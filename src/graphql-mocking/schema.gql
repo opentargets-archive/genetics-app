@@ -1,0 +1,6 @@
+type Query {
+    hello: Hello
+}
+type Hello {
+    label: String
+}
