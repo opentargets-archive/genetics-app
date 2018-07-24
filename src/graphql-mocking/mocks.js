@@ -1,4 +1,11 @@
+import { MockList } from 'graphql-tools';
+
 const mocks = {
-    hello: () => ({ label: 'World!' }),
+    Hello: () => ({ label: 'World' }),
+    PheWASAssociation: () => ({ test: 4 }),
+    RootQueryType: () => ({
+        assocs: () => new MockList([5, 7])
+    })
 }
+
 export default mocks;

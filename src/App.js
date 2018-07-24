@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import logo from './logo.svg';
 import './App.css';
+import { TestComponent } from 'ot-ui';
 
 class App extends Component {
   render() {
@@ -10,6 +14,33 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
+        <TestComponent name='World' />
+
+        <Query
+                query={gql`
+                  {
+                    hello {
+                      label
+                    }
+                    # pheWAS { 
+                    #   associations {
+                    #     test
+                    #   }
+                    #   # rsId
+                    #   # chromosome
+                    # }
+                    assocs {
+                      test
+                    }
+                  }
+                `}
+            >
+                {({ loading, error, data }) => {
+                  console.log('data', data)
+                  return null
+                }}
+        </Query>
+
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
