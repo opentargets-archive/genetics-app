@@ -22,15 +22,18 @@ class App extends Component {
                     hello {
                       label
                     }
-                    # pheWAS { 
-                    #   associations {
-                    #     test
-                    #   }
-                    #   # rsId
-                    #   # chromosome
-                    # }
-                    assocs {
-                      test
+                    pheWAS(variantId: "1_1002003_A_G") {
+                      associations {
+                        studyId
+                        pmId
+                        traitReported
+                        n
+                        nCases
+                        eaf
+                        beta
+                        se
+                        pval
+                      }
                     }
                   }
                 `}
