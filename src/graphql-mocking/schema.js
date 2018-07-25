@@ -13,15 +13,14 @@ export const typeDefs = gql`
 
 # Assumptions/Questions:
 # * pheWAS and regional use the summary statistics, while manhattan uses top loci
-# * does pval need to be represented as split mantissa/exponent in api (js floats are always 64 bit)?
-# * should ManhattanAssociation include summary statistics fields for study-variant (eaf/beta/se/...); see mockup?
-# * should ManhattanAssociation include best gene and best gene evidence; see mockup?
-# * should ManhattanAssociation include credible set count; see mockup?
+# * should ManhattanAssociation include summary statistics fields for study-variant (eaf/beta/se/...); see mockup? NO
+# * should ManhattanAssociation include best gene and best gene evidence; see mockup? YES, ARRAY OF GENES (COULD BE EMPTY)
+# * should ManhattanAssociation include credible set count; see mockup? YES, AND LD SET COUNT
 # * we do not yet have LD for regional plots; ldWithLead is commented out for now
 # * field nCases could be null
 # * fields traitMapped, traitEfos can be grouped as [{ efoId, efoTerm }]
 # * under the current design, data magnitude for charts sufficiently limited that tables can just use chart data and do client-side pagination
-# * should a study have (n, nCases) or (nInitial, nReplication, nCases)?
+# * should a study have (n, nCases) or (nInitial, nReplication, nCases)? (N, NCASES) FOR PHEWAS
 
 schema {
     query: RootQueryType
@@ -29,7 +28,7 @@ schema {
 type RootQueryType {
     # search(queryString: String): [SearchResult!]!
     manhattan(studyId: String!): Manhattan
-    regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
+    # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     pheWAS(variantId: String!): PheWAS
 }
 type PheWAS {
@@ -38,36 +37,60 @@ type PheWAS {
 # # type PheWASAssociation implements StudyInterface {
 type PheWASAssociation {
     studyId: String!
-    pmId: String!
-    pubDate: String!
-    pubJournal: String!
-    pubTitle: String!
-    pubAuthor: String!
     traitReported: String!
-    traitEfoMapping: [Efo!]
+    traitCode: String!
+    pval: Float!
+    n: Int # total sample size (variant level)
+    nCases: Int # number of cases (variant level)
+
+    # pmId: String
+    # pubDate: String 
+    # pubJournal: String
+    # pubTitle: String
+    # pubAuthor: String
+    
+    # traitEfoMapping: [Efo!]
     # TODO: ancestryInitial
     # TODO: ancestryReplication
-    n: Int!
-    nCases: Int
+    
  
-    eaf: Float!
-    beta: Float!
-    se: Float!
-    pval: Float!
+    # EITHER block1 OR block2
+    # -- block1
+    # eaf: Float
+    # beta: Float
+    # se: Float
+    # --
+    # -- block2
+    # oddsRatio: Float
+    # oddsRatioCILower: Float
+    # oddsRatioCIUpper: Float
+    # --
 }
-type Efo {
-    id: String!
-    term: String!
-}
+# type Efo {
+#     id: String!
+#     term: String!
+# }
 type Manhattan {
     associations: [ManhattanAssociation!]!
 }
 type ManhattanAssociation {
-    variantId: String!
-    rsId: String
+    indexVariantId: String!
+    indexVariantRsId: String
     pval: Float!
     chromosome: String!
     position: Int!
+    bestGenes: [Gene!]
+
+    # could have index variant which has no tag variants (goes nowhere on click)
+    credibleSetSize: Int
+    ldSetSize: Int
+
+    # TODO: get this
+    # maf: Float
+}
+type Gene {
+    id: String
+    symbol: String
 }
 type Regional {
     associations: [RegionalAssociation!]!
@@ -81,6 +104,8 @@ type RegionalAssociation {
     # ldWithLead: Float!
 }
 
+
+# ------------- IGNORE --------------
 
 # # interface StudyInterface {
 # #     studyId: String!
