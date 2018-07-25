@@ -1,7 +1,11 @@
 import React from 'react';
+import { Gecko } from 'ot-charts';
 
 const LocusPage = () => (
-    <div>Locus</div>
+    <div>
+        <h1>Locus</h1>
+        <Gecko />
+    </div>
 );
 
 export default LocusPage;
