@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const GenePage = ({ match }) => (
     <div>
+        <Link to="/">HOME</Link>
         <h1>{`Gene ${match.params.geneId}`}</h1>
         <hr />
         <h2>Associated variants</h2>

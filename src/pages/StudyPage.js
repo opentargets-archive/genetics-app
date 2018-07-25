@@ -4,6 +4,7 @@ import { Manhattan } from 'ot-charts';
 
 const StudyPage = ({ match }) => (
     <div>
+        <Link to="/">HOME</Link>
         <h1>{`Study ${match.params.studyId}`}</h1>
         <hr />
         <h2>Associated loci</h2>
