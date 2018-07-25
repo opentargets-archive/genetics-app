@@ -1,7 +1,7 @@
 import React from 'react';
 
-const StudyPage = () => (
-    <div>Study</div>
+const StudyPage = ({ match }) => (
+    <div>{`Study ${match.params.studyId}`}</div>
 );
 
 export default StudyPage;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-const GenePage = () => (
-    <div>Gene</div>
+const GenePage = ({ match }) => (
+    <div>{`Gene ${match.params.geneId}`}</div>
 );
 
 export default GenePage;
