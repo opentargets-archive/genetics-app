@@ -1462,9 +1462,9 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-casual@^1.5.19:
-  version "1.5.19"
-  resolved "https://registry.yarnpkg.com/casual/-/casual-1.5.19.tgz#66fac46f7ae463f468f5913eb139f9c41c58bbf2"
+casual-browserify@^1.5.19-2:
+  version "1.5.19-2"
+  resolved "https://registry.yarnpkg.com/casual-browserify/-/casual-browserify-1.5.19-2.tgz#e4881deb8b9c85c17e6f51ba1ee59c0a30839f05"
   dependencies:
     mersenne-twister "^1.0.1"
     moment "^2.15.2"

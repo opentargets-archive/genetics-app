@@ -19,9 +19,6 @@ class App extends Component {
         <Query
                 query={gql`
                   {
-                    hello {
-                      label
-                    }
                     pheWAS(variantId: "1_1002003_A_G") {
                       associations {
                         studyId

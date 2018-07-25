@@ -6,22 +6,34 @@ import gql from 'graphql-tag';
 
 export const typeDefs = gql`
 # ----------------------------------------------------
+
+# Derived using
+# * mockups: https://5o96p0.axshare.com/#g=1&p=home_-_no_search_terms_entered
+# * table definitions: https://github.com/opentargets/v2d_data
+
+# Assumptions/Questions:
+# * pheWAS and regional use the summary statistics, while manhattan uses top loci
+# * does pval need to be represented as split mantissa/exponent in api (js floats are always 64 bit)?
+# * should ManhattanAssociation include summary statistics fields for study-variant (eaf/beta/se/...); see mockup?
+# * should ManhattanAssociation include best gene and best gene evidence; see mockup?
+# * should ManhattanAssociation include credible set count; see mockup?
+# * we do not yet have LD for regional plots; ldWithLead is commented out for now
+# * field nCases could be null
+# * fields traitMapped, traitEfos can be grouped as [{ efoId, efoTerm }]
+# * under the current design, data magnitude for charts sufficiently limited that tables can just use chart data and do client-side pagination
+# * should a study have (n, nCases) or (nInitial, nReplication, nCases)?
+
 schema {
     query: RootQueryType
 }
-
 type RootQueryType {
-    hello: Hello
+    # search(queryString: String): [SearchResult!]!
+    manhattan(studyId: String!): Manhattan
+    regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     pheWAS(variantId: String!): PheWAS
-    # regional(chromosome: String, start: Int, end: Int)
 }
-
-type Hello {
-    label: String
-}
-
 type PheWAS {
-    associations: [PheWASAssociation]
+    associations: [PheWASAssociation!]!
 }
 # # type PheWASAssociation implements StudyInterface {
 type PheWASAssociation {
@@ -32,10 +44,9 @@ type PheWASAssociation {
     pubTitle: String!
     pubAuthor: String!
     traitReported: String!
-    # traitMapped
-    # traitEfos
-    # ancestryInitial
-    # ancestryReplication
+    traitEfoMapping: [Efo!]
+    # TODO: ancestryInitial
+    # TODO: ancestryReplication
     n: Int!
     nCases: Int
  
@@ -44,6 +55,33 @@ type PheWASAssociation {
     se: Float!
     pval: Float!
 }
+type Efo {
+    id: String!
+    term: String!
+}
+type Manhattan {
+    associations: [ManhattanAssociation!]!
+}
+type ManhattanAssociation {
+    variantId: String!
+    rsId: String
+    pval: Float!
+    chromosome: String!
+    position: Int!
+}
+type Regional {
+    associations: [RegionalAssociation!]!
+}
+type RegionalAssociation {
+    variantId: String!
+    rsId: String
+    pval: Float!
+    chromosome: String!
+    position: Int!
+    # ldWithLead: Float!
+}
+
+
 # # interface StudyInterface {
 # #     studyId: String!
 # #     pmid: String!
