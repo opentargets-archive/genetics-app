@@ -5253,6 +5253,14 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
+ot-charts@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.1.tgz#f454b96022c1c5eeacbaa5eef4265a27af8cb46b"
+
+ot-ui@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.1.tgz#521f1128f6e5614106d2429dcf83b91b2ce2ec81"
+
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
