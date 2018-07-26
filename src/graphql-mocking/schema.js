@@ -40,7 +40,7 @@ type PheWASAssociation {
     traitReported: String!
     traitCode: String!
     pval: Float!
-    n: Int # total sample size (variant level)
+    nTotal: Int # total sample size (variant level)
     nCases: Int # number of cases (variant level)
 
     # pmId: String
@@ -92,17 +92,17 @@ type Gene {
     id: String
     symbol: String
 }
-type Regional {
-    associations: [RegionalAssociation!]!
-}
-type RegionalAssociation {
-    variantId: String!
-    rsId: String
-    pval: Float!
-    chromosome: String!
-    position: Int!
-    # ldWithLead: Float!
-}
+# type Regional {
+#     associations: [RegionalAssociation!]!
+# }
+# type RegionalAssociation {
+#     variantId: String!
+#     rsId: String
+#     pval: Float!
+#     chromosome: String!
+#     position: Int!
+#     # ldWithLead: Float!
+# }
 
 
 # ------------- IGNORE --------------

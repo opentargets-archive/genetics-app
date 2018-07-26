@@ -1,7 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import { PheWAS } from 'ot-charts';
-// import { Query, graphql } from 'react-apollo';
+
+const pheWASQuery = gql`{
+    pheWAS(variantId: "1_100314838_C_T") {
+        associations {
+            studyId
+            traitReported
+            traitCode
+            pval
+            nTotal
+            nCases
+        }
+    }
+}`;
 
 const VariantPage = ({ match }) => (
     <div>
@@ -37,6 +52,15 @@ const VariantPage = ({ match }) => (
         <hr />
         <h2>Associated studies</h2>
         <PheWAS />
+
+        <Query query={pheWASQuery}
+        >
+            {({ loading, error, data }) => {
+                    console.log('data', data);
+                    return null;               
+            }}
+        </Query>
+
         <table>
             <thead>
                 <tr>

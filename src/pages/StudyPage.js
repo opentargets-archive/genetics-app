@@ -5,6 +5,21 @@ import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
 
+const manhattanQuery = gql`{
+    manhattan(studyId: "GCT123") {
+        associations {
+            indexVariantId
+            indexVariantRsId
+            pval
+            chromosome
+            position
+            credibleSetSize
+            ldSetSize
+            bestGenes
+        }
+    }
+}`;
+
 const StudyPage = ({ match }) => (
     <div>
         <Link to="/">HOME</Link>
@@ -13,22 +28,7 @@ const StudyPage = ({ match }) => (
         <h2>Associated loci</h2>
         <Manhattan />
 
-        <Query query={
-                gql`{
-                    manhattan(studyId: "GCT123") {
-                        associations {
-                            indexVariantId
-                            indexVariantRsId
-                            pval
-                            chromosome
-                            position
-                            credibleSetSize
-                            ldSetSize
-                            bestGenes
-                        }
-                    }
-                }`
-            }
+        <Query query={manhattanQuery}
         >
             {({ loading, error, data }) => {
                     console.log('data', data);
