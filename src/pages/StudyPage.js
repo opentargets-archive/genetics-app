@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import { Manhattan } from 'ot-charts';
 
 const StudyPage = ({ match }) => (
@@ -9,6 +12,30 @@ const StudyPage = ({ match }) => (
         <hr />
         <h2>Associated loci</h2>
         <Manhattan />
+
+        <Query query={
+                gql`{
+                    manhattan(studyId: "GCT123") {
+                        associations {
+                            indexVariantId
+                            indexVariantRsId
+                            pval
+                            chromosome
+                            position
+                            credibleSetSize
+                            ldSetSize
+                            bestGenes
+                        }
+                    }
+                }`
+            }
+        >
+            {({ loading, error, data }) => {
+                    console.log('data', data);
+                    return null;               
+            }}
+        </Query>
+
         <table>
             <thead>
                 <tr>
