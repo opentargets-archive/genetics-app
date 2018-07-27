@@ -4,13 +4,40 @@ import _ from 'lodash';
 
 import STUDIES from './studies';
 
-const SIGNIFICANCE = 5e-8;
+const SIGNIFICANCE = - Math.log10(5e-8);
+const MIN_PVAL = - Math.log10(1e-300);
 const CHROMOSOMES = [...Array.from(new Array(22),(val,index)=>`${index+1}`), 'X'];
+const CHROMOSOME_LENGTHS_GRCH38 = {
+    '1': 248956422,
+    '2': 242193529,
+    '3': 198295559,
+    '4': 190214555,
+    '5': 181538259,
+    '6': 170805979,
+    '7': 159345973,
+    '8': 145138636,
+    '9': 138394717,
+    '10': 133797422,
+    '11': 135086622,
+    '12': 133275309,
+    '13': 114364328,
+    '14': 107043718,
+    '15': 101991189,
+    '16': 90338345,
+    '17': 83257441,
+    '18': 80373285,
+    '19': 58617616,
+    '20': 64444167,
+    '21': 46709983,
+    '22': 50818468,
+    X: 156040895,
+    Y: 57227415,
+};
 const ALLELES = 'ACGT'.split('');
 
 const mockManhattanAssociation = () => {
     const chromosome = casual.random_element(CHROMOSOMES);
-    const position = casual.integer(1, 10000000); // TODO: base on chrom length
+    const position = casual.integer(1, CHROMOSOME_LENGTHS_GRCH38[chromosome]);
     const effectAllele = casual.random_element(ALLELES);
     const effectAlleleIndex = ALLELES.indexOf(effectAllele);
     const otherAlleleOptions = [...ALLELES.slice(0, effectAlleleIndex), ...ALLELES.slice(effectAlleleIndex + 1)]
@@ -20,7 +47,7 @@ const mockManhattanAssociation = () => {
     return {
         indexVariantId: `${chromosome}_${position}_${otherAllele}_${effectAllele}`,
         indexVariantRsId: `rs${rsNumber}`,
-        pval: casual.double(0, SIGNIFICANCE),
+        pval: Math.pow(10, - casual.double(SIGNIFICANCE, MIN_PVAL)),
         chromosome,
         position,
         credibleSetSize: casual.integer(0, 10),
@@ -44,7 +71,7 @@ const mocks = {
     RootQueryType: () => ({
         manhattan: (_, { studyId }) => {
             return ({
-                associations: () => new MockList(5)
+                associations: () => new MockList(100)
             })
         }
     })

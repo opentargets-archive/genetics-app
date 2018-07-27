@@ -26,13 +26,15 @@ const StudyPage = ({ match }) => (
         <h1>{`Study ${match.params.studyId}`}</h1>
         <hr />
         <h2>Associated loci</h2>
-        <Manhattan />
-
-        <Query query={manhattanQuery}
+        <Query query={manhattanQuery} fetchPolicy='network-only'
         >
             {({ loading, error, data }) => {
-                    console.log('data', data);
-                    return null;               
+                // TODO: handle more gracefully within Manhattan
+                if (data.manhattan) {
+                    return <Manhattan data={data.manhattan} />;
+                } else {
+                    return <Manhattan data={{associations: []}} />;
+                }
             }}
         </Query>
 
