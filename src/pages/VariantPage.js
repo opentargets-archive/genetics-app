@@ -73,15 +73,11 @@ const VariantPage = ({ match }) => (
     <SubHeading>
       Which studies are linked to this variant through a GWAS?
     </SubHeading>
-    <PheWAS />
-
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
-        return null;
+        return <PheWAS data={data} />;
       }}
     </Query>
-
     <table>
       <thead>
         <tr>
