@@ -20,7 +20,7 @@ const manhattanQuery = gql`{
     }
 }`;
 
-const StudyPage = ({ match }) => (
+const StudyPage = ({ match, history }) => (
     <div>
         <Link to="/">HOME</Link>
         <h1>{`Study ${match.params.studyId}`}</h1>
@@ -31,7 +31,7 @@ const StudyPage = ({ match }) => (
             {({ loading, error, data }) => {
                 // TODO: handle more gracefully within Manhattan
                 if (data.manhattan) {
-                    return <Manhattan data={data.manhattan} />;
+                    return <Manhattan data={data.manhattan} handleAssociationClick={d => { history.push(`/locus?chr=${d.chromosome}&position=${d.position}&selectedId=${d.indexVariantId}&selectedType=indexVariant`); }} />;
                 } else {
                     return <Manhattan data={{associations: []}} />;
                 }
