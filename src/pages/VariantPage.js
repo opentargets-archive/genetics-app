@@ -20,7 +20,6 @@ const pheWASQuery = gql`{
 
 const VariantPage = ({ match }) => (
     <div>
-        <Link to="/">HOME</Link>
         <h1>{`Variant ${match.params.variantId}`}</h1>
         <hr />
         <h2>Associated genes</h2>

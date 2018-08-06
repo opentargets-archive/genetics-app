@@ -16,7 +16,7 @@ const App = () => (
     <OtUiThemeProvider>
         <Router>
             <React.Fragment>
-                <NavBar />
+                <NavBar name='Genetics' />
                 <Route exact path="/" component={HomePage} />
                 <Route path="/study/:studyId" component={StudyPage} />
                 <Route path="/gene/:geneId" component={GenePage} />
