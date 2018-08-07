@@ -1,6 +1,6 @@
 import React from 'react';
 import { Regional } from 'ot-charts';
-import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PageTitle } from 'ot-ui';
 
 import BasePage from './BasePage';
 
