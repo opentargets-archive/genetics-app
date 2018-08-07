@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 
@@ -24,9 +25,12 @@ const pheWASQuery = gql`
 
 const VariantPage = ({ match }) => (
   <BasePage>
-    <h1>{`Variant ${match.params.variantId}`}</h1>
+    <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
     <hr />
-    <h2>Associated genes</h2>
+    <Heading>Associated genes</Heading>
+    <SubHeading>
+      Which genes are functionally linked to this variant?
+    </SubHeading>
     <table>
       <thead>
         <tr>
@@ -65,7 +69,10 @@ const VariantPage = ({ match }) => (
       </tbody>
     </table>
     <hr />
-    <h2>Associated studies</h2>
+    <Heading>Associated studies</Heading>
+    <SubHeading>
+      Which studies are linked to this variant through a GWAS?
+    </SubHeading>
     <PheWAS />
 
     <Query query={pheWASQuery}>

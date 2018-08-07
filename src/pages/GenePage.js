@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 
 const GenePage = ({ match }) => (
   <BasePage>
-    <h1>{`Gene ${match.params.geneId}`}</h1>
-    <h2>Associated variants</h2>
-    <p>What about tissues?</p>
+    <PageTitle>{`Gene ${match.params.geneId}`}</PageTitle>
+    <hr />
+    <Heading>Associated variants</Heading>
+    <SubHeading>
+      Which variants are functionally linked to this gene?
+    </SubHeading>
     <table>
       <thead>
         <tr>

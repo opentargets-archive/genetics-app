@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 
@@ -26,9 +27,10 @@ const manhattanQuery = gql`
 
 const StudyPage = ({ match }) => (
   <BasePage>
-    <h1>{`Study ${match.params.studyId}`}</h1>
+    <PageTitle>{`Study ${match.params.studyId}`}</PageTitle>
     <hr />
-    <h2>Associated loci</h2>
+    <Heading>Associated loci</Heading>
+    <SubHeading>Which loci are significantly linked to this study?</SubHeading>
     <Query query={manhattanQuery} fetchPolicy="network-only">
       {({ loading, error, data }) => {
         // TODO: handle more gracefully within Manhattan
