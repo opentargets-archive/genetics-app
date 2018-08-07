@@ -1,7 +1,16 @@
 {
   "name": "genetics-app",
+  "homepage": "https://github.com/opentargets/genetics-app",
   "version": "0.1.0",
-  "private": true,
+  "license": "Apache-2.0",
+  "contributors": [
+    "Gareth Peat <garethpeat@gmail.com>",
+    "Alfredo Miranda <alfredo@miranda.io>"
+  ],
+  "bugs": {
+    "url" : "https://github.com/opentargets/genetics/issues",
+    "email" : "support@targetvalidation.org"
+  },
   "dependencies": {
     "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
