@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { Page } from 'ot-ui';
+
 const GenePage = ({ match }) => (
-    <div>
+    <Page>
         <h1>{`Gene ${match.params.geneId}`}</h1>
-        <hr />
         <h2>Associated variants</h2>
         <p>What about tissues?</p>
         <table>
@@ -35,7 +36,7 @@ const GenePage = ({ match }) => (
                 </tr>
             </tbody>
         </table>
-    </div>
+    </Page>
 );
 
 export default GenePage;

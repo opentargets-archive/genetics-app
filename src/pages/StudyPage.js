@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
+import { Page } from 'ot-ui';
 
 const manhattanQuery = gql`{
     manhattan(studyId: "GCT123") {
@@ -21,7 +22,7 @@ const manhattanQuery = gql`{
 }`;
 
 const StudyPage = ({ match }) => (
-    <div>
+    <Page>
         <h1>{`Study ${match.params.studyId}`}</h1>
         <hr />
         <h2>Associated loci</h2>
@@ -71,7 +72,7 @@ const StudyPage = ({ match }) => (
                 </tr>
             </tbody>
         </table>
-    </div>
+    </Page>
 );
 
 export default StudyPage;

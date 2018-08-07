@@ -1,11 +1,13 @@
 import React from 'react';
 import { Gecko } from 'ot-charts';
 
+import { Page } from 'ot-ui';
+
 const LocusPage = () => (
-    <div>
+    <Page>
         <h1>Locus</h1>
         <Gecko />
-    </div>
+    </Page>
 );
 
 export default LocusPage;
