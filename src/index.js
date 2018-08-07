@@ -13,16 +13,16 @@ import { unregister } from './registerServiceWorker';
 import mockSchemaLink from './graphql-mocking/mockSchemaLink';
 
 const client = new ApolloClient({
-    // uri: 'https://<API>/graphql', // TODO: connect to Miguel's API
-    link: mockSchemaLink,
-    cache: new InMemoryCache()
+  // uri: 'https://<API>/graphql', // TODO: connect to Miguel's API
+  link: mockSchemaLink,
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <App />
-    </ApolloProvider>,
-    document.getElementById('root')
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('root')
 );
 
 // disable service worker

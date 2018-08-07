@@ -13,21 +13,18 @@ import LocusPage from './pages/LocusPage';
 import RegionalPage from './pages/RegionalPage';
 
 const App = () => (
-    <OtUiThemeProvider>
-        <Router>
-            <React.Fragment>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/study/:studyId" component={StudyPage} />
-                <Route path="/gene/:geneId" component={GenePage} />
-                <Route path="/variant/:variantId" component={VariantPage} />
-                <Route path="/locus" component={LocusPage} />
-                <Route
-                    path="/regional/:studyId/:variantId"
-                    component={RegionalPage}
-                />
-            </React.Fragment>
-        </Router>
-    </OtUiThemeProvider>
+  <OtUiThemeProvider>
+    <Router>
+      <React.Fragment>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/study/:studyId" component={StudyPage} />
+        <Route path="/gene/:geneId" component={GenePage} />
+        <Route path="/variant/:variantId" component={VariantPage} />
+        <Route path="/locus" component={LocusPage} />
+        <Route path="/regional/:studyId/:variantId" component={RegionalPage} />
+      </React.Fragment>
+    </Router>
+  </OtUiThemeProvider>
 );
 
 export default App;
