@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { Page, Splash, HomeBox, Search, SearchExamples } from 'ot-ui';
+import { Splash, HomeBox, Search, SearchExamples } from 'ot-ui';
 
 const EXAMPLES = [
     {label: 'CDK6', url: '/gene/ENSG00000105810'},
