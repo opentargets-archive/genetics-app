@@ -15,7 +15,7 @@ import mockSchemaLink from './graphql-mocking/mockSchemaLink';
 const client = new ApolloClient({
     // uri: 'https://<API>/graphql', // TODO: connect to Miguel's API
     link: mockSchemaLink,
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
 });
 
 ReactDOM.render(

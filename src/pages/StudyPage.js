@@ -5,20 +5,22 @@ import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
 
-const manhattanQuery = gql`{
-    manhattan(studyId: "GCT123") {
-        associations {
-            indexVariantId
-            indexVariantRsId
-            pval
-            chromosome
-            position
-            credibleSetSize
-            ldSetSize
-            bestGenes
+const manhattanQuery = gql`
+    {
+        manhattan(studyId: "GCT123") {
+            associations {
+                indexVariantId
+                indexVariantRsId
+                pval
+                chromosome
+                position
+                credibleSetSize
+                ldSetSize
+                bestGenes
+            }
         }
     }
-}`;
+`;
 
 const StudyPage = ({ match, history }) => (
     <div>
@@ -26,14 +28,26 @@ const StudyPage = ({ match, history }) => (
         <h1>{`Study ${match.params.studyId}`}</h1>
         <hr />
         <h2>Associated loci</h2>
-        <Query query={manhattanQuery} fetchPolicy='network-only'
-        >
+        <Query query={manhattanQuery} fetchPolicy="network-only">
             {({ loading, error, data }) => {
                 // TODO: handle more gracefully within Manhattan
                 if (data.manhattan) {
-                    return <Manhattan data={data.manhattan} handleAssociationClick={d => { history.push(`/locus?chr=${d.chromosome}&position=${d.position}&selectedId=${d.indexVariantId}&selectedType=indexVariant`); }} />;
+                    return (
+                        <Manhattan
+                            data={data.manhattan}
+                            handleAssociationClick={d => {
+                                history.push(
+                                    `/locus?chr=${d.chromosome}&position=${
+                                        d.position
+                                    }&selectedId=${
+                                        d.indexVariantId
+                                    }&selectedType=indexVariant`
+                                );
+                            }}
+                        />
+                    );
                 } else {
-                    return <Manhattan data={{associations: []}} />;
+                    return <Manhattan data={{ associations: [] }} />;
                 }
             }}
         </Query>
@@ -53,7 +67,11 @@ const StudyPage = ({ match, history }) => (
             </thead>
             <tbody>
                 <tr>
-                    <td><Link to="/variant/1_100314838_C_T">1_100314838_C_T</Link></td>
+                    <td>
+                        <Link to="/variant/1_100314838_C_T">
+                            1_100314838_C_T
+                        </Link>
+                    </td>
                     <td>rs3753486</td>
                     <td>1</td>
                     <td>100314838</td>
@@ -62,7 +80,11 @@ const StudyPage = ({ match, history }) => (
                     <td>7</td>
                 </tr>
                 <tr>
-                    <td><Link to="/variant/2_107731839_A_G">2_107731839_A_G</Link></td>
+                    <td>
+                        <Link to="/variant/2_107731839_A_G">
+                            2_107731839_A_G
+                        </Link>
+                    </td>
                     <td>rs3753487</td>
                     <td>2</td>
                     <td>107731839</td>
