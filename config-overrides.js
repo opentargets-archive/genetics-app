@@ -1,5 +1,3 @@
-
-const { injectBabelPlugin } = require('react-app-rewired');
 const rewireInlineImportGraphqlAst = require('react-app-rewire-inline-import-graphql-ast');
 
 module.exports = function override(config, env) {
