@@ -27,7 +27,8 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
     "prettier": "prettier --write",
-    "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js"
+    "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
+    "eslint": "eslint . --fix --ext .js"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
@@ -44,7 +45,12 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
+    "*.{js}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,css,md}": [
       "prettier --write",
       "git add"
     ]
