@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { NavBar, Footer, OtUiThemeProvider } from 'ot-ui';
 
@@ -16,14 +16,22 @@ const App = () => (
     <OtUiThemeProvider>
         <Router>
             <React.Fragment>
-                <NavBar name='Genetics' />
+                <Switch>
+                    <Route exact path='/' component={null} />
+                    <Route path='/*' render={() => (<NavBar name='Genetics' />)} />
+                </Switch>
+                
                 <Route exact path="/" component={HomePage} />
                 <Route path="/study/:studyId" component={StudyPage} />
                 <Route path="/gene/:geneId" component={GenePage} />
                 <Route path="/variant/:variantId" component={VariantPage} />
                 <Route path="/locus" component={LocusPage} />
                 <Route path="/regional/:studyId/:variantId" component={RegionalPage} />
-                <Footer />
+                
+                <Switch>
+                    <Route exact path='/' component={null} />
+                    <Route path='/*' render={() => (<Footer />)} />
+                </Switch>
             </React.Fragment>
         </Router>
     </OtUiThemeProvider>
