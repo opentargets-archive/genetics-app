@@ -18,7 +18,10 @@ const App = () => (
             <Route path="/gene/:geneId" component={GenePage} />
             <Route path="/variant/:variantId" component={VariantPage} />
             <Route path="/locus" component={LocusPage} />
-            <Route path="/regional/:studyId/:variantId" component={RegionalPage} />
+            <Route
+                path="/regional/:studyId/:variantId"
+                component={RegionalPage}
+            />
         </React.Fragment>
     </Router>
 );
