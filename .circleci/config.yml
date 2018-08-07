@@ -1,0 +1,54 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:boron
+
+version: 2
+jobs:
+  checkout_and_install:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      = restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-{{ .Branch }}
+            - yarn-cache-
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths: node_modules
+      - persist_to_workspace:
+          root: .
+          paths: .
+  unit_test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: CI=true yarn test
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Build
+          command: yarn build
+workflows:
+  version: 2
+  test_and_build:
+    jobs:
+      - checkout_and_install
+      - unit_test:
+          requires:
+            - checkout_and_install
+      - build:
+          requires:
+            - checkout_and_install
