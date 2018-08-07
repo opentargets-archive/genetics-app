@@ -4,36 +4,38 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
-import { Page } from 'ot-ui';
 
-const manhattanQuery = gql`{
-    manhattan(studyId: "GCT123") {
-        associations {
-            indexVariantId
-            indexVariantRsId
-            pval
-            chromosome
-            position
-            credibleSetSize
-            ldSetSize
-            bestGenes
+import BasePage from './BasePage';
+
+const manhattanQuery = gql`
+    {
+        manhattan(studyId: "GCT123") {
+            associations {
+                indexVariantId
+                indexVariantRsId
+                pval
+                chromosome
+                position
+                credibleSetSize
+                ldSetSize
+                bestGenes
+            }
         }
     }
-}`;
+`;
 
 const StudyPage = ({ match }) => (
-    <Page>
+    <BasePage>
         <h1>{`Study ${match.params.studyId}`}</h1>
         <hr />
         <h2>Associated loci</h2>
-        <Query query={manhattanQuery} fetchPolicy='network-only'
-        >
+        <Query query={manhattanQuery} fetchPolicy="network-only">
             {({ loading, error, data }) => {
                 // TODO: handle more gracefully within Manhattan
                 if (data.manhattan) {
                     return <Manhattan data={data.manhattan} />;
                 } else {
-                    return <Manhattan data={{associations: []}} />;
+                    return <Manhattan data={{ associations: [] }} />;
                 }
             }}
         </Query>
@@ -53,7 +55,11 @@ const StudyPage = ({ match }) => (
             </thead>
             <tbody>
                 <tr>
-                    <td><Link to="/variant/1_100314838_C_T">1_100314838_C_T</Link></td>
+                    <td>
+                        <Link to="/variant/1_100314838_C_T">
+                            1_100314838_C_T
+                        </Link>
+                    </td>
                     <td>rs3753486</td>
                     <td>1</td>
                     <td>100314838</td>
@@ -62,7 +68,11 @@ const StudyPage = ({ match }) => (
                     <td>7</td>
                 </tr>
                 <tr>
-                    <td><Link to="/variant/2_107731839_A_G">2_107731839_A_G</Link></td>
+                    <td>
+                        <Link to="/variant/2_107731839_A_G">
+                            2_107731839_A_G
+                        </Link>
+                    </td>
                     <td>rs3753487</td>
                     <td>2</td>
                     <td>107731839</td>
@@ -72,7 +82,7 @@ const StudyPage = ({ match }) => (
                 </tr>
             </tbody>
         </table>
-    </Page>
+    </BasePage>
 );
 
 export default StudyPage;

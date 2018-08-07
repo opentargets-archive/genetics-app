@@ -1,13 +1,13 @@
 import React from 'react';
 import { Regional } from 'ot-charts';
 
-import { Page } from 'ot-ui';
+import BasePage from './BasePage';
 
 const RegionalPage = ({ match }) => (
-    <Page>
+    <BasePage>
         <h1>{`Regional ${match.params.studyId}, ${match.params.variantId}`}</h1>
         <Regional />
-    </Page>
+    </BasePage>
 );
 
 export default RegionalPage;
