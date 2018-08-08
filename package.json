@@ -37,7 +37,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
-    "test:coverage": "yarn test -- --coverage",
+    "test:coverage": "yarn test --coverage",
     "eject": "react-scripts eject",
     "prettier": "prettier --write",
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
