@@ -4,6 +4,9 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { Manhattan } from 'ot-charts';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
+
+import BasePage from './BasePage';
 
 const manhattanQuery = gql`
   {
@@ -22,28 +25,17 @@ const manhattanQuery = gql`
   }
 `;
 
-const StudyPage = ({ match, history }) => (
-  <div>
-    <Link to="/">HOME</Link>
-    <h1>{`Study ${match.params.studyId}`}</h1>
+const StudyPage = ({ match }) => (
+  <BasePage>
+    <PageTitle>{`Study ${match.params.studyId}`}</PageTitle>
     <hr />
-    <h2>Associated loci</h2>
+    <Heading>Associated loci</Heading>
+    <SubHeading>Which loci are significantly linked to this study?</SubHeading>
     <Query query={manhattanQuery} fetchPolicy="network-only">
       {({ loading, error, data }) => {
         // TODO: handle more gracefully within Manhattan
         if (data.manhattan) {
-          return (
-            <Manhattan
-              data={data.manhattan}
-              handleAssociationClick={d => {
-                history.push(
-                  `/locus?chr=${d.chromosome}&position=${
-                    d.position
-                  }&selectedId=${d.indexVariantId}&selectedType=indexVariant`
-                );
-              }}
-            />
-          );
+          return <Manhattan data={data.manhattan} />;
         } else {
           return <Manhattan data={{ associations: [] }} />;
         }
@@ -88,7 +80,7 @@ const StudyPage = ({ match, history }) => (
         </tr>
       </tbody>
     </table>
-  </div>
+  </BasePage>
 );
 
 export default StudyPage;

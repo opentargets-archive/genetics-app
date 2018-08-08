@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Regional } from 'ot-charts';
+import { PageTitle } from 'ot-ui';
+
+import BasePage from './BasePage';
 
 const RegionalPage = ({ match }) => (
-  <div>
-    <Link to="/">HOME</Link>
-    <h1>{`Regional ${match.params.studyId}, ${match.params.variantId}`}</h1>
+  <BasePage>
+    <PageTitle>{`Regional ${match.params.studyId}, ${
+      match.params.variantId
+    }`}</PageTitle>
+    <hr />
     <Regional />
-  </div>
+  </BasePage>
 );
 
 export default RegionalPage;
