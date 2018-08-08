@@ -5,14 +5,12 @@ defaults: &defaults
 
 version: 2
 jobs:
-  checkout_and_install:
+  build:
     <<: *defaults
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/repo
-      = restore_cache:
-          name: Restore Yarn Package Cache
+      - restore_cache:
+          name: Restore yarn package cache
           keys:
             - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - yarn-cache-{{ .Branch }}
@@ -21,34 +19,12 @@ jobs:
           name: Install Dependencies
           command: yarn install
       - save_cache:
-          name: Save Yarn Package Cache
+          name: Save yarn package cache
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths: node_modules
-      - persist_to_workspace:
-          root: .
-          paths: .
-  unit_test:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run: CI=true yarn test
-  build:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
+      - run:
+          name: Run unit tests
+          command: CI=true yarn test
       - run:
           name: Build
           command: yarn build
-workflows:
-  version: 2
-  test_and_build:
-    jobs:
-      - checkout_and_install
-      - unit_test:
-          requires:
-            - checkout_and_install
-      - build:
-          requires:
-            - checkout_and_install
