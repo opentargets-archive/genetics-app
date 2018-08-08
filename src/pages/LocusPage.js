@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Gecko } from 'ot-charts';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
+
+import BasePage from './BasePage';
 
 const LocusPage = () => (
-  <div>
-    <Link to="/">HOME</Link>
-    <h1>Locus</h1>
+  <BasePage>
+    <PageTitle>Locus</PageTitle>
+    <hr />
+    <Heading>Associations</Heading>
+    <SubHeading>What genetic evidence is there within this locus?</SubHeading>
     <Gecko />
-  </div>
+  </BasePage>
 );
 
 export default LocusPage;

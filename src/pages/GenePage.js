@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
+
+import BasePage from './BasePage';
 
 const GenePage = ({ match }) => (
-  <div>
-    <Link to="/">HOME</Link>
-    <h1>{`Gene ${match.params.geneId}`}</h1>
+  <BasePage>
+    <PageTitle>{`Gene ${match.params.geneId}`}</PageTitle>
     <hr />
-    <h2>Associated variants</h2>
-    <p>What about tissues?</p>
+    <Heading>Associated variants</Heading>
+    <SubHeading>
+      Which variants are functionally linked to this gene?
+    </SubHeading>
     <table>
       <thead>
         <tr>
@@ -48,7 +52,7 @@ const GenePage = ({ match }) => (
         </tr>
       </tbody>
     </table>
-  </div>
+  </BasePage>
 );
 
 export default GenePage;
