@@ -7,10 +7,11 @@
     "Alfredo Miranda <alfredo@miranda.io>"
   ],
   "bugs": {
-    "url" : "https://github.com/opentargets/genetics/issues",
-    "email" : "support@targetvalidation.org"
+    "url": "https://github.com/opentargets/genetics/issues",
+    "email": "support@targetvalidation.org"
   },
   "dependencies": {
+    "@material-ui/core": "^1.4.3",
     "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
@@ -21,13 +22,18 @@
     "graphql-tag": "^2.9.2",
     "graphql-tools": "^3.0.5",
     "lodash": "^4.17.10",
-    "ot-charts": "^0.0.1",
-    "ot-ui": "^0.0.1",
-    "react": "^16.4.1",
+    "ot-charts": "^0.0.5",
+    "ot-ui": "^0.0.3",
+    "polished": "^1.9.3",
+    "react": "^16.4.2",
     "react-apollo": "^2.1.9",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
+    "react-measure": "^2.1.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "react-select": "^2.0.0",
+    "react-virtualized": "^9.20.1",
+    "typeface-roboto": "^0.0.54"
   },
   "scripts": {
     "start": "react-app-rewired start",
