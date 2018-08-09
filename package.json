@@ -7,8 +7,8 @@
     "Alfredo Miranda <alfredo@miranda.io>"
   ],
   "bugs": {
-    "url" : "https://github.com/opentargets/genetics/issues",
-    "email" : "support@targetvalidation.org"
+    "url": "https://github.com/opentargets/genetics/issues",
+    "email": "support@targetvalidation.org"
   },
   "dependencies": {
     "apollo-boost": "^0.1.10",
@@ -27,13 +27,15 @@
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "source-map-explorer": "^1.5.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
+    "analyse": "source-map-explorer build/static/js/main.*",
     "prettier": "prettier --write",
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
     "eslint": "eslint . --fix --ext .js"
