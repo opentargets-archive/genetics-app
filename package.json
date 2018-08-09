@@ -33,13 +33,15 @@
     "react-scripts": "1.1.4",
     "react-select": "^2.0.0",
     "react-virtualized": "^9.20.1",
-    "typeface-roboto": "^0.0.54"
+    "typeface-roboto": "^0.0.54",
+    "source-map-explorer": "^1.5.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
+    "analyse": "source-map-explorer build/static/js/main.*",
     "prettier": "prettier --write",
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
     "eslint": "eslint . --fix --ext .js"
