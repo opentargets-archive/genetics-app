@@ -6,6 +6,8 @@ import STUDIES from './studies';
 
 const SIGNIFICANCE = -Math.log10(5e-8);
 const MIN_PVAL = -Math.log10(1e-300);
+const MIN_PVAL_PHEWAS = 1e-20;
+const MAX_NEG_LOG10_PVAL_PHEWAS = -Math.log10(MIN_PVAL_PHEWAS);
 const CHROMOSOMES = [
   ...Array.from(new Array(22), (val, index) => `${index + 1}`),
   'X',
@@ -68,7 +70,7 @@ const mocks = {
     const associations = _.sampleSize(STUDIES, 100).map(d => ({
       ...d,
       traitCode: `TRAIT_${casual.integer(10000, 99999)}`,
-      pval: casual.double(0, SIGNIFICANCE),
+      pval: Math.pow(10, -casual.double(0, MAX_NEG_LOG10_PVAL_PHEWAS)),
       nCases: casual.integer(1, d.nTotal),
     }));
     return { associations };
