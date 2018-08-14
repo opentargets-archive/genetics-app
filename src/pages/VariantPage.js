@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
-import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PageTitle, Heading, SubHeading, OtTable } from 'ot-ui';
 
 import BasePage from './BasePage';
+
+function hasAssociations(data) {
+  return (
+    data.pheWAS &&
+    data.pheWAS.associations &&
+    data.pheWAS.associations.length > 0
+  );
+}
 
 const pheWASQuery = gql`
   {
@@ -22,6 +30,33 @@ const pheWASQuery = gql`
     }
   }
 `;
+
+const tableColumns = [
+  {
+    label: 'nCases',
+    key: 'nCases',
+  },
+  {
+    label: 'nTotal',
+    key: 'nTotal',
+  },
+  {
+    label: 'pval',
+    key: 'pval',
+  },
+  {
+    label: 'studyId',
+    key: 'studyId',
+  },
+  {
+    label: 'traitCode',
+    key: 'traitCode',
+  },
+  {
+    label: 'traitReported',
+    key: 'traitReported',
+  },
+];
 
 const VariantPage = ({ match }) => (
   <BasePage>
@@ -75,47 +110,15 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        return <PheWAS data={data} />;
+        console.log('data', data);
+        return hasAssociations(data) ? (
+          <Fragment>
+            <PheWAS data={data} />
+            <OtTable columns={tableColumns} data={data.pheWAS.associations} />
+          </Fragment>
+        ) : null;
       }}
     </Query>
-    <table>
-      <thead>
-        <tr>
-          <td>study</td>
-          <td>reported trait</td>
-          <td>p-value</td>
-          <td>cases / total</td>
-          <td />
-          <td>...more columns to come</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <Link to="/study/GCST005806">GCST005806</Link>
-          </td>
-          <td>Blood protein levels</td>
-          <td>5.3e-11</td>
-          <td>
-            <Link to="/locus">
-              <button>Gecko Plot</button>
-            </Link>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Link to="/study/GCST005831">GCST005831</Link>
-          </td>
-          <td>Systemic lupus erythematosus</td>
-          <td>6.7e-32</td>
-          <td>
-            <Link to="/locus">
-              <button>Gecko Plot</button>
-            </Link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </BasePage>
 );
 
