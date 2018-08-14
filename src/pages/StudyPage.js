@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -27,6 +28,9 @@ const manhattanQuery = gql`
 
 const StudyPage = ({ match }) => (
   <BasePage>
+    <Helmet>
+      <title>{match.params.studyId}</title>
+    </Helmet>
     <PageTitle>{`Study ${match.params.studyId}`}</PageTitle>
     <hr />
     <Heading>Associated loci</Heading>
