@@ -5319,6 +5319,10 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
 
+lodash.sortby@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
+
 lodash.template@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.template/-/lodash.template-4.4.0.tgz#e73a0385c8355591746e020b99679c690e68fba0"
@@ -6065,9 +6069,11 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.5.tgz#a75642b215f5e84c7d2462d297225e38d52df597"
+ot-charts@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.6.tgz#17cd5efb8d336666d63a7f6a20fbbf60b826a3e8"
+  dependencies:
+    lodash.sortby "^4.7.0"
 
 ot-ui@^0.0.3:
   version "0.0.3"

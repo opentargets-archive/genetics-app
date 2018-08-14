@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:boron
+    - image: circleci/node:10-jessie
 
 version: 2
 jobs:
