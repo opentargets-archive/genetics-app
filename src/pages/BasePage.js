@@ -1,7 +1,8 @@
 import React from 'react';
-import pkg from '../../package.json';
-
+import { Helmet } from 'react-helmet';
 import { Page, NavBar, Footer } from 'ot-ui';
+
+import pkg from '../../package.json';
 
 const BasePage = ({ children }) => (
   <Page
@@ -19,6 +20,10 @@ const BasePage = ({ children }) => (
       />
     }
   >
+    <Helmet
+      defaultTitle="Open Targets Genetics"
+      titleTemplate="%s | Open Targets Genetics"
+    />
     {children}
   </Page>
 );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 import { Splash, HomeBox, Search, SearchExamples } from 'ot-ui';
 
@@ -10,6 +11,9 @@ const EXAMPLES = [
 
 const HomePage = () => (
   <div>
+    <Helmet>
+      <title>Open Targets Genetics</title>
+    </Helmet>
     <Splash />
     <HomeBox name="Genetics">
       <Search />
