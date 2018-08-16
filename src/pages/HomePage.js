@@ -1,5 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { Splash, HomeBox, Search, SearchExamples } from 'ot-ui';
 
@@ -8,6 +10,30 @@ const EXAMPLES = [
   { label: '1_100314838_C_T', url: '/variant/1_100314838_C_T' },
   { label: 'Blood protein levels (Sun BB; 2018)', url: '/study/GCST005806' },
 ];
+
+const searchQuery = gql`
+  query SearchQuery($queryString: String) {
+    search(queryString: $queryString) {
+      genes {
+        id
+        symbol
+        name
+        synonyms
+      }
+      variants {
+        variantId
+        rsId
+      }
+      studies {
+        studyId
+        reportedTrait
+        pubAuthor
+        pubDate
+        pubJournal
+      }
+    }
+  }
+`;
 
 const HomePage = () => (
   <div>
@@ -25,6 +51,15 @@ const HomePage = () => (
         </a>
       </p>
     </HomeBox>
+    <Query
+      query={searchQuery}
+      variables={{ queryString: 'braf' }}
+      fetchPolicy="network-only"
+    >
+      {({ loading, error, data }) => {
+        return null;
+      }}
+    </Query>
   </div>
 );
 
