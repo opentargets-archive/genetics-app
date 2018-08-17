@@ -6,9 +6,9 @@ import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import PheWASTable from '../components/PheWASTable';
 
 import BasePage from './BasePage';
-import PheWASTable from '../tables/PheWASTable';
 import AssociatedTagVariantsTable from '../tables/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../tables/AssociatedIndexVariantsTable';
 
@@ -169,7 +169,7 @@ const VariantPage = ({ match }) => (
         return hasAssociations(data) ? (
           <Fragment>
             <PheWAS data={data} />
-            <PheWASTable data={data} />
+            <PheWASTable associations={data.pheWAS.associations} />
           </Fragment>
         ) : null;
       }}
