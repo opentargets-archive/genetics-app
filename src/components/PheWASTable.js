@@ -1,20 +1,8 @@
 import React from 'react';
-import { OtTable } from 'ot-ui';
 import { Link } from 'react-router-dom';
+import { OtTable, commaSeparate } from 'ot-ui';
 
 const tableColumns = [
-  {
-    label: 'nCases',
-    key: 'nCases',
-  },
-  {
-    label: 'nTotal',
-    key: 'nTotal',
-  },
-  {
-    label: 'pval',
-    key: 'pval',
-  },
   {
     label: 'studyId',
     renderCell: rowData => (
@@ -22,13 +10,26 @@ const tableColumns = [
     ),
   },
   {
-    label: 'traitCode',
-    key: 'traitCode',
-  },
-  {
     label: 'traitReported',
     key: 'traitReported',
   },
+  {
+    label: 'pval',
+    renderCell: rowData => rowData.pval.toPrecision(3),
+  },
+  {
+    label: 'nCases',
+    renderCell: rowData => commaSeparate(rowData.nCases),
+  },
+  {
+    label: 'nTotal',
+    renderCell: rowData => commaSeparate(rowData.nTotal),
+  },
+  // TODO: check status of traitCode with Miguel - should we expose?
+  // {
+  //   label: 'traitCode',
+  //   key: 'traitCode',
+  // },
   {
     label: 'Locus View',
     renderCell: () => {
