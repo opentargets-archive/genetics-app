@@ -9,12 +9,21 @@ import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import PheWASTable from '../tables/PheWASTable';
+import AssociatedTagVariantsTable from '../tables/AssociatedTagVariantsTable';
 
 function hasAssociations(data) {
   return (
     data.pheWAS &&
     data.pheWAS.associations &&
     data.pheWAS.associations.length > 0
+  );
+}
+
+function hasAssociatedTagVariants(data) {
+  return (
+    data.indexVariantsAndStudiesForTagVariant &&
+    data.indexVariantsAndStudiesForTagVariant.rows &&
+    data.indexVariantsAndStudiesForTagVariant.rows.length > 0
   );
 }
 
@@ -28,6 +37,36 @@ const pheWASQuery = gql`
         pval
         nTotal
         nCases
+      }
+    }
+  }
+`;
+
+const associatedTagsQuery = gql`
+  {
+    indexVariantsAndStudiesForTagVariant(variantId: "1_100314838_C_T") {
+      rows {
+        indexVariantId
+        indexVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
       }
     }
   }
@@ -88,12 +127,24 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
         return hasAssociations(data) ? (
           <Fragment>
             <PheWAS data={data} />
             <PheWASTable data={data} />
           </Fragment>
+        ) : null;
+      }}
+    </Query>
+    <hr />
+    <Heading>Associated index variants</Heading>
+    <SubHeading>
+      Which index variants and studies are linked to this tag variant?
+    </SubHeading>
+    <Query query={associatedTagsQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedTagVariants(data) ? (
+          <AssociatedTagVariantsTable data={data} />
         ) : null;
       }}
     </Query>
