@@ -10,6 +10,7 @@ import { PageTitle, Heading, SubHeading } from 'ot-ui';
 import BasePage from './BasePage';
 import PheWASTable from '../tables/PheWASTable';
 import AssociatedTagVariantsTable from '../tables/AssociatedTagVariantsTable';
+import AssociatedIndexVariantsTable from '../tables/AssociatedIndexVariantsTable';
 
 function hasAssociations(data) {
   return (
@@ -19,11 +20,19 @@ function hasAssociations(data) {
   );
 }
 
-function hasAssociatedTagVariants(data) {
+function hasAssociatedIndexVariants(data) {
   return (
     data.indexVariantsAndStudiesForTagVariant &&
     data.indexVariantsAndStudiesForTagVariant.rows &&
     data.indexVariantsAndStudiesForTagVariant.rows.length > 0
+  );
+}
+
+function hasAssociatedTagVariants(data) {
+  return (
+    data.tagVariantsAndStudiesForIndexVariant &&
+    data.tagVariantsAndStudiesForIndexVariant.rows &&
+    data.tagVariantsAndStudiesForIndexVariant.rows.length > 0
   );
 }
 
@@ -42,12 +51,42 @@ const pheWASQuery = gql`
   }
 `;
 
-const associatedTagsQuery = gql`
+const associatedIndexesQuery = gql`
   {
     indexVariantsAndStudiesForTagVariant(variantId: "1_100314838_C_T") {
       rows {
         indexVariantId
         indexVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
+      }
+    }
+  }
+`;
+
+const associatedTagsQuery = gql`
+  {
+    tagVariantsAndStudiesForIndexVariant(variantId: "1_100314838_C_T") {
+      rows {
+        tagVariantId
+        tagVariantRsId
         studyId
         traitReported
         pval
@@ -145,6 +184,19 @@ const VariantPage = ({ match }) => (
         console.log('data', data);
         return hasAssociatedTagVariants(data) ? (
           <AssociatedTagVariantsTable data={data} />
+        ) : null;
+      }}
+    </Query>
+    <hr />
+    <Heading>Associated tag variants</Heading>
+    <SubHeading>
+      Which tag variants and studies are linked to this index variant?
+    </SubHeading>
+    <Query query={associatedIndexesQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedIndexVariants(data) ? (
+          <AssociatedIndexVariantsTable data={data} />
         ) : null;
       }}
     </Query>

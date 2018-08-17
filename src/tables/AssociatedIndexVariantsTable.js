@@ -2,8 +2,8 @@ import React from 'react';
 import { OtTable } from 'ot-ui';
 
 const tableColumns = [
-  { label: 'tagVariantId', key: 'tagVariantId' },
-  { label: 'tagVariantRsId', key: 'tagVariantRsId' },
+  { label: 'indexVariantId', key: 'indexVariantId' },
+  { label: 'indexVariantRsId', key: 'indexVariantRsId' },
   { label: 'studyId', key: 'studyId' },
   { label: 'traitReported', key: 'traitReported' },
   { label: 'pval', key: 'pval' },
@@ -19,11 +19,11 @@ const tableColumns = [
   { label: 'posteriorProbability', key: 'posteriorProbability' },
 ];
 
-const AssociatedTagVariantsTable = ({ loading, error, data }) => (
+const AssociatedIndexVariantsTable = ({ loading, error, data }) => (
   <OtTable
     columns={tableColumns}
-    data={data.tagVariantsAndStudiesForIndexVariant.rows}
+    data={data.indexVariantsAndStudiesForTagVariant.rows}
   />
 );
 
-export default AssociatedTagVariantsTable;
+export default AssociatedIndexVariantsTable;
