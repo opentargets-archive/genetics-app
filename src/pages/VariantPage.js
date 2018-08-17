@@ -179,11 +179,11 @@ const VariantPage = ({ match }) => (
     <SubHeading>
       Which index variants and studies are linked to this tag variant?
     </SubHeading>
-    <Query query={associatedTagsQuery}>
+    <Query query={associatedIndexesQuery}>
       {({ loading, error, data }) => {
         console.log('data', data);
-        return hasAssociatedTagVariants(data) ? (
-          <AssociatedTagVariantsTable data={data} />
+        return hasAssociatedIndexVariants(data) ? (
+          <AssociatedIndexVariantsTable data={data} />
         ) : null;
       }}
     </Query>
@@ -192,11 +192,11 @@ const VariantPage = ({ match }) => (
     <SubHeading>
       Which tag variants and studies are linked to this index variant?
     </SubHeading>
-    <Query query={associatedIndexesQuery}>
+    <Query query={associatedTagsQuery}>
       {({ loading, error, data }) => {
         console.log('data', data);
-        return hasAssociatedIndexVariants(data) ? (
-          <AssociatedIndexVariantsTable data={data} />
+        return hasAssociatedTagVariants(data) ? (
+          <AssociatedTagVariantsTable data={data} />
         ) : null;
       }}
     </Query>
