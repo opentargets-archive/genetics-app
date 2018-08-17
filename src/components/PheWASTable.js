@@ -31,7 +31,7 @@ const tableColumns = [
   },
   {
     label: 'Locus View',
-    renderCell: rowData => {
+    renderCell: () => {
       return <Link to="/locus">Gecko Plot</Link>;
     },
   },
