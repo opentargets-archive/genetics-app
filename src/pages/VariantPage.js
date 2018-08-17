@@ -6,11 +6,11 @@ import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
-import PheWASTable from '../components/PheWASTable';
 
 import BasePage from './BasePage';
-import AssociatedTagVariantsTable from '../tables/AssociatedTagVariantsTable';
-import AssociatedIndexVariantsTable from '../tables/AssociatedIndexVariantsTable';
+import PheWASTable from '../components/PheWASTable';
+import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
+import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 
 function hasAssociations(data) {
   return (
