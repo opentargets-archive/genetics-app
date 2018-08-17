@@ -5,7 +5,8 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
-import { PageTitle, Heading, SubHeading, OtTable } from 'ot-ui';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import PheWASTable from '../components/PheWASTable';
 
 import BasePage from './BasePage';
 
@@ -31,33 +32,6 @@ const pheWASQuery = gql`
     }
   }
 `;
-
-const tableColumns = [
-  {
-    label: 'nCases',
-    key: 'nCases',
-  },
-  {
-    label: 'nTotal',
-    key: 'nTotal',
-  },
-  {
-    label: 'pval',
-    key: 'pval',
-  },
-  {
-    label: 'studyId',
-    key: 'studyId',
-  },
-  {
-    label: 'traitCode',
-    key: 'traitCode',
-  },
-  {
-    label: 'traitReported',
-    key: 'traitReported',
-  },
-];
 
 const VariantPage = ({ match }) => (
   <BasePage>
@@ -114,11 +88,10 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
         return hasAssociations(data) ? (
           <Fragment>
             <PheWAS data={data} />
-            <OtTable columns={tableColumns} data={data.pheWAS.associations} />
+            <PheWASTable associations={data.pheWAS.associations} />
           </Fragment>
         ) : null;
       }}
