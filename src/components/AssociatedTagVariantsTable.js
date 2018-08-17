@@ -39,10 +39,7 @@ const tableColumns = [
 ];
 
 const AssociatedTagVariantsTable = ({ loading, error, data }) => (
-  <OtTable
-    columns={tableColumns}
-    data={data.tagVariantsAndStudiesForIndexVariant.rows}
-  />
+  <OtTable columns={tableColumns} data={data} />
 );
 
 export default AssociatedTagVariantsTable;

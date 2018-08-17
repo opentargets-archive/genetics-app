@@ -183,7 +183,9 @@ const VariantPage = ({ match }) => (
       {({ loading, error, data }) => {
         console.log('data', data);
         return hasAssociatedIndexVariants(data) ? (
-          <AssociatedIndexVariantsTable data={data} />
+          <AssociatedIndexVariantsTable
+            data={data.indexVariantsAndStudiesForTagVariant.rows}
+          />
         ) : null;
       }}
     </Query>
@@ -196,7 +198,9 @@ const VariantPage = ({ match }) => (
       {({ loading, error, data }) => {
         console.log('data', data);
         return hasAssociatedTagVariants(data) ? (
-          <AssociatedTagVariantsTable data={data} />
+          <AssociatedTagVariantsTable
+            data={data.tagVariantsAndStudiesForIndexVariant.rows}
+          />
         ) : null;
       }}
     </Query>
