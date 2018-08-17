@@ -88,7 +88,6 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log(data);
         return hasAssociations(data) ? (
           <Fragment>
             <PheWAS data={data} />
