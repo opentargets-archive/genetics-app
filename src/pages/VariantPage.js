@@ -47,7 +47,9 @@ const tableColumns = [
   },
   {
     label: 'studyId',
-    key: 'studyId',
+    renderCell: rowData => (
+      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+    ),
   },
   {
     label: 'traitCode',
@@ -56,6 +58,12 @@ const tableColumns = [
   {
     label: 'traitReported',
     key: 'traitReported',
+  },
+  {
+    label: 'Locus View',
+    renderCell: rowData => {
+      return <Link to="/locus">Gecko Plot</Link>;
+    },
   },
 ];
 
