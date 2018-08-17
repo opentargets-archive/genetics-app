@@ -30,6 +30,9 @@ export const typeDefs = gql`
     manhattan(studyId: String!): Manhattan
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     pheWAS(variantId: String!): PheWAS
+    indexVariantsAndStudiesForTagVariant(
+      variantId: String!
+    ): IndexVariantsAndStudiesForTagVariant
   }
   type PheWAS {
     associations: [PheWASAssociation!]!
@@ -90,6 +93,36 @@ export const typeDefs = gql`
   type Gene {
     id: String
     symbol: String
+  }
+  type IndexVariantsAndStudiesForTagVariant {
+    rows: [IndexVariantAndStudyForTagVariant!]!
+  }
+  type IndexVariantAndStudyForTagVariant {
+    indexVariantId: String!
+    indexVariantRsId: String!
+    studyId: String!
+    traitReported: String!
+    pval: Float!
+
+    # publication info
+    pmid: String
+    pubDate: String
+    pubJournal: String
+    pubTitle: String
+    pubAuthor: String
+    nTotal: Int # n_initial + n_replication
+    nCases: Int # n_cases
+    # ld info is optional; but expect all or none of the following
+    overallR2: Float # 0.7 - 1
+    afr1000GProp: Float # 0 - 1
+    amr1000GProp: Float
+    eas1000GProp: Float
+    eur1000GProp: Float
+    sas1000GProp: Float
+
+    # finemapping is optional; but expect all or none of the following
+    log10Abf: Float # -inf - +inf
+    posteriorProbability: Float # 0 - 1
   }
   # type Regional {
   #     associations: [RegionalAssociation!]!
