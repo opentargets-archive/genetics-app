@@ -13,7 +13,6 @@ const tableColumns = [
   {
     id: 'traitReported',
     label: 'traitReported',
-    key: 'traitReported',
   },
   {
     id: 'pval',
@@ -33,8 +32,7 @@ const tableColumns = [
   // TODO: check status of traitCode with Miguel - should we expose?
   // {
   //   id: 'traitCode',
-  //   label: 'traitCode',
-  //   key: 'traitCode',
+  //   label: 'traitCode'
   // },
   {
     id: 'locusView',
