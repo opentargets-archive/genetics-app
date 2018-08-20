@@ -59,7 +59,12 @@ const tableColumns = [
 ];
 
 const AssociatedTagVariantsTable = ({ loading, error, data }) => (
-  <OtTable columns={tableColumns} data={data} />
+  <OtTable
+    columns={tableColumns}
+    data={data}
+    sortBy="tagVariantId"
+    order="desc"
+  />
 );
 
 export default AssociatedTagVariantsTable;

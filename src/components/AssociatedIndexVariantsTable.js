@@ -59,7 +59,12 @@ const tableColumns = [
 ];
 
 const AssociatedIndexVariantsTable = ({ loading, error, data }) => (
-  <OtTable columns={tableColumns} data={data} />
+  <OtTable
+    columns={tableColumns}
+    data={data}
+    sortBy="indexVariantId"
+    order="desc"
+  />
 );
 
 export default AssociatedIndexVariantsTable;
