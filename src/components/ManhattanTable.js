@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
 
-const tableColumns = [
+export const tableColumns = [
   {
     id: 'indexVariantId',
     label: 'indexVariantId',
