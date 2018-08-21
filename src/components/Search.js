@@ -46,18 +46,18 @@ const asGroupedOptions = data => {
   ];
 };
 
-function Option(props) {
-  switch (props.data.groupType) {
+const Option = ({ data }) => {
+  switch (data.groupType) {
     case 'gene':
-      return <React.Fragment>{props.data.symbol}</React.Fragment>;
+      return <React.Fragment>{data.symbol}</React.Fragment>;
     case 'variant':
-      return <React.Fragment>{props.data.variantId}</React.Fragment>;
+      return <React.Fragment>{data.variantId}</React.Fragment>;
     case 'study':
-      return <React.Fragment>{props.data.studyId}</React.Fragment>;
+      return <React.Fragment>{data.studyId}</React.Fragment>;
     default:
       throw Error('Unexpected groupType. Should be gene, variant or study.');
   }
-}
+};
 
 class Search extends React.Component {
   constructor(props) {
