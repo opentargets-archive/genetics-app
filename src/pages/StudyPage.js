@@ -4,10 +4,13 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { Manhattan } from 'ot-charts';
 
 import BasePage from './BasePage';
-import ManhattanTable from '../components/ManhattanTable';
-import ManhattanWithTooltip from '../components/ManhattanWithTooltip';
+import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
+import withTooltip from '../components/withTooltip';
+
+const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns);
 
 function hasAssociations(data) {
   return (
