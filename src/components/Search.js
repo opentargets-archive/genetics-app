@@ -78,10 +78,8 @@ class Search extends React.Component {
     this.state = {
       value: null,
     };
-    this.handleSelectOption = this.handleSelectOption.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
-  handleSelectOption(value, { action }) {
+  handleSelectOption = (value, { action }) => {
     const { history } = this.props;
     if (action === 'select-option') {
       switch (value.groupType) {
@@ -101,8 +99,8 @@ class Search extends React.Component {
     this.setState({
       value,
     });
-  }
-  handleInputChange(inputValue) {
+  };
+  handleInputChange = inputValue => {
     const { client } = this.props;
     return client
       .query({
@@ -120,7 +118,7 @@ class Search extends React.Component {
           });
         }
       });
-  }
+  };
   render() {
     return (
       <OtSearch
