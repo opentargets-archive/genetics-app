@@ -17,6 +17,7 @@ const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
 
 function hasAssociations(data) {
   return (
+    data &&
     data.pheWAS &&
     data.pheWAS.associations &&
     data.pheWAS.associations.length > 0
@@ -171,7 +172,7 @@ const VariantPage = ({ match }) => (
       {({ loading, error, data }) => {
         return hasAssociations(data) ? (
           <Fragment>
-            <PheWASWithTooltip data={data} />
+            <PheWASWithTooltip associations={data.pheWAS.associations} />
             <PheWASTable associations={data.pheWAS.associations} />
           </Fragment>
         ) : null;
