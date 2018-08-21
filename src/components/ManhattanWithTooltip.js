@@ -33,9 +33,9 @@ class ManhattanWithTooltip extends React.Component {
     const { data } = this.props;
     const { anchorEl, anchorData, open } = this.state;
     const dataList = anchorData
-      ? tableColumns.map(({ label, key, renderCell }) => ({
+      ? tableColumns.map(({ label, id, renderCell }) => ({
           label,
-          value: renderCell ? renderCell(anchorData) : anchorData[key],
+          value: renderCell ? renderCell(anchorData) : anchorData[id],
         }))
       : [];
     return (
