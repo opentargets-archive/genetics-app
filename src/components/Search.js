@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { Search as OtSearch } from 'ot-ui';
+import { Search as OtSearch, SearchOption } from 'ot-ui';
 
 const SEARCH_QUERY = gql`
   query SearchQuery($queryString: String) {
@@ -20,7 +20,7 @@ const SEARCH_QUERY = gql`
       }
       studies {
         studyId
-        reportedTrait
+        traitReported
         pubAuthor
         pubDate
         pubJournal
@@ -49,11 +49,24 @@ const asGroupedOptions = data => {
 const Option = ({ data }) => {
   switch (data.groupType) {
     case 'gene':
-      return <React.Fragment>{data.symbol}</React.Fragment>;
+      return (
+        <SearchOption
+          heading={data.symbol}
+          subheading={data.name}
+          extra={data.synonyms.join(', ')}
+        />
+      );
     case 'variant':
-      return <React.Fragment>{data.variantId}</React.Fragment>;
+      return <SearchOption heading={data.variantId} subheading={data.rsId} />;
     case 'study':
-      return <React.Fragment>{data.studyId}</React.Fragment>;
+      const pubYear = new Date(data.pubDate).getFullYear();
+      return (
+        <SearchOption
+          heading={`${data.pubAuthor} (${pubYear})`}
+          subheading={data.traitReported}
+          extra={data.pubJournal}
+        />
+      );
     default:
       throw Error('Unexpected groupType. Should be gene, variant or study.');
   }
