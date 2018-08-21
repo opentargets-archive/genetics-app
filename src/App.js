@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { OtUiThemeProvider } from 'ot-ui';
 
-import './App.css';
-
 import HomePage from './pages/HomePage';
 import StudyPage from './pages/StudyPage';
 import GenePage from './pages/GenePage';

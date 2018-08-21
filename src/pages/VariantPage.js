@@ -5,15 +5,34 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PheWAS } from 'ot-charts';
-import { PageTitle, Heading, SubHeading, OtTable } from 'ot-ui';
+import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
+import PheWASTable from '../components/PheWASTable';
+import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
+import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 
 function hasAssociations(data) {
   return (
     data.pheWAS &&
     data.pheWAS.associations &&
     data.pheWAS.associations.length > 0
+  );
+}
+
+function hasAssociatedIndexVariants(data) {
+  return (
+    data.indexVariantsAndStudiesForTagVariant &&
+    data.indexVariantsAndStudiesForTagVariant.rows &&
+    data.indexVariantsAndStudiesForTagVariant.rows.length > 0
+  );
+}
+
+function hasAssociatedTagVariants(data) {
+  return (
+    data.tagVariantsAndStudiesForIndexVariant &&
+    data.tagVariantsAndStudiesForIndexVariant.rows &&
+    data.tagVariantsAndStudiesForIndexVariant.rows.length > 0
   );
 }
 
@@ -32,32 +51,65 @@ const pheWASQuery = gql`
   }
 `;
 
-const tableColumns = [
+const associatedIndexesQuery = gql`
   {
-    label: 'nCases',
-    key: 'nCases',
-  },
+    indexVariantsAndStudiesForTagVariant(variantId: "1_100314838_C_T") {
+      rows {
+        indexVariantId
+        indexVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
+      }
+    }
+  }
+`;
+
+const associatedTagsQuery = gql`
   {
-    label: 'nTotal',
-    key: 'nTotal',
-  },
-  {
-    label: 'pval',
-    key: 'pval',
-  },
-  {
-    label: 'studyId',
-    key: 'studyId',
-  },
-  {
-    label: 'traitCode',
-    key: 'traitCode',
-  },
-  {
-    label: 'traitReported',
-    key: 'traitReported',
-  },
-];
+    tagVariantsAndStudiesForIndexVariant(variantId: "1_100314838_C_T") {
+      rows {
+        tagVariantId
+        tagVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
+      }
+    }
+  }
+`;
 
 const VariantPage = ({ match }) => (
   <BasePage>
@@ -114,12 +166,41 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
         return hasAssociations(data) ? (
           <Fragment>
             <PheWAS data={data} />
-            <OtTable columns={tableColumns} data={data.pheWAS.associations} />
+            <PheWASTable associations={data.pheWAS.associations} />
           </Fragment>
+        ) : null;
+      }}
+    </Query>
+    <hr />
+    <Heading>Associated index variants</Heading>
+    <SubHeading>
+      Which index variants and studies are linked to this tag variant?
+    </SubHeading>
+    <Query query={associatedIndexesQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedIndexVariants(data) ? (
+          <AssociatedIndexVariantsTable
+            data={data.indexVariantsAndStudiesForTagVariant.rows}
+          />
+        ) : null;
+      }}
+    </Query>
+    <hr />
+    <Heading>Associated tag variants</Heading>
+    <SubHeading>
+      Which tag variants and studies are linked to this index variant?
+    </SubHeading>
+    <Query query={associatedTagsQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedTagVariants(data) ? (
+          <AssociatedTagVariantsTable
+            data={data.tagVariantsAndStudiesForIndexVariant.rows}
+          />
         ) : null;
       }}
     </Query>
