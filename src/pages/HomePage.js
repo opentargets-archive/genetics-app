@@ -3,7 +3,9 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { Splash, HomeBox, Search, SearchExamples } from 'ot-ui';
+import { Splash, HomeBox, SearchExamples } from 'ot-ui';
+
+import Search from '../components/Search';
 
 const EXAMPLES = [
   { label: 'CDK6', url: '/gene/ENSG00000105810' },
