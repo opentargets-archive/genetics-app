@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PheWAS } from 'ot-charts';
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import PheWASTable from '../components/PheWASTable';
+import PheWASWithTooltip from '../components/PheWASWithTooltip';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 
@@ -168,7 +168,7 @@ const VariantPage = ({ match }) => (
       {({ loading, error, data }) => {
         return hasAssociations(data) ? (
           <Fragment>
-            <PheWAS data={data} />
+            <PheWASWithTooltip data={data} />
             <PheWASTable associations={data.pheWAS.associations} />
           </Fragment>
         ) : null;
