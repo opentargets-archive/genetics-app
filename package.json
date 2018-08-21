@@ -1,6 +1,6 @@
 {
   "name": "genetics-app",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "Apache-2.0",
   "contributors": [
     "Gareth Peat <garethpeat@gmail.com>",
@@ -27,7 +27,7 @@
     "graphql-tools": "^3.0.5",
     "lodash": "^4.17.10",
     "ot-charts": "^0.0.7",
-    "ot-ui": "^0.0.6",
+    "ot-ui": "^0.0.7",
     "polished": "^1.9.3",
     "react": "^16.4.2",
     "react-apollo": "^2.1.9",
