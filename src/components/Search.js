@@ -101,6 +101,10 @@ class Search extends React.Component {
     });
   };
   handleInputChange = inputValue => {
+    if (!inputValue || inputValue.length < 3) {
+      return;
+    }
+
     const { client } = this.props;
     return client
       .query({
