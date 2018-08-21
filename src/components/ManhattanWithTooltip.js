@@ -12,23 +12,21 @@ class ManhattanWithTooltip extends React.Component {
       anchorData: null,
       open: false,
     };
-    this.handleMouseover = this.handleMouseover.bind(this);
-    this.handleMouseout = this.handleMouseout.bind(this);
   }
-  handleMouseover(d, el) {
+  handleMouseover = (d, el) => {
     this.setState({
       open: true,
       anchorEl: el,
       anchorData: d,
     });
-  }
-  handleMouseout() {
+  };
+  handleMouseout = () => {
     this.setState({
       open: false,
       anchorEl: null,
       anchorData: null,
     });
-  }
+  };
   render() {
     const { data } = this.props;
     const { anchorEl, anchorData, open } = this.state;
