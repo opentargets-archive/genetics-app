@@ -5,12 +5,15 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
-import PheWASTable from '../components/PheWASTable';
-import PheWASWithTooltip from '../components/PheWASWithTooltip';
+import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
+import withTooltip from '../components/withTooltip';
+
+const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
 
 function hasAssociations(data) {
   return (
