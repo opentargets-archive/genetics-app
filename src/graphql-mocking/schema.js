@@ -55,7 +55,7 @@ export const typeDefs = gql`
   }
   type SearchResultStudy {
     studyId: String!
-    reportedTrait: String!
+    traitReported: String!
     pubAuthor: String
     pubDate: String
     pubJournal: String
