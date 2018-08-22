@@ -81,6 +81,57 @@ const mockManhattanAssociation = () => {
   };
 };
 
+const SEARCH_GENES = [
+  {
+    id: 'ENSG00000157764',
+    symbol: 'BRAF',
+    name: 'B-Raf proto-oncogene, serine/threonine kinase',
+    synonyms: [
+      'BRAF1',
+      'RAFB1',
+      'v-Raf murine sarcoma viral oncogene homolog B1',
+    ],
+  },
+  {
+    id: 'ENSG00000145335',
+    symbol: 'SNCA',
+    name: 'synuclein alpha',
+    synonyms: [],
+  },
+];
+const SEARCH_VARIANTS = [
+  {
+    variantId: '1_10247043_A_T',
+    rsId: 'rs869449',
+  },
+  {
+    variantId: '5_17399320_C_G',
+    rsId: 'rs3758469',
+  },
+];
+const SEARCH_STUDIES = [
+  {
+    studyId: 'GCST005806',
+    traitReported: 'Blood protein levels',
+    pubAuthor: 'Sun BB',
+    pubDate: '2018-06-06',
+    pubJournal: 'Nature',
+  },
+  {
+    studyId: 'GCST005831',
+    traitReported: 'Systemic lupus erythematosus',
+    pubAuthor: 'Julia A',
+    pubDate: '2018-05-30',
+    pubJournal: 'Arthritis Res Ther',
+  },
+];
+const mockSearchResult = () => {
+  return {
+    genes: SEARCH_GENES,
+    variants: SEARCH_VARIANTS,
+    studies: SEARCH_STUDIES,
+  };
+};
 const mockVariantId = () => {
   const chromosome = casual.random_element(CHROMOSOMES);
   const position = casual.integer(1, CHROMOSOME_LENGTHS_GRCH38[chromosome]);
@@ -106,6 +157,7 @@ const mocks = {
     }));
     return { associations };
   },
+  SearchResult: mockSearchResult,
   IndexVariantAndStudyForTagVariant: () => {
     const study = casual.random_element(STUDIES);
     return {
