@@ -45,10 +45,12 @@
     "analyse": "source-map-explorer build/static/js/main.*",
     "prettier": "prettier --write",
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
-    "eslint": "eslint . --fix --ext .js"
+    "eslint": "eslint . --fix --ext .js",
+    "report:coverage": "codecov"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
+    "codecov": "^3.0.4",
     "enzyme": "^3.4.1",
     "enzyme-adapter-react-16": "^1.2.0",
     "eslint-plugin-prettier": "^2.6.2",
