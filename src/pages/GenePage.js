@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 
 const GenePage = ({ match }) => (
   <BasePage>
+    <Helmet>
+      <title>{match.params.geneId}</title>
+    </Helmet>
     <PageTitle>{`Gene ${match.params.geneId}`}</PageTitle>
     <hr />
     <Heading>Associated variants</Heading>

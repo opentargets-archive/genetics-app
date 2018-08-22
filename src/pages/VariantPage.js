@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PheWAS } from 'ot-charts';
 import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
+import PheWASTable, { tableColumns } from '../components/PheWASTable';
+import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
+import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
+import withTooltip from '../components/withTooltip';
+
+const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
+
+function hasAssociations(data) {
+  return (
+    data &&
+    data.pheWAS &&
+    data.pheWAS.associations &&
+    data.pheWAS.associations.length > 0
+  );
+}
+
+function hasAssociatedIndexVariants(data) {
+  return (
+    data.indexVariantsAndStudiesForTagVariant &&
+    data.indexVariantsAndStudiesForTagVariant.rows &&
+    data.indexVariantsAndStudiesForTagVariant.rows.length > 0
+  );
+}
+
+function hasAssociatedTagVariants(data) {
+  return (
+    data.tagVariantsAndStudiesForIndexVariant &&
+    data.tagVariantsAndStudiesForIndexVariant.rows &&
+    data.tagVariantsAndStudiesForIndexVariant.rows.length > 0
+  );
+}
 
 const pheWASQuery = gql`
   {
@@ -23,8 +55,71 @@ const pheWASQuery = gql`
   }
 `;
 
+const associatedIndexesQuery = gql`
+  {
+    indexVariantsAndStudiesForTagVariant(variantId: "1_100314838_C_T") {
+      rows {
+        indexVariantId
+        indexVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
+      }
+    }
+  }
+`;
+
+const associatedTagsQuery = gql`
+  {
+    tagVariantsAndStudiesForIndexVariant(variantId: "1_100314838_C_T") {
+      rows {
+        tagVariantId
+        tagVariantRsId
+        studyId
+        traitReported
+        pval
+
+        # publication info
+        pmid
+        pubDate
+        pubJournal
+        pubTitle
+        pubAuthor
+        nTotal
+        nCases
+
+        # ld info is optional
+        overallR2
+
+        # finemapping is optional; but expect all or none of the following
+        log10Abf
+        posteriorProbability
+      }
+    }
+  }
+`;
+
 const VariantPage = ({ match }) => (
   <BasePage>
+    <Helmet>
+      <title>{match.params.variantId}</title>
+    </Helmet>
     <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
     <hr />
     <Heading>Associated genes</Heading>
@@ -73,53 +168,46 @@ const VariantPage = ({ match }) => (
     <SubHeading>
       Which studies are linked to this variant through a GWAS?
     </SubHeading>
-    <PheWAS />
-
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
-        return null;
+        return hasAssociations(data) ? (
+          <Fragment>
+            <PheWASWithTooltip associations={data.pheWAS.associations} />
+            <PheWASTable associations={data.pheWAS.associations} />
+          </Fragment>
+        ) : null;
       }}
     </Query>
-
-    <table>
-      <thead>
-        <tr>
-          <td>study</td>
-          <td>reported trait</td>
-          <td>p-value</td>
-          <td>cases / total</td>
-          <td />
-          <td>...more columns to come</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <Link to="/study/GCST005806">GCST005806</Link>
-          </td>
-          <td>Blood protein levels</td>
-          <td>5.3e-11</td>
-          <td>
-            <Link to="/locus">
-              <button>Gecko Plot</button>
-            </Link>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Link to="/study/GCST005831">GCST005831</Link>
-          </td>
-          <td>Systemic lupus erythematosus</td>
-          <td>6.7e-32</td>
-          <td>
-            <Link to="/locus">
-              <button>Gecko Plot</button>
-            </Link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <hr />
+    <Heading>Associated index variants</Heading>
+    <SubHeading>
+      Which index variants and studies are linked to this tag variant?
+    </SubHeading>
+    <Query query={associatedIndexesQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedIndexVariants(data) ? (
+          <AssociatedIndexVariantsTable
+            data={data.indexVariantsAndStudiesForTagVariant.rows}
+          />
+        ) : null;
+      }}
+    </Query>
+    <hr />
+    <Heading>Associated tag variants</Heading>
+    <SubHeading>
+      Which tag variants and studies are linked to this index variant?
+    </SubHeading>
+    <Query query={associatedTagsQuery}>
+      {({ loading, error, data }) => {
+        console.log('data', data);
+        return hasAssociatedTagVariants(data) ? (
+          <AssociatedTagVariantsTable
+            data={data.tagVariantsAndStudiesForIndexVariant.rows}
+          />
+        ) : null;
+      }}
+    </Query>
   </BasePage>
 );
 
