@@ -49,7 +49,9 @@
     "analyse": "source-map-explorer build/static/js/main.*",
     "prettier": "prettier --write",
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
-    "eslint": "eslint . --fix --ext .js"
+    "eslint": "eslint . --fix --ext .js",
+    "version": "yarn build",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
