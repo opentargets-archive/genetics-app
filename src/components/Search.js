@@ -96,9 +96,6 @@ class Search extends React.Component {
           break;
       }
     }
-    this.setState({
-      value,
-    });
   };
   handleInputChange = inputValue => {
     if (!inputValue || inputValue.length < 3) {
