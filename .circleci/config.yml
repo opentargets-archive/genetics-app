@@ -24,7 +24,10 @@ jobs:
           paths: node_modules
       - run:
           name: Run unit tests
-          command: CI=true yarn test
+          command: CI=true yarn test:coverage
+      - run:
+          name: Report test coverage
+          command: yarn report:coverage
       - run:
           name: Build
           command: yarn build
