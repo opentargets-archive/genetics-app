@@ -140,26 +140,15 @@ export const typeDefs = gql`
     studyId: String!
     traitReported: String!
     pval: Float!
-
     # publication info
     pmid: String
     pubDate: String
-    pubJournal: String
-    pubTitle: String
     pubAuthor: String
     nTotal: Int # n_initial + n_replication
-    nCases: Int # n_cases
     # ld info is optional; but expect all or none of the following
     overallR2: Float # 0.7 - 1
-    afr1000GProp: Float # 0 - 1
-    amr1000GProp: Float
-    eas1000GProp: Float
-    eur1000GProp: Float
-    sas1000GProp: Float
-
     # finemapping is optional; but expect all or none of the following
-    log10Abf: Float # -inf - +inf
-    posteriorProbability: Float # 0 - 1
+    isInCredibleSet: Boolean
   }
   type TagVariantsAndStudiesForIndexVariant {
     rows: [TagVariantAndStudyForIndexVariant!]!
@@ -170,25 +159,15 @@ export const typeDefs = gql`
     studyId: String!
     traitReported: String!
     pval: Float!
-
     # publication info
     pmid: String
     pubDate: String
-    pubJournal: String
-    pubTitle: String
     pubAuthor: String
     nTotal: Int # n_initial + n_replication
-    nCases: Int # n_cases
     # ld info is optional; but expect all or none of the following
     overallR2: Float # 0.7 - 1
-    afr1000GProp: Float # 0 - 1
-    amr1000GProp: Float
-    eas1000GProp: Float
-    eur1000GProp: Float
-    sas1000GProp: Float
-
     # finemapping is optional; but expect all or none of the following
-    log10Abf: Float # -inf - +inf
+    isInCredibleSet: Boolean
     posteriorProbability: Float # 0 - 1
   }
   # type Regional {

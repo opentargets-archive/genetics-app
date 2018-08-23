@@ -40,22 +40,7 @@ const CHROMOSOME_LENGTHS_GRCH38 = {
 };
 const ALLELES = 'ACGT'.split('');
 
-const PUB_JOURNALS = [
-  'Nat Commun',
-  'Sci Rep',
-  'Arthritis Res Ther',
-  'Nature',
-  'BMC Genomics',
-  'Diabetes Metab Res Rev',
-  'Prog Neuropsychopharmacol Biol Psychiatry',
-];
-const PUB_TITLES = [
-  'Genome-wide association study link novel loci to endometriosis.',
-  'Genome-wide association study of iron traits and relation to diabetes in the Hispanic Community Health Study/Study of Latinos (HCHS/SOL): potential genomic intersection of iron andglucose regulation?',
-  'Meta-analysis of genome-wide association studies of anxiety disorders.',
-  'Whole genome sequencing and imputation in isolated populations identify genetic associations with medically-relevant complex traits.',
-  'Weight loss after gastric bypass is associated with a variant at 15q26.1.',
-];
+const IS_IN_CREDIBLE_SET_OPTIONS = [true, false, null];
 
 const mockManhattanAssociation = () => {
   const chromosome = casual.random_element(CHROMOSOMES);
@@ -172,15 +157,11 @@ const mocks = {
       indexVariantRsId: mockRsId(),
       ...study,
       pval: Math.pow(10, -casual.double(0, MAX_NEG_LOG10_PVAL_PHEWAS)),
-      nCases: casual.integer(1, study.nTotal),
       pmid: `${casual.integer(10000000, 100000000)}`,
       pubDate: casual.date('YYYY-MM-DD'),
-      pubJournal: casual.random_element(PUB_JOURNALS),
-      pubTitle: casual.random_element(PUB_TITLES),
       pubAuthor: `${casual.last_name} ${casual.letter.toUpperCase()}`,
       overallR2: casual.double(0.7, 1),
-      log10Abf: casual.double(-10, 10),
-      posteriorProbability: casual.double(0, 1),
+      isInCredibleSet: casual.random_element(IS_IN_CREDIBLE_SET_OPTIONS),
     };
   },
   TagVariantAndStudyForIndexVariant: () => {
@@ -190,14 +171,11 @@ const mocks = {
       tagVariantRsId: mockRsId(),
       ...study,
       pval: Math.pow(10, -casual.double(0, MAX_NEG_LOG10_PVAL_PHEWAS)),
-      nCases: casual.integer(1, study.nTotal),
       pmid: `${casual.integer(10000000, 100000000)}`,
       pubDate: casual.date('YYYY-MM-DD'),
-      pubJournal: casual.random_element(PUB_JOURNALS),
-      pubTitle: casual.random_element(PUB_TITLES),
       pubAuthor: `${casual.last_name} ${casual.letter.toUpperCase()}`,
       overallR2: casual.double(0.7, 1),
-      log10Abf: casual.double(-10, 10),
+      isInCredibleSet: casual.random_element(IS_IN_CREDIBLE_SET_OPTIONS),
       posteriorProbability: casual.double(0, 1),
     };
   },

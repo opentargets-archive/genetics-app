@@ -68,18 +68,14 @@ const associatedIndexesQuery = gql`
         # publication info
         pmid
         pubDate
-        pubJournal
-        pubTitle
         pubAuthor
         nTotal
-        nCases
 
         # ld info is optional
         overallR2
 
         # finemapping is optional; but expect all or none of the following
-        log10Abf
-        posteriorProbability
+        isInCredibleSet
       }
     }
   }
@@ -98,17 +94,14 @@ const associatedTagsQuery = gql`
         # publication info
         pmid
         pubDate
-        pubJournal
-        pubTitle
         pubAuthor
         nTotal
-        nCases
 
         # ld info is optional
         overallR2
 
         # finemapping is optional; but expect all or none of the following
-        log10Abf
+        isInCredibleSet
         posteriorProbability
       }
     }
@@ -185,7 +178,6 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={associatedIndexesQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
         return hasAssociatedIndexVariants(data) ? (
           <AssociatedIndexVariantsTable
             data={data.indexVariantsAndStudiesForTagVariant.rows}
@@ -200,7 +192,6 @@ const VariantPage = ({ match }) => (
     </SubHeading>
     <Query query={associatedTagsQuery}>
       {({ loading, error, data }) => {
-        console.log('data', data);
         return hasAssociatedTagVariants(data) ? (
           <AssociatedTagVariantsTable
             data={data.tagVariantsAndStudiesForIndexVariant.rows}
