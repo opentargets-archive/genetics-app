@@ -72,6 +72,8 @@ export const typeDefs = gql`
     traitReported: String!
     traitCode: String!
     pval: Float!
+    beta: Float
+    oddsRatio: Float
     nTotal: Int # total sample size (variant level)
     nCases: Int # number of cases (variant level)
 
