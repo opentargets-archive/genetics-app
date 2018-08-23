@@ -5,7 +5,7 @@ import { OtTable, commaSeparate } from 'ot-ui';
 export const tableColumns = [
   {
     id: 'indexVariantId',
-    label: 'indexVariantId',
+    label: 'Lead Variant',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
@@ -14,21 +14,21 @@ export const tableColumns = [
   },
   {
     id: 'indexVariantRsId',
-    label: 'indexVariantRsId',
+    label: 'rsID',
   },
   {
     id: 'pval',
-    label: 'pval',
+    label: 'P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {
     id: 'credibleSetSize',
-    label: 'credibleSetSize',
+    label: 'Credible Set Size',
     renderCell: rowData => commaSeparate(rowData.credibleSetSize),
   },
   {
     id: 'ldSetSize',
-    label: 'ldSetSize',
+    label: 'LD Set Size',
     renderCell: rowData => commaSeparate(rowData.ldSetSize),
   },
 ];
