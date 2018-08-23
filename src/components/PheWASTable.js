@@ -43,8 +43,8 @@ function PheWASTable({ associations }) {
     <OtTable
       columns={tableColumns}
       data={associations}
-      sortBy="studyId"
-      order="desc"
+      sortBy="pval"
+      order="asc"
     />
   );
 }
