@@ -24,11 +24,14 @@ export const tableColumns = [
   {
     id: 'credibleSetSize',
     label: 'Credible Set Size',
+    tooltip: 'Number of variants in 95% credible set at this locus',
     renderCell: rowData => commaSeparate(rowData.credibleSetSize),
   },
   {
     id: 'ldSetSize',
     label: 'LD Set Size',
+    tooltip:
+      'Number of variants that are in LD (R2 >= 0.7) with this lead variant',
     renderCell: rowData => commaSeparate(rowData.ldSetSize),
   },
 ];
