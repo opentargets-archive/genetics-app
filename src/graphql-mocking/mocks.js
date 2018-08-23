@@ -132,6 +132,12 @@ const mockSearchResult = () => {
     studies: SEARCH_STUDIES,
   };
 };
+const mockStudyInfo = () => {
+  return {
+    ...SEARCH_STUDIES[0],
+    pmid: '8962668',
+  };
+};
 const mockVariantId = () => {
   const chromosome = casual.random_element(CHROMOSOMES);
   const position = casual.integer(1, CHROMOSOME_LENGTHS_GRCH38[chromosome]);
@@ -157,6 +163,7 @@ const mocks = {
     }));
     return { associations };
   },
+  StudyInfo: mockStudyInfo,
   SearchResult: mockSearchResult,
   IndexVariantAndStudyForTagVariant: () => {
     const study = casual.random_element(STUDIES);

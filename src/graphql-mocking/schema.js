@@ -27,7 +27,8 @@ export const typeDefs = gql`
   }
   type RootQueryType {
     # search(queryString: String): [SearchResult!]!
-    manhattan(studyId: String!): Manhattan
+    studyInfo(studyId: String!): StudyInfo!
+    manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
@@ -100,6 +101,14 @@ export const typeDefs = gql`
   #     id: String!
   #     term: String!
   # }
+  type StudyInfo {
+    studyId: String!
+    traitReported: String!
+    pubAuthor: String
+    pubDate: String
+    pubJournal: String
+    pmid: String
+  }
   type Manhattan {
     associations: [ManhattanAssociation!]!
   }

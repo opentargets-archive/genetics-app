@@ -11,17 +11,35 @@ import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import withTooltip from '../components/withTooltip';
 
 const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns);
+const SIGNIFICANCE = 5e-8;
 
 function hasAssociations(data) {
   return (
+    data &&
     data.manhattan &&
     data.manhattan.associations &&
     data.manhattan.associations.length > 0
   );
 }
 
+function hasStudyInfo(data) {
+  return data && data.studyInfo;
+}
+
+function significantLoci(data) {
+  return data.manhattan.associations.filter(d => d.pval < SIGNIFICANCE).length;
+}
+
 const manhattanQuery = gql`
   {
+    studyInfo(studyId: "GCT123") {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+    }
     manhattan(studyId: "GCT123") {
       associations {
         indexVariantId
@@ -42,18 +60,45 @@ const StudyPage = ({ match }) => (
     <Helmet>
       <title>{match.params.studyId}</title>
     </Helmet>
-    <PageTitle>{`Study ${match.params.studyId}`}</PageTitle>
-    <hr />
-    <Heading>Associated loci</Heading>
-    <SubHeading>Which loci are significantly linked to this study?</SubHeading>
+
     <Query query={manhattanQuery} fetchPolicy="network-only">
       {({ loading, error, data }) => {
-        return hasAssociations(data) ? (
+        return (
           <React.Fragment>
-            <ManhattanWithTooltip data={data.manhattan} />
-            <ManhattanTable data={data.manhattan.associations} />
+            {hasStudyInfo(data) ? (
+              <React.Fragment>
+                <PageTitle>{data.studyInfo.traitReported}</PageTitle>
+                <SubHeading>
+                  {`${data.studyInfo.pubAuthor} et al (${new Date(
+                    data.studyInfo.pubDate
+                  ).getFullYear()}) `}
+                  <em>{`${data.studyInfo.pubJournal} `}</em>
+                  <a
+                    href={`http://europepmc.org/abstract/med/${
+                      data.studyInfo.pmid
+                    }`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {data.studyInfo.pmid}
+                  </a>
+                </SubHeading>
+                <hr />
+              </React.Fragment>
+            ) : null}
+            {hasAssociations(data) ? (
+              <React.Fragment>
+                <Heading>Independently-associated loci</Heading>
+                <SubHeading>
+                  {`Found ${significantLoci(data)} loci with genome-wide
+                  significance (p-value < 5e-8)`}
+                </SubHeading>
+                <ManhattanWithTooltip data={data.manhattan} />
+                <ManhattanTable data={data.manhattan.associations} />
+              </React.Fragment>
+            ) : null}
           </React.Fragment>
-        ) : null;
+        );
       }}
     </Query>
   </BasePage>
