@@ -38,12 +38,7 @@ export const tableColumns = [
 
 function ManhattanTable({ data }) {
   return (
-    <OtTable
-      columns={tableColumns}
-      data={data}
-      sortBy="indexVariantId"
-      order="desc"
-    />
+    <OtTable columns={tableColumns} data={data} sortBy="pval" order="asc" />
   );
 }
 
