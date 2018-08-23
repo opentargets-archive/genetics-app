@@ -138,6 +138,22 @@ const mockVariantId = () => {
 const mockRsId = () => `rs${casual.integer(100, 100000)}`;
 
 const mocks = {
+  GenesForVariant: () => {
+    return {
+      genes: [
+        {
+          id: 'ENSG00000157764',
+          symbol: 'BRAF',
+          overallScore: 'High',
+        },
+        {
+          id: 'ENSG00000145335',
+          symbol: 'SNCA',
+          overallScore: 'Medium',
+        },
+      ],
+    };
+  },
   PheWAS: () => {
     // sample from the actual study names, then augment with other fields
     const associations = _.sampleSize(STUDIES, 100).map(d => ({

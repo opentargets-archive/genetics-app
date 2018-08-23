@@ -30,6 +30,7 @@ export const typeDefs = gql`
     studyInfo(studyId: String!): StudyInfo!
     manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
+    genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
     indexVariantsAndStudiesForTagVariant(
@@ -62,6 +63,18 @@ export const typeDefs = gql`
     pubJournal: String
     # TBD: sample size
     # TBD: loci count
+  }
+  type GenesForVariant {
+    genes: [GeneForVariant!]!
+  }
+
+  type GeneForVariant {
+    id: String!
+    symbol: String!
+    overallScore: String!
+    # qtls: [Qtl!]!
+    # intervals: [Interval!]!
+    # functionalPredictions: TBD
   }
   type PheWAS {
     associations: [PheWASAssociation!]!
