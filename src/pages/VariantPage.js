@@ -164,9 +164,9 @@ const VariantPage = ({ match }) => (
       </tbody>
     </table>
     <hr />
-    <Heading>Associated studies</Heading>
+    <Heading>PheWAS</Heading>
     <SubHeading>
-      Which studies are linked to this variant through a GWAS?
+      Which traits are associated with this variant in UK Biobank?
     </SubHeading>
     <Query query={pheWASQuery}>
       {({ loading, error, data }) => {
