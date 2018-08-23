@@ -122,9 +122,9 @@ const VariantPage = ({ match }) => (
     </Helmet>
     <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
     <hr />
-    <Heading>Associated genes</Heading>
+    <Heading>Assigned genes</Heading>
     <SubHeading>
-      Which genes are functionally linked to this variant?
+      Which genes are functionally implicated by this variant?
     </SubHeading>
     <table>
       <thead>
@@ -179,9 +179,9 @@ const VariantPage = ({ match }) => (
       }}
     </Query>
     <hr />
-    <Heading>Associated index variants</Heading>
+    <Heading>GWAS lead variants</Heading>
     <SubHeading>
-      Which index variants and studies are linked to this tag variant?
+      Which GWAS lead variants are linked with this variant?
     </SubHeading>
     <Query query={associatedIndexesQuery}>
       {({ loading, error, data }) => {
@@ -194,9 +194,9 @@ const VariantPage = ({ match }) => (
       }}
     </Query>
     <hr />
-    <Heading>Associated tag variants</Heading>
+    <Heading>Tag variants</Heading>
     <SubHeading>
-      Which tag variants and studies are linked to this index variant?
+      Which variants tag (through LD or finemapping) this lead variant?
     </SubHeading>
     <Query query={associatedTagsQuery}>
       {({ loading, error, data }) => {
