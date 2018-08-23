@@ -20,6 +20,16 @@ export const tableColumns = [
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {
+    id: 'beta',
+    label: 'Beta',
+    renderCell: rowData => rowData.beta.toPrecision(3),
+  },
+  {
+    id: 'oddsRatio',
+    label: 'Odds Ratio',
+    renderCell: rowData => rowData.oddsRatio.toPrecision(3),
+  },
+  {
     id: 'nCases',
     label: 'N Cases',
     renderCell: rowData => commaSeparate(rowData.nCases),

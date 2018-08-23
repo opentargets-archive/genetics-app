@@ -159,6 +159,8 @@ const mocks = {
       ...d,
       traitCode: `TRAIT_${casual.integer(10000, 99999)}`,
       pval: Math.pow(10, -casual.double(0, MAX_NEG_LOG10_PVAL_PHEWAS)),
+      beta: casual.double(-0.002, 0.008), // taken from example summary stats file for rheumatoid arthritis
+      oddsRatio: Math.exp(casual.double(-0.002, 0.008)),
       nCases: casual.integer(1, d.nTotal),
     }));
     return { associations };

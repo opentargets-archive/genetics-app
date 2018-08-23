@@ -48,6 +48,8 @@ const pheWASQuery = gql`
         traitReported
         traitCode
         pval
+        beta
+        oddsRatio
         nTotal
         nCases
       }
