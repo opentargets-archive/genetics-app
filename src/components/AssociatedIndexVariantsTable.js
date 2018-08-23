@@ -73,7 +73,13 @@ const tableColumns = [
 ];
 
 const AssociatedIndexVariantsTable = ({ loading, error, data }) => (
-  <OtTable columns={tableColumns} data={data} sortBy="pval" order="asc" />
+  <OtTable
+    columns={tableColumns}
+    data={data}
+    sortBy="pval"
+    order="asc"
+    downloadFileStem="associated-index-variants"
+  />
 );
 
 export default AssociatedIndexVariantsTable;

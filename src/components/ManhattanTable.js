@@ -38,7 +38,13 @@ export const tableColumns = [
 
 function ManhattanTable({ data }) {
   return (
-    <OtTable columns={tableColumns} data={data} sortBy="pval" order="asc" />
+    <OtTable
+      columns={tableColumns}
+      data={data}
+      sortBy="pval"
+      order="asc"
+      downloadFileStem="independently-associated-loci"
+    />
   );
 }
 
