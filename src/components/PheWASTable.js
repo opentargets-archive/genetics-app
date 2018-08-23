@@ -5,35 +5,30 @@ import { OtTable, commaSeparate } from 'ot-ui';
 export const tableColumns = [
   {
     id: 'studyId',
-    label: 'studyId',
+    label: 'Study ID',
     renderCell: rowData => (
       <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
     ),
   },
   {
     id: 'traitReported',
-    label: 'traitReported',
+    label: 'Trait',
   },
   {
     id: 'pval',
-    label: 'pval',
+    label: 'P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {
     id: 'nCases',
-    label: 'nCases',
+    label: 'N Cases',
     renderCell: rowData => commaSeparate(rowData.nCases),
   },
   {
     id: 'nTotal',
-    label: 'nTotal',
+    label: 'N Overall',
     renderCell: rowData => commaSeparate(rowData.nTotal),
   },
-  // TODO: check status of traitCode with Miguel - should we expose?
-  // {
-  //   id: 'traitCode',
-  //   label: 'traitCode'
-  // },
   {
     id: 'locusView',
     label: 'Locus View',
