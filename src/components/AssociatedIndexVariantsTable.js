@@ -5,66 +5,75 @@ import { OtTable, commaSeparate } from 'ot-ui';
 const tableColumns = [
   {
     id: 'indexVariantId',
-    label: 'indexVariantId',
+    label: 'Variant',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
       </Link>
     ),
   },
-  { id: 'indexVariantRsId', label: 'indexVariantRsId' },
+  { id: 'indexVariantRsId', label: 'rsID' },
   {
     id: 'studyId',
-    label: 'studyId',
+    label: 'Study ID',
     renderCell: rowData => (
       <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
     ),
   },
-  { id: 'traitReported', label: 'traitReported' },
+  { id: 'traitReported', label: 'Trait' },
   {
     id: 'pval',
-    label: 'pval',
+    label: 'P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
-  { id: 'pmid', label: 'pmid' },
-  { id: 'pubDate', label: 'pubDate' },
-  { id: 'pubJournal', label: 'pubJournal' },
-  // { id: 'pubTitle', label: 'pubTitle' },
-  { id: 'pubAuthor', label: 'pubAuthor' },
+  {
+    id: 'pmid',
+    label: 'PMID',
+    renderCell: rowData => (
+      <a
+        href={`http://europepmc.org/abstract/med/${rowData.pmid}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {rowData.pmid}
+      </a>
+    ),
+  },
+  {
+    id: 'pubAuthor',
+    label: 'Author (Year)',
+    renderCell: rowData =>
+      `${rowData.pubAuthor} et al (${new Date(rowData.pubDate).getFullYear()})`,
+  },
   {
     id: 'nTotal',
-    label: 'nTotal',
+    label: 'Study N',
     renderCell: rowData => commaSeparate(rowData.nTotal),
   },
   {
-    id: 'nCases',
-    label: 'nCases',
-    renderCell: rowData => commaSeparate(rowData.nCases),
-  },
-  {
     id: 'overallR2',
-    label: 'overallR2',
+    label: 'LD (R-squared)',
+    tooltip: 'Linkage disequilibrium with the queried variant',
     renderCell: rowData => rowData.overallR2.toPrecision(3),
   },
   {
-    id: 'log10Abf',
-    label: 'log10Abf',
-    renderCell: rowData => rowData.log10Abf.toPrecision(3),
-  },
-  {
-    id: 'posteriorProbability',
-    label: 'posteriorProbability',
-    renderCell: rowData => rowData.posteriorProbability.toPrecision(3),
+    id: 'isInCredibleSet',
+    label: 'Is in 95% Credible Set',
+    renderCell: rowData => {
+      switch (rowData.isInCredibleSet) {
+        case true:
+          return 'True';
+        case false:
+          return 'False';
+        default:
+          return 'No information';
+      }
+    },
   },
 ];
 
 const AssociatedIndexVariantsTable = ({ loading, error, data }) => (
-  <OtTable
-    columns={tableColumns}
-    data={data}
-    sortBy="indexVariantId"
-    order="desc"
-  />
+  <OtTable columns={tableColumns} data={data} sortBy="pval" order="asc" />
 );
 
 export default AssociatedIndexVariantsTable;

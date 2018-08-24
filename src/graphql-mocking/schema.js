@@ -30,6 +30,7 @@ export const typeDefs = gql`
     studyInfo(studyId: String!): StudyInfo!
     manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
+    genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
     indexVariantsAndStudiesForTagVariant(
@@ -63,6 +64,18 @@ export const typeDefs = gql`
     # TBD: sample size
     # TBD: loci count
   }
+  type GenesForVariant {
+    genes: [GeneForVariant!]!
+  }
+
+  type GeneForVariant {
+    id: String!
+    symbol: String!
+    overallScore: String!
+    # qtls: [Qtl!]!
+    # intervals: [Interval!]!
+    # functionalPredictions: TBD
+  }
   type PheWAS {
     associations: [PheWASAssociation!]!
   }
@@ -72,6 +85,8 @@ export const typeDefs = gql`
     traitReported: String!
     traitCode: String!
     pval: Float!
+    beta: Float
+    oddsRatio: Float
     nTotal: Int # total sample size (variant level)
     nCases: Int # number of cases (variant level)
 
@@ -140,26 +155,15 @@ export const typeDefs = gql`
     studyId: String!
     traitReported: String!
     pval: Float!
-
     # publication info
     pmid: String
     pubDate: String
-    pubJournal: String
-    pubTitle: String
     pubAuthor: String
     nTotal: Int # n_initial + n_replication
-    nCases: Int # n_cases
     # ld info is optional; but expect all or none of the following
     overallR2: Float # 0.7 - 1
-    afr1000GProp: Float # 0 - 1
-    amr1000GProp: Float
-    eas1000GProp: Float
-    eur1000GProp: Float
-    sas1000GProp: Float
-
     # finemapping is optional; but expect all or none of the following
-    log10Abf: Float # -inf - +inf
-    posteriorProbability: Float # 0 - 1
+    isInCredibleSet: Boolean
   }
   type TagVariantsAndStudiesForIndexVariant {
     rows: [TagVariantAndStudyForIndexVariant!]!
@@ -170,25 +174,15 @@ export const typeDefs = gql`
     studyId: String!
     traitReported: String!
     pval: Float!
-
     # publication info
     pmid: String
     pubDate: String
-    pubJournal: String
-    pubTitle: String
     pubAuthor: String
     nTotal: Int # n_initial + n_replication
-    nCases: Int # n_cases
     # ld info is optional; but expect all or none of the following
     overallR2: Float # 0.7 - 1
-    afr1000GProp: Float # 0 - 1
-    amr1000GProp: Float
-    eas1000GProp: Float
-    eur1000GProp: Float
-    sas1000GProp: Float
-
     # finemapping is optional; but expect all or none of the following
-    log10Abf: Float # -inf - +inf
+    isInCredibleSet: Boolean
     posteriorProbability: Float # 0 - 1
   }
   # type Regional {
