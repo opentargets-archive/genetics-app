@@ -6108,15 +6108,15 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.9.tgz#5eaa7107aff2820173689ed38db6a252c010a31e"
+ot-charts@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.10.tgz#802efcd5d073b951c1ebfbadca5ed4336ed47405"
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.8.tgz#335011f695f429dbe8febe470d9f4689432dcfd4"
+ot-ui@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.9.tgz#6ea75b3d1925451703ab60db66ee64876b39433b"
 
 p-finally@^1.0.0:
   version "1.0.0"
@@ -7056,6 +7056,13 @@ react-select@^2.0.0:
     raf "^3.4.0"
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
+
+react-side-effect@^1.1.0:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.5.tgz#f26059e50ed9c626d91d661b9f3c8bb38cd0ff2d"
+  dependencies:
+    exenv "^1.2.1"
+    shallowequal "^1.0.1"
 
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.4.2:
   version "16.4.2"
