@@ -10,7 +10,13 @@ const tableColumns = [
 ];
 
 const AssociatedGenesTable = ({ loading, error, data }) => (
-  <OtTable columns={tableColumns} data={data} sortBy="pval" order="asc" />
+  <OtTable
+    columns={tableColumns}
+    data={data}
+    sortBy="pval"
+    order="asc"
+    downloadFileStem="assigned-genes"
+  />
 );
 
 export default AssociatedGenesTable;
