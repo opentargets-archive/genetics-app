@@ -56,6 +56,7 @@ function PheWASTable({ associations }) {
       sortBy="pval"
       order="asc"
       downloadFileStem="associated-studies"
+      excludeDownloadColumns={['locusView']}
     />
   );
 }
