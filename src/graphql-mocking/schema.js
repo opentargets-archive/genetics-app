@@ -187,8 +187,18 @@ export const typeDefs = gql`
     posteriorProbability: Float # 0 - 1
   }
   type Gecko {
+    genes: [GeckoGene!]!
     tagVariants: [TagVariant!]!
     indexVariants: [IndexVariant!]!
+  }
+  type GeckoGene {
+    id: String!
+    symbol: String!
+    tss: Int!
+    start: Int!
+    end: Int!
+    forwardStrand: Boolean!
+    exons: [[Int!]!]!
   }
   type TagVariant {
     id: String!

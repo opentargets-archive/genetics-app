@@ -3,6 +3,9 @@ import casual from 'casual-browserify';
 import _ from 'lodash';
 
 import STUDIES from './studies';
+import GENES from './locusGenes';
+import TAG_VARIANTS from './locusTagVariants';
+import INDEX_VARIANTS from './locusIndexVariants';
 
 const SIGNIFICANCE = -Math.log10(5e-8);
 const MIN_PVAL = -Math.log10(1e-300);
@@ -42,34 +45,21 @@ const ALLELES = 'ACGT'.split('');
 
 const IS_IN_CREDIBLE_SET_OPTIONS = [true, false, null];
 
-const mockGeckoVariant = (chromosome, start, end) => {
-  const position = casual.integer(start, end);
-  const effectAllele = casual.random_element(ALLELES);
-  const effectAlleleIndex = ALLELES.indexOf(effectAllele);
-  const otherAlleleOptions = [
-    ...ALLELES.slice(0, effectAlleleIndex),
-    ...ALLELES.slice(effectAlleleIndex + 1),
-  ];
-  const otherAllele = casual.random_element(otherAlleleOptions);
-  const rsNumber = casual.integer(100, 100000);
-
-  return {
-    id: `${chromosome}_${position}_${otherAllele}_${effectAllele}`,
-    rsId: `rs${rsNumber}`,
-    position,
-  };
-};
-
 const mockGecko = (_, { chromosome, start, end }) => {
-  const tagVariants = [];
-  for (let i = 0; i < 80; i++) {
-    tagVariants.push(mockGeckoVariant(chromosome, start, end));
-  }
-  const indexVariants = [];
-  for (let i = 0; i < 20; i++) {
-    indexVariants.push(mockGeckoVariant(chromosome, start, end));
+  let tagVariants = [];
+  let indexVariants = [];
+  let genes = [];
+  if (chromosome === '7') {
+    genes = GENES.filter(d => d.end >= start && d.start < end);
+    tagVariants = TAG_VARIANTS.filter(
+      d => d.position >= start && d.position < end
+    );
+    indexVariants = INDEX_VARIANTS.filter(
+      d => d.position >= start && d.position < end
+    );
   }
   return {
+    genes,
     tagVariants,
     indexVariants,
   };

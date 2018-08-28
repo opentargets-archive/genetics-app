@@ -18,17 +18,15 @@ import BasePage from './BasePage';
 const geckoQuery = gql`
   query GeckoQuery($chromosome: String, $start: Int, $end: Int) {
     gecko(chromosome: $chromosome, start: $start, end: $end) {
-      # genes {
-      #   id
-      #   symbol
-      #   description
-      #   chromosome
-      #   tss
-      #   start
-      #   end
-      #   forwardStrand
-      #   exons
-      # }
+      genes {
+        id
+        symbol
+        tss
+        start
+        end
+        forwardStrand
+        exons
+      }
       tagVariants {
         id
         rsId
@@ -153,7 +151,7 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            return <Gecko data={data} />;
+            return <Gecko data={data.gecko} start={start} end={end} />;
           }}
         </Query>
       </BasePage>
