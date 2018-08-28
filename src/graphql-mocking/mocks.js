@@ -42,6 +42,39 @@ const ALLELES = 'ACGT'.split('');
 
 const IS_IN_CREDIBLE_SET_OPTIONS = [true, false, null];
 
+const mockGeckoVariant = (chromosome, start, end) => {
+  const position = casual.integer(start, end);
+  const effectAllele = casual.random_element(ALLELES);
+  const effectAlleleIndex = ALLELES.indexOf(effectAllele);
+  const otherAlleleOptions = [
+    ...ALLELES.slice(0, effectAlleleIndex),
+    ...ALLELES.slice(effectAlleleIndex + 1),
+  ];
+  const otherAllele = casual.random_element(otherAlleleOptions);
+  const rsNumber = casual.integer(100, 100000);
+
+  return {
+    id: `${chromosome}_${position}_${otherAllele}_${effectAllele}`,
+    rsId: `rs${rsNumber}`,
+    position,
+  };
+};
+
+const mockGecko = (_, { chromosome, start, end }) => {
+  const tagVariants = [];
+  for (let i = 0; i < 80; i++) {
+    tagVariants.push(mockGeckoVariant(chromosome, start, end));
+  }
+  const indexVariants = [];
+  for (let i = 0; i < 20; i++) {
+    indexVariants.push(mockGeckoVariant(chromosome, start, end));
+  }
+  return {
+    tagVariants,
+    indexVariants,
+  };
+};
+
 const mockManhattanAssociation = () => {
   const chromosome = casual.random_element(CHROMOSOMES);
   const position = casual.integer(1, CHROMOSOME_LENGTHS_GRCH38[chromosome]);
@@ -204,6 +237,7 @@ const mocks = {
         associations: () => new MockList(100),
       };
     },
+    gecko: mockGecko,
   }),
 };
 

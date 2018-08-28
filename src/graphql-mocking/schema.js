@@ -29,6 +29,7 @@ export const typeDefs = gql`
     # search(queryString: String): [SearchResult!]!
     studyInfo(studyId: String!): StudyInfo!
     manhattan(studyId: String!): Manhattan!
+    gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
@@ -185,6 +186,21 @@ export const typeDefs = gql`
     isInCredibleSet: Boolean
     posteriorProbability: Float # 0 - 1
   }
+  type Gecko {
+    tagVariants: [TagVariant!]!
+    indexVariants: [IndexVariant!]!
+  }
+  type TagVariant {
+    id: String!
+    rsId: String
+    position: Int!
+  }
+  type IndexVariant {
+    id: String!
+    rsId: String
+    position: Int!
+  }
+
   # type Regional {
   #     associations: [RegionalAssociation!]!
   # }

@@ -16,25 +16,27 @@ import {
 import BasePage from './BasePage';
 
 const geckoQuery = gql`
-  {
+  query GeckoQuery($chromosome: String, $start: Int, $end: Int) {
     gecko(chromosome: $chromosome, start: $start, end: $end) {
-      genes {
-        id
-        symbol
-        description
-        chromosome
-        tss
-        start
-        end
-        forwardStrand
-        exons
-      }
+      # genes {
+      #   id
+      #   symbol
+      #   description
+      #   chromosome
+      #   tss
+      #   start
+      #   end
+      #   forwardStrand
+      #   exons
+      # }
       tagVariants {
         id
+        rsId
         position
       }
       indexVariants {
         id
+        rsId
         position
       }
       # studies {
@@ -45,14 +47,14 @@ const geckoQuery = gql`
       #   pubJournal
       #   pmid
       # }
-      geneTagVariants {
-        geneId
-        geneSymbol
-        geneTss
-        tagVariantId
-        tagVariantPosition
-        overallScore
-      }
+      # geneTagVariants {
+      #   geneId
+      #   geneSymbol
+      #   geneTss
+      #   tagVariantId
+      #   tagVariantPosition
+      #   overallScore
+      # }
       # tagVariantIndexVariants {
       #   tagVariantId
       #   tagVariantPosition
@@ -126,6 +128,7 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   render() {
+    const { start, end, chromosome } = this._parseQueryProps();
     const locationString = this._locationString();
     return (
       <BasePage>
@@ -144,7 +147,11 @@ class LocusPage extends React.Component {
           handlePanLeft={this.handlePanLeft}
           handlePanRight={this.handlePanRight}
         />
-        <Query query={geckoQuery} fetchPolicy="network-only">
+        <Query
+          query={geckoQuery}
+          variables={{ chromosome, start, end }}
+          fetchPolicy="network-only"
+        >
           {({ loading, error, data }) => {
             return <Gecko data={data} />;
           }}
