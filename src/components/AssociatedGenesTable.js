@@ -9,13 +9,13 @@ const tableColumns = [
   { id: 'overallScore', label: 'Confidence' },
 ];
 
-const AssociatedGenesTable = ({ loading, error, data }) => (
+const AssociatedGenesTable = ({ loading, error, data, filenameStem }) => (
   <OtTable
     columns={tableColumns}
     data={data}
     sortBy="pval"
     order="asc"
-    downloadFileStem="assigned-genes"
+    downloadFileStem={filenameStem}
   />
 );
 

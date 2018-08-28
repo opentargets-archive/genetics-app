@@ -57,11 +57,12 @@ const manhattanQuery = gql`
 
 const StudyPage = ({ match }) => {
   let manhattanPlot = React.createRef();
+  const { studyId } = match.params;
 
   return (
     <BasePage>
       <Helmet>
-        <title>{match.params.studyId}</title>
+        <title>{studyId}</title>
       </Helmet>
 
       <Query query={manhattanQuery} fetchPolicy="network-only">
@@ -98,14 +99,17 @@ const StudyPage = ({ match }) => {
                   </SubHeading>
                   <DownloadSVGPlot
                     svgContainer={manhattanPlot}
-                    filenameStem="independently-associated-loci"
+                    filenameStem={`${studyId}-independently-associated-loci`}
                   >
                     <ManhattanWithTooltip
                       data={data.manhattan}
                       ref={manhattanPlot}
                     />
                   </DownloadSVGPlot>
-                  <ManhattanTable data={data.manhattan.associations} />
+                  <ManhattanTable
+                    data={data.manhattan.associations}
+                    filenameStem={`${studyId}-independently-associated-loci`}
+                  />
                 </React.Fragment>
               ) : null}
             </React.Fragment>

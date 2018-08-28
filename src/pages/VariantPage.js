@@ -133,11 +133,12 @@ const associatedTagsQuery = gql`
 
 const VariantPage = ({ match }) => {
   let pheWASPlot = React.createRef();
+  const { variantId } = match.params;
 
   return (
     <BasePage>
       <Helmet>
-        <title>{match.params.variantId}</title>
+        <title>{variantId}</title>
       </Helmet>
       <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
       <hr />
@@ -148,7 +149,10 @@ const VariantPage = ({ match }) => {
       <Query query={associatedGenesQuery}>
         {({ loading, error, data }) => {
           return hasAssociatedGenes(data) ? (
-            <AssociatedGenesTable data={data.genesForVariant.genes} />
+            <AssociatedGenesTable
+              data={data.genesForVariant.genes}
+              filenameStem={`${variantId}-assigned-genes`}
+            />
           ) : null;
         }}
       </Query>
@@ -163,7 +167,7 @@ const VariantPage = ({ match }) => {
             <Fragment>
               <DownloadSVGPlot
                 svgContainer={pheWASPlot}
-                filenameStem="associated-studies"
+                filenameStem={`${variantId}-traits`}
               >
                 <PheWASWithTooltip
                   associations={data.pheWAS.associations}
@@ -185,6 +189,7 @@ const VariantPage = ({ match }) => {
           return hasAssociatedIndexVariants(data) ? (
             <AssociatedIndexVariantsTable
               data={data.indexVariantsAndStudiesForTagVariant.rows}
+              filenameStem={`${variantId}-lead-variants`}
             />
           ) : null;
         }}
@@ -199,6 +204,7 @@ const VariantPage = ({ match }) => {
           return hasAssociatedTagVariants(data) ? (
             <AssociatedTagVariantsTable
               data={data.tagVariantsAndStudiesForIndexVariant.rows}
+              filenameStem={`${variantId}-tag-variants`}
             />
           ) : null;
         }}
