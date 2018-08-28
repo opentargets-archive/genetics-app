@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -68,9 +68,9 @@ const StudyPage = ({ match }) => {
       <Query query={manhattanQuery} fetchPolicy="network-only">
         {({ loading, error, data }) => {
           return (
-            <React.Fragment>
+            <Fragment>
               {hasStudyInfo(data) ? (
-                <React.Fragment>
+                <Fragment>
                   <PageTitle>{data.studyInfo.traitReported}</PageTitle>
                   <SubHeading>
                     {`${data.studyInfo.pubAuthor} et al (${new Date(
@@ -88,10 +88,10 @@ const StudyPage = ({ match }) => {
                     </a>
                   </SubHeading>
                   <hr />
-                </React.Fragment>
+                </Fragment>
               ) : null}
               {hasAssociations(data) ? (
-                <React.Fragment>
+                <Fragment>
                   <Heading>Independently-associated loci</Heading>
                   <SubHeading>
                     {`Found ${significantLoci(data)} loci with genome-wide
@@ -110,9 +110,9 @@ const StudyPage = ({ match }) => {
                     data={data.manhattan.associations}
                     filenameStem={`${studyId}-independently-associated-loci`}
                   />
-                </React.Fragment>
+                </Fragment>
               ) : null}
-            </React.Fragment>
+            </Fragment>
           );
         }}
       </Query>
