@@ -45,14 +45,14 @@ const geckoQuery = gql`
       #   pubJournal
       #   pmid
       # }
-      # geneTagVariants {
-      #   geneId
-      #   geneSymbol
-      #   geneTss
-      #   tagVariantId
-      #   tagVariantPosition
-      #   overallScore
-      # }
+      geneTagVariants {
+        #   geneId
+        #   geneSymbol
+        geneTss
+        #   tagVariantId
+        variantPosition
+        #   overallScore
+      }
       # tagVariantIndexVariants {
       #   tagVariantId
       #   tagVariantPosition

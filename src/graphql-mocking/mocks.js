@@ -6,6 +6,7 @@ import STUDIES from './studies';
 import GENES from './locusGenes';
 import TAG_VARIANTS from './locusTagVariants';
 import INDEX_VARIANTS from './locusIndexVariants';
+import GENE_TAG_VARIANTS from './locusGeneTagVariants';
 
 const SIGNIFICANCE = -Math.log10(5e-8);
 const MIN_PVAL = -Math.log10(1e-300);
@@ -49,6 +50,7 @@ const mockGecko = (_, { chromosome, start, end }) => {
   let tagVariants = [];
   let indexVariants = [];
   let genes = [];
+  let geneTagVariants = [];
   if (chromosome === '7') {
     genes = GENES.filter(d => d.end >= start && d.start < end);
     tagVariants = TAG_VARIANTS.filter(
@@ -57,11 +59,17 @@ const mockGecko = (_, { chromosome, start, end }) => {
     indexVariants = INDEX_VARIANTS.filter(
       d => d.position >= start && d.position < end
     );
+    geneTagVariants = GENE_TAG_VARIANTS.filter(
+      d =>
+        (d => d.variantPosition >= start && d.variantPosition < end) ||
+        (d => d.geneTss >= start && d.geneTss < end)
+    );
   }
   return {
     genes,
     tagVariants,
     indexVariants,
+    geneTagVariants,
   };
 };
 

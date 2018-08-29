@@ -190,6 +190,7 @@ export const typeDefs = gql`
     genes: [GeckoGene!]!
     tagVariants: [TagVariant!]!
     indexVariants: [IndexVariant!]!
+    geneTagVariants: [GeneTagVariant!]!
   }
   type GeckoGene {
     id: String!
@@ -199,6 +200,10 @@ export const typeDefs = gql`
     end: Int!
     forwardStrand: Boolean!
     exons: [[Int!]!]!
+  }
+  type GeneTagVariant {
+    geneTss: Int!
+    variantPosition: Int!
   }
   type TagVariant {
     id: String!
