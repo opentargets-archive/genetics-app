@@ -68,7 +68,7 @@ const geckoQuery = gql`
 `;
 
 const ZOOM_FACTOR = 1.25;
-const PAN_FACTOR = 0.2;
+const PAN_FACTOR = 0.1;
 
 class LocusPage extends React.Component {
   handleZoomIn = () => {
