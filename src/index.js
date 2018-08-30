@@ -31,7 +31,9 @@ getMockSchemaLink().then(mockSchemaLink => {
 // // START: WITH_LIVE_ONLY
 // import { HttpLink } from 'apollo-link-http';
 // const client = new ApolloClient({
-//   link: new HttpLink('https://open-targets-genetics.appspot.com/graphql'),
+//   link: new HttpLink({
+//     uri: 'https://open-targets-genetics.appspot.com/graphql',
+//   }),
 //   cache: new InMemoryCache(),
 // });
 

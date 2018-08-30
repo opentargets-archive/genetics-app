@@ -22,6 +22,19 @@ function hasAssociations(data) {
   );
 }
 
+function transformAssociations(data) {
+  return {
+    associations: data.manhattan.associations.map(d => {
+      const { variantId, variantRsId, ...rest } = d;
+      return {
+        ...rest,
+        indexVariantId: variantId,
+        indexVariantRsId: variantRsId,
+      };
+    }),
+  };
+}
+
 function hasStudyInfo(data) {
   return data && data.studyInfo;
 }
@@ -31,8 +44,8 @@ function significantLoci(data) {
 }
 
 const manhattanQuery = gql`
-  {
-    studyInfo(studyId: "GCT123") {
+  query StudyPageQuery($studyId: String!) {
+    studyInfo(studyId: $studyId) {
       studyId
       traitReported
       pubAuthor
@@ -40,16 +53,16 @@ const manhattanQuery = gql`
       pubJournal
       pmid
     }
-    manhattan(studyId: "GCT123") {
+    manhattan(studyId: $studyId) {
       associations {
-        indexVariantId
-        indexVariantRsId
+        variantId
+        variantRsId
         pval
         chromosome
         position
         credibleSetSize
         ldSetSize
-        bestGenes
+        # bestGenes
       }
     }
   }
@@ -61,8 +74,15 @@ const StudyPage = ({ match }) => (
       <title>{match.params.studyId}</title>
     </Helmet>
 
-    <Query query={manhattanQuery} fetchPolicy="network-only">
+    <Query
+      query={manhattanQuery}
+      variables={{ studyId: match.params.studyId }}
+      fetchPolicy="network-only"
+    >
       {({ loading, error, data }) => {
+        const manhattan = hasAssociations(data)
+          ? transformAssociations(data)
+          : { associations: [] };
         return (
           <React.Fragment>
             {hasStudyInfo(data) ? (
@@ -93,8 +113,8 @@ const StudyPage = ({ match }) => (
                   {`Found ${significantLoci(data)} loci with genome-wide
                   significance (p-value < 5e-8)`}
                 </SubHeading>
-                <ManhattanWithTooltip data={data.manhattan} />
-                <ManhattanTable data={data.manhattan.associations} />
+                <ManhattanWithTooltip data={manhattan} />
+                <ManhattanTable data={manhattan.associations} />
               </React.Fragment>
             ) : null}
           </React.Fragment>
