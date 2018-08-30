@@ -36,14 +36,14 @@ export const tableColumns = [
   },
 ];
 
-function ManhattanTable({ data }) {
+function ManhattanTable({ data, filenameStem }) {
   return (
     <OtTable
       columns={tableColumns}
       data={data}
       sortBy="pval"
       order="asc"
-      downloadFileStem="independently-associated-loci"
+      downloadFileStem={filenameStem}
     />
   );
 }

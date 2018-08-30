@@ -72,13 +72,18 @@ const tableColumns = [
   },
 ];
 
-const AssociatedIndexVariantsTable = ({ loading, error, data }) => (
+const AssociatedIndexVariantsTable = ({
+  loading,
+  error,
+  filenameStem,
+  data,
+}) => (
   <OtTable
     columns={tableColumns}
     data={data}
     sortBy="pval"
     order="asc"
-    downloadFileStem="associated-index-variants"
+    downloadFileStem={filenameStem}
   />
 );
 
