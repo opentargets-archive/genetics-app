@@ -7,22 +7,41 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import App from './App';
 import { unregister } from './registerServiceWorker';
 
-// Note: mock schema used for development purposes,
-//       this will be replaced before launch
-import mockSchemaLink from './graphql-mocking/mockSchemaLink';
+// START: WITH_PARTIAL_MOCKING
+import getMockSchemaLink from './graphql-mocking/mockSchemaLink';
 
-const client = new ApolloClient({
-  // uri: 'https://<API>/graphql', // TODO: connect to Miguel's API
-  link: mockSchemaLink,
-  cache: new InMemoryCache(),
+getMockSchemaLink().then(mockSchemaLink => {
+  const client = new ApolloClient({
+    link: mockSchemaLink,
+    cache: new InMemoryCache(),
+  });
+
+  ReactDOM.render(
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>,
+    document.getElementById('root')
+  );
+
+  // disable service worker
+  unregister();
 });
+// END: WITH_PARTIAL_MOCKING
 
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById('root')
-);
+// // START: WITH_LIVE_ONLY
+// import { HttpLink } from 'apollo-link-http';
+// const client = new ApolloClient({
+//   link: new HttpLink('https://open-targets-genetics.appspot.com/graphql'),
+//   cache: new InMemoryCache(),
+// });
 
-// disable service worker
-unregister();
+// ReactDOM.render(
+//   <ApolloProvider client={client}>
+//     <App />
+//   </ApolloProvider>,
+//   document.getElementById('root')
+// );
+
+// // disable service worker
+// unregister();
+// // END: WITH_LIVE_ONLY
