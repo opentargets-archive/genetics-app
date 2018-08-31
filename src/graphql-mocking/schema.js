@@ -27,7 +27,7 @@ export const typeDefs = gql`
   }
   type RootQueryType {
     # search(queryString: String): [SearchResult!]!
-    studyInfo(studyId: String!): StudyInfo!
+    # studyInfo(studyId: String!): StudyInfo!
     # manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     genesForVariant(variantId: String!): GenesForVariant!
