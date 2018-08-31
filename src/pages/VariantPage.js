@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -131,68 +131,86 @@ const associatedTagsQuery = gql`
   }
 `;
 
-const VariantPage = ({ match }) => (
-  <BasePage>
-    <Helmet>
-      <title>{match.params.variantId}</title>
-    </Helmet>
-    <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
-    <hr />
-    <Heading>Assigned genes</Heading>
-    <SubHeading>
-      Which genes are functionally implicated by this variant?
-    </SubHeading>
-    <Query query={associatedGenesQuery}>
-      {({ loading, error, data }) => {
-        return hasAssociatedGenes(data) ? (
-          <AssociatedGenesTable data={data.genesForVariant.genes} />
-        ) : null;
-      }}
-    </Query>
-    <hr />
-    <Heading>PheWAS</Heading>
-    <SubHeading>
-      Which traits are associated with this variant in UK Biobank?
-    </SubHeading>
-    <Query query={pheWASQuery}>
-      {({ loading, error, data }) => {
-        return hasAssociations(data) ? (
-          <Fragment>
-            <PheWASWithTooltip associations={data.pheWAS.associations} />
-            <PheWASTable associations={data.pheWAS.associations} />
-          </Fragment>
-        ) : null;
-      }}
-    </Query>
-    <hr />
-    <Heading>GWAS lead variants</Heading>
-    <SubHeading>
-      Which GWAS lead variants are linked with this variant?
-    </SubHeading>
-    <Query query={associatedIndexesQuery}>
-      {({ loading, error, data }) => {
-        return hasAssociatedIndexVariants(data) ? (
-          <AssociatedIndexVariantsTable
-            data={data.indexVariantsAndStudiesForTagVariant.rows}
-          />
-        ) : null;
-      }}
-    </Query>
-    <hr />
-    <Heading>Tag variants</Heading>
-    <SubHeading>
-      Which variants tag (through LD or finemapping) this lead variant?
-    </SubHeading>
-    <Query query={associatedTagsQuery}>
-      {({ loading, error, data }) => {
-        return hasAssociatedTagVariants(data) ? (
-          <AssociatedTagVariantsTable
-            data={data.tagVariantsAndStudiesForIndexVariant.rows}
-          />
-        ) : null;
-      }}
-    </Query>
-  </BasePage>
-);
+const VariantPage = ({ match }) => {
+  let pheWASPlot = React.createRef();
+  const { variantId } = match.params;
+
+  return (
+    <BasePage>
+      <Helmet>
+        <title>{variantId}</title>
+      </Helmet>
+      <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
+      <hr />
+      <Heading>Assigned genes</Heading>
+      <SubHeading>
+        Which genes are functionally implicated by this variant?
+      </SubHeading>
+      <Query query={associatedGenesQuery}>
+        {({ loading, error, data }) => {
+          return hasAssociatedGenes(data) ? (
+            <AssociatedGenesTable
+              data={data.genesForVariant.genes}
+              filenameStem={`${variantId}-assigned-genes`}
+            />
+          ) : null;
+        }}
+      </Query>
+      <hr />
+      <Heading>PheWAS</Heading>
+      <SubHeading>
+        Which traits are associated with this variant in UK Biobank?
+      </SubHeading>
+      <Query query={pheWASQuery}>
+        {({ loading, error, data }) => {
+          return hasAssociations(data) ? (
+            <Fragment>
+              <DownloadSVGPlot
+                svgContainer={pheWASPlot}
+                filenameStem={`${variantId}-traits`}
+              >
+                <PheWASWithTooltip
+                  associations={data.pheWAS.associations}
+                  ref={pheWASPlot}
+                />
+              </DownloadSVGPlot>
+              <PheWASTable associations={data.pheWAS.associations} />
+            </Fragment>
+          ) : null;
+        }}
+      </Query>
+      <hr />
+      <Heading>GWAS lead variants</Heading>
+      <SubHeading>
+        Which GWAS lead variants are linked with this variant?
+      </SubHeading>
+      <Query query={associatedIndexesQuery}>
+        {({ loading, error, data }) => {
+          return hasAssociatedIndexVariants(data) ? (
+            <AssociatedIndexVariantsTable
+              data={data.indexVariantsAndStudiesForTagVariant.rows}
+              filenameStem={`${variantId}-lead-variants`}
+            />
+          ) : null;
+        }}
+      </Query>
+      <hr />
+      <Heading>Tag variants</Heading>
+      <SubHeading>
+        Which variants tag (through LD or finemapping) this lead variant?
+      </SubHeading>
+      <Query query={associatedTagsQuery}>
+        {({ loading, error, data }) => {
+          return hasAssociatedTagVariants(data) ? (
+            <AssociatedTagVariantsTable
+              data={data.tagVariantsAndStudiesForIndexVariant.rows}
+              filenameStem={`${variantId}-tag-variants`}
+            />
+          ) : null;
+        }}
+      </Query>
+    </BasePage>
+  );
+};
 
 export default VariantPage;

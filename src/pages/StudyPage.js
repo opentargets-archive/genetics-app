@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
 import { Manhattan } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -68,60 +68,75 @@ const manhattanQuery = gql`
   }
 `;
 
-const StudyPage = ({ match }) => (
-  <BasePage>
-    <Helmet>
-      <title>{match.params.studyId}</title>
-    </Helmet>
+const StudyPage = ({ match }) => {
+  let manhattanPlot = React.createRef();
+  const { studyId } = match.params;
+  return (
+    <BasePage>
+      <Helmet>
+        <title>{studyId}</title>
+      </Helmet>
 
-    <Query
-      query={manhattanQuery}
-      variables={{ studyId: match.params.studyId }}
-      fetchPolicy="network-only"
-    >
-      {({ loading, error, data }) => {
-        const manhattan = hasAssociations(data)
-          ? transformAssociations(data)
-          : { associations: [] };
-        return (
-          <React.Fragment>
-            {hasStudyInfo(data) ? (
-              <React.Fragment>
-                <PageTitle>{data.studyInfo.traitReported}</PageTitle>
-                <SubHeading>
-                  {`${data.studyInfo.pubAuthor} et al (${new Date(
-                    data.studyInfo.pubDate
-                  ).getFullYear()}) `}
-                  <em>{`${data.studyInfo.pubJournal} `}</em>
-                  <a
-                    href={`http://europepmc.org/abstract/med/${
-                      data.studyInfo.pmid
-                    }`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {data.studyInfo.pmid}
-                  </a>
-                </SubHeading>
-                <hr />
-              </React.Fragment>
-            ) : null}
-            {hasAssociations(data) ? (
-              <React.Fragment>
-                <Heading>Independently-associated loci</Heading>
-                <SubHeading>
-                  {`Found ${significantLoci(data)} loci with genome-wide
+      <Query
+        query={manhattanQuery}
+        variables={{ studyId: match.params.studyId }}
+        fetchPolicy="network-only"
+      >
+        {({ loading, error, data }) => {
+          const manhattan = hasAssociations(data)
+            ? transformAssociations(data)
+            : { associations: [] };
+          return (
+            <Fragment>
+              {hasStudyInfo(data) ? (
+                <Fragment>
+                  <PageTitle>{data.studyInfo.traitReported}</PageTitle>
+                  <SubHeading>
+                    {`${data.studyInfo.pubAuthor} et al (${new Date(
+                      data.studyInfo.pubDate
+                    ).getFullYear()}) `}
+                    <em>{`${data.studyInfo.pubJournal} `}</em>
+                    <a
+                      href={`http://europepmc.org/abstract/med/${
+                        data.studyInfo.pmid
+                      }`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {data.studyInfo.pmid}
+                    </a>
+                  </SubHeading>
+                  <hr />
+                </Fragment>
+              ) : null}
+              {hasAssociations(data) ? (
+                <Fragment>
+                  <Heading>Independently-associated loci</Heading>
+                  <SubHeading>
+                    {`Found ${significantLoci(data)} loci with genome-wide
                   significance (p-value < 5e-8)`}
-                </SubHeading>
-                <ManhattanWithTooltip data={manhattan} />
-                <ManhattanTable data={manhattan.associations} />
-              </React.Fragment>
-            ) : null}
-          </React.Fragment>
-        );
-      }}
-    </Query>
-  </BasePage>
-);
+                  </SubHeading>
+                  <DownloadSVGPlot
+                    svgContainer={manhattanPlot}
+                    filenameStem={`${studyId}-independently-associated-loci`}
+                  >
+                    <ManhattanWithTooltip
+                      data={manhattan}
+                      ref={manhattanPlot}
+                    />
+                  </DownloadSVGPlot>
+                  <ManhattanTable
+                    data={manhattan.associations}
+                    filenameStem={`${studyId}-independently-associated-loci`}
+                  />
+                </Fragment>
+              ) : null}
+            </Fragment>
+          );
+        }}
+      </Query>
+    </BasePage>
+  );
+};
 
 export default StudyPage;

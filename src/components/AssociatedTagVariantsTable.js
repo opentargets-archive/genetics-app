@@ -79,13 +79,13 @@ const tableColumns = [
   },
 ];
 
-const AssociatedTagVariantsTable = ({ loading, error, data }) => (
+const AssociatedTagVariantsTable = ({ loading, error, filenameStem, data }) => (
   <OtTable
     columns={tableColumns}
     data={data}
     sortBy="pval"
     order="asc"
-    downloadFileStem="associated-tag-variants"
+    downloadFileStem={filenameStem}
   />
 );
 
