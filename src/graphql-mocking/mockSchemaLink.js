@@ -39,7 +39,7 @@ const getMergedSchemaLink = async () => {
 
   // --- MERGED SCHEMA ---
   const mergedSchema = mergeSchemas({
-    schemas: [mockSchema, liveSchema],
+    schemas: [liveSchema, mockSchema],
   });
   const mergedSchemaLink = new SchemaLink({ schema: mergedSchema });
   return mergedSchemaLink;
