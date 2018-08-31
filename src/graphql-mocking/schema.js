@@ -27,8 +27,8 @@ export const typeDefs = gql`
   }
   type RootQueryType {
     # search(queryString: String): [SearchResult!]!
-    studyInfo(studyId: String!): StudyInfo!
-    manhattan(studyId: String!): Manhattan!
+    # studyInfo(studyId: String!): StudyInfo!
+    # manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
@@ -124,28 +124,30 @@ export const typeDefs = gql`
     pubJournal: String
     pmid: String
   }
-  type Manhattan {
-    associations: [ManhattanAssociation!]!
-  }
-  type ManhattanAssociation {
-    indexVariantId: String!
-    indexVariantRsId: String
-    pval: Float!
-    chromosome: String!
-    position: Int!
-    bestGenes: [Gene!]
+  # type Manhattan {
+  #   associations: [ManhattanAssociation!]!
+  # }
+  # type ManhattanAssociation {
+  #   # indexVariantId: String!
+  #   # indexVariantRsId: String
+  #   variantId: String!
+  #   variantRsId: String
+  #   pval: Float!
+  #   chromosome: String!
+  #   position: Int!
+  #   # bestGenes: [Gene!]
 
-    # could have index variant which has no tag variants (goes nowhere on click)
-    credibleSetSize: Int
-    ldSetSize: Int
+  #   # could have index variant which has no tag variants (goes nowhere on click)
+  #   credibleSetSize: Int
+  #   ldSetSize: Int
 
-    # TODO: get this
-    # maf: Float
-  }
-  type Gene {
-    id: String
-    symbol: String
-  }
+  #   # TODO: get this
+  #   # maf: Float
+  # }
+  # type Gene {
+  #   id: String
+  #   symbol: String
+  # }
   type IndexVariantsAndStudiesForTagVariant {
     rows: [IndexVariantAndStudyForTagVariant!]!
   }
