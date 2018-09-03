@@ -37,14 +37,14 @@ const geckoQuery = gql`
         rsId
         position
       }
-      # studies {
-      #   studyId
-      #   traitReported
-      #   pubAuthor
-      #   pubDate
-      #   pubJournal
-      #   pmid
-      # }
+      studies {
+        studyId
+        traitReported
+        pubAuthor
+        pubDate
+        pubJournal
+        pmid
+      }
       geneTagVariants {
         #   geneId
         #   geneSymbol
