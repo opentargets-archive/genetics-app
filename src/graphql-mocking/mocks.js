@@ -52,6 +52,7 @@ const mockGecko = (_, { chromosome, start, end }) => {
   let genes = [];
   let geneTagVariants = [];
   let studies = [];
+  let tagVariantIndexVariantStudies = [];
   if (chromosome === '7') {
     genes = GENES.filter(d => d.end >= start && d.start < end);
     tagVariants = TAG_VARIANTS.filter(
@@ -69,13 +70,32 @@ const mockGecko = (_, { chromosome, start, end }) => {
       ...d,
       pmid: casual.integer(100000, 1000000),
     }));
+    tagVariants.forEach(tv => {
+      indexVariants.forEach(iv => {
+        studies.forEach(s => {
+          const dist = Math.abs(tv.position - iv.position);
+          const PRIME = 17;
+          const variantsClose = dist < 1000000;
+          const variantsFilter = (tv.position + iv.position) % PRIME === 0;
+          const indexStudyFilter = (iv.position + s.nTotal) % PRIME === 0;
+          if (variantsClose && variantsFilter && indexStudyFilter) {
+            tagVariantIndexVariantStudies.push({
+              tagVariantId: tv.id,
+              indexVariantId: iv.id,
+              studyId: s.studyId,
+            });
+          }
+        });
+      });
+    });
   }
   return {
     genes,
     tagVariants,
     indexVariants,
-    geneTagVariants,
     studies,
+    geneTagVariants,
+    tagVariantIndexVariantStudies,
   };
 };
 

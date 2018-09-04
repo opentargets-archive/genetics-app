@@ -53,16 +53,14 @@ const geckoQuery = gql`
         variantPosition
         #   overallScore
       }
-      # tagVariantIndexVariants {
-      #   tagVariantId
-      #   tagVariantPosition
-      #   indexVariantId
-      #   indexVariantPosition
-      #   r2
-      # }
-      # indexVariantStudies {
-
-      # }
+      tagVariantIndexVariantStudies {
+        tagVariantId
+        indexVariantId
+        studyId
+        # r2
+        # pval
+        # posteriorProbability
+      }
     }
   }
 `;

@@ -192,6 +192,7 @@ export const typeDefs = gql`
     indexVariants: [IndexVariant!]!
     studies: [StudyInfo!]!
     geneTagVariants: [GeneTagVariant!]!
+    tagVariantIndexVariantStudies: [TagVariantIndexVariantStudy!]!
   }
   type GeckoGene {
     id: String!
@@ -215,6 +216,14 @@ export const typeDefs = gql`
   type GeneTagVariant {
     geneTss: Int!
     variantPosition: Int!
+  }
+  type TagVariantIndexVariantStudy {
+    tagVariantId: String!
+    indexVariantId: String!
+    studyId: String!
+    r2: Float
+    pval: Float!
+    posteriorProbability: Float
   }
 
   # type Regional {
