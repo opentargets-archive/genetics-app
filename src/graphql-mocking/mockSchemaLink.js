@@ -1,16 +1,48 @@
-import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import {
+  mergeSchemas,
+  makeExecutableSchema,
+  makeRemoteExecutableSchema,
+  introspectSchema,
+  addMockFunctionsToSchema,
+} from 'graphql-tools';
 import { SchemaLink } from 'apollo-link-schema';
+import { HttpLink } from 'apollo-link-http';
 
 import mocks from './mocks';
 import { typeDefs, typeResolvers } from './schema.js';
 
-// construct schema and attach type resolvers (if any)
-const schema = makeExecutableSchema({ typeDefs, resolvers: typeResolvers });
+// see https://github.com/hasura/client-side-graphql
+// see https://github.com/apollographql/graphql-tools/pull/382
+const getRemoteExecutableSchema = async uri => {
+  const httpLink = new HttpLink({ uri });
+  const remoteSchema = await introspectSchema(httpLink);
+  return makeRemoteExecutableSchema({ schema: remoteSchema, link: httpLink });
+};
 
-// attach mock resolvers
-addMockFunctionsToSchema({ schema, mocks });
+const getMergedSchemaLink = async () => {
+  // --- MOCK SCHEMA ---
+  // construct schema and attach type resolvers (if any)
+  const mockSchema = makeExecutableSchema({
+    typeDefs,
+    resolvers: typeResolvers,
+  });
 
-// construct link for client
-const mockSchemaLink = new SchemaLink({ schema });
+  // attach mock resolvers
+  addMockFunctionsToSchema({
+    schema: mockSchema,
+    mocks,
+  });
 
-export default mockSchemaLink;
+  // --- LIVE SCHEMA ---
+  const liveUrl = 'https://open-targets-genetics.appspot.com/graphql';
+  const liveSchema = await getRemoteExecutableSchema(liveUrl);
+
+  // --- MERGED SCHEMA ---
+  const mergedSchema = mergeSchemas({
+    schemas: [liveSchema, mockSchema],
+  });
+  const mergedSchemaLink = new SchemaLink({ schema: mergedSchema });
+  return mergedSchemaLink;
+};
+
+export default getMergedSchemaLink;

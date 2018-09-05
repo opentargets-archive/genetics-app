@@ -376,7 +376,7 @@ apollo-link-http-common@^0.2.4:
   dependencies:
     apollo-link "^1.2.2"
 
-apollo-link-http@^1.3.1:
+apollo-link-http@^1.3.1, apollo-link-http@^1.5.4:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.4.tgz#b80b7b4b342c655b6a5614624b076a36be368f43"
   dependencies:
@@ -6108,15 +6108,15 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.10.tgz#802efcd5d073b951c1ebfbadca5ed4336ed47405"
+ot-charts@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.13.tgz#54ed406222b12358ed8a618606e6eb478943fe57"
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.10.tgz#ea61fb1c4217662f7cbb86b3f080d95192aa1cdf"
+ot-ui@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.11.tgz#6f7099fd4b3632858a6f1b16517b782ae0f56bff"
 
 p-finally@^1.0.0:
   version "1.0.0"
