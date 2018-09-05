@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
+import { getCytoband } from 'ot-charts';
 
 export const tableColumns = [
   {
@@ -15,6 +16,14 @@ export const tableColumns = [
   {
     id: 'indexVariantRsId',
     label: 'rsID',
+  },
+  {
+    id: 'cytoband',
+    label: 'Cytoband',
+    renderCell: rowData => {
+      const [chromosome, position] = rowData.indexVariantId.split('_');
+      return getCytoband(chromosome, position);
+    },
   },
   {
     id: 'pval',
