@@ -3,10 +3,6 @@ import casual from 'casual-browserify';
 import _ from 'lodash';
 
 import STUDIES from './studies';
-import GENES from './locusGenes';
-import TAG_VARIANTS from './locusTagVariants';
-import INDEX_VARIANTS from './locusIndexVariants';
-import GENE_TAG_VARIANTS from './locusGeneTagVariants';
 
 const SIGNIFICANCE = -Math.log10(5e-8);
 const MIN_PVAL = -Math.log10(1e-300);
@@ -45,59 +41,6 @@ const CHROMOSOME_LENGTHS_GRCH38 = {
 const ALLELES = 'ACGT'.split('');
 
 const IS_IN_CREDIBLE_SET_OPTIONS = [true, false, null];
-
-const mockGecko = (_, { chromosome, start, end }) => {
-  let tagVariants = [];
-  let indexVariants = [];
-  let genes = [];
-  let geneTagVariants = [];
-  let studies = [];
-  let tagVariantIndexVariantStudies = [];
-  if (chromosome === '7') {
-    genes = GENES.filter(d => d.end >= start && d.start < end);
-    tagVariants = TAG_VARIANTS.filter(
-      d => d.position >= start && d.position < end
-    );
-    indexVariants = INDEX_VARIANTS.filter(
-      d => d.position >= start && d.position < end
-    );
-    geneTagVariants = GENE_TAG_VARIANTS.filter(
-      d =>
-        (d => d.variantPosition >= start && d.variantPosition < end) ||
-        (d => d.geneTss >= start && d.geneTss < end)
-    );
-    studies = STUDIES.filter((d, i) => i < 30).map(d => ({
-      ...d,
-      pmid: casual.integer(100000, 1000000),
-    }));
-    tagVariants.forEach(tv => {
-      indexVariants.forEach(iv => {
-        studies.forEach(s => {
-          const dist = Math.abs(tv.position - iv.position);
-          const PRIME = 17;
-          const variantsClose = dist < 1000000;
-          const variantsFilter = (tv.position + iv.position) % PRIME === 0;
-          const indexStudyFilter = (iv.position + s.nTotal) % PRIME === 0;
-          if (variantsClose && variantsFilter && indexStudyFilter) {
-            tagVariantIndexVariantStudies.push({
-              tagVariantId: tv.id,
-              indexVariantId: iv.id,
-              studyId: s.studyId,
-            });
-          }
-        });
-      });
-    });
-  }
-  return {
-    genes,
-    tagVariants,
-    indexVariants,
-    studies,
-    geneTagVariants,
-    tagVariantIndexVariantStudies,
-  };
-};
 
 const mockManhattanAssociation = () => {
   const chromosome = casual.random_element(CHROMOSOMES);
@@ -261,7 +204,6 @@ const mocks = {
         associations: () => new MockList(100),
       };
     },
-    gecko: mockGecko,
   }),
 };
 
