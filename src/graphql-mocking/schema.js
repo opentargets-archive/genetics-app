@@ -30,7 +30,7 @@ export const typeDefs = gql`
     # studyInfo(studyId: String!): StudyInfo!
     # manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
-    gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
+    # gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
@@ -188,45 +188,45 @@ export const typeDefs = gql`
     isInCredibleSet: Boolean
     posteriorProbability: Float # 0 - 1
   }
-  type Gecko {
-    genes: [GeckoGene!]!
-    tagVariants: [TagVariant!]!
-    indexVariants: [IndexVariant!]!
-    studies: [StudyInfo!]!
-    geneTagVariants: [GeneTagVariant!]!
-    tagVariantIndexVariantStudies: [TagVariantIndexVariantStudy!]!
-  }
-  type GeckoGene {
-    id: String!
-    symbol: String!
-    tss: Int!
-    start: Int!
-    end: Int!
-    forwardStrand: Boolean!
-    exons: [[Int!]!]!
-  }
-  type TagVariant {
-    id: String!
-    rsId: String
-    position: Int!
-  }
-  type IndexVariant {
-    id: String!
-    rsId: String
-    position: Int!
-  }
-  type GeneTagVariant {
-    geneTss: Int!
-    variantPosition: Int!
-  }
-  type TagVariantIndexVariantStudy {
-    tagVariantId: String!
-    indexVariantId: String!
-    studyId: String!
-    r2: Float
-    pval: Float!
-    posteriorProbability: Float
-  }
+  # type Gecko {
+  #   genes: [GeckoGene!]!
+  #   tagVariants: [TagVariant!]!
+  #   indexVariants: [IndexVariant!]!
+  #   studies: [StudyInfo!]!
+  #   geneTagVariants: [GeneTagVariant!]!
+  #   tagVariantIndexVariantStudies: [TagVariantIndexVariantStudy!]!
+  # }
+  # type GeckoGene {
+  #   id: String!
+  #   symbol: String!
+  #   tss: Int!
+  #   start: Int!
+  #   end: Int!
+  #   forwardStrand: Boolean!
+  #   exons: [[Int!]!]!
+  # }
+  # type TagVariant {
+  #   id: String!
+  #   rsId: String
+  #   position: Int!
+  # }
+  # type IndexVariant {
+  #   id: String!
+  #   rsId: String
+  #   position: Int!
+  # }
+  # type GeneTagVariant {
+  #   geneTss: Int!
+  #   variantPosition: Int!
+  # }
+  # type TagVariantIndexVariantStudy {
+  #   tagVariantId: String!
+  #   indexVariantId: String!
+  #   studyId: String!
+  #   r2: Float
+  #   pval: Float!
+  #   posteriorProbability: Float
+  # }
 
   # type Regional {
   #     associations: [RegionalAssociation!]!

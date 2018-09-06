@@ -15,6 +15,29 @@ import {
 
 import BasePage from './BasePage';
 
+function hasData(data) {
+  return data && data.gecko;
+}
+
+function transformExons(data) {
+  const { genes, ...rest } = data.gecko;
+  const genesWithExonPairs = genes.map(d => ({
+    ...d,
+    exons: d.exons.reduce((result, value, index, array) => {
+      if (index % 2 === 0) {
+        result.push(array.slice(index, index + 2));
+      }
+      return result;
+    }, []),
+  }));
+  return {
+    gecko: {
+      genes: genesWithExonPairs,
+      ...rest,
+    },
+  };
+}
+
 const geckoQuery = gql`
   query GeckoQuery($chromosome: String, $start: Int, $end: Int) {
     gecko(chromosome: $chromosome, start: $start, end: $end) {
@@ -24,7 +47,6 @@ const geckoQuery = gql`
         tss
         start
         end
-        forwardStrand
         exons
       }
       tagVariants {
@@ -46,20 +68,17 @@ const geckoQuery = gql`
         pmid
       }
       geneTagVariants {
-        #   geneId
-        #   geneSymbol
-        geneTss
-        #   tagVariantId
-        variantPosition
-        #   overallScore
+        geneId
+        tagVariantId
+        overallScore
       }
       tagVariantIndexVariantStudies {
         tagVariantId
         indexVariantId
         studyId
-        # r2
-        # pval
-        # posteriorProbability
+        r2
+        pval
+        posteriorProbability
       }
     }
   }
@@ -149,7 +168,13 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            return <Gecko data={data.gecko} start={start} end={end} />;
+            return hasData(data) ? (
+              <Gecko
+                data={transformExons(data).gecko}
+                start={start}
+                end={end}
+              />
+            ) : null;
           }}
         </Query>
       </BasePage>
