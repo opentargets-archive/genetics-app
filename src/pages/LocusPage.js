@@ -64,6 +64,12 @@ function transformData(data) {
     })
   );
 
+  console.info(
+    `Rendering ${geneTagVariants.length} (G, TV)s and ${
+      tagVariantIndexVariantStudies.length
+    } (TV, IV, S)s`
+  );
+
   return {
     gecko: {
       genes: genesWithExonPairs,
