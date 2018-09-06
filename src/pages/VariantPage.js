@@ -11,6 +11,7 @@ import AssociatedGenesTable from '../components/AssociatedGenesTable';
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
+import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
 const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
@@ -170,6 +171,7 @@ const VariantPage = ({ match }) => {
 
   return (
     <BasePage>
+      <ScrollToTop onRouteChange />
       <Helmet>
         <title>{variantId}</title>
       </Helmet>
