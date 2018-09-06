@@ -58,20 +58,6 @@ const tableColumns = [
       rowData.overallR2 ? rowData.overallR2.toPrecision(3) : 'No information',
   },
   {
-    id: 'isInCredibleSet',
-    label: 'Is in 95% Credible Set',
-    renderCell: rowData => {
-      switch (rowData.isInCredibleSet) {
-        case true:
-          return 'True';
-        case false:
-          return 'False';
-        default:
-          return 'No information';
-      }
-    },
-  },
-  {
     id: 'posteriorProbability',
     label: 'posteriorProbability',
     tooltip:
