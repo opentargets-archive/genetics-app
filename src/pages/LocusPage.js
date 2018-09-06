@@ -19,8 +19,16 @@ function hasData(data) {
   return data && data.gecko;
 }
 
-function transformExons(data) {
-  const { genes, ...rest } = data.gecko;
+function transformData(data) {
+  const {
+    genes,
+    geneTagVariants,
+    tagVariantIndexVariantStudies,
+    ...rest
+  } = data.gecko;
+  const { tagVariants, indexVariants, studies } = rest;
+
+  // gene exons come as flat list, rendering expects list of pairs
   const genesWithExonPairs = genes.map(d => ({
     ...d,
     exons: d.exons.reduce((result, value, index, array) => {
@@ -30,9 +38,37 @@ function transformExons(data) {
       return result;
     }, []),
   }));
+
+  // geneTagVariants come with ids only, but need position info for gene and tagVariant
+  const geneDict = {};
+  const tagVariantDict = {};
+  genes.forEach(d => (geneDict[d.id] = d));
+  tagVariants.forEach(d => (tagVariantDict[d.id] = d));
+  const geneTagVariantsWithPosition = geneTagVariants.map(d => ({
+    ...d,
+    geneTss: geneDict[d.geneId].tss,
+    tagVariantPosition: tagVariantDict[d.tagVariantId].position,
+  }));
+
+  // tagVariantIndexVariantStudies come with ids only, but need position info for tagVariant and indexVariant
+  const indexVariantDict = {};
+  const studyDict = {};
+  indexVariants.forEach(d => (indexVariantDict[d.id] = d));
+  studies.forEach(d => (studyDict[d.studyId] = d));
+  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies.map(
+    d => ({
+      ...d,
+      tagVariantPosition: tagVariantDict[d.tagVariantId].position,
+      indexVariantPosition: indexVariantDict[d.indexVariantId].position,
+      traitReported: studyDict[d.studyId].traitReported,
+    })
+  );
+
   return {
     gecko: {
       genes: genesWithExonPairs,
+      geneTagVariants: geneTagVariantsWithPosition,
+      tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesWithPosition,
       ...rest,
     },
   };
@@ -169,11 +205,7 @@ class LocusPage extends React.Component {
         >
           {({ loading, error, data }) => {
             return hasData(data) ? (
-              <Gecko
-                data={transformExons(data).gecko}
-                start={start}
-                end={end}
-              />
+              <Gecko data={transformData(data).gecko} start={start} end={end} />
             ) : null;
           }}
         </Query>
