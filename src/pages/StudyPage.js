@@ -85,7 +85,7 @@ const StudyPage = ({ match }) => {
 
       <Query
         query={manhattanQuery}
-        variables={{ studyId: match.params.studyId }}
+        variables={{ studyId }}
         fetchPolicy="network-only"
       >
         {({ loading, error, data }) => {

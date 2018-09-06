@@ -33,12 +33,12 @@ export const typeDefs = gql`
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
-    indexVariantsAndStudiesForTagVariant(
-      variantId: String!
-    ): IndexVariantsAndStudiesForTagVariant
-    tagVariantsAndStudiesForIndexVariant(
-      variantId: String!
-    ): TagVariantsAndStudiesForIndexVariant
+    # indexVariantsAndStudiesForTagVariant(
+    #   variantId: String!
+    # ): IndexVariantsAndStudiesForTagVariant
+    # tagVariantsAndStudiesForIndexVariant(
+    #   variantId: String!
+    # ): TagVariantsAndStudiesForIndexVariant
   }
   type SearchResult {
     genes: [SearchResultGene!]!
@@ -148,45 +148,45 @@ export const typeDefs = gql`
   #   id: String
   #   symbol: String
   # }
-  type IndexVariantsAndStudiesForTagVariant {
-    rows: [IndexVariantAndStudyForTagVariant!]!
-  }
-  type IndexVariantAndStudyForTagVariant {
-    indexVariantId: String!
-    indexVariantRsId: String!
-    studyId: String!
-    traitReported: String!
-    pval: Float!
-    # publication info
-    pmid: String
-    pubDate: String
-    pubAuthor: String
-    nTotal: Int # n_initial + n_replication
-    # ld info is optional; but expect all or none of the following
-    overallR2: Float # 0.7 - 1
-    # finemapping is optional; but expect all or none of the following
-    isInCredibleSet: Boolean
-  }
-  type TagVariantsAndStudiesForIndexVariant {
-    rows: [TagVariantAndStudyForIndexVariant!]!
-  }
-  type TagVariantAndStudyForIndexVariant {
-    tagVariantId: String!
-    tagVariantRsId: String!
-    studyId: String!
-    traitReported: String!
-    pval: Float!
-    # publication info
-    pmid: String
-    pubDate: String
-    pubAuthor: String
-    nTotal: Int # n_initial + n_replication
-    # ld info is optional; but expect all or none of the following
-    overallR2: Float # 0.7 - 1
-    # finemapping is optional; but expect all or none of the following
-    isInCredibleSet: Boolean
-    posteriorProbability: Float # 0 - 1
-  }
+  # type IndexVariantsAndStudiesForTagVariant {
+  #   rows: [IndexVariantAndStudyForTagVariant!]!
+  # }
+  # type IndexVariantAndStudyForTagVariant {
+  #   indexVariantId: String!
+  #   indexVariantRsId: String!
+  #   studyId: String!
+  #   traitReported: String!
+  #   pval: Float!
+  #   # publication info
+  #   pmid: String
+  #   pubDate: String
+  #   pubAuthor: String
+  #   nTotal: Int # n_initial + n_replication
+  #   # ld info is optional; but expect all or none of the following
+  #   overallR2: Float # 0.7 - 1
+  #   # finemapping is optional; but expect all or none of the following
+  #   isInCredibleSet: Boolean
+  # }
+  # type TagVariantsAndStudiesForIndexVariant {
+  #   rows: [TagVariantAndStudyForIndexVariant!]!
+  # }
+  # type TagVariantAndStudyForIndexVariant {
+  #   tagVariantId: String!
+  #   tagVariantRsId: String!
+  #   studyId: String!
+  #   traitReported: String!
+  #   pval: Float!
+  #   # publication info
+  #   pmid: String
+  #   pubDate: String
+  #   pubAuthor: String
+  #   nTotal: Int # n_initial + n_replication
+  #   # ld info is optional; but expect all or none of the following
+  #   overallR2: Float # 0.7 - 1
+  #   # finemapping is optional; but expect all or none of the following
+  #   isInCredibleSet: Boolean
+  #   posteriorProbability: Float # 0 - 1
+  # }
   # type Regional {
   #     associations: [RegionalAssociation!]!
   # }

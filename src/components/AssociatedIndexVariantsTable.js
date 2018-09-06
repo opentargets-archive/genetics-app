@@ -54,21 +54,13 @@ const tableColumns = [
     id: 'overallR2',
     label: 'LD (R-squared)',
     tooltip: 'Linkage disequilibrium with the queried variant',
-    renderCell: rowData => rowData.overallR2.toPrecision(3),
+    renderCell: rowData =>
+      rowData.overallR2 ? rowData.overallR2.toPrecision(3) : 'No information',
   },
   {
-    id: 'isInCredibleSet',
+    id: 'posteriorProbability',
     label: 'Is in 95% Credible Set',
-    renderCell: rowData => {
-      switch (rowData.isInCredibleSet) {
-        case true:
-          return 'True';
-        case false:
-          return 'False';
-        default:
-          return 'No information';
-      }
-    },
+    renderCell: rowData => (rowData.posteriorProbability ? 'True' : 'False'),
   },
 ];
 
