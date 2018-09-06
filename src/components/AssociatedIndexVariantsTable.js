@@ -54,7 +54,8 @@ const tableColumns = [
     id: 'overallR2',
     label: 'LD (R-squared)',
     tooltip: 'Linkage disequilibrium with the queried variant',
-    renderCell: rowData => rowData.overallR2.toPrecision(3),
+    renderCell: rowData =>
+      rowData.overallR2 ? rowData.overallR2.toPrecision(3) : 'No information',
   },
   {
     id: 'isInCredibleSet',
