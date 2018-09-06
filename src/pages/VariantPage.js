@@ -36,22 +36,60 @@ function hasAssociations(data) {
 function hasAssociatedIndexVariants(data) {
   return (
     data.indexVariantsAndStudiesForTagVariant &&
-    data.indexVariantsAndStudiesForTagVariant.rows &&
-    data.indexVariantsAndStudiesForTagVariant.rows.length > 0
+    data.indexVariantsAndStudiesForTagVariant.associations &&
+    data.indexVariantsAndStudiesForTagVariant.associations.length > 0
   );
+}
+
+function transformAssociatedIndexVariants(data) {
+  const associationsFlattened = data.associations.map(d => {
+    const { indexVariant, study, ...rest } = d;
+    return {
+      indexVariantId: indexVariant.id,
+      indexVariantRsId: indexVariant.rsId,
+      studyId: study.studyId,
+      traitReported: study.traitReported,
+      pmid: study.pmid,
+      pubDate: study.pubDate,
+      pubAuthor: study.pubAuthor,
+      ...rest,
+    };
+  });
+  return {
+    associations: associationsFlattened,
+  };
 }
 
 function hasAssociatedTagVariants(data) {
   return (
     data.tagVariantsAndStudiesForIndexVariant &&
-    data.tagVariantsAndStudiesForIndexVariant.rows &&
-    data.tagVariantsAndStudiesForIndexVariant.rows.length > 0
+    data.tagVariantsAndStudiesForIndexVariant.associations &&
+    data.tagVariantsAndStudiesForIndexVariant.associations.length > 0
   );
 }
 
+function transformAssociatedTagVariants(data) {
+  const associationsFlattened = data.associations.map(d => {
+    const { tagVariant, study, ...rest } = d;
+    return {
+      tagVariantId: tagVariant.id,
+      tagVariantRsId: tagVariant.rsId,
+      studyId: study.studyId,
+      traitReported: study.traitReported,
+      pmid: study.pmid,
+      pubDate: study.pubDate,
+      pubAuthor: study.pubAuthor,
+      ...rest,
+    };
+  });
+  return {
+    associations: associationsFlattened,
+  };
+}
+
 const associatedGenesQuery = gql`
-  {
-    genesForVariant(variantId: "1_100314838_C_T") {
+  query GenesForVariantQuery($variantId: String!) {
+    genesForVariant(variantId: $variantId) {
       genes {
         id
         symbol
@@ -62,8 +100,8 @@ const associatedGenesQuery = gql`
 `;
 
 const pheWASQuery = gql`
-  {
-    pheWAS(variantId: "1_100314838_C_T") {
+  query PheWASQuery($variantId: String!) {
+    pheWAS(variantId: $variantId) {
       associations {
         studyId
         traitReported
@@ -79,52 +117,47 @@ const pheWASQuery = gql`
 `;
 
 const associatedIndexesQuery = gql`
-  {
-    indexVariantsAndStudiesForTagVariant(variantId: "1_100314838_C_T") {
-      rows {
-        indexVariantId
-        indexVariantRsId
-        studyId
-        traitReported
+  query AssociatedIndexVariantsQuery($variantId: String!) {
+    indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
+      associations {
+        indexVariant {
+          id
+          rsId
+        }
+        study {
+          studyId
+          traitReported
+          pmid
+          pubDate
+          pubAuthor
+        }
         pval
-
-        # publication info
-        pmid
-        pubDate
-        pubAuthor
         nTotal
-
-        # ld info is optional
         overallR2
-
-        # finemapping is optional; but expect all or none of the following
-        isInCredibleSet
+        posteriorProbability
       }
     }
   }
 `;
 
 const associatedTagsQuery = gql`
-  {
-    tagVariantsAndStudiesForIndexVariant(variantId: "1_100314838_C_T") {
-      rows {
-        tagVariantId
-        tagVariantRsId
-        studyId
-        traitReported
+  query AssociatedTagVariantsQuery($variantId: String!) {
+    tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
+      associations {
+        tagVariant {
+          id
+          rsId
+        }
+        study {
+          studyId
+          traitReported
+          pmid
+          pubDate
+          pubAuthor
+        }
         pval
-
-        # publication info
-        pmid
-        pubDate
-        pubAuthor
         nTotal
-
-        # ld info is optional
         overallR2
-
-        # finemapping is optional; but expect all or none of the following
-        isInCredibleSet
         posteriorProbability
       }
     }
@@ -140,13 +173,13 @@ const VariantPage = ({ match }) => {
       <Helmet>
         <title>{variantId}</title>
       </Helmet>
-      <PageTitle>{`Variant ${match.params.variantId}`}</PageTitle>
+      <PageTitle>{`Variant ${variantId}`}</PageTitle>
       <hr />
       <Heading>Assigned genes</Heading>
       <SubHeading>
         Which genes are functionally implicated by this variant?
       </SubHeading>
-      <Query query={associatedGenesQuery}>
+      <Query query={associatedGenesQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           return hasAssociatedGenes(data) ? (
             <AssociatedGenesTable
@@ -156,15 +189,16 @@ const VariantPage = ({ match }) => {
           ) : null;
         }}
       </Query>
-      <hr />
-      <Heading>PheWAS</Heading>
-      <SubHeading>
-        Which traits are associated with this variant in UK Biobank?
-      </SubHeading>
-      <Query query={pheWASQuery}>
+
+      <Query query={pheWASQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           return hasAssociations(data) ? (
             <Fragment>
+              <hr />
+              <Heading>PheWAS</Heading>
+              <SubHeading>
+                Which traits are associated with this variant in UK Biobank?
+              </SubHeading>
               <DownloadSVGPlot
                 svgContainer={pheWASPlot}
                 filenameStem={`${variantId}-traits`}
@@ -179,33 +213,48 @@ const VariantPage = ({ match }) => {
           ) : null;
         }}
       </Query>
-      <hr />
-      <Heading>GWAS lead variants</Heading>
-      <SubHeading>
-        Which GWAS lead variants are linked with this variant?
-      </SubHeading>
-      <Query query={associatedIndexesQuery}>
+
+      <Query query={associatedIndexesQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           return hasAssociatedIndexVariants(data) ? (
-            <AssociatedIndexVariantsTable
-              data={data.indexVariantsAndStudiesForTagVariant.rows}
-              filenameStem={`${variantId}-lead-variants`}
-            />
+            <Fragment>
+              <hr />
+              <Heading>GWAS lead variants</Heading>
+              <SubHeading>
+                Which GWAS lead variants are linked with this variant?
+              </SubHeading>
+              <AssociatedIndexVariantsTable
+                data={
+                  transformAssociatedIndexVariants(
+                    data.indexVariantsAndStudiesForTagVariant
+                  ).associations
+                }
+                filenameStem={`${variantId}-lead-variants`}
+              />
+            </Fragment>
           ) : null;
         }}
       </Query>
-      <hr />
-      <Heading>Tag variants</Heading>
-      <SubHeading>
-        Which variants tag (through LD or finemapping) this lead variant?
-      </SubHeading>
-      <Query query={associatedTagsQuery}>
+
+      <Query query={associatedTagsQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           return hasAssociatedTagVariants(data) ? (
-            <AssociatedTagVariantsTable
-              data={data.tagVariantsAndStudiesForIndexVariant.rows}
-              filenameStem={`${variantId}-tag-variants`}
-            />
+            <Fragment>
+              <hr />
+              <Heading>Tag variants</Heading>
+              <SubHeading>
+                Which variants tag (through LD or finemapping) this lead
+                variant?
+              </SubHeading>
+              <AssociatedTagVariantsTable
+                data={
+                  transformAssociatedTagVariants(
+                    data.tagVariantsAndStudiesForIndexVariant
+                  ).associations
+                }
+                filenameStem={`${variantId}-tag-variants`}
+              />
+            </Fragment>
           ) : null;
         }}
       </Query>
