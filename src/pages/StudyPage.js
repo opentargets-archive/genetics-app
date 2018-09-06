@@ -62,7 +62,13 @@ const manhattanQuery = gql`
         position
         credibleSetSize
         ldSetSize
-        # bestGenes
+        bestGenes {
+          score
+          gene {
+            id
+            symbol
+          }
+        }
       }
     }
   }

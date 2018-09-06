@@ -43,6 +43,21 @@ export const tableColumns = [
       'Number of variants that are in LD (R2 >= 0.7) with this lead variant',
     renderCell: rowData => commaSeparate(rowData.ldSetSize),
   },
+  {
+    id: 'bestGenes',
+    label: 'Best Genes',
+    tooltip:
+      'The list of genes with equal best overall score across all variants in either the credible set or LD expansion of a given locus',
+    renderCell: rowData => (
+      <React.Fragment>
+        {rowData.bestGenes.map((d, i) => (
+          <React.Fragment key={i}>
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+          </React.Fragment>
+        ))}
+      </React.Fragment>
+    ),
+  },
 ];
 
 function ManhattanTable({ data, filenameStem }) {
