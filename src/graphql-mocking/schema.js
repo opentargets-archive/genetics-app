@@ -34,12 +34,12 @@ export const typeDefs = gql`
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
-    indexVariantsAndStudiesForTagVariant(
-      variantId: String!
-    ): IndexVariantsAndStudiesForTagVariant
-    tagVariantsAndStudiesForIndexVariant(
-      variantId: String!
-    ): TagVariantsAndStudiesForIndexVariant
+    # indexVariantsAndStudiesForTagVariant(
+    #   variantId: String!
+    # ): IndexVariantsAndStudiesForTagVariant
+    # tagVariantsAndStudiesForIndexVariant(
+    #   variantId: String!
+    # ): TagVariantsAndStudiesForIndexVariant
   }
   type SearchResult {
     genes: [SearchResultGene!]!
@@ -149,85 +149,45 @@ export const typeDefs = gql`
   #   id: String
   #   symbol: String
   # }
-  type IndexVariantsAndStudiesForTagVariant {
-    rows: [IndexVariantAndStudyForTagVariant!]!
-  }
-  type IndexVariantAndStudyForTagVariant {
-    indexVariantId: String!
-    indexVariantRsId: String!
-    studyId: String!
-    traitReported: String!
-    pval: Float!
-    # publication info
-    pmid: String
-    pubDate: String
-    pubAuthor: String
-    nTotal: Int # n_initial + n_replication
-    # ld info is optional; but expect all or none of the following
-    overallR2: Float # 0.7 - 1
-    # finemapping is optional; but expect all or none of the following
-    isInCredibleSet: Boolean
-  }
-  type TagVariantsAndStudiesForIndexVariant {
-    rows: [TagVariantAndStudyForIndexVariant!]!
-  }
-  type TagVariantAndStudyForIndexVariant {
-    tagVariantId: String!
-    tagVariantRsId: String!
-    studyId: String!
-    traitReported: String!
-    pval: Float!
-    # publication info
-    pmid: String
-    pubDate: String
-    pubAuthor: String
-    nTotal: Int # n_initial + n_replication
-    # ld info is optional; but expect all or none of the following
-    overallR2: Float # 0.7 - 1
-    # finemapping is optional; but expect all or none of the following
-    isInCredibleSet: Boolean
-    posteriorProbability: Float # 0 - 1
-  }
-  # type Gecko {
-  #   genes: [GeckoGene!]!
-  #   tagVariants: [TagVariant!]!
-  #   indexVariants: [IndexVariant!]!
-  #   studies: [StudyInfo!]!
-  #   geneTagVariants: [GeneTagVariant!]!
-  #   tagVariantIndexVariantStudies: [TagVariantIndexVariantStudy!]!
+  # type IndexVariantsAndStudiesForTagVariant {
+  #   rows: [IndexVariantAndStudyForTagVariant!]!
   # }
-  # type GeckoGene {
-  #   id: String!
-  #   symbol: String!
-  #   tss: Int!
-  #   start: Int!
-  #   end: Int!
-  #   forwardStrand: Boolean!
-  #   exons: [[Int!]!]!
-  # }
-  # type TagVariant {
-  #   id: String!
-  #   rsId: String
-  #   position: Int!
-  # }
-  # type IndexVariant {
-  #   id: String!
-  #   rsId: String
-  #   position: Int!
-  # }
-  # type GeneTagVariant {
-  #   geneTss: Int!
-  #   variantPosition: Int!
-  # }
-  # type TagVariantIndexVariantStudy {
-  #   tagVariantId: String!
+  # type IndexVariantAndStudyForTagVariant {
   #   indexVariantId: String!
+  #   indexVariantRsId: String!
   #   studyId: String!
-  #   r2: Float
+  #   traitReported: String!
   #   pval: Float!
-  #   posteriorProbability: Float
+  #   # publication info
+  #   pmid: String
+  #   pubDate: String
+  #   pubAuthor: String
+  #   nTotal: Int # n_initial + n_replication
+  #   # ld info is optional; but expect all or none of the following
+  #   overallR2: Float # 0.7 - 1
+  #   # finemapping is optional; but expect all or none of the following
+  #   isInCredibleSet: Boolean
   # }
-
+  # type TagVariantsAndStudiesForIndexVariant {
+  #   rows: [TagVariantAndStudyForIndexVariant!]!
+  # }
+  # type TagVariantAndStudyForIndexVariant {
+  #   tagVariantId: String!
+  #   tagVariantRsId: String!
+  #   studyId: String!
+  #   traitReported: String!
+  #   pval: Float!
+  #   # publication info
+  #   pmid: String
+  #   pubDate: String
+  #   pubAuthor: String
+  #   nTotal: Int # n_initial + n_replication
+  #   # ld info is optional; but expect all or none of the following
+  #   overallR2: Float # 0.7 - 1
+  #   # finemapping is optional; but expect all or none of the following
+  #   isInCredibleSet: Boolean
+  #   posteriorProbability: Float # 0 - 1
+  # }
   # type Regional {
   #     associations: [RegionalAssociation!]!
   # }
