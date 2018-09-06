@@ -8,6 +8,7 @@ import { Manhattan } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
+import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
 const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns);
@@ -79,6 +80,7 @@ const StudyPage = ({ match }) => {
   const { studyId } = match.params;
   return (
     <BasePage>
+      <ScrollToTop onRouteChange />
       <Helmet>
         <title>{studyId}</title>
       </Helmet>
