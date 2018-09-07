@@ -30,6 +30,7 @@
     "ot-charts": "^0.0.14",
     "ot-ui": "^0.0.12",
     "polished": "^1.9.3",
+    "query-string": "^6.1.0",
     "react": "^16.4.2",
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.2",

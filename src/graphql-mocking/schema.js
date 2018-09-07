@@ -30,6 +30,7 @@ export const typeDefs = gql`
     # studyInfo(studyId: String!): StudyInfo!
     # manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
+    # gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
     genesForVariant(variantId: String!): GenesForVariant!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
