@@ -7,7 +7,6 @@ import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
-import AssociatedGenesTable from '../components/AssociatedGenesTable';
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
@@ -90,11 +89,74 @@ function transformAssociatedTagVariants(data) {
 
 const associatedGenesQuery = gql`
   query GenesForVariantQuery($variantId: String!) {
+    genesForVariantSchema {
+      qtls {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+      intervals {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+      functionalPredictions {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+    }
     genesForVariant(variantId: $variantId) {
-      genes {
+      gene {
         id
         symbol
-        overallScore
+      }
+      overallScore
+      qtls {
+        id
+        sourceId
+        tissues {
+          tissue {
+            id
+            name
+          }
+          quantile
+          beta
+          pval
+        }
+      }
+      intervals {
+        id
+        sourceId
+        tissues {
+          tissue {
+            id
+            name
+          }
+          quantile
+          score
+        }
+      }
+      functionalPredictions {
+        id
+        sourceId
+        tissues {
+          tissue {
+            id
+            name
+          }
+          maxEffectLabel
+          maxEffectScore
+        }
       }
     }
   }
@@ -183,12 +245,8 @@ const VariantPage = ({ match }) => {
       </SubHeading>
       <Query query={associatedGenesQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
-          return hasAssociatedGenes(data) ? (
-            <AssociatedGenesTable
-              data={data.genesForVariant.genes}
-              filenameStem={`${variantId}-assigned-genes`}
-            />
-          ) : null;
+          console.log('data', data);
+          return <div>Associated Genes Table</div>;
         }}
       </Query>
 
