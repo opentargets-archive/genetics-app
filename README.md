@@ -1,6 +1,6 @@
 # Open Targets Genetics App
 
-This repo contains the web application code for [Open Targets Genetics](https://admiring-dubinsky-cb7f95.netlify.com/).
+This repo contains the web application code for [Open Targets Genetics](https://genetics-app.netlify.com).
 
 It is one component of several and the overarching project is described [here](https://github.com/opentargets/genetics), which is also where issues can be raised.
 
