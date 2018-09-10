@@ -55,14 +55,25 @@ function transformData(data) {
   const studyDict = {};
   indexVariants.forEach(d => (indexVariantDict[d.id] = d));
   studies.forEach(d => (studyDict[d.studyId] = d));
-  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies.map(
-    d => ({
+  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies
+    .map(d => ({
       ...d,
       tagVariantPosition: tagVariantDict[d.tagVariantId].position,
       indexVariantPosition: indexVariantDict[d.indexVariantId].position,
       traitReported: studyDict[d.studyId].traitReported,
-    })
-  );
+    }))
+    .sort((a, b) => {
+      // render finemapping on top
+      if (a.posteriorProbability && b.posteriorProbability) {
+        return a.r2 - b.r2;
+      } else if (a.posteriorProbability) {
+        return 1;
+      } else if (b.posteriorProbability) {
+        return -1;
+      } else {
+        return a.r2 - b.r2;
+      }
+    });
 
   console.info(
     `Rendering ${geneTagVariants.length} (G, TV)s and ${
