@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
+import {
+  PageTitle,
+  Heading,
+  SubHeading,
+  DownloadSVGPlot,
+  ModelSchematic,
+} from 'ot-ui';
 import { Manhattan } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -124,6 +130,18 @@ const StudyPage = ({ match }) => {
                     {`Found ${significantLoci(data)} loci with genome-wide
                   significance (p-value < 5e-8)`}
                   </SubHeading>
+                  <ModelSchematic
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: true,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: false,
+                      },
+                    ]}
+                  />
                   <DownloadSVGPlot
                     svgContainer={manhattanPlot}
                     filenameStem={`${studyId}-independently-associated-loci`}
