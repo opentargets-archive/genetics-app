@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
+import {
+  PageTitle,
+  Heading,
+  SubHeading,
+  DownloadSVGPlot,
+  ModelSchematic,
+} from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -181,6 +187,18 @@ const VariantPage = ({ match }) => {
       <SubHeading>
         Which genes are functionally implicated by this variant?
       </SubHeading>
+      <ModelSchematic
+        entities={[
+          {
+            type: 'variant',
+            fixed: true,
+          },
+          {
+            type: 'gene',
+            fixed: false,
+          },
+        ]}
+      />
       <Query query={associatedGenesQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           return hasAssociatedGenes(data) ? (
@@ -201,6 +219,18 @@ const VariantPage = ({ match }) => {
               <SubHeading>
                 Which traits are associated with this variant in UK Biobank?
               </SubHeading>
+              <ModelSchematic
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'variant',
+                    fixed: true,
+                  },
+                ]}
+              />
               <DownloadSVGPlot
                 svgContainer={pheWASPlot}
                 filenameStem={`${variantId}-traits`}
@@ -225,6 +255,22 @@ const VariantPage = ({ match }) => {
               <SubHeading>
                 Which GWAS lead variants are linked with this variant?
               </SubHeading>
+              <ModelSchematic
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'indexVariant',
+                    fixed: false,
+                  },
+                  {
+                    type: 'tagVariant',
+                    fixed: true,
+                  },
+                ]}
+              />
               <AssociatedIndexVariantsTable
                 data={
                   transformAssociatedIndexVariants(
@@ -248,6 +294,22 @@ const VariantPage = ({ match }) => {
                 Which variants tag (through LD or finemapping) this lead
                 variant?
               </SubHeading>
+              <ModelSchematic
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'indexVariant',
+                    fixed: true,
+                  },
+                  {
+                    type: 'tagVariant',
+                    fixed: false,
+                  },
+                ]}
+              />
               <AssociatedTagVariantsTable
                 data={
                   transformAssociatedTagVariants(
