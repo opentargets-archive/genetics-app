@@ -3,13 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import {
-  PageTitle,
-  Heading,
-  SubHeading,
-  DownloadSVGPlot,
-  ModelSchematic,
-} from 'ot-ui';
+import { PageTitle, DownloadSVGPlot, SectionHeading } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -182,12 +176,9 @@ const VariantPage = ({ match }) => {
         <title>{variantId}</title>
       </Helmet>
       <PageTitle>{`Variant ${variantId}`}</PageTitle>
-      <hr />
-      <Heading>Assigned genes</Heading>
-      <SubHeading>
-        Which genes are functionally implicated by this variant?
-      </SubHeading>
-      <ModelSchematic
+      <SectionHeading
+        heading="Assigned genes"
+        subheading="Which genes are functionally implicated by this variant?"
         entities={[
           {
             type: 'variant',
@@ -214,12 +205,9 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociations(data) ? (
             <Fragment>
-              <hr />
-              <Heading>PheWAS</Heading>
-              <SubHeading>
-                Which traits are associated with this variant in UK Biobank?
-              </SubHeading>
-              <ModelSchematic
+              <SectionHeading
+                heading="PheWAS"
+                subheading="Which traits are associated with this variant in UK Biobank?"
                 entities={[
                   {
                     type: 'study',
@@ -250,12 +238,9 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociatedIndexVariants(data) ? (
             <Fragment>
-              <hr />
-              <Heading>GWAS lead variants</Heading>
-              <SubHeading>
-                Which GWAS lead variants are linked with this variant?
-              </SubHeading>
-              <ModelSchematic
+              <SectionHeading
+                heading="GWAS lead variants"
+                subheading="Which GWAS lead variants are linked with this variant?"
                 entities={[
                   {
                     type: 'study',
@@ -288,13 +273,9 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociatedTagVariants(data) ? (
             <Fragment>
-              <hr />
-              <Heading>Tag variants</Heading>
-              <SubHeading>
-                Which variants tag (through LD or finemapping) this lead
-                variant?
-              </SubHeading>
-              <ModelSchematic
+              <SectionHeading
+                heading="Tag variants"
+                subheading="Which variants tag (through LD or finemapping) this lead variant?"
                 entities={[
                   {
                     type: 'study',
