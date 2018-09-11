@@ -31,7 +31,8 @@ export const typeDefs = gql`
     # manhattan(studyId: String!): Manhattan!
     # regional(studyId: String!, leadVariantId: String!, chromosome: String!, start: Int!, end: Int!): Regional
     # gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
-    genesForVariant(variantId: String!): GenesForVariant!
+    # genesForVariantSchema: G2VSchema!
+    # genesForVariant(variantId: String!): [GeneForVariant!]!
     pheWAS(variantId: String!): PheWAS
     search(queryString: String!): SearchResult
     # indexVariantsAndStudiesForTagVariant(
@@ -65,18 +66,27 @@ export const typeDefs = gql`
     # TBD: sample size
     # TBD: loci count
   }
-  type GenesForVariant {
-    genes: [GeneForVariant!]!
-  }
-
-  type GeneForVariant {
-    id: String!
-    symbol: String!
-    overallScore: String!
-    # qtls: [Qtl!]!
-    # intervals: [Interval!]!
-    # functionalPredictions: TBD
-  }
+  #type G2VSchema {
+  #  qtls: [G2VSchemaElement!]!
+  #  intervals: [G2VSchemaElement!]!
+  #  functionalPredictions: [G2VSchemaElement!]!
+  #}
+  #type G2VSchemaElement {
+  #  id: String!
+  #  sourceId: String!
+  #  tissues: [Tissue!]!
+  #}
+  #type Tissue {
+  #  id: String!
+  #  name: String
+  #}
+  #type GeneForVariant {
+  #  gene: Gene!
+  #  overallScore: Float!
+  #  qtls: [QTLElement!]!
+  #  intervals: [IntervalElement!]!
+  #  functionalPredictions: [FunctionalPredictionElement!]!
+  #}
   type PheWAS {
     associations: [PheWASAssociation!]!
   }

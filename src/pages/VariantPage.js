@@ -7,23 +7,14 @@ import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
-import AssociatedGenesTable from '../components/AssociatedGenesTable';
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
+import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
 const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
-
-function hasAssociatedGenes(data) {
-  return (
-    data &&
-    data.genesForVariant &&
-    data.genesForVariant.genes &&
-    data.genesForVariant.genes.length > 0
-  );
-}
 
 function hasAssociations(data) {
   return (
@@ -90,11 +81,77 @@ function transformAssociatedTagVariants(data) {
 
 const associatedGenesQuery = gql`
   query GenesForVariantQuery($variantId: String!) {
+    genesForVariantSchema {
+      qtls {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+      intervals {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+      functionalPredictions {
+        id
+        sourceId
+        tissues {
+          id
+          name
+        }
+      }
+    }
     genesForVariant(variantId: $variantId) {
-      genes {
+      gene {
         id
         symbol
-        overallScore
+      }
+      overallScore
+      qtls {
+        id
+        sourceId
+        aggregatedScore
+        tissues {
+          tissue {
+            id
+            name
+          }
+          quantile
+          beta
+          pval
+        }
+      }
+      intervals {
+        id
+        sourceId
+        aggregatedScore
+        tissues {
+          tissue {
+            id
+            name
+          }
+          quantile
+          score
+        }
+      }
+      functionalPredictions {
+        id
+        sourceId
+        aggregatedScore
+        tissues {
+          tissue {
+            id
+            name
+          }
+          maxEffectLabel
+          maxEffectScore
+        }
       }
     }
   }
@@ -182,12 +239,9 @@ const VariantPage = ({ match }) => {
         Which genes are functionally implicated by this variant?
       </SubHeading>
       <Query query={associatedGenesQuery} variables={{ variantId }}>
-        {({ loading, error, data }) => {
-          return hasAssociatedGenes(data) ? (
-            <AssociatedGenesTable
-              data={data.genesForVariant.genes}
-              filenameStem={`${variantId}-assigned-genes`}
-            />
+        {({ data }) => {
+          return data.genesForVariantSchema ? (
+            <AssociatedGenes data={data} />
           ) : null;
         }}
       </Query>
