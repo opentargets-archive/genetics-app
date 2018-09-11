@@ -3,19 +3,14 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import {
-  PageTitle,
-  Heading,
-  SubHeading,
-  DownloadSVGPlot,
-  AssociatedGenesTable,
-} from 'ot-ui';
+import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
+import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
@@ -246,7 +241,7 @@ const VariantPage = ({ match }) => {
       <Query query={associatedGenesQuery} variables={{ variantId }}>
         {({ data }) => {
           return data.genesForVariantSchema ? (
-            <AssociatedGenesTable data={data} />
+            <AssociatedGenes data={data} />
           ) : null;
         }}
       </Query>
