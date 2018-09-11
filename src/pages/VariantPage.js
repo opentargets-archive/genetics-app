@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
+import {
+  PageTitle,
+  Heading,
+  SubHeading,
+  DownloadSVGPlot,
+  AssociatedGenesTable,
+} from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -14,15 +20,6 @@ import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
 const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
-
-function hasAssociatedGenes(data) {
-  return (
-    data &&
-    data.genesForVariant &&
-    data.genesForVariant.genes &&
-    data.genesForVariant.genes.length > 0
-  );
-}
 
 function hasAssociations(data) {
   return (
@@ -124,6 +121,7 @@ const associatedGenesQuery = gql`
       qtls {
         id
         sourceId
+        aggregatedScore
         tissues {
           tissue {
             id
@@ -137,6 +135,7 @@ const associatedGenesQuery = gql`
       intervals {
         id
         sourceId
+        aggregatedScore
         tissues {
           tissue {
             id
@@ -149,6 +148,7 @@ const associatedGenesQuery = gql`
       functionalPredictions {
         id
         sourceId
+        aggregatedScore
         tissues {
           tissue {
             id
@@ -244,9 +244,10 @@ const VariantPage = ({ match }) => {
         Which genes are functionally implicated by this variant?
       </SubHeading>
       <Query query={associatedGenesQuery} variables={{ variantId }}>
-        {({ loading, error, data }) => {
-          console.log('data', data);
-          return <div>Associated Genes Table</div>;
+        {({ data }) => {
+          return data.genesForVariantSchema ? (
+            <AssociatedGenesTable data={data} />
+          ) : null;
         }}
       </Query>
 
