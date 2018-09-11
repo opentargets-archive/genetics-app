@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 
 import { OtTable, Tabs, Tab } from 'ot-ui';
 
+const OVERVIEW = 'overview';
+
 const getColumnsAll = schemas => {
   const columns = [
     { id: 'gene', label: 'Gene' },
@@ -107,7 +109,7 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
 
 class AssociatedGenes extends Component {
   state = {
-    value: 0,
+    value: OVERVIEW,
   };
 
   handleChange = (_, value) => {
@@ -134,7 +136,7 @@ class AssociatedGenes extends Component {
     return (
       <Fragment>
         <Tabs value={value} onChange={this.handleChange}>
-          <Tab label="All" />
+          <Tab label="All" value={OVERVIEW} />
           {filteredSchemas.map(schema => {
             return (
               <Tab
@@ -145,20 +147,18 @@ class AssociatedGenes extends Component {
             );
           })}
         </Tabs>
-        {value === 0 && <OtTable columns={columnsAll} data={dataAll} />}
+        {value === OVERVIEW && <OtTable columns={columnsAll} data={dataAll} />}
         {filteredSchemas.map(schema => {
-          const tissueColumns = getTissueColumns(schemas, schema.sourceId);
-          const tissueData = getTissueData(
-            genesForVariantSchema,
-            genesForVariant,
-            schema.sourceId
-          );
           return (
             value === schema.sourceId && (
               <OtTable
                 key={schema.sourceId}
-                columns={tissueColumns}
-                data={tissueData}
+                columns={getTissueColumns(schemas, schema.sourceId)}
+                data={getTissueData(
+                  genesForVariantSchema,
+                  genesForVariant,
+                  schema.sourceId
+                )}
               />
             )
           );
