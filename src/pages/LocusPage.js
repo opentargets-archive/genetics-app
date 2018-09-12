@@ -217,19 +217,19 @@ class LocusPage extends React.Component {
           entities={[
             {
               type: 'study',
-              fixed: false,
+              fixed: selectedStudies,
             },
             {
               type: 'indexVariant',
-              fixed: false,
+              fixed: selectedIndexVariants,
             },
             {
               type: 'tagVariant',
-              fixed: false,
+              fixed: selectedTagVariants,
             },
             {
               type: 'gene',
-              fixed: false,
+              fixed: selectedGenes,
             },
           ]}
         />
