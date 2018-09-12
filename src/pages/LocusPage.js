@@ -237,8 +237,17 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
+            // selectedGenes={['ENSG00000242265', 'ENSG00000105852']}
+            // selectedTagVariants={['7_94934200_A_G', '7_94035892_C_T']}
+            // selectedIndexVariants={['7_94812658_G_T']}
+            // selectedStudies={['GCST002985']}
             return hasData(data) ? (
-              <Gecko data={transformData(data).gecko} start={start} end={end} />
+              <Gecko
+                data={transformData(data).gecko}
+                start={start}
+                end={end}
+                selectedStudies={['GCST002985']}
+              />
             ) : null;
           }}
         </Query>
