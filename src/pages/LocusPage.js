@@ -7,8 +7,7 @@ import queryString from 'query-string';
 import { Gecko } from 'ot-charts';
 import {
   PageTitle,
-  Heading,
-  SubHeading,
+  SectionHeading,
   BrowserControls,
   commaSeparate,
 } from 'ot-ui';
@@ -193,11 +192,28 @@ class LocusPage extends React.Component {
           <title>{locationString}</title>
         </Helmet>
         <PageTitle>Locus {locationString}</PageTitle>
-        <hr />
-        <Heading>Associations</Heading>
-        <SubHeading>
-          What genetic evidence is there within this locus?
-        </SubHeading>
+        <SectionHeading
+          heading="Associations"
+          subheading="What genetic evidence is there within this locus?"
+          entities={[
+            {
+              type: 'study',
+              fixed: false,
+            },
+            {
+              type: 'indexVariant',
+              fixed: false,
+            },
+            {
+              type: 'tagVariant',
+              fixed: false,
+            },
+            {
+              type: 'gene',
+              fixed: false,
+            },
+          ]}
+        />
         <BrowserControls
           handleZoomIn={this.handleZoomIn}
           handleZoomOut={this.handleZoomOut}

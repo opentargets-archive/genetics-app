@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
+import { PageTitle, SubHeading, DownloadSVGPlot, SectionHeading } from 'ot-ui';
 import { Manhattan } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -114,16 +114,28 @@ const StudyPage = ({ match }) => {
                       {data.studyInfo.pmid}
                     </a>
                   </SubHeading>
-                  <hr />
                 </Fragment>
               ) : null}
               {hasAssociations(data) ? (
                 <Fragment>
-                  <Heading>Independently-associated loci</Heading>
-                  <SubHeading>
-                    {`Found ${significantLoci(data)} loci with genome-wide
+                  <SectionHeading
+                    heading="Independently-associated loci"
+                    subheading={`Found ${significantLoci(
+                      data
+                    )} loci with genome-wide
                   significance (p-value < 5e-8)`}
-                  </SubHeading>
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: true,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: false,
+                      },
+                    ]}
+                  />
+
                   <DownloadSVGPlot
                     svgContainer={manhattanPlot}
                     filenameStem={`${studyId}-independently-associated-loci`}

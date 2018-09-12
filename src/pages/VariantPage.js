@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading, DownloadSVGPlot } from 'ot-ui';
+import { PageTitle, DownloadSVGPlot, SectionHeading } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -233,11 +233,20 @@ const VariantPage = ({ match }) => {
         <title>{variantId}</title>
       </Helmet>
       <PageTitle>{`Variant ${variantId}`}</PageTitle>
-      <hr />
-      <Heading>Assigned genes</Heading>
-      <SubHeading>
-        Which genes are functionally implicated by this variant?
-      </SubHeading>
+      <SectionHeading
+        heading="Assigned genes"
+        subheading="Which genes are functionally implicated by this variant?"
+        entities={[
+          {
+            type: 'variant',
+            fixed: true,
+          },
+          {
+            type: 'gene',
+            fixed: false,
+          },
+        ]}
+      />
       <Query query={associatedGenesQuery} variables={{ variantId }}>
         {({ data }) => {
           return data.genesForVariantSchema ? (
@@ -250,11 +259,20 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociations(data) ? (
             <Fragment>
-              <hr />
-              <Heading>PheWAS</Heading>
-              <SubHeading>
-                Which traits are associated with this variant in UK Biobank?
-              </SubHeading>
+              <SectionHeading
+                heading="PheWAS"
+                subheading="Which traits are associated with this variant in UK Biobank?"
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'variant',
+                    fixed: true,
+                  },
+                ]}
+              />
               <DownloadSVGPlot
                 svgContainer={pheWASPlot}
                 filenameStem={`${variantId}-traits`}
@@ -274,11 +292,24 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociatedIndexVariants(data) ? (
             <Fragment>
-              <hr />
-              <Heading>GWAS lead variants</Heading>
-              <SubHeading>
-                Which GWAS lead variants are linked with this variant?
-              </SubHeading>
+              <SectionHeading
+                heading="GWAS lead variants"
+                subheading="Which GWAS lead variants are linked with this variant?"
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'indexVariant',
+                    fixed: false,
+                  },
+                  {
+                    type: 'tagVariant',
+                    fixed: true,
+                  },
+                ]}
+              />
               <AssociatedIndexVariantsTable
                 data={
                   transformAssociatedIndexVariants(
@@ -296,12 +327,24 @@ const VariantPage = ({ match }) => {
         {({ loading, error, data }) => {
           return hasAssociatedTagVariants(data) ? (
             <Fragment>
-              <hr />
-              <Heading>Tag variants</Heading>
-              <SubHeading>
-                Which variants tag (through LD or finemapping) this lead
-                variant?
-              </SubHeading>
+              <SectionHeading
+                heading="Tag variants"
+                subheading="Which variants tag (through LD or finemapping) this lead variant?"
+                entities={[
+                  {
+                    type: 'study',
+                    fixed: false,
+                  },
+                  {
+                    type: 'indexVariant',
+                    fixed: true,
+                  },
+                  {
+                    type: 'tagVariant',
+                    fixed: false,
+                  },
+                ]}
+              />
               <AssociatedTagVariantsTable
                 data={
                   transformAssociatedTagVariants(
