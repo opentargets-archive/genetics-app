@@ -6,13 +6,14 @@ const tableColumns = variantId => [
   {
     id: 'tagVariantId',
     label: 'Variant',
-    renderCell: rowData => (
-      <Link to={`/variant/${rowData.tagVariantId}`}>
-        {variantId === rowData.tagVariantId
-          ? `${rowData.tagVariantId} (self)`
-          : rowData.tagVariantId}
-      </Link>
-    ),
+    renderCell: rowData =>
+      variantId !== rowData.tagVariantId ? (
+        <Link to={`/variant/${rowData.tagVariantId}`}>
+          {rowData.tagVariantId}
+        </Link>
+      ) : (
+        `${rowData.tagVariantId} (self)`
+      ),
   },
   { id: 'tagVariantRsId', label: 'rsID' },
   {
