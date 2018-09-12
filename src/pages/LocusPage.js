@@ -195,7 +195,15 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   render() {
-    const { start, end, chromosome } = this._parseQueryProps();
+    const {
+      start,
+      end,
+      chromosome,
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+    } = this._parseQueryProps();
     const locationString = this._locationString();
     return (
       <BasePage>
@@ -237,16 +245,15 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            // selectedGenes={['ENSG00000242265', 'ENSG00000105852']}
-            // selectedTagVariants={['7_94934200_A_G', '7_94035892_C_T']}
-            // selectedIndexVariants={['7_94812658_G_T']}
-            // selectedStudies={['GCST002985']}
             return hasData(data) ? (
               <Gecko
                 data={transformData(data).gecko}
                 start={start}
                 end={end}
-                selectedStudies={['GCST002985']}
+                selectedGenes={selectedGenes}
+                selectedTagVariants={selectedTagVariants}
+                selectedIndexVariants={selectedIndexVariants}
+                selectedStudies={selectedStudies}
               />
             ) : null;
           }}
@@ -262,6 +269,28 @@ class LocusPage extends React.Component {
     }
     if (queryProps.end) {
       queryProps.end = parseInt(queryProps.end, 10);
+    }
+
+    // single values need to be put in lists
+    if (queryProps.selectedGenes) {
+      queryProps.selectedGenes = queryProps.selectedGenes.length
+        ? queryProps.selectedGenes
+        : [queryProps.selectedGenes];
+    }
+    if (queryProps.selectedTagVariants) {
+      queryProps.selectedTagVariants = queryProps.selectedTagVariants.length
+        ? queryProps.selectedTagVariants
+        : [queryProps.selectedTagVariants];
+    }
+    if (queryProps.selectedIndexVariants) {
+      queryProps.selectedIndexVariants = queryProps.selectedIndexVariants.length
+        ? queryProps.selectedIndexVariants
+        : [queryProps.selectedIndexVariants];
+    }
+    if (queryProps.selectedStudies) {
+      queryProps.selectedStudies = queryProps.selectedStudies.length
+        ? queryProps.selectedStudies
+        : [queryProps.selectedStudies];
     }
     return queryProps;
   }
