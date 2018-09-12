@@ -2,15 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
 
-const tableColumns = [
+const tableColumns = variantId => [
   {
     id: 'indexVariantId',
     label: 'Variant',
-    renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariantId}`}>
-        {rowData.indexVariantId}
-      </Link>
-    ),
+    renderCell: rowData =>
+      variantId !== rowData.indexVariantId ? (
+        <Link to={`/variant/${rowData.indexVariantId}`}>
+          {rowData.indexVariantId}
+        </Link>
+      ) : (
+        `${rowData.indexVariantId} (self)`
+      ),
   },
   { id: 'indexVariantRsId', label: 'rsID' },
   {
@@ -69,9 +72,10 @@ const AssociatedIndexVariantsTable = ({
   error,
   filenameStem,
   data,
+  variantId,
 }) => (
   <OtTable
-    columns={tableColumns}
+    columns={tableColumns(variantId)}
     data={data}
     sortBy="pval"
     order="asc"

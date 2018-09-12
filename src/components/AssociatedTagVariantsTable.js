@@ -2,15 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
 
-const tableColumns = [
+const tableColumns = variantId => [
   {
     id: 'tagVariantId',
     label: 'Variant',
-    renderCell: rowData => (
-      <Link to={`/variant/${rowData.tagVariantId}`}>
-        {rowData.tagVariantId}
-      </Link>
-    ),
+    renderCell: rowData =>
+      variantId !== rowData.tagVariantId ? (
+        <Link to={`/variant/${rowData.tagVariantId}`}>
+          {rowData.tagVariantId}
+        </Link>
+      ) : (
+        `${rowData.tagVariantId} (self)`
+      ),
   },
   { id: 'tagVariantRsId', label: 'rsID' },
   {
@@ -69,9 +72,15 @@ const tableColumns = [
   },
 ];
 
-const AssociatedTagVariantsTable = ({ loading, error, filenameStem, data }) => (
+const AssociatedTagVariantsTable = ({
+  loading,
+  error,
+  filenameStem,
+  data,
+  variantId,
+}) => (
   <OtTable
-    columns={tableColumns}
+    columns={tableColumns(variantId)}
     data={data}
     sortBy="pval"
     order="asc"

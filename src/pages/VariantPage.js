@@ -316,6 +316,7 @@ const VariantPage = ({ match }) => {
                     data.indexVariantsAndStudiesForTagVariant
                   ).associations
                 }
+                variantId={variantId}
                 filenameStem={`${variantId}-lead-variants`}
               />
             </Fragment>
@@ -351,6 +352,7 @@ const VariantPage = ({ match }) => {
                     data.tagVariantsAndStudiesForIndexVariant
                   ).associations
                 }
+                variantId={variantId}
                 filenameStem={`${variantId}-tag-variants`}
               />
             </Fragment>
