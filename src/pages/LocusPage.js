@@ -14,6 +14,10 @@ import {
 
 import BasePage from './BasePage';
 import LocusSelection from '../components/LocusSelection';
+import LocusTable from '../components/LocusTable';
+
+import locusFilter from '../logic/locusFilter';
+import locusTable from '../logic/locusTable';
 
 function hasData(data) {
   return data && data.gecko;
@@ -360,33 +364,50 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            return hasData(data) ? (
-              <React.Fragment>
-                <LocusSelection
-                  {...{
-                    selectedGenes,
-                    selectedTagVariants,
-                    selectedIndexVariants,
-                    selectedStudies,
-                  }}
-                  handleDeleteGene={this.handleDeleteGene}
-                  handleDeleteTagVariant={this.handleDeleteTagVariant}
-                  handleDeleteIndexVariant={this.handleDeleteIndexVariant}
-                  handleDeleteStudy={this.handleDeleteStudy}
-                />
-                <Gecko
-                  data={transformData(data).gecko}
-                  start={start}
-                  end={end}
-                  selectedGenes={selectedGenes}
-                  selectedTagVariants={selectedTagVariants}
-                  selectedIndexVariants={selectedIndexVariants}
-                  selectedStudies={selectedStudies}
-                  handleClick={this.handleClick}
-                  handleMousemove={this.handleMousemove}
-                />
-              </React.Fragment>
-            ) : null;
+            if (hasData(data)) {
+              const transformedData = transformData(data).gecko;
+              const filteredData = locusFilter({
+                data: transformedData,
+                selectedGenes,
+                selectedTagVariants,
+                selectedIndexVariants,
+                selectedStudies,
+              });
+              const rows = locusTable(filteredData);
+              return (
+                <React.Fragment>
+                  <LocusSelection
+                    {...{
+                      selectedGenes,
+                      selectedTagVariants,
+                      selectedIndexVariants,
+                      selectedStudies,
+                    }}
+                    handleDeleteGene={this.handleDeleteGene}
+                    handleDeleteTagVariant={this.handleDeleteTagVariant}
+                    handleDeleteIndexVariant={this.handleDeleteIndexVariant}
+                    handleDeleteStudy={this.handleDeleteStudy}
+                  />
+                  <Gecko
+                    data={filteredData}
+                    start={start}
+                    end={end}
+                    selectedGenes={selectedGenes}
+                    selectedTagVariants={selectedTagVariants}
+                    selectedIndexVariants={selectedIndexVariants}
+                    selectedStudies={selectedStudies}
+                    handleClick={this.handleClick}
+                    handleMousemove={this.handleMousemove}
+                  />
+                  <LocusTable
+                    data={rows}
+                    filenameStem={`${chromosome}-${start}-${end}-locus`}
+                  />
+                </React.Fragment>
+              );
+            } else {
+              return null;
+            }
           }}
         </Query>
       </BasePage>
