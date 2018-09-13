@@ -10,6 +10,7 @@ import {
   SectionHeading,
   BrowserControls,
   commaSeparate,
+  Chip,
 } from 'ot-ui';
 
 import BasePage from './BasePage';
@@ -219,7 +220,7 @@ class LocusPage extends React.Component {
         }
         break;
       case 'study':
-        if (!selectedStudies || !selectedStudies.find(d.id)) {
+        if (!selectedStudies || !selectedStudies.find(d.studyId)) {
           selectedStudies = [d.studyId, ...(selectedStudies || [])];
         }
         break;
@@ -237,6 +238,58 @@ class LocusPage extends React.Component {
   };
   handleMousemove = (d, type, point) => {
     console.log(`MOUSEMOVED ${type} AT ${point}`, d);
+  };
+  handleDeleteGene = id => () => {
+    const { selectedGenes, ...rest } = this._parseQueryProps();
+    const newSelected = selectedGenes
+      ? selectedGenes.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedGenes] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteTagVariant = id => () => {
+    const { selectedTagVariants, ...rest } = this._parseQueryProps();
+    const newSelected = selectedTagVariants
+      ? selectedTagVariants.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedTagVariants] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteIndexVariant = id => () => {
+    const { selectedIndexVariants, ...rest } = this._parseQueryProps();
+    const newSelected = selectedIndexVariants
+      ? selectedIndexVariants.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedIndexVariants] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteStudy = id => () => {
+    const { selectedStudies, ...rest } = this._parseQueryProps();
+    const newSelected = selectedStudies
+      ? selectedStudies.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedStudies] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
   };
   render() {
     const {
@@ -308,17 +361,57 @@ class LocusPage extends React.Component {
         >
           {({ loading, error, data }) => {
             return hasData(data) ? (
-              <Gecko
-                data={transformData(data).gecko}
-                start={start}
-                end={end}
-                selectedGenes={selectedGenes}
-                selectedTagVariants={selectedTagVariants}
-                selectedIndexVariants={selectedIndexVariants}
-                selectedStudies={selectedStudies}
-                handleClick={this.handleClick}
-                handleMousemove={this.handleMousemove}
-              />
+              <React.Fragment>
+                <div>
+                  {selectedGenes
+                    ? selectedGenes.map(d => (
+                        <Chip
+                          key={d}
+                          label={d}
+                          onDelete={this.handleDeleteGene(d)}
+                        />
+                      ))
+                    : null}
+                  {selectedTagVariants
+                    ? selectedTagVariants.map(d => (
+                        <Chip
+                          key={d}
+                          label={d}
+                          onDelete={this.handleDeleteTagVariant(d)}
+                        />
+                      ))
+                    : null}
+                  {selectedIndexVariants
+                    ? selectedIndexVariants.map(d => (
+                        <Chip
+                          key={d}
+                          label={d}
+                          onDelete={this.handleDeleteIndexVariant(d)}
+                        />
+                      ))
+                    : null}
+                  {selectedStudies
+                    ? selectedStudies.map(d => (
+                        <Chip
+                          key={d}
+                          label={d}
+                          onDelete={this.handleDeleteStudy(d)}
+                        />
+                      ))
+                    : null}
+                </div>
+                <Gecko
+                  data={transformData(data).gecko}
+                  start={start}
+                  end={end}
+                  selectedGenes={selectedGenes}
+                  selectedTagVariants={selectedTagVariants}
+                  selectedIndexVariants={selectedIndexVariants}
+                  selectedStudies={selectedStudies}
+                  handleClick={this.handleClick}
+                  handleMousemove={this.handleMousemove}
+                />
+              </React.Fragment>
             ) : null;
           }}
         </Query>
