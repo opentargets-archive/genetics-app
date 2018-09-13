@@ -205,6 +205,24 @@ class LocusPage extends React.Component {
       selectedStudies,
     } = this._parseQueryProps();
     const locationString = this._locationString();
+
+    let subheadingSelected = '';
+    if (
+      selectedGenes ||
+      selectedTagVariants ||
+      selectedIndexVariants ||
+      selectedStudies
+    ) {
+      const selected = [
+        ...(selectedGenes || []),
+        ...(selectedTagVariants || []),
+        ...(selectedIndexVariants || []),
+        ...(selectedStudies || []),
+      ];
+      subheadingSelected = ` associated with ${selected.join(', ')}`;
+    }
+    const subheading = `What genetic evidence is there within this locus${subheadingSelected}?`;
+
     return (
       <BasePage>
         <Helmet>
@@ -213,7 +231,7 @@ class LocusPage extends React.Component {
         <PageTitle>Locus {locationString}</PageTitle>
         <SectionHeading
           heading="Associations"
-          subheading="What genetic evidence is there within this locus?"
+          subheading={subheading}
           entities={[
             {
               type: 'study',
@@ -273,22 +291,26 @@ class LocusPage extends React.Component {
 
     // single values need to be put in lists
     if (queryProps.selectedGenes) {
-      queryProps.selectedGenes = queryProps.selectedGenes.length
+      queryProps.selectedGenes = Array.isArray(queryProps.selectedGenes)
         ? queryProps.selectedGenes
         : [queryProps.selectedGenes];
     }
     if (queryProps.selectedTagVariants) {
-      queryProps.selectedTagVariants = queryProps.selectedTagVariants.length
+      queryProps.selectedTagVariants = Array.isArray(
+        queryProps.selectedTagVariants
+      )
         ? queryProps.selectedTagVariants
         : [queryProps.selectedTagVariants];
     }
     if (queryProps.selectedIndexVariants) {
-      queryProps.selectedIndexVariants = queryProps.selectedIndexVariants.length
+      queryProps.selectedIndexVariants = Array.isArray(
+        queryProps.selectedIndexVariants
+      )
         ? queryProps.selectedIndexVariants
         : [queryProps.selectedIndexVariants];
     }
     if (queryProps.selectedStudies) {
-      queryProps.selectedStudies = queryProps.selectedStudies.length
+      queryProps.selectedStudies = Array.isArray(queryProps.selectedStudies)
         ? queryProps.selectedStudies
         : [queryProps.selectedStudies];
     }
