@@ -10,10 +10,10 @@ import {
   SectionHeading,
   BrowserControls,
   commaSeparate,
-  Chip,
 } from 'ot-ui';
 
 import BasePage from './BasePage';
+import LocusSelection from '../components/LocusSelection';
 
 function hasData(data) {
   return data && data.gecko;
@@ -362,44 +362,18 @@ class LocusPage extends React.Component {
           {({ loading, error, data }) => {
             return hasData(data) ? (
               <React.Fragment>
-                <div>
-                  {selectedGenes
-                    ? selectedGenes.map(d => (
-                        <Chip
-                          key={d}
-                          label={d}
-                          onDelete={this.handleDeleteGene(d)}
-                        />
-                      ))
-                    : null}
-                  {selectedTagVariants
-                    ? selectedTagVariants.map(d => (
-                        <Chip
-                          key={d}
-                          label={d}
-                          onDelete={this.handleDeleteTagVariant(d)}
-                        />
-                      ))
-                    : null}
-                  {selectedIndexVariants
-                    ? selectedIndexVariants.map(d => (
-                        <Chip
-                          key={d}
-                          label={d}
-                          onDelete={this.handleDeleteIndexVariant(d)}
-                        />
-                      ))
-                    : null}
-                  {selectedStudies
-                    ? selectedStudies.map(d => (
-                        <Chip
-                          key={d}
-                          label={d}
-                          onDelete={this.handleDeleteStudy(d)}
-                        />
-                      ))
-                    : null}
-                </div>
+                <LocusSelection
+                  {...{
+                    selectedGenes,
+                    selectedTagVariants,
+                    selectedIndexVariants,
+                    selectedStudies,
+                  }}
+                  handleDeleteGene={this.handleDeleteGene}
+                  handleDeleteTagVariant={this.handleDeleteTagVariant}
+                  handleDeleteIndexVariant={this.handleDeleteIndexVariant}
+                  handleDeleteStudy={this.handleDeleteStudy}
+                />
                 <Gecko
                   data={transformData(data).gecko}
                   start={start}
