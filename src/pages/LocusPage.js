@@ -304,20 +304,20 @@ class LocusPage extends React.Component {
     const locationString = this._locationString();
 
     let subheadingSelected = '';
-    if (
-      selectedGenes ||
-      selectedTagVariants ||
-      selectedIndexVariants ||
-      selectedStudies
-    ) {
-      const selected = [
-        ...(selectedGenes || []),
-        ...(selectedTagVariants || []),
-        ...(selectedIndexVariants || []),
-        ...(selectedStudies || []),
-      ];
-      subheadingSelected = ` associated with ${selected.join(', ')}`;
-    }
+    // if (
+    //   selectedGenes ||
+    //   selectedTagVariants ||
+    //   selectedIndexVariants ||
+    //   selectedStudies
+    // ) {
+    //   const selected = [
+    //     ...(selectedGenes || []),
+    //     ...(selectedTagVariants || []),
+    //     ...(selectedIndexVariants || []),
+    //     ...(selectedStudies || []),
+    //   ];
+    //   subheadingSelected = ` associated with ${selected.join(', ')}`;
+    // }
     const subheading = `What genetic evidence is there within this locus${subheadingSelected}?`;
 
     return (
