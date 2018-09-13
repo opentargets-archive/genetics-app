@@ -8,10 +8,13 @@ export const tableColumns = [
     id: 'studyId',
     label: 'Study ID',
     renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>
-        {rowData.study.traitReported}
-      </Link>
+      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
     ),
+  },
+  {
+    id: 'traitReported',
+    label: 'Trait',
+    renderCell: rowData => rowData.study.traitReported,
   },
   {
     id: 'indexVariantId',
