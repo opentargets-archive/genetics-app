@@ -57,7 +57,7 @@ export const tableColumns = [
       rowData.r2 ? rowData.r2.toPrecision(3) : 'No information',
   },
   {
-    id: 'overallG2V',
+    id: 'overallScore',
     label: 'Overall G2V',
     renderCell: rowData =>
       rowData.overallScore
