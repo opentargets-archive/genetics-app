@@ -194,6 +194,50 @@ class LocusPage extends React.Component {
     };
     this._stringifyQueryProps(newQueryParams);
   };
+  handleClick = (d, type, point) => {
+    let {
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+      ...rest
+    } = this._parseQueryProps();
+    switch (type) {
+      case 'gene':
+        if (!selectedGenes || !selectedGenes.find(d.id)) {
+          selectedGenes = [d.id, ...(selectedGenes || [])];
+        }
+        break;
+      case 'tagVariant':
+        if (!selectedTagVariants || !selectedTagVariants.find(d.id)) {
+          selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
+        }
+        break;
+      case 'indexVariant':
+        if (!selectedIndexVariants || !selectedIndexVariants.find(d.id)) {
+          selectedIndexVariants = [d.id, ...(selectedIndexVariants || [])];
+        }
+        break;
+      case 'study':
+        if (!selectedStudies || !selectedStudies.find(d.id)) {
+          selectedStudies = [d.studyId, ...(selectedStudies || [])];
+        }
+        break;
+      default:
+    }
+    const newQueryParams = {
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+      ...rest,
+    };
+    this._stringifyQueryProps(newQueryParams);
+    console.log(`CLICKED ${type} AT ${point}`, d);
+  };
+  handleMousemove = (d, type, point) => {
+    console.log(`MOUSEMOVED ${type} AT ${point}`, d);
+  };
   render() {
     const {
       start,
@@ -272,6 +316,8 @@ class LocusPage extends React.Component {
                 selectedTagVariants={selectedTagVariants}
                 selectedIndexVariants={selectedIndexVariants}
                 selectedStudies={selectedStudies}
+                handleClick={this.handleClick}
+                handleMousemove={this.handleMousemove}
               />
             ) : null;
           }}
