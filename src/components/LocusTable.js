@@ -53,7 +53,7 @@ export const tableColumns = [
   },
   {
     id: 'r2',
-    label: 'LD (R-squared)',
+    label: 'LD (r²)',
     tooltip: 'Linkage disequilibrium between lead and tag variants',
     renderCell: rowData =>
       rowData.r2 ? rowData.r2.toPrecision(3) : 'No information',

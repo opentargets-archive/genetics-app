@@ -55,7 +55,7 @@ const tableColumns = variantId => [
   },
   {
     id: 'overallR2',
-    label: 'LD (R-squared)',
+    label: 'LD (r²)',
     tooltip: 'Linkage disequilibrium with the queried variant',
     renderCell: rowData =>
       rowData.overallR2 ? rowData.overallR2.toPrecision(3) : 'No information',
