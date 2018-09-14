@@ -203,22 +203,28 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     switch (type) {
       case 'gene':
-        if (!selectedGenes || !selectedGenes.find(d.id)) {
+        if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
           selectedGenes = [d.id, ...(selectedGenes || [])];
         }
         break;
       case 'tagVariant':
-        if (!selectedTagVariants || !selectedTagVariants.find(d.id)) {
+        if (
+          !selectedTagVariants ||
+          !selectedTagVariants.find(d2 => d2 === d.id)
+        ) {
           selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
         }
         break;
       case 'indexVariant':
-        if (!selectedIndexVariants || !selectedIndexVariants.find(d.id)) {
+        if (
+          !selectedIndexVariants ||
+          !selectedIndexVariants.find(d2 => d2 === d.id)
+        ) {
           selectedIndexVariants = [d.id, ...(selectedIndexVariants || [])];
         }
         break;
       case 'study':
-        if (!selectedStudies || !selectedStudies.find(d.studyId)) {
+        if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
           selectedStudies = [d.studyId, ...(selectedStudies || [])];
         }
         break;
@@ -232,11 +238,8 @@ class LocusPage extends React.Component {
       ...rest,
     };
     this._stringifyQueryProps(newQueryParams);
-    console.log(`CLICKED ${type} AT ${point}`, d);
   };
-  handleMousemove = (d, type, point) => {
-    console.log(`MOUSEMOVED ${type} AT ${point}`, d);
-  };
+  handleMousemove = (d, type, point) => {};
   handleDeleteGene = id => () => {
     const { selectedGenes, ...rest } = this._parseQueryProps();
     const newSelected = selectedGenes
