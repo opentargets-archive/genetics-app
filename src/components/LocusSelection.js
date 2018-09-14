@@ -1,9 +1,6 @@
 import React from 'react';
 import { Chip, Text } from 'ot-ui';
 
-// const AND = 'AND';
-// const OR = 'OR';
-
 const LocusSelection = ({
   selectedGenes,
   selectedTagVariants,
