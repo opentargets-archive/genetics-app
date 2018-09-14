@@ -34,7 +34,7 @@ export const typeDefs = gql`
     # genesForVariantSchema: G2VSchema!
     # genesForVariant(variantId: String!): [GeneForVariant!]!
     pheWAS(variantId: String!): PheWAS
-    search(queryString: String!): SearchResult
+    # search(queryString: String!): SearchResult
     # indexVariantsAndStudiesForTagVariant(
     #   variantId: String!
     # ): IndexVariantsAndStudiesForTagVariant
@@ -42,30 +42,30 @@ export const typeDefs = gql`
     #   variantId: String!
     # ): TagVariantsAndStudiesForIndexVariant
   }
-  type SearchResult {
-    genes: [SearchResultGene!]!
-    variants: [SearchResultVariant!]!
-    studies: [SearchResultStudy!]!
-  }
-  type SearchResultGene {
-    id: String!
-    symbol: String!
-    name: String
-    synonyms: [String!]!
-  }
-  type SearchResultVariant {
-    variantId: String!
-    rsId: String
-  }
-  type SearchResultStudy {
-    studyId: String!
-    traitReported: String!
-    pubAuthor: String
-    pubDate: String
-    pubJournal: String
-    # TBD: sample size
-    # TBD: loci count
-  }
+  # type SearchResult {
+  #   genes: [SearchResultGene!]!
+  #   variants: [SearchResultVariant!]!
+  #   studies: [SearchResultStudy!]!
+  # }
+  # type SearchResultGene {
+  #   id: String!
+  #   symbol: String!
+  #   name: String
+  #   synonyms: [String!]!
+  # }
+  # type SearchResultVariant {
+  #   variantId: String!
+  #   rsId: String
+  # }
+  # type SearchResultStudy {
+  #   studyId: String!
+  #   traitReported: String!
+  #   pubAuthor: String
+  #   pubDate: String
+  #   pubJournal: String
+  #   # TBD: sample size
+  #   # TBD: loci count
+  # }
   #type G2VSchema {
   #  qtls: [G2VSchemaElement!]!
   #  intervals: [G2VSchemaElement!]!

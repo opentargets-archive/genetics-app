@@ -3,24 +3,36 @@ import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { Search as OtSearch, SearchOption } from 'ot-ui';
+import { Search as OtSearch, SearchOption, commaSeparate } from 'ot-ui';
 
 const SEARCH_QUERY = gql`
   query SearchQuery($queryString: String) {
     search(queryString: $queryString) {
+      totalGenes
+      totalVariants
+      totalStudies
       genes {
         id
         symbol
-        name
-        synonyms
+        chromosome
+        start
+        end
       }
       variants {
-        variantId
-        rsId
+        variant {
+          id
+          rsId
+          chromosome
+          position
+          refAllele
+          altAllele
+        }
+        relatedGenes
       }
       studies {
         studyId
         traitReported
+        pmid
         pubAuthor
         pubDate
         pubJournal
@@ -52,18 +64,30 @@ const Option = ({ data }) => {
       return (
         <SearchOption
           heading={data.symbol}
-          subheading={data.name}
-          extra={data.synonyms.join(', ')}
+          subheading={`${data.chromosome}:${commaSeparate(
+            data.start
+          )}-${commaSeparate(data.end)}`}
+          extra={data.id}
         />
       );
     case 'variant':
-      return <SearchOption heading={data.variantId} subheading={data.rsId} />;
+      return (
+        <SearchOption
+          heading={data.variant.id}
+          subheading={data.variant.rsId}
+          extra={
+            data.relatedGenes.length > 0
+              ? `Linked genes: ${data.relatedGenes.join(', ')}`
+              : null
+          }
+        />
+      );
     case 'study':
       const pubYear = new Date(data.pubDate).getFullYear();
       return (
         <SearchOption
-          heading={`${data.pubAuthor} (${pubYear})`}
-          subheading={data.traitReported}
+          heading={data.traitReported}
+          subheading={`${data.pubAuthor} (${pubYear})`}
           extra={data.pubJournal}
         />
       );
@@ -87,7 +111,7 @@ class Search extends React.Component {
           history.push(`/gene/${value.id}`);
           break;
         case 'variant':
-          history.push(`/variant/${value.variantId}`);
+          history.push(`/variant/${value.variant.id}`);
           break;
         case 'study':
           history.push(`/study/${value.studyId}`);
