@@ -18,12 +18,13 @@ import LocusTable from '../components/LocusTable';
 
 import locusFilter from '../logic/locusFilter';
 import locusTable from '../logic/locusTable';
+import locusLookups from '../logic/locusLookups';
 
 function hasData(data) {
   return data && data.gecko;
 }
 
-function transformData(data) {
+function transformData(data, lookups) {
   const {
     genes,
     geneTagVariants,
@@ -31,6 +32,7 @@ function transformData(data) {
     ...rest
   } = data.gecko;
   const { tagVariants, indexVariants, studies } = rest;
+  const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
 
   // gene exons come as flat list, rendering expects list of pairs
   const genesWithExonPairs = genes.map(d => ({
@@ -44,10 +46,6 @@ function transformData(data) {
   }));
 
   // geneTagVariants come with ids only, but need position info for gene and tagVariant
-  const geneDict = {};
-  const tagVariantDict = {};
-  genes.forEach(d => (geneDict[d.id] = d));
-  tagVariants.forEach(d => (tagVariantDict[d.id] = d));
   const geneTagVariantsWithPosition = geneTagVariants.map(d => ({
     ...d,
     geneTss: geneDict[d.geneId].tss,
@@ -55,10 +53,6 @@ function transformData(data) {
   }));
 
   // tagVariantIndexVariantStudies come with ids only, but need position info for tagVariant and indexVariant
-  const indexVariantDict = {};
-  const studyDict = {};
-  indexVariants.forEach(d => (indexVariantDict[d.id] = d));
-  studies.forEach(d => (studyDict[d.studyId] = d));
   const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies
     .map(d => ({
       ...d,
@@ -365,7 +359,8 @@ class LocusPage extends React.Component {
         >
           {({ loading, error, data }) => {
             if (hasData(data)) {
-              const transformedData = transformData(data).gecko;
+              const lookups = locusLookups(data.gecko);
+              const transformedData = transformData(data, lookups).gecko;
               const filteredData = locusFilter({
                 data: transformedData,
                 selectedGenes,
@@ -373,7 +368,7 @@ class LocusPage extends React.Component {
                 selectedIndexVariants,
                 selectedStudies,
               });
-              const rows = locusTable(filteredData);
+              const rows = locusTable(filteredData, lookups);
               return (
                 <React.Fragment>
                   <LocusSelection
@@ -383,6 +378,7 @@ class LocusPage extends React.Component {
                       selectedIndexVariants,
                       selectedStudies,
                     }}
+                    lookups={lookups}
                     handleDeleteGene={this.handleDeleteGene}
                     handleDeleteTagVariant={this.handleDeleteTagVariant}
                     handleDeleteIndexVariant={this.handleDeleteIndexVariant}

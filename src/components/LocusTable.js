@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
-import { getCytoband } from 'ot-charts';
 
 export const tableColumns = [
   {

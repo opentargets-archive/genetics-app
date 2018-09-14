@@ -1,20 +1,15 @@
-const locusTable = ({
-  genes,
-  tagVariants,
-  indexVariants,
-  studies,
-  geneTagVariants,
-  tagVariantIndexVariantStudies,
-}) => {
-  // build dictionaries
-  const geneDict = {};
-  const tagVariantDict = {};
-  const indexVariantDict = {};
-  const studyDict = {};
-  genes.forEach(d => (geneDict[d.id] = d));
-  tagVariants.forEach(d => (tagVariantDict[d.id] = d));
-  indexVariants.forEach(d => (indexVariantDict[d.id] = d));
-  studies.forEach(d => (studyDict[d.studyId] = d));
+const locusTable = (
+  {
+    genes,
+    tagVariants,
+    indexVariants,
+    studies,
+    geneTagVariants,
+    tagVariantIndexVariantStudies,
+  },
+  lookups
+) => {
+  const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
 
   // build rows
   const rows = [];
