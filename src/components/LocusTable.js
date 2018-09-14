@@ -20,7 +20,7 @@ export const tableColumns = [
     label: 'Lead Variant',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
-        {`${rowData.indexVariantId} (${rowData.indexVariant.rsId})`}
+        {rowData.indexVariantId}
       </Link>
     ),
   },
@@ -29,7 +29,7 @@ export const tableColumns = [
     label: 'Tag Variant',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.tagVariantId}`}>
-        {`${rowData.tagVariantId} (${rowData.tagVariant.rsId})`}
+        {rowData.tagVariantId}
       </Link>
     ),
   },
