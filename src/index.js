@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
+import casual from 'casual-browserify';
 
 import App from './App';
 import { unregister } from './registerServiceWorker';
@@ -13,7 +14,18 @@ import getMockSchemaLink from './graphql-mocking/mockSchemaLink';
 getMockSchemaLink().then(mockSchemaLink => {
   const client = new ApolloClient({
     link: mockSchemaLink,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      dataIdFromObject: object => {
+        switch (object.__typename) {
+          case 'QTLElement':
+          case 'IntervalElement':
+          case 'FunctionalPredictionElement':
+            return casual.uuid;
+          default:
+            return defaultDataIdFromObject(object);
+        }
+      },
+    }),
   });
 
   ReactDOM.render(
