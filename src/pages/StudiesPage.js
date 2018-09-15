@@ -77,7 +77,26 @@ class StudiesPage extends React.Component {
           {({ loading, error, data }) => {
             if (hasData(data)) {
               const studies = transformData(studyIds, data);
-              return <ManhattansTable studies={studies} />;
+              return (
+                <React.Fragment>
+                  <SectionHeading
+                    heading={`Independently-associated loci across ${
+                      studies.length
+                    } studies`}
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: true,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: false,
+                      },
+                    ]}
+                  />
+                  <ManhattansTable studies={studies} />
+                </React.Fragment>
+              );
             } else {
               return null;
             }
