@@ -59,6 +59,7 @@ const transformData = (studyIds, data) => {
   return studyIds.map(d => ({
     ...data[`${studyInfoPrefix}${d}`],
     ...data[`${manhattanPrefix}${d}`],
+    associationsCount: data[`${manhattanPrefix}${d}`].associations.length,
   }));
 };
 

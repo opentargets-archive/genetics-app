@@ -13,11 +13,29 @@ export const tableColumns = [
   },
   {
     id: 'traitReported',
-    label: 'Trait',
+    label: 'Details',
+    renderCell: rowData => {
+      let pubInfo = '';
+      if (rowData.pubAuthor && rowData.pubDate) {
+        pubInfo = ` (${rowData.pubAuthor} ${new Date(
+          rowData.pubDate
+        ).getFullYear()})`;
+      }
+      return (
+        <React.Fragment>
+          <span style={{ fontWeight: 'bold' }}>{rowData.traitReported}</span>
+          <span style={{ fontSize: '0.75rem' }}>{pubInfo}</span>
+          <br />
+          <span style={{ fontSize: '0.65rem' }}>{rowData.pubJournal}</span>
+        </React.Fragment>
+      );
+    },
   },
   {
-    id: 'associations',
+    id: 'associationsCount',
     label: 'Independently-associated loci',
+    tooltip:
+      'Independent loci associated with this study (p < 5e-8 are shown in red)',
     renderCell: rowData => <ManhattanFlat data={rowData.associations} />,
   },
 ];
