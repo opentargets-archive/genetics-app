@@ -8,6 +8,7 @@ import { PageTitle, SubHeading, DownloadSVGPlot, SectionHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
+import ManhattansTable from '../components/ManhattansTable';
 
 const studyInfoPrefix = 'studyInfo';
 const studyInfo = studyId => `
@@ -50,12 +51,20 @@ const manhattansQuery = studyIds => gql`
   }
 `;
 
+const hasData = data => {
+  return data && Object.keys(data).length > 0;
+};
+
+const transformData = (studyIds, data) => {
+  return studyIds.map(d => ({
+    ...data[`${studyInfoPrefix}${d}`],
+    ...data[`${manhattanPrefix}${d}`],
+  }));
+};
+
 class StudiesPage extends React.Component {
   render() {
     const { studyIds } = this._parseQueryProps();
-    console.log(studyIds);
-    const q = manhattansQuery(studyIds);
-    console.log(q);
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
@@ -63,10 +72,14 @@ class StudiesPage extends React.Component {
           <title>Compare studies</title>
         </Helmet>
         <PageTitle>Compare studies</PageTitle>
-        <Query query={q} fetchPolicy="network-only">
+        <Query query={manhattansQuery(studyIds)} fetchPolicy="network-only">
           {({ loading, error, data }) => {
-            console.log(loading, error, data);
-            return null;
+            if (hasData(data)) {
+              const studies = transformData(studyIds, data);
+              return <ManhattansTable studies={studies} />;
+            } else {
+              return null;
+            }
           }}
         </Query>
       </BasePage>
