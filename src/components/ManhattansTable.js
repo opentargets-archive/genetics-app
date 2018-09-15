@@ -45,6 +45,8 @@ function ManhattansTable({ studies }) {
     <OtTable
       columns={tableColumns}
       data={studies}
+      sortBy="associationsCount"
+      order="desc"
       downloadFileStem="multi-study"
     />
   );
