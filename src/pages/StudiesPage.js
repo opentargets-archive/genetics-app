@@ -4,11 +4,12 @@ import { Query } from 'react-apollo';
 import queryString from 'query-string';
 import gql from 'graphql-tag';
 
-import { PageTitle, SubHeading, DownloadSVGPlot, SectionHeading } from 'ot-ui';
+import { PageTitle, SubHeading, SectionHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
+import StudySearch from '../components/StudySearch';
 
 const studyInfoPrefix = 'studyInfo';
 const studyInfo = studyId => `
@@ -56,14 +57,29 @@ const hasData = data => {
 };
 
 const transformData = (studyIds, data) => {
-  return studyIds.map(d => ({
-    ...data[`${studyInfoPrefix}${d}`],
-    ...data[`${manhattanPrefix}${d}`],
-    associationsCount: data[`${manhattanPrefix}${d}`].associations.length,
-  }));
+  return studyIds
+    .filter(
+      d => data[`${studyInfoPrefix}${d}`] && data[`${manhattanPrefix}${d}`]
+    )
+    .map(d => ({
+      ...data[`${studyInfoPrefix}${d}`],
+      ...data[`${manhattanPrefix}${d}`],
+      associationsCount: data[`${manhattanPrefix}${d}`].associations.length,
+    }));
 };
 
 class StudiesPage extends React.Component {
+  handleAddStudy = studyId => {
+    const { studyIds, ...rest } = this._parseQueryProps();
+    const newStudyIds = studyIds
+      ? [studyId, ...studyIds.filter(d => d !== studyId)]
+      : [studyId];
+    const newQueryParams = { ...rest };
+    if (studyIds) {
+      newQueryParams.studyIds = newStudyIds;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleDeleteStudy = studyId => () => {
     const { studyIds, ...rest } = this._parseQueryProps();
     const newStudyIds = studyIds ? studyIds.filter(d => d !== studyId) : null;
@@ -82,6 +98,8 @@ class StudiesPage extends React.Component {
           <title>Compare studies</title>
         </Helmet>
         <PageTitle>Compare studies</PageTitle>
+        <SubHeading>Add more studies</SubHeading>
+        <StudySearch handleAddStudy={this.handleAddStudy} />
         <Query query={manhattansQuery(studyIds)} fetchPolicy="network-only">
           {({ loading, error, data }) => {
             if (hasData(data)) {
