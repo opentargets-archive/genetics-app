@@ -64,6 +64,15 @@ const transformData = (studyIds, data) => {
 };
 
 class StudiesPage extends React.Component {
+  handleDeleteStudy = studyId => () => {
+    const { studyIds, ...rest } = this._parseQueryProps();
+    const newStudyIds = studyIds ? studyIds.filter(d => d !== studyId) : null;
+    const newQueryParams = { ...rest };
+    if (studyIds) {
+      newQueryParams.studyIds = newStudyIds;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   render() {
     const { studyIds } = this._parseQueryProps();
     return (
@@ -94,7 +103,10 @@ class StudiesPage extends React.Component {
                       },
                     ]}
                   />
-                  <ManhattansTable studies={studies} />
+                  <ManhattansTable
+                    studies={studies}
+                    onDeleteStudy={this.handleDeleteStudy}
+                  />
                 </React.Fragment>
               );
             } else {

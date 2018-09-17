@@ -1,9 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable } from 'ot-ui';
+import { OtTable, CloseButton } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
-export const tableColumns = [
+export const tableColumns = onDeleteStudy => [
+  {
+    id: 'deleteRow',
+    label: 'Remove',
+    renderCell: rowData => (
+      <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
+    ),
+  },
   {
     id: 'studyId',
     label: 'Study ID',
@@ -40,10 +47,10 @@ export const tableColumns = [
   },
 ];
 
-function ManhattansTable({ studies }) {
+function ManhattansTable({ studies, onDeleteStudy }) {
   return (
     <OtTable
-      columns={tableColumns}
+      columns={tableColumns(onDeleteStudy)}
       data={studies}
       sortBy="associationsCount"
       order="desc"
