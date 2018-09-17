@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import queryString from 'query-string';
 import gql from 'graphql-tag';
 
-import { PageTitle, SubHeading, SectionHeading } from 'ot-ui';
+import { PageTitle, SectionHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
@@ -98,8 +98,10 @@ class StudiesPage extends React.Component {
           <title>Compare studies</title>
         </Helmet>
         <PageTitle>Compare studies</PageTitle>
-        <SubHeading>Add more studies</SubHeading>
-        <StudySearch handleAddStudy={this.handleAddStudy} />
+        <div style={{ maxWidth: '400px' }}>
+          <StudySearch handleAddStudy={this.handleAddStudy} />
+        </div>
+
         <Query query={manhattansQuery(studyIds)} fetchPolicy="network-only">
           {({ loading, error, data }) => {
             if (hasData(data)) {

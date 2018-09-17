@@ -85,7 +85,7 @@ class StudySearch extends React.Component {
         optionComponent={Option}
         value={this.state.value}
         onSelectOption={this.handleSelectOption}
-        placeholder="Search for a trait or author..."
+        placeholder="Add more studies..."
       />
     );
   }
