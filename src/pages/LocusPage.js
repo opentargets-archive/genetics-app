@@ -13,12 +13,18 @@ import {
 } from 'ot-ui';
 
 import BasePage from './BasePage';
+import LocusSelection from '../components/LocusSelection';
+import LocusTable from '../components/LocusTable';
+
+import locusFilter from '../logic/locusFilter';
+import locusTable from '../logic/locusTable';
+import locusLookups from '../logic/locusLookups';
 
 function hasData(data) {
   return data && data.gecko;
 }
 
-function transformData(data) {
+function transformData(data, lookups) {
   const {
     genes,
     geneTagVariants,
@@ -26,6 +32,7 @@ function transformData(data) {
     ...rest
   } = data.gecko;
   const { tagVariants, indexVariants, studies } = rest;
+  const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
 
   // gene exons come as flat list, rendering expects list of pairs
   const genesWithExonPairs = genes.map(d => ({
@@ -39,10 +46,6 @@ function transformData(data) {
   }));
 
   // geneTagVariants come with ids only, but need position info for gene and tagVariant
-  const geneDict = {};
-  const tagVariantDict = {};
-  genes.forEach(d => (geneDict[d.id] = d));
-  tagVariants.forEach(d => (tagVariantDict[d.id] = d));
   const geneTagVariantsWithPosition = geneTagVariants.map(d => ({
     ...d,
     geneTss: geneDict[d.geneId].tss,
@@ -50,10 +53,6 @@ function transformData(data) {
   }));
 
   // tagVariantIndexVariantStudies come with ids only, but need position info for tagVariant and indexVariant
-  const indexVariantDict = {};
-  const studyDict = {};
-  indexVariants.forEach(d => (indexVariantDict[d.id] = d));
-  studies.forEach(d => (studyDict[d.studyId] = d));
   const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies
     .map(d => ({
       ...d,
@@ -194,9 +193,134 @@ class LocusPage extends React.Component {
     };
     this._stringifyQueryProps(newQueryParams);
   };
+  handleClick = (d, type, point) => {
+    let {
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+      ...rest
+    } = this._parseQueryProps();
+    switch (type) {
+      case 'gene':
+        if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
+          selectedGenes = [d.id, ...(selectedGenes || [])];
+        }
+        break;
+      case 'tagVariant':
+        if (
+          !selectedTagVariants ||
+          !selectedTagVariants.find(d2 => d2 === d.id)
+        ) {
+          selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
+        }
+        break;
+      case 'indexVariant':
+        if (
+          !selectedIndexVariants ||
+          !selectedIndexVariants.find(d2 => d2 === d.id)
+        ) {
+          selectedIndexVariants = [d.id, ...(selectedIndexVariants || [])];
+        }
+        break;
+      case 'study':
+        if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
+          selectedStudies = [d.studyId, ...(selectedStudies || [])];
+        }
+        break;
+      default:
+    }
+    const newQueryParams = {
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+      ...rest,
+    };
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleMousemove = (d, type, point) => {};
+  handleDeleteGene = id => () => {
+    const { selectedGenes, ...rest } = this._parseQueryProps();
+    const newSelected = selectedGenes
+      ? selectedGenes.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedGenes] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteTagVariant = id => () => {
+    const { selectedTagVariants, ...rest } = this._parseQueryProps();
+    const newSelected = selectedTagVariants
+      ? selectedTagVariants.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedTagVariants] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteIndexVariant = id => () => {
+    const { selectedIndexVariants, ...rest } = this._parseQueryProps();
+    const newSelected = selectedIndexVariants
+      ? selectedIndexVariants.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedIndexVariants] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleDeleteStudy = id => () => {
+    const { selectedStudies, ...rest } = this._parseQueryProps();
+    const newSelected = selectedStudies
+      ? selectedStudies.filter(d => d !== id)
+      : [];
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelected.length > 0) {
+      newQueryParams[selectedStudies] = newSelected;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   render() {
-    const { start, end, chromosome } = this._parseQueryProps();
+    const {
+      start,
+      end,
+      chromosome,
+      selectedGenes,
+      selectedTagVariants,
+      selectedIndexVariants,
+      selectedStudies,
+    } = this._parseQueryProps();
     const locationString = this._locationString();
+
+    let subheadingSelected = '';
+    // if (
+    //   selectedGenes ||
+    //   selectedTagVariants ||
+    //   selectedIndexVariants ||
+    //   selectedStudies
+    // ) {
+    //   const selected = [
+    //     ...(selectedGenes || []),
+    //     ...(selectedTagVariants || []),
+    //     ...(selectedIndexVariants || []),
+    //     ...(selectedStudies || []),
+    //   ];
+    //   subheadingSelected = ` associated with ${selected.join(', ')}`;
+    // }
+    const subheading = `What genetic evidence is there within this locus${subheadingSelected}?`;
+
     return (
       <BasePage>
         <Helmet>
@@ -205,23 +329,23 @@ class LocusPage extends React.Component {
         <PageTitle>Locus {locationString}</PageTitle>
         <SectionHeading
           heading="Associations"
-          subheading="What genetic evidence is there within this locus?"
+          subheading={subheading}
           entities={[
             {
               type: 'study',
-              fixed: false,
+              fixed: selectedStudies,
             },
             {
               type: 'indexVariant',
-              fixed: false,
+              fixed: selectedIndexVariants,
             },
             {
               type: 'tagVariant',
-              fixed: false,
+              fixed: selectedTagVariants,
             },
             {
               type: 'gene',
-              fixed: false,
+              fixed: selectedGenes,
             },
           ]}
         />
@@ -237,9 +361,52 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            return hasData(data) ? (
-              <Gecko data={transformData(data).gecko} start={start} end={end} />
-            ) : null;
+            if (hasData(data)) {
+              const lookups = locusLookups(data.gecko);
+              const transformedData = transformData(data, lookups).gecko;
+              const filteredData = locusFilter({
+                data: transformedData,
+                selectedGenes,
+                selectedTagVariants,
+                selectedIndexVariants,
+                selectedStudies,
+              });
+              const rows = locusTable(filteredData, lookups);
+              return (
+                <React.Fragment>
+                  <LocusSelection
+                    {...{
+                      selectedGenes,
+                      selectedTagVariants,
+                      selectedIndexVariants,
+                      selectedStudies,
+                    }}
+                    lookups={lookups}
+                    handleDeleteGene={this.handleDeleteGene}
+                    handleDeleteTagVariant={this.handleDeleteTagVariant}
+                    handleDeleteIndexVariant={this.handleDeleteIndexVariant}
+                    handleDeleteStudy={this.handleDeleteStudy}
+                  />
+                  <Gecko
+                    data={filteredData}
+                    start={start}
+                    end={end}
+                    selectedGenes={selectedGenes}
+                    selectedTagVariants={selectedTagVariants}
+                    selectedIndexVariants={selectedIndexVariants}
+                    selectedStudies={selectedStudies}
+                    handleClick={this.handleClick}
+                    handleMousemove={this.handleMousemove}
+                  />
+                  <LocusTable
+                    data={rows}
+                    filenameStem={`${chromosome}-${start}-${end}-locus`}
+                  />
+                </React.Fragment>
+              );
+            } else {
+              return null;
+            }
           }}
         </Query>
       </BasePage>
@@ -253,6 +420,32 @@ class LocusPage extends React.Component {
     }
     if (queryProps.end) {
       queryProps.end = parseInt(queryProps.end, 10);
+    }
+
+    // single values need to be put in lists
+    if (queryProps.selectedGenes) {
+      queryProps.selectedGenes = Array.isArray(queryProps.selectedGenes)
+        ? queryProps.selectedGenes
+        : [queryProps.selectedGenes];
+    }
+    if (queryProps.selectedTagVariants) {
+      queryProps.selectedTagVariants = Array.isArray(
+        queryProps.selectedTagVariants
+      )
+        ? queryProps.selectedTagVariants
+        : [queryProps.selectedTagVariants];
+    }
+    if (queryProps.selectedIndexVariants) {
+      queryProps.selectedIndexVariants = Array.isArray(
+        queryProps.selectedIndexVariants
+      )
+        ? queryProps.selectedIndexVariants
+        : [queryProps.selectedIndexVariants];
+    }
+    if (queryProps.selectedStudies) {
+      queryProps.selectedStudies = Array.isArray(queryProps.selectedStudies)
+        ? queryProps.selectedStudies
+        : [queryProps.selectedStudies];
     }
     return queryProps;
   }
