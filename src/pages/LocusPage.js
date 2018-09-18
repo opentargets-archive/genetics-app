@@ -10,6 +10,8 @@ import {
   SubHeading,
   SectionHeading,
   BrowserControls,
+  PlotContainer,
+  PlotContainerSection,
   commaSeparate,
 } from 'ot-ui';
 
@@ -89,6 +91,12 @@ function transformData(data, lookups) {
     },
   };
 }
+
+const FullWidthText = ({ children }) => (
+  <div style={{ width: '100%', textAlign: 'center' }}>
+    <SubHeading>{children}</SubHeading>
+  </div>
+);
 
 const geckoQuery = gql`
   query GeckoQuery($chromosome: String, $start: Int, $end: Int) {
@@ -350,12 +358,6 @@ class LocusPage extends React.Component {
             },
           ]}
         />
-        <BrowserControls
-          handleZoomIn={this.handleZoomIn}
-          handleZoomOut={this.handleZoomOut}
-          handlePanLeft={this.handlePanLeft}
-          handlePanRight={this.handlePanRight}
-        />
         <Query
           query={geckoQuery}
           variables={{ chromosome, start, end }}
@@ -381,42 +383,58 @@ class LocusPage extends React.Component {
               const rows = locusTable(filteredData, lookups);
               return (
                 <React.Fragment>
-                  <LocusSelection
-                    {...{
-                      selectedGenes,
-                      selectedTagVariants,
-                      selectedIndexVariants,
-                      selectedStudies,
-                    }}
-                    lookups={lookups}
-                    handleDeleteGene={this.handleDeleteGene}
-                    handleDeleteTagVariant={this.handleDeleteTagVariant}
-                    handleDeleteIndexVariant={this.handleDeleteIndexVariant}
-                    handleDeleteStudy={this.handleDeleteStudy}
-                  />
-                  {isEmptyFiltered ? (
-                    isEmpty ? (
-                      <SubHeading>
-                        There are no associations in this locus.
-                      </SubHeading>
-                    ) : (
-                      <SubHeading>
-                        There are associations in this locus, but they are
-                        filtered out. Try removing some filters.
-                      </SubHeading>
-                    )
-                  ) : null}
-                  <Gecko
-                    data={filteredData}
-                    start={start}
-                    end={end}
-                    selectedGenes={selectedGenes}
-                    selectedTagVariants={selectedTagVariants}
-                    selectedIndexVariants={selectedIndexVariants}
-                    selectedStudies={selectedStudies}
-                    handleClick={this.handleClick}
-                    handleMousemove={this.handleMousemove}
-                  />
+                  <PlotContainer
+                    left={
+                      <BrowserControls
+                        handleZoomIn={this.handleZoomIn}
+                        handleZoomOut={this.handleZoomOut}
+                        handlePanLeft={this.handlePanLeft}
+                        handlePanRight={this.handlePanRight}
+                      />
+                    }
+                  >
+                    <PlotContainerSection>
+                      {isEmptyFiltered ? (
+                        isEmpty ? (
+                          <FullWidthText>
+                            There are no associations in this locus.
+                          </FullWidthText>
+                        ) : (
+                          <FullWidthText>
+                            There are associations in this locus, but they are
+                            filtered out. Try removing some filters.
+                          </FullWidthText>
+                        )
+                      ) : null}
+                    </PlotContainerSection>
+                    <PlotContainerSection>
+                      <LocusSelection
+                        {...{
+                          selectedGenes,
+                          selectedTagVariants,
+                          selectedIndexVariants,
+                          selectedStudies,
+                        }}
+                        lookups={lookups}
+                        handleDeleteGene={this.handleDeleteGene}
+                        handleDeleteTagVariant={this.handleDeleteTagVariant}
+                        handleDeleteIndexVariant={this.handleDeleteIndexVariant}
+                        handleDeleteStudy={this.handleDeleteStudy}
+                      />
+                    </PlotContainerSection>
+
+                    <Gecko
+                      data={filteredData}
+                      start={start}
+                      end={end}
+                      selectedGenes={selectedGenes}
+                      selectedTagVariants={selectedTagVariants}
+                      selectedIndexVariants={selectedIndexVariants}
+                      selectedStudies={selectedStudies}
+                      handleClick={this.handleClick}
+                      handleMousemove={this.handleMousemove}
+                    />
+                  </PlotContainer>
                   <LocusTable
                     data={rows}
                     filenameStem={`${chromosome}-${start}-${end}-locus`}
