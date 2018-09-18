@@ -18,7 +18,6 @@ import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
-const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns);
 const SIGNIFICANCE = 5e-8;
 
 function hasAssociations(data) {
@@ -110,6 +109,7 @@ class StudyPage extends React.Component {
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
+    const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns(studyId));
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
