@@ -30,6 +30,7 @@ function hasAssociations(data) {
 
 function hasAssociatedIndexVariants(data) {
   return (
+    data &&
     data.indexVariantsAndStudiesForTagVariant &&
     data.indexVariantsAndStudiesForTagVariant.associations &&
     data.indexVariantsAndStudiesForTagVariant.associations.length > 0
@@ -57,6 +58,7 @@ function transformAssociatedIndexVariants(data) {
 
 function hasAssociatedTagVariants(data) {
   return (
+    data &&
     data.tagVariantsAndStudiesForIndexVariant &&
     data.tagVariantsAndStudiesForIndexVariant.associations &&
     data.tagVariantsAndStudiesForIndexVariant.associations.length > 0
