@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, Heading, SubHeading } from 'ot-ui';
+import { PageTitle, SubHeading, SectionHeading, commaSeparate } from 'ot-ui';
 
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
@@ -45,6 +45,11 @@ const GenePage = ({ match }) => {
                 </Helmet>
                 <PageTitle>{symbol}</PageTitle>
                 <SubHeading>
+                  {`${chromosome}:${commaSeparate(start)}-${commaSeparate(
+                    end
+                  )} `}
+                </SubHeading>
+                <SubHeading>
                   <LocusLink
                     chromosome={chromosome}
                     position={position}
@@ -52,6 +57,32 @@ const GenePage = ({ match }) => {
                   >
                     View locus
                   </LocusLink>
+                </SubHeading>
+                <SectionHeading heading="Useful links" />
+                <SubHeading>
+                  <a
+                    href={`https://www.targetvalidation.org/target/${geneId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open Targets Platform
+                  </a>
+                  <br />
+                  <a
+                    href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ensembl
+                  </a>
+                  <br />
+                  <a
+                    href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GTEx
+                  </a>
                 </SubHeading>
               </React.Fragment>
             );
