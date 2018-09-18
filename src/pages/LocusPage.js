@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import { Gecko } from 'ot-charts';
 import {
   PageTitle,
+  SubHeading,
   SectionHeading,
   BrowserControls,
   commaSeparate,
@@ -371,6 +372,12 @@ class LocusPage extends React.Component {
                 selectedIndexVariants,
                 selectedStudies,
               });
+              const isEmpty =
+                transformedData.geneTagVariants.length === 0 &&
+                transformedData.tagVariantIndexVariantStudies.length === 0;
+              const isEmptyFiltered =
+                filteredData.geneTagVariants.length === 0 &&
+                filteredData.tagVariantIndexVariantStudies.length === 0;
               const rows = locusTable(filteredData, lookups);
               return (
                 <React.Fragment>
@@ -387,6 +394,18 @@ class LocusPage extends React.Component {
                     handleDeleteIndexVariant={this.handleDeleteIndexVariant}
                     handleDeleteStudy={this.handleDeleteStudy}
                   />
+                  {isEmptyFiltered ? (
+                    isEmpty ? (
+                      <SubHeading>
+                        There are no associations in this locus.
+                      </SubHeading>
+                    ) : (
+                      <SubHeading>
+                        There are associations in this locus, but they are
+                        filtered out. Try removing some filters.
+                      </SubHeading>
+                    )
+                  ) : null}
                   <Gecko
                     data={filteredData}
                     start={start}
