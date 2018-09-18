@@ -127,14 +127,14 @@ export const typeDefs = gql`
   #     id: String!
   #     term: String!
   # }
-  type StudyInfo {
-    studyId: String!
-    traitReported: String!
-    pubAuthor: String
-    pubDate: String
-    pubJournal: String
-    pmid: String
-  }
+  # type StudyInfo {
+  #   studyId: String!
+  #   traitReported: String!
+  #   pubAuthor: String
+  #   pubDate: String
+  #   pubJournal: String
+  #   pmid: String
+  # }
   # type Manhattan {
   #   associations: [ManhattanAssociation!]!
   # }
