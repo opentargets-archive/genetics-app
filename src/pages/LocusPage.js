@@ -393,20 +393,22 @@ class LocusPage extends React.Component {
                       />
                     }
                   >
-                    <PlotContainerSection>
-                      {isEmptyFiltered ? (
-                        isEmpty ? (
+                    {isEmptyFiltered ? (
+                      isEmpty ? (
+                        <PlotContainerSection>
                           <FullWidthText>
                             There are no associations in this locus.
                           </FullWidthText>
-                        ) : (
+                        </PlotContainerSection>
+                      ) : (
+                        <PlotContainerSection>
                           <FullWidthText>
                             There are associations in this locus, but they are
                             filtered out. Try removing some filters.
                           </FullWidthText>
-                        )
-                      ) : null}
-                    </PlotContainerSection>
+                        </PlotContainerSection>
+                      )
+                    ) : null}
                     <PlotContainerSection>
                       <LocusSelection
                         {...{
