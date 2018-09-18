@@ -15,8 +15,6 @@ import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 import LocusLink from '../components/LocusLink';
 
-const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
-
 function hasAssociatedGenes(data) {
   return data && data.genesForVariantSchema;
 }
@@ -230,6 +228,16 @@ const VariantPage = ({ match }) => {
           const isGeneVariant = hasAssociatedGenes(data);
           const isTagVariant = hasAssociatedIndexVariants(data);
           const isIndexVariant = hasAssociatedTagVariants(data);
+          const PheWASWithTooltip = withTooltip(
+            PheWAS,
+            tableColumns({
+              variantId,
+              chromosome,
+              position,
+              isIndexVariant,
+              isTagVariant,
+            })
+          );
           return (
             <React.Fragment>
               <SubHeading>
@@ -295,7 +303,16 @@ const VariantPage = ({ match }) => {
                       ref={pheWASPlot}
                     />
                   </DownloadSVGPlot>
-                  <PheWASTable associations={data.pheWAS.associations} />
+                  <PheWASTable
+                    associations={data.pheWAS.associations}
+                    {...{
+                      variantId,
+                      chromosome,
+                      position,
+                      isIndexVariant,
+                      isTagVariant,
+                    }}
+                  />
                 </Fragment>
               ) : null}
               {isTagVariant ? (

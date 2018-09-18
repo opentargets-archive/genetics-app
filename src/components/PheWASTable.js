@@ -2,7 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
 
-export const tableColumns = [
+import LocusLink from './LocusLink';
+
+export const tableColumns = ({
+  variantId,
+  chromosome,
+  position,
+  isIndexVariant,
+  isTagVariant,
+}) => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -41,17 +49,46 @@ export const tableColumns = [
   },
   {
     id: 'locusView',
-    label: 'Locus View',
+    label: 'View',
     renderCell: () => {
-      return <Link to="/locus">Gecko Plot</Link>;
+      return isIndexVariant ? (
+        <LocusLink
+          chromosome={chromosome}
+          position={position}
+          selectedIndexVariants={[variantId]}
+        >
+          Locus
+        </LocusLink>
+      ) : isTagVariant ? (
+        <LocusLink
+          chromosome={chromosome}
+          position={position}
+          selectedTagVariants={[variantId]}
+        >
+          Locus
+        </LocusLink>
+      ) : null;
     },
   },
 ];
 
-function PheWASTable({ associations }) {
+function PheWASTable({
+  associations,
+  variantId,
+  chromosome,
+  position,
+  isIndexVariant,
+  isTagVariant,
+}) {
   return (
     <OtTable
-      columns={tableColumns}
+      columns={tableColumns({
+        variantId,
+        chromosome,
+        position,
+        isIndexVariant,
+        isTagVariant,
+      })}
       data={associations}
       sortBy="pval"
       order="asc"
