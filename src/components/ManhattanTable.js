@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import { OtTable, commaSeparate } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
-export const tableColumns = [
+import LocusLink from './LocusLink';
+
+export const tableColumns = studyId => [
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
@@ -58,12 +61,26 @@ export const tableColumns = [
       </React.Fragment>
     ),
   },
+  {
+    id: 'locus',
+    label: 'View',
+    renderCell: rowData => (
+      <LocusLink
+        chromosome={rowData.chromosome}
+        position={rowData.position}
+        selectedIndexVariants={[rowData.indexVariantId]}
+        selectedStudies={[studyId]}
+      >
+        Locus
+      </LocusLink>
+    ),
+  },
 ];
 
-function ManhattanTable({ data, filenameStem }) {
+function ManhattanTable({ data, studyId, filenameStem }) {
   return (
     <OtTable
-      columns={tableColumns}
+      columns={tableColumns(studyId)}
       data={data}
       sortBy="pval"
       order="asc"

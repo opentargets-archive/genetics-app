@@ -11,7 +11,6 @@ import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
 
-const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns);
 const SIGNIFICANCE = 5e-8;
 
 function hasAssociations(data) {
@@ -78,6 +77,7 @@ const manhattanQuery = gql`
 const StudyPage = ({ match }) => {
   let manhattanPlot = React.createRef();
   const { studyId } = match.params;
+  const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns(studyId));
   return (
     <BasePage>
       <ScrollToTop onRouteChange />
@@ -147,6 +147,7 @@ const StudyPage = ({ match }) => {
                   </DownloadSVGPlot>
                   <ManhattanTable
                     data={manhattan.associations}
+                    studyId={studyId}
                     filenameStem={`${studyId}-independently-associated-loci`}
                   />
                 </Fragment>
