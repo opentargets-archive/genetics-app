@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, DownloadSVGPlot, SectionHeading } from 'ot-ui';
+import { PageTitle, SubHeading, DownloadSVGPlot, SectionHeading } from 'ot-ui';
 import { PheWAS } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -13,8 +13,13 @@ import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsT
 import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import withTooltip from '../components/withTooltip';
+import LocusLink from '../components/LocusLink';
 
 const PheWASWithTooltip = withTooltip(PheWAS, tableColumns);
+
+function hasAssociatedGenes(data) {
+  return data && data.genesForVariantSchema;
+}
 
 function hasAssociations(data) {
   return (
@@ -79,8 +84,8 @@ function transformAssociatedTagVariants(data) {
   };
 }
 
-const associatedGenesQuery = gql`
-  query GenesForVariantQuery($variantId: String!) {
+const variantPageQuery = gql`
+  query VariantPageQuery($variantId: String!) {
     genesForVariantSchema {
       qtls {
         id
@@ -154,11 +159,6 @@ const associatedGenesQuery = gql`
         }
       }
     }
-  }
-`;
-
-const pheWASQuery = gql`
-  query PheWASQuery($variantId: String!) {
     pheWAS(variantId: $variantId) {
       associations {
         studyId
@@ -171,11 +171,6 @@ const pheWASQuery = gql`
         nCases
       }
     }
-  }
-`;
-
-const associatedIndexesQuery = gql`
-  query AssociatedIndexVariantsQuery($variantId: String!) {
     indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
       associations {
         indexVariant {
@@ -195,11 +190,6 @@ const associatedIndexesQuery = gql`
         posteriorProbability
       }
     }
-  }
-`;
-
-const associatedTagsQuery = gql`
-  query AssociatedTagVariantsQuery($variantId: String!) {
     tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
       associations {
         tagVariant {
@@ -225,7 +215,8 @@ const associatedTagsQuery = gql`
 const VariantPage = ({ match }) => {
   let pheWASPlot = React.createRef();
   const { variantId } = match.params;
-
+  const [chromosome, positionString] = variantId.split('_');
+  const position = parseInt(positionString, 10);
   return (
     <BasePage>
       <ScrollToTop onRouteChange />
@@ -233,130 +224,145 @@ const VariantPage = ({ match }) => {
         <title>{variantId}</title>
       </Helmet>
       <PageTitle>{`Variant ${variantId}`}</PageTitle>
-      <SectionHeading
-        heading="Assigned genes"
-        subheading="Which genes are functionally implicated by this variant?"
-        entities={[
-          {
-            type: 'variant',
-            fixed: true,
-          },
-          {
-            type: 'gene',
-            fixed: false,
-          },
-        ]}
-      />
-      <Query query={associatedGenesQuery} variables={{ variantId }}>
-        {({ data }) => {
-          return data.genesForVariantSchema ? (
-            <AssociatedGenes data={data} />
-          ) : null;
-        }}
-      </Query>
 
-      <Query query={pheWASQuery} variables={{ variantId }}>
+      <Query query={variantPageQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
-          return hasAssociations(data) ? (
-            <Fragment>
-              <SectionHeading
-                heading="PheWAS"
-                subheading="Which traits are associated with this variant in UK Biobank?"
-                entities={[
-                  {
-                    type: 'study',
-                    fixed: false,
-                  },
-                  {
-                    type: 'variant',
-                    fixed: true,
-                  },
-                ]}
-              />
-              <DownloadSVGPlot
-                svgContainer={pheWASPlot}
-                filenameStem={`${variantId}-traits`}
-              >
-                <PheWASWithTooltip
-                  associations={data.pheWAS.associations}
-                  ref={pheWASPlot}
-                />
-              </DownloadSVGPlot>
-              <PheWASTable associations={data.pheWAS.associations} />
-            </Fragment>
-          ) : null;
-        }}
-      </Query>
+          const isGeneVariant = hasAssociatedGenes(data);
+          const isTagVariant = hasAssociatedIndexVariants(data);
+          const isIndexVariant = hasAssociatedTagVariants(data);
+          return (
+            <React.Fragment>
+              <SubHeading>
+                {isIndexVariant ? (
+                  <LocusLink
+                    chromosome={chromosome}
+                    position={position}
+                    selectedIndexVariants={[variantId]}
+                  >
+                    View locus
+                  </LocusLink>
+                ) : isTagVariant ? (
+                  <LocusLink
+                    chromosome={chromosome}
+                    position={position}
+                    selectedTagVariants={[variantId]}
+                  >
+                    View locus
+                  </LocusLink>
+                ) : null}
+              </SubHeading>
+              {isGeneVariant ? (
+                <Fragment>
+                  <SectionHeading
+                    heading="Assigned genes"
+                    subheading="Which genes are functionally implicated by this variant?"
+                    entities={[
+                      {
+                        type: 'variant',
+                        fixed: true,
+                      },
+                      {
+                        type: 'gene',
+                        fixed: false,
+                      },
+                    ]}
+                  />
+                  <AssociatedGenes data={data} />
+                </Fragment>
+              ) : null}
+              {hasAssociations(data) ? (
+                <Fragment>
+                  <SectionHeading
+                    heading="PheWAS"
+                    subheading="Which traits are associated with this variant in UK Biobank?"
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: false,
+                      },
+                      {
+                        type: 'variant',
+                        fixed: true,
+                      },
+                    ]}
+                  />
+                  <DownloadSVGPlot
+                    svgContainer={pheWASPlot}
+                    filenameStem={`${variantId}-traits`}
+                  >
+                    <PheWASWithTooltip
+                      associations={data.pheWAS.associations}
+                      ref={pheWASPlot}
+                    />
+                  </DownloadSVGPlot>
+                  <PheWASTable associations={data.pheWAS.associations} />
+                </Fragment>
+              ) : null}
+              {isTagVariant ? (
+                <Fragment>
+                  <SectionHeading
+                    heading="GWAS lead variants"
+                    subheading="Which GWAS lead variants are linked with this variant?"
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: false,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: false,
+                      },
+                      {
+                        type: 'tagVariant',
+                        fixed: true,
+                      },
+                    ]}
+                  />
 
-      <Query query={associatedIndexesQuery} variables={{ variantId }}>
-        {({ loading, error, data }) => {
-          return hasAssociatedIndexVariants(data) ? (
-            <Fragment>
-              <SectionHeading
-                heading="GWAS lead variants"
-                subheading="Which GWAS lead variants are linked with this variant?"
-                entities={[
-                  {
-                    type: 'study',
-                    fixed: false,
-                  },
-                  {
-                    type: 'indexVariant',
-                    fixed: false,
-                  },
-                  {
-                    type: 'tagVariant',
-                    fixed: true,
-                  },
-                ]}
-              />
-              <AssociatedIndexVariantsTable
-                data={
-                  transformAssociatedIndexVariants(
-                    data.indexVariantsAndStudiesForTagVariant
-                  ).associations
-                }
-                variantId={variantId}
-                filenameStem={`${variantId}-lead-variants`}
-              />
-            </Fragment>
-          ) : null;
-        }}
-      </Query>
-
-      <Query query={associatedTagsQuery} variables={{ variantId }}>
-        {({ loading, error, data }) => {
-          return hasAssociatedTagVariants(data) ? (
-            <Fragment>
-              <SectionHeading
-                heading="Tag variants"
-                subheading="Which variants tag (through LD or finemapping) this lead variant?"
-                entities={[
-                  {
-                    type: 'study',
-                    fixed: false,
-                  },
-                  {
-                    type: 'indexVariant',
-                    fixed: true,
-                  },
-                  {
-                    type: 'tagVariant',
-                    fixed: false,
-                  },
-                ]}
-              />
-              <AssociatedTagVariantsTable
-                data={
-                  transformAssociatedTagVariants(
-                    data.tagVariantsAndStudiesForIndexVariant
-                  ).associations
-                }
-                variantId={variantId}
-                filenameStem={`${variantId}-tag-variants`}
-              />
-            </Fragment>
-          ) : null;
+                  <AssociatedIndexVariantsTable
+                    data={
+                      transformAssociatedIndexVariants(
+                        data.indexVariantsAndStudiesForTagVariant
+                      ).associations
+                    }
+                    variantId={variantId}
+                    filenameStem={`${variantId}-lead-variants`}
+                  />
+                </Fragment>
+              ) : null}
+              {isIndexVariant ? (
+                <Fragment>
+                  <SectionHeading
+                    heading="Tag variants"
+                    subheading="Which variants tag (through LD or finemapping) this lead variant?"
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: false,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: true,
+                      },
+                      {
+                        type: 'tagVariant',
+                        fixed: false,
+                      },
+                    ]}
+                  />
+                  <AssociatedTagVariantsTable
+                    data={
+                      transformAssociatedTagVariants(
+                        data.tagVariantsAndStudiesForIndexVariant
+                      ).associations
+                    }
+                    variantId={variantId}
+                    filenameStem={`${variantId}-tag-variants`}
+                  />
+                </Fragment>
+              ) : null}
+            </React.Fragment>
+          );
         }}
       </Query>
     </BasePage>
