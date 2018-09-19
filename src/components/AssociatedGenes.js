@@ -110,47 +110,29 @@ const getDataAll = genesForVariant => {
   return data;
 };
 
-const getTissueColumns = (
-  genesForVariantSchema,
-  genesForVariant,
-  sourceId,
-  classes
-) => {
-  const columns = [{ id: 'geneSymbol', label: 'Gene' }];
-  let type;
-  let schema;
+const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
+  const schema = [
+    ...genesForVariantSchema.qtls.map(qtl => ({ ...qtl, type: 'qtls' })),
+    ...genesForVariantSchema.intervals.map(interval => ({
+      ...interval,
+      type: 'intervals',
+    })),
+    ...genesForVariantSchema.functionalPredictions.map(fp => ({
+      ...fp,
+      type: 'functionalPredictions',
+    })),
+  ].find(schema => schema.sourceId === sourceId);
 
-  genesForVariantSchema.qtls.forEach(s => {
-    if (s.sourceId === sourceId) {
-      type = 'qtls';
-      schema = s;
-    }
-  });
+  let tissueColumns;
 
-  !schema &&
-    genesForVariantSchema.intervals.forEach(s => {
-      if (s.sourceId === sourceId) {
-        type = 'intervals';
-        schema = s;
-      }
-    });
-
-  !schema &&
-    genesForVariantSchema.functionalPredictions.forEach(s => {
-      if (s.sourceId === sourceId) {
-        type = 'functionalPredictions';
-        schema = s;
-      }
-    });
-
-  schema.tissues.forEach(tissue => {
-    columns.push({
-      id: tissue.id,
-      label: tissue.name,
-      renderCell: rowData => {
-        if (rowData[tissue.id]) {
-          switch (type) {
-            case 'qtls':
+  switch (schema.type) {
+    case 'qtls':
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
               const qtlRadius = radiusScale(rowData[tissue.id]);
               const beta = findBeta(
                 genesForVariant,
@@ -160,20 +142,42 @@ const getTissueColumns = (
               );
               const qtlColor = beta > 0 ? 'red' : 'blue';
               return <DataCircle radius={qtlRadius} colorScheme={qtlColor} />;
-            case 'intervals':
+            }
+          },
+        };
+      });
+      break;
+    case 'intervals':
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
               const intervalRadius = radiusScale(rowData[tissue.id]);
               return (
                 <DataCircle radius={intervalRadius} colorScheme="default" />
               );
-            case 'functionalPredictions':
-            default:
+            }
+          },
+        };
+      });
+      break;
+    case 'functionalPredictions':
+    default:
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
               return rowData[tissue.id];
-          }
-        }
-      },
-    });
-  });
-
+            }
+          },
+        };
+      });
+  }
+  const columns = [{ id: 'geneSymbol', label: 'Gene' }, ...tissueColumns];
   return columns;
 };
 
