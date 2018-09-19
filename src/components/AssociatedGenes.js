@@ -2,17 +2,9 @@ import React, { Component, Fragment } from 'react';
 import * as d3 from 'd3';
 import { withStyles } from '@material-ui/core/styles';
 
-import { OtTable, Tabs, Tab, LabelHML } from 'ot-ui';
+import { OtTable, Tabs, Tab, DataCircle, LabelHML } from 'ot-ui';
 
 const OVERVIEW = 'overview';
-
-const DataCircle = ({ radius, className }) => {
-  return (
-    <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-      <circle cx={radius} cy={radius} r={radius} className={className} />
-    </svg>
-  );
-};
 
 const radiusScale = d3
   .scaleSqrt()
@@ -23,12 +15,7 @@ const createQtlCellRenderer = (schema, classes) => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
       const circleRadius = radiusScale(rowData[schema.sourceId]);
-      return (
-        <DataCircle
-          radius={circleRadius}
-          className={classes.qtlIntervalCircle}
-        />
-      );
+      return <DataCircle radius={circleRadius} colorScheme="default" />;
     }
   };
 };
@@ -37,12 +24,7 @@ const createIntervalCellRenderer = (schema, classes) => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
       const circleRadius = radiusScale(rowData[schema.sourceId]);
-      return (
-        <DataCircle
-          radius={circleRadius}
-          className={classes.qtlIntervalCircle}
-        />
-      );
+      return <DataCircle radius={circleRadius} colorScheme="default" />;
     }
   };
 };
@@ -84,12 +66,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
       label: 'Overall G2V',
       renderCell: rowData => {
         const circleRadius = overallScoreScale(rowData.overallScore);
-        return (
-          <DataCircle
-            radius={circleRadius}
-            className={classes.overallScoreCircle}
-          />
-        );
+        return <DataCircle radius={circleRadius} colorScheme="bold" />;
       },
     },
     ...genesForVariantSchema.qtls.map(schema => ({
@@ -181,16 +158,12 @@ const getTissueColumns = (
                 schema.sourceId,
                 tissue.id
               );
-              const qtlClass =
-                beta > 0 ? classes.positiveBeta : classes.negativeBeta;
-              return <DataCircle radius={qtlRadius} className={qtlClass} />;
+              const qtlColor = beta > 0 ? 'red' : 'blue';
+              return <DataCircle radius={qtlRadius} colorScheme={qtlColor} />;
             case 'intervals':
               const intervalRadius = radiusScale(rowData[tissue.id]);
               return (
-                <DataCircle
-                  radius={intervalRadius}
-                  className={classes.qtlIntervalCircle}
-                />
+                <DataCircle radius={intervalRadius} colorScheme="default" />
               );
             case 'functionalPredictions':
             default:
