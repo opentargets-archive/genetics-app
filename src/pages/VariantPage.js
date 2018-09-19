@@ -28,6 +28,18 @@ function hasAssociations(data) {
   );
 }
 
+function transformPheWAS(data) {
+  return data.pheWAS.associations.map(d => {
+    const { study, ...rest } = d;
+    const { studyId, traitReported } = study;
+    return {
+      studyId,
+      traitReported,
+      ...rest,
+    };
+  });
+}
+
 function hasAssociatedIndexVariants(data) {
   return (
     data &&
@@ -161,9 +173,11 @@ const variantPageQuery = gql`
     }
     pheWAS(variantId: $variantId) {
       associations {
-        studyId
-        traitReported
-        traitCode
+        study {
+          studyId
+          traitReported
+          traitCode
+        }
         pval
         beta
         oddsRatio
@@ -228,6 +242,7 @@ const VariantPage = ({ match }) => {
       <Query query={variantPageQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           const isGeneVariant = hasAssociatedGenes(data);
+          const isPheWASVariant = hasAssociations(data);
           const isTagVariant = hasAssociatedIndexVariants(data);
           const isIndexVariant = hasAssociatedTagVariants(data);
           const PheWASWithTooltip = withTooltip(
@@ -240,6 +255,9 @@ const VariantPage = ({ match }) => {
               isTagVariant,
             })
           );
+          const pheWASAssociations = isPheWASVariant
+            ? transformPheWAS(data)
+            : null;
           return (
             <React.Fragment>
               <SubHeading>
@@ -280,7 +298,7 @@ const VariantPage = ({ match }) => {
                   <AssociatedGenes data={data} />
                 </Fragment>
               ) : null}
-              {hasAssociations(data) ? (
+              {isPheWASVariant ? (
                 <Fragment>
                   <SectionHeading
                     heading="PheWAS"
@@ -301,12 +319,12 @@ const VariantPage = ({ match }) => {
                     filenameStem={`${variantId}-traits`}
                   >
                     <PheWASWithTooltip
-                      associations={data.pheWAS.associations}
+                      associations={pheWASAssociations}
                       ref={pheWASPlot}
                     />
                   </DownloadSVGPlot>
                   <PheWASTable
-                    associations={data.pheWAS.associations}
+                    associations={pheWASAssociations}
                     {...{
                       variantId,
                       chromosome,
