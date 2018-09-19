@@ -30,12 +30,13 @@ export const tableColumns = ({
   {
     id: 'beta',
     label: 'Beta',
-    renderCell: rowData => rowData.beta.toPrecision(3),
+    renderCell: rowData => (rowData.beta ? rowData.beta.toPrecision(3) : null),
   },
   {
     id: 'oddsRatio',
     label: 'Odds Ratio',
-    renderCell: rowData => rowData.oddsRatio.toPrecision(3),
+    renderCell: rowData =>
+      rowData.oddsRatio ? rowData.oddsRatio.toPrecision(3) : null,
   },
   {
     id: 'nCases',
