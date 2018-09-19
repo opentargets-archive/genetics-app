@@ -131,7 +131,6 @@ const variantPageQuery = gql`
       }
       overallScore
       qtls {
-        id
         sourceId
         aggregatedScore
         tissues {
@@ -145,7 +144,6 @@ const variantPageQuery = gql`
         }
       }
       intervals {
-        id
         sourceId
         aggregatedScore
         tissues {
@@ -158,7 +156,6 @@ const variantPageQuery = gql`
         }
       }
       functionalPredictions {
-        id
         sourceId
         aggregatedScore
         tissues {
