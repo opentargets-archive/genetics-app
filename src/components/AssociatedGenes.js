@@ -219,7 +219,9 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
     if (element) {
       element.tissues.forEach(elementTissue => {
         row[elementTissue.tissue.id] =
-          elementTissue.maxEffectLabel || elementTissue.quantile;
+          elementTissue.__typename === 'FPredTissue'
+            ? elementTissue.maxEffectLabel
+            : elementTissue.quantile;
       });
     }
 
