@@ -90,7 +90,6 @@
     "collectCoverageFrom": [
       "src/**/*.js",
       "!**/node_modules/**",
-      "!src/graphql-mocking/**",
       "!src/index.js",
       "!src/registerServiceWorker.js",
       "!src/setupTests.js"
