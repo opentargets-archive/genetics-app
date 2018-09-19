@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, CloseButton } from 'ot-ui';
+import { OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
 export const tableColumns = onDeleteStudy => [
@@ -37,6 +37,24 @@ export const tableColumns = onDeleteStudy => [
         </React.Fragment>
       );
     },
+  },
+  {
+    id: 'nInitial',
+    label: 'N Initial',
+    renderCell: rowData =>
+      rowData.nInitial ? commaSeparate(rowData.nInitial) : null,
+  },
+  {
+    id: 'nReplication',
+    label: 'N Replication',
+    renderCell: rowData =>
+      rowData.nReplication ? commaSeparate(rowData.nReplication) : null,
+  },
+  {
+    id: 'nCases',
+    label: 'N Cases',
+    renderCell: rowData =>
+      rowData.nCases ? commaSeparate(rowData.nCases) : null,
   },
   {
     id: 'associationsCount',
