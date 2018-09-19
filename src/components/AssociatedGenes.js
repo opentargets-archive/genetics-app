@@ -187,7 +187,6 @@ const getTissueColumns = (
               );
               const qtlClass =
                 beta > 0 ? classes.positiveBeta : classes.negativeBeta;
-              console.log('beta', tissue.id, beta);
               return <DataCircle radius={qtlRadius} className={qtlClass} />;
             case 'intervals':
               const intervalArea = areaScale(rowData[tissue.id]);

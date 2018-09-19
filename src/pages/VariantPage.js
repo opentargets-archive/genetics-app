@@ -294,7 +294,10 @@ const VariantPage = ({ match }) => {
                       },
                     ]}
                   />
-                  <AssociatedGenes data={data} />
+                  <AssociatedGenes
+                    genesForVariantSchema={data.genesForVariantSchema}
+                    genesForVariant={data.genesForVariant}
+                  />
                 </Fragment>
               ) : null}
               {isPheWASVariant ? (
