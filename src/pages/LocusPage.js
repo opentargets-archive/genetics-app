@@ -34,7 +34,6 @@ function transformData(data, lookups) {
     tagVariantIndexVariantStudies,
     ...rest
   } = data.gecko;
-  const { tagVariants, indexVariants, studies } = rest;
   const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
 
   // gene exons come as flat list, rendering expects list of pairs
