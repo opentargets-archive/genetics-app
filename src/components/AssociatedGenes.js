@@ -20,6 +20,56 @@ const radiusScale = d3
   .domain([0, 1])
   .range([0, 6]);
 
+const createQtlCellRenderer = (schema, classes) => {
+  return rowData => {
+    if (rowData[schema.sourceId] !== undefined) {
+      const circleRadius = radiusScale(rowData[schema.sourceId]);
+      return (
+        <DataCircle
+          radius={circleRadius}
+          className={classes.qtlIntervalCircle}
+        />
+      );
+    }
+  };
+};
+
+const createIntervalCellRenderer = (schema, classes) => {
+  return rowData => {
+    if (rowData[schema.sourceId] !== undefined) {
+      const circleRadius = radiusScale(rowData[schema.sourceId]);
+      return (
+        <DataCircle
+          radius={circleRadius}
+          className={classes.qtlIntervalCircle}
+        />
+      );
+    }
+  };
+};
+
+const createFPCellRenderer = (genesForVariant, classes) => {
+  return rowData => {
+    const gene = genesForVariant.find(
+      geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
+    );
+
+    if (gene.functionalPredictions.length === 1) {
+      const {
+        maxEffectLabel,
+        maxEffectScore,
+      } = gene.functionalPredictions[0].tissues[0];
+      const labelClass = classNames({
+        [classes.maxEffectLow]: 0 <= maxEffectScore && maxEffectScore <= 1 / 3,
+        [classes.maxEffectMedium]:
+          1 / 3 < maxEffectScore && maxEffectScore <= 2 / 3,
+        [classes.maxEffectHigh]: 2 / 3 < maxEffectScore && maxEffectScore <= 1,
+      });
+      return <span className={labelClass}>{maxEffectLabel}</span>;
+    }
+  };
+};
+
 const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
   const overallScoreScale = d3
     .scaleSqrt()
@@ -43,71 +93,22 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
         );
       },
     },
+    ...genesForVariantSchema.qtls.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceId,
+      renderCell: createQtlCellRenderer(schema, classes),
+    })),
+    ...genesForVariantSchema.intervals.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceId,
+      renderCell: createIntervalCellRenderer(schema, classes),
+    })),
+    ...genesForVariantSchema.functionalPredictions.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceId,
+      renderCell: createFPCellRenderer(genesForVariant, classes),
+    })),
   ];
-
-  genesForVariantSchema.qtls.forEach(schema => {
-    columns.push({
-      id: schema.sourceId,
-      label: schema.sourceId,
-      renderCell: rowData => {
-        if (rowData[schema.sourceId] !== undefined) {
-          const circleRadius = radiusScale(rowData[schema.sourceId]);
-          return (
-            <DataCircle
-              radius={circleRadius}
-              className={classes.qtlIntervalCircle}
-            />
-          );
-        }
-      },
-    });
-  });
-
-  genesForVariantSchema.intervals.forEach(schema => {
-    columns.push({
-      id: schema.sourceId,
-      label: schema.sourceId,
-      renderCell: rowData => {
-        if (rowData[schema.sourceId] !== undefined) {
-          const circleRadius = radiusScale(rowData[schema.sourceId]);
-          return (
-            <DataCircle
-              radius={circleRadius}
-              className={classes.qtlIntervalCircle}
-            />
-          );
-        }
-      },
-    });
-  });
-
-  genesForVariantSchema.functionalPredictions.forEach(schema => {
-    columns.push({
-      id: schema.sourceId,
-      label: schema.sourceId,
-      renderCell: rowData => {
-        const gene = genesForVariant.find(
-          geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
-        );
-
-        if (gene.functionalPredictions.length === 1) {
-          const {
-            maxEffectLabel,
-            maxEffectScore,
-          } = gene.functionalPredictions[0].tissues[0];
-          const labelClass = classNames({
-            [classes.maxEffectLow]:
-              0 <= maxEffectScore && maxEffectScore <= 1 / 3,
-            [classes.maxEffectMedium]:
-              1 / 3 < maxEffectScore && maxEffectScore <= 2 / 3,
-            [classes.maxEffectHigh]:
-              2 / 3 < maxEffectScore && maxEffectScore <= 1,
-          });
-          return <span className={labelClass}>{maxEffectLabel}</span>;
-        }
-      },
-    });
-  });
 
   return columns;
 };
