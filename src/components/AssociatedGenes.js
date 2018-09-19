@@ -15,27 +15,26 @@ const DataCircle = ({ radius, className }) => {
   );
 };
 
-const areaScale = d3
-  .scaleLinear()
+const radiusScale = d3
+  .scaleSqrt()
   .domain([0, 1])
-  .range([0, 36]);
+  .range([0, 6]);
 
 const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
   const overallScoreScale = d3
-    .scaleLinear()
+    .scaleSqrt()
     .domain([
       0,
       d3.max(genesForVariant, geneForVariant => geneForVariant.overallScore),
     ])
-    .range([0, 36]);
+    .range([0, 6]);
   const columns = [
     { id: 'geneSymbol', label: 'Gene' },
     {
       id: 'overallScore',
       label: 'Overall G2V',
       renderCell: rowData => {
-        const circleArea = overallScoreScale(rowData.overallScore);
-        const circleRadius = Math.sqrt(circleArea);
+        const circleRadius = overallScoreScale(rowData.overallScore);
         return (
           <DataCircle
             radius={circleRadius}
@@ -52,8 +51,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
       label: schema.sourceId,
       renderCell: rowData => {
         if (rowData[schema.sourceId] !== undefined) {
-          const circleArea = areaScale(rowData[schema.sourceId]);
-          const circleRadius = Math.sqrt(circleArea);
+          const circleRadius = radiusScale(rowData[schema.sourceId]);
           return (
             <DataCircle
               radius={circleRadius}
@@ -71,8 +69,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
       label: schema.sourceId,
       renderCell: rowData => {
         if (rowData[schema.sourceId] !== undefined) {
-          const circleArea = areaScale(rowData[schema.sourceId]);
-          const circleRadius = Math.sqrt(circleArea);
+          const circleRadius = radiusScale(rowData[schema.sourceId]);
           return (
             <DataCircle
               radius={circleRadius}
@@ -177,8 +174,7 @@ const getTissueColumns = (
         if (rowData[tissue.id]) {
           switch (type) {
             case 'qtls':
-              const qtlArea = areaScale(rowData[tissue.id]);
-              const qtlRadius = Math.sqrt(qtlArea);
+              const qtlRadius = radiusScale(rowData[tissue.id]);
               const beta = findBeta(
                 genesForVariant,
                 rowData.geneSymbol,
@@ -189,8 +185,7 @@ const getTissueColumns = (
                 beta > 0 ? classes.positiveBeta : classes.negativeBeta;
               return <DataCircle radius={qtlRadius} className={qtlClass} />;
             case 'intervals':
-              const intervalArea = areaScale(rowData[tissue.id]);
-              const intervalRadius = Math.sqrt(intervalArea);
+              const intervalRadius = radiusScale(rowData[tissue.id]);
               return (
                 <DataCircle
                   radius={intervalRadius}
