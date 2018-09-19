@@ -26,6 +26,7 @@ export const typeDefs = gql`
     query: RootQueryType
   }
   type RootQueryType {
+    hello(query: String!): String!
     # search(queryString: String): [SearchResult!]!
     # studyInfo(studyId: String!): StudyInfo!
     # manhattan(studyId: String!): Manhattan!
@@ -33,7 +34,7 @@ export const typeDefs = gql`
     # gecko(chromosome: String!, start: Int!, end: Int!): Gecko!
     # genesForVariantSchema: G2VSchema!
     # genesForVariant(variantId: String!): [GeneForVariant!]!
-    pheWAS(variantId: String!): PheWAS
+    # pheWAS(variantId: String!): PheWAS
     # search(queryString: String!): SearchResult
     # indexVariantsAndStudiesForTagVariant(
     #   variantId: String!
@@ -87,42 +88,42 @@ export const typeDefs = gql`
   #  intervals: [IntervalElement!]!
   #  functionalPredictions: [FunctionalPredictionElement!]!
   #}
-  type PheWAS {
-    associations: [PheWASAssociation!]!
-  }
+  # type PheWAS {
+  #   associations: [PheWASAssociation!]!
+  # }
   # # type PheWASAssociation implements StudyInterface {
-  type PheWASAssociation {
-    studyId: String!
-    traitReported: String!
-    traitCode: String!
-    pval: Float!
-    beta: Float
-    oddsRatio: Float
-    nTotal: Int # total sample size (variant level)
-    nCases: Int # number of cases (variant level)
+  # type PheWASAssociation {
+  #   studyId: String!
+  #   traitReported: String!
+  #   traitCode: String!
+  #   pval: Float!
+  #   beta: Float
+  #   oddsRatio: Float
+  #   nTotal: Int # total sample size (variant level)
+  #   nCases: Int # number of cases (variant level)
 
-    # pmId: String
-    # pubDate: String
-    # pubJournal: String
-    # pubTitle: String
-    # pubAuthor: String
+  #   # pmId: String
+  #   # pubDate: String
+  #   # pubJournal: String
+  #   # pubTitle: String
+  #   # pubAuthor: String
 
-    # traitEfoMapping: [Efo!]
-    # TODO: ancestryInitial
-    # TODO: ancestryReplication
+  #   # traitEfoMapping: [Efo!]
+  #   # TODO: ancestryInitial
+  #   # TODO: ancestryReplication
 
-    # EITHER block1 OR block2
-    # -- block1
-    # eaf: Float
-    # beta: Float
-    # se: Float
-    # --
-    # -- block2
-    # oddsRatio: Float
-    # oddsRatioCILower: Float
-    # oddsRatioCIUpper: Float
-    # --
-  }
+  #   # EITHER block1 OR block2
+  #   # -- block1
+  #   # eaf: Float
+  #   # beta: Float
+  #   # se: Float
+  #   # --
+  #   # -- block2
+  #   # oddsRatio: Float
+  #   # oddsRatioCILower: Float
+  #   # oddsRatioCIUpper: Float
+  #   # --
+  # }
   # type Efo {
   #     id: String!
   #     term: String!
