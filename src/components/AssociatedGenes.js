@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import * as d3 from 'd3';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 
-import { OtTable, Tabs, Tab } from 'ot-ui';
+import { OtTable, Tabs, Tab, LabelHML } from 'ot-ui';
 
 const OVERVIEW = 'overview';
 
@@ -59,13 +58,13 @@ const createFPCellRenderer = (genesForVariant, classes) => {
         maxEffectLabel,
         maxEffectScore,
       } = gene.functionalPredictions[0].tissues[0];
-      const labelClass = classNames({
-        [classes.maxEffectLow]: 0 <= maxEffectScore && maxEffectScore <= 1 / 3,
-        [classes.maxEffectMedium]:
-          1 / 3 < maxEffectScore && maxEffectScore <= 2 / 3,
-        [classes.maxEffectHigh]: 2 / 3 < maxEffectScore && maxEffectScore <= 1,
-      });
-      return <span className={labelClass}>{maxEffectLabel}</span>;
+      const level =
+        0 <= maxEffectScore && maxEffectScore <= 1 / 3
+          ? 'L'
+          : 1 / 3 < maxEffectScore && maxEffectScore <= 2 / 3
+            ? 'M'
+            : 'H';
+      return <LabelHML level={level}>{maxEffectLabel}</LabelHML>;
     }
   };
 };
@@ -263,15 +262,6 @@ const styles = theme => {
     },
     qtlIntervalCircle: {
       fill: theme.palette.grey[500],
-    },
-    maxEffectHigh: {
-      color: theme.palette.high,
-    },
-    maxEffectMedium: {
-      color: theme.palette.medium,
-    },
-    maxEffectLow: {
-      color: theme.palette.low,
     },
     positiveBeta: {
       fill: theme.palette.secondary.main,
