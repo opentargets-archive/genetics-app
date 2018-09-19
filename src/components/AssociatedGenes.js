@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import * as d3 from 'd3';
-import { withStyles } from '@material-ui/core/styles';
 
 import { OtTable, Tabs, Tab, DataCircle, LabelHML } from 'ot-ui';
 
@@ -11,7 +10,7 @@ const radiusScale = d3
   .domain([0, 1])
   .range([0, 6]);
 
-const createQtlCellRenderer = (schema, classes) => {
+const createQtlCellRenderer = schema => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
       const circleRadius = radiusScale(rowData[schema.sourceId]);
@@ -20,7 +19,7 @@ const createQtlCellRenderer = (schema, classes) => {
   };
 };
 
-const createIntervalCellRenderer = (schema, classes) => {
+const createIntervalCellRenderer = schema => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
       const circleRadius = radiusScale(rowData[schema.sourceId]);
@@ -29,7 +28,7 @@ const createIntervalCellRenderer = (schema, classes) => {
   };
 };
 
-const createFPCellRenderer = (genesForVariant, classes) => {
+const createFPCellRenderer = genesForVariant => {
   return rowData => {
     const gene = genesForVariant.find(
       geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
@@ -51,7 +50,7 @@ const createFPCellRenderer = (genesForVariant, classes) => {
   };
 };
 
-const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
+const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
   const overallScoreScale = d3
     .scaleSqrt()
     .domain([
@@ -72,17 +71,17 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant, classes) => {
     ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
       label: schema.sourceId,
-      renderCell: createQtlCellRenderer(schema, classes),
+      renderCell: createQtlCellRenderer(schema),
     })),
     ...genesForVariantSchema.intervals.map(schema => ({
       id: schema.sourceId,
       label: schema.sourceId,
-      renderCell: createIntervalCellRenderer(schema, classes),
+      renderCell: createIntervalCellRenderer(schema),
     })),
     ...genesForVariantSchema.functionalPredictions.map(schema => ({
       id: schema.sourceId,
       label: schema.sourceId,
-      renderCell: createFPCellRenderer(genesForVariant, classes),
+      renderCell: createFPCellRenderer(genesForVariant),
     })),
   ];
 
@@ -234,23 +233,6 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
   return data;
 };
 
-const styles = theme => {
-  return {
-    overallScoreCircle: {
-      fill: theme.palette.grey[600],
-    },
-    qtlIntervalCircle: {
-      fill: theme.palette.grey[500],
-    },
-    positiveBeta: {
-      fill: theme.palette.secondary.main,
-    },
-    negativeBeta: {
-      fill: theme.palette.primary.main,
-    },
-  };
-};
-
 class AssociatedGenes extends Component {
   state = {
     value: OVERVIEW,
@@ -262,7 +244,7 @@ class AssociatedGenes extends Component {
 
   render() {
     const { value } = this.state;
-    const { genesForVariantSchema, genesForVariant, classes } = this.props;
+    const { genesForVariantSchema, genesForVariant } = this.props;
 
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
@@ -272,11 +254,7 @@ class AssociatedGenes extends Component {
       ...genesForVariantSchema.functionalPredictions,
     ];
 
-    const columnsAll = getColumnsAll(
-      genesForVariantSchema,
-      genesForVariant,
-      classes
-    );
+    const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
     const dataAll = getDataAll(genesForVariant);
 
     return (
@@ -302,8 +280,7 @@ class AssociatedGenes extends Component {
                 columns={getTissueColumns(
                   genesForVariantSchema,
                   genesForVariant,
-                  schema.sourceId,
-                  classes
+                  schema.sourceId
                 )}
                 data={getTissueData(
                   genesForVariantSchema,
@@ -319,4 +296,4 @@ class AssociatedGenes extends Component {
   }
 }
 
-export default withStyles(styles)(AssociatedGenes);
+export default AssociatedGenes;
