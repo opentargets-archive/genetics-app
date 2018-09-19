@@ -235,7 +235,6 @@ const VariantPage = ({ match }) => {
         <title>{variantId}</title>
       </Helmet>
       <PageTitle>{`Variant ${variantId}`}</PageTitle>
-
       <Query query={variantPageQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
           const isGeneVariant = hasAssociatedGenes(data);
@@ -292,7 +291,10 @@ const VariantPage = ({ match }) => {
                       },
                     ]}
                   />
-                  <AssociatedGenes data={data} />
+                  <AssociatedGenes
+                    genesForVariantSchema={data.genesForVariantSchema}
+                    genesForVariant={data.genesForVariant}
+                  />
                 </Fragment>
               ) : null}
               {isPheWASVariant ? (

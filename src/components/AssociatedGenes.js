@@ -1,38 +1,100 @@
 import React, { Component, Fragment } from 'react';
+import * as d3 from 'd3';
 
-import { OtTable, Tabs, Tab } from 'ot-ui';
+import { OtTable, Tabs, Tab, DataCircle, LabelHML } from 'ot-ui';
 
 const OVERVIEW = 'overview';
 
-const getColumnsAll = schemas => {
+const radiusScale = d3
+  .scaleSqrt()
+  .domain([0, 1])
+  .range([0, 6]);
+
+const createQtlCellRenderer = schema => {
+  return rowData => {
+    if (rowData[schema.sourceId] !== undefined) {
+      const circleRadius = radiusScale(rowData[schema.sourceId]);
+      return <DataCircle radius={circleRadius} colorScheme="default" />;
+    }
+  };
+};
+
+const createIntervalCellRenderer = schema => {
+  return rowData => {
+    if (rowData[schema.sourceId] !== undefined) {
+      const circleRadius = radiusScale(rowData[schema.sourceId]);
+      return <DataCircle radius={circleRadius} colorScheme="default" />;
+    }
+  };
+};
+
+const createFPCellRenderer = genesForVariant => {
+  return rowData => {
+    const gene = genesForVariant.find(
+      geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
+    );
+
+    if (gene.functionalPredictions.length === 1) {
+      const {
+        maxEffectLabel,
+        maxEffectScore,
+      } = gene.functionalPredictions[0].tissues[0];
+      const level =
+        0 <= maxEffectScore && maxEffectScore <= 1 / 3
+          ? 'L'
+          : 1 / 3 < maxEffectScore && maxEffectScore <= 2 / 3
+            ? 'M'
+            : 'H';
+      return <LabelHML level={level}>{maxEffectLabel}</LabelHML>;
+    }
+  };
+};
+
+const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
+  const overallScoreScale = d3
+    .scaleSqrt()
+    .domain([
+      0,
+      d3.max(genesForVariant, geneForVariant => geneForVariant.overallScore),
+    ])
+    .range([0, 6]);
   const columns = [
-    { id: 'gene', label: 'Gene' },
+    { id: 'geneSymbol', label: 'Gene' },
     {
       id: 'overallScore',
       label: 'Overall G2V',
       renderCell: rowData => {
-        return rowData.overallScore.toPrecision(3);
+        const circleRadius = overallScoreScale(rowData.overallScore);
+        return <DataCircle radius={circleRadius} colorScheme="bold" />;
       },
     },
-  ];
-  schemas.forEach(schema => {
-    columns.push({
+    ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
       label: schema.sourceId,
-      renderCell: rowData => {
-        return rowData[schema.sourceId]
-          ? rowData[schema.sourceId].toPrecision(3)
-          : 'No information';
-      },
-    });
-  });
+      renderCell: createQtlCellRenderer(schema),
+    })),
+    ...genesForVariantSchema.intervals.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceId,
+      renderCell: createIntervalCellRenderer(schema),
+    })),
+    ...genesForVariantSchema.functionalPredictions.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceId,
+      renderCell: createFPCellRenderer(genesForVariant),
+    })),
+  ];
+
   return columns;
 };
 
 const getDataAll = genesForVariant => {
   const data = [];
   genesForVariant.forEach(item => {
-    const row = { gene: item.gene.symbol, overallScore: item.overallScore };
+    const row = {
+      geneSymbol: item.gene.symbol,
+      overallScore: item.overallScore,
+    };
     item.qtls.forEach(qtl => {
       row[qtl.sourceId] = qtl.aggregatedScore;
     });
@@ -47,22 +109,84 @@ const getDataAll = genesForVariant => {
   return data;
 };
 
-const getTissueColumns = (schemas, sourceId) => {
-  const columns = [{ id: 'gene', label: 'Gene' }];
-  schemas
-    .find(schema => schema.sourceId === sourceId)
-    .tissues.forEach(tissue => {
-      columns.push({
-        id: tissue.id,
-        label: tissue.name,
-        renderCell: rowData => {
-          return rowData[tissue.id]
-            ? rowData[tissue.id].toPrecision(3)
-            : 'No information';
-        },
+const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
+  const schema = [
+    ...genesForVariantSchema.qtls.map(qtl => ({ ...qtl, type: 'qtls' })),
+    ...genesForVariantSchema.intervals.map(interval => ({
+      ...interval,
+      type: 'intervals',
+    })),
+    ...genesForVariantSchema.functionalPredictions.map(fp => ({
+      ...fp,
+      type: 'functionalPredictions',
+    })),
+  ].find(schema => schema.sourceId === sourceId);
+
+  let tissueColumns;
+
+  switch (schema.type) {
+    case 'qtls':
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
+              const qtlRadius = radiusScale(rowData[tissue.id]);
+              const beta = findBeta(
+                genesForVariant,
+                rowData.geneSymbol,
+                schema.sourceId,
+                tissue.id
+              );
+              const qtlColor = beta > 0 ? 'red' : 'blue';
+              return <DataCircle radius={qtlRadius} colorScheme={qtlColor} />;
+            }
+          },
+        };
       });
-    });
+      break;
+    case 'intervals':
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
+              const intervalRadius = radiusScale(rowData[tissue.id]);
+              return (
+                <DataCircle radius={intervalRadius} colorScheme="default" />
+              );
+            }
+          },
+        };
+      });
+      break;
+    case 'functionalPredictions':
+    default:
+      tissueColumns = schema.tissues.map(tissue => {
+        return {
+          id: tissue.id,
+          label: tissue.name,
+          renderCell: rowData => {
+            if (rowData[tissue.id]) {
+              return rowData[tissue.id];
+            }
+          },
+        };
+      });
+  }
+  const columns = [{ id: 'geneSymbol', label: 'Gene' }, ...tissueColumns];
   return columns;
+};
+
+const findBeta = (genesForVariant, geneSymbol, sourceId, tissueId) => {
+  const gene = genesForVariant.find(
+    geneForVariant => geneForVariant.gene.symbol === geneSymbol
+  );
+  const qtl = gene.qtls.find(qtl => qtl.sourceId === sourceId);
+  const tissue = qtl.tissues.find(tissue => tissue.tissue.id === tissueId);
+  return tissue.beta;
 };
 
 const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
@@ -90,7 +214,7 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
     });
 
   genesForVariant.forEach(geneForVariant => {
-    const row = { gene: geneForVariant.gene.symbol };
+    const row = { geneSymbol: geneForVariant.gene.symbol };
     const element = geneForVariant[searchField].find(
       item => item.sourceId === sourceId
     );
@@ -98,7 +222,9 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
     if (element) {
       element.tissues.forEach(elementTissue => {
         row[elementTissue.tissue.id] =
-          elementTissue.score || elementTissue.beta;
+          elementTissue.__typename === 'FPredTissue'
+            ? elementTissue.maxEffectLabel
+            : elementTissue.quantile;
       });
     }
 
@@ -118,7 +244,7 @@ class AssociatedGenes extends Component {
 
   render() {
     const { value } = this.state;
-    const { genesForVariantSchema, genesForVariant } = this.props.data;
+    const { genesForVariantSchema, genesForVariant } = this.props;
 
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
@@ -128,16 +254,14 @@ class AssociatedGenes extends Component {
       ...genesForVariantSchema.functionalPredictions,
     ];
 
-    const filteredSchemas = schemas.filter(schema => schema.tissues.length > 1);
-
-    const columnsAll = getColumnsAll(schemas);
+    const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
     const dataAll = getDataAll(genesForVariant);
 
     return (
       <Fragment>
         <Tabs value={value} onChange={this.handleChange}>
           <Tab label="All" value={OVERVIEW} />
-          {filteredSchemas.map(schema => {
+          {schemas.map(schema => {
             return (
               <Tab
                 key={schema.sourceId}
@@ -148,12 +272,16 @@ class AssociatedGenes extends Component {
           })}
         </Tabs>
         {value === OVERVIEW && <OtTable columns={columnsAll} data={dataAll} />}
-        {filteredSchemas.map(schema => {
+        {schemas.map(schema => {
           return (
             value === schema.sourceId && (
               <OtTable
                 key={schema.sourceId}
-                columns={getTissueColumns(schemas, schema.sourceId)}
+                columns={getTissueColumns(
+                  genesForVariantSchema,
+                  genesForVariant,
+                  schema.sourceId
+                )}
                 data={getTissueData(
                   genesForVariantSchema,
                   genesForVariant,

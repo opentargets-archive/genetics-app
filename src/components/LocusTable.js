@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate } from 'ot-ui';
+import { OtTable } from 'ot-ui';
 
 export const tableColumns = [
   {
