@@ -98,7 +98,7 @@ const FullWidthText = ({ children }) => (
 );
 
 const geckoQuery = gql`
-  query GeckoQuery($chromosome: String, $start: Int, $end: Int) {
+  query GeckoQuery($chromosome: String!, $start: Long!, $end: Long!) {
     gecko(chromosome: $chromosome, start: $start, end: $end) {
       genes {
         id
