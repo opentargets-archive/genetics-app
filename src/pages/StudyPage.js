@@ -186,6 +186,7 @@ class StudyPage extends React.Component {
                     </DownloadSVGPlot>
                     <ManhattanTable
                       data={manhattan.associations}
+                      studyId={studyId}
                       filenameStem={`${studyId}-independently-associated-loci`}
                     />
                   </Fragment>
