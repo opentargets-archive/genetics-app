@@ -20,6 +20,9 @@ studyInfo(studyId: "${studyId}") {
   pubDate
   pubJournal
   pmid
+  nInitial
+  nReplication
+  nCases
 }
 `;
 
