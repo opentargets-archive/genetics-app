@@ -276,6 +276,7 @@ class AssociatedGenes extends Component {
           return (
             value === schema.sourceId && (
               <OtTable
+                verticalHeaders
                 key={schema.sourceId}
                 columns={getTissueColumns(
                   genesForVariantSchema,
