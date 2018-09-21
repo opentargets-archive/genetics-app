@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import * as d3 from 'd3';
 
-import { OtTable, Tabs, Tab, DataCircle, LabelHML } from 'ot-ui';
+import { OtTable, Tabs, Tab, DataCircle, LabelHML, Tooltip } from 'ot-ui';
 
 const OVERVIEW = 'overview';
 
@@ -133,14 +133,24 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
           renderCell: rowData => {
             if (rowData[tissue.id]) {
               const qtlRadius = radiusScale(rowData[tissue.id]);
-              const beta = findBeta(
+              const { beta, pval } = findValues(
                 genesForVariant,
                 rowData.geneSymbol,
                 schema.sourceId,
                 tissue.id
               );
               const qtlColor = beta > 0 ? 'red' : 'blue';
-              return <DataCircle radius={qtlRadius} colorScheme={qtlColor} />;
+              return (
+                <Tooltip
+                  title={`Beta: ${beta.toPrecision(3)} pval: ${pval.toPrecision(
+                    3
+                  )}`}
+                >
+                  <span>
+                    <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
+                  </span>
+                </Tooltip>
+              );
             }
           },
         };
@@ -155,7 +165,11 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
             if (rowData[tissue.id]) {
               const intervalRadius = radiusScale(rowData[tissue.id]);
               return (
-                <DataCircle radius={intervalRadius} colorScheme="default" />
+                <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
+                  <span>
+                    <DataCircle radius={intervalRadius} colorScheme="default" />
+                  </span>
+                </Tooltip>
               );
             }
           },
@@ -180,13 +194,16 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
   return columns;
 };
 
-const findBeta = (genesForVariant, geneSymbol, sourceId, tissueId) => {
+const findValues = (genesForVariant, geneSymbol, sourceId, tissueId) => {
   const gene = genesForVariant.find(
     geneForVariant => geneForVariant.gene.symbol === geneSymbol
   );
   const qtl = gene.qtls.find(qtl => qtl.sourceId === sourceId);
   const tissue = qtl.tissues.find(tissue => tissue.tissue.id === tissueId);
-  return tissue.beta;
+  return {
+    beta: tissue.beta,
+    pval: tissue.pval,
+  };
 };
 
 const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
@@ -276,6 +293,7 @@ class AssociatedGenes extends Component {
           return (
             value === schema.sourceId && (
               <OtTable
+                verticalHeaders
                 key={schema.sourceId}
                 columns={getTissueColumns(
                   genesForVariantSchema,
