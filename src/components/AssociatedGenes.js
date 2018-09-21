@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import { OtTable, Tabs, Tab, DataCircle, LabelHML, Tooltip } from 'ot-ui';
@@ -59,7 +60,16 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
     ])
     .range([0, 6]);
   const columns = [
-    { id: 'geneSymbol', label: 'Gene' },
+    {
+      id: 'geneSymbol',
+      label: 'Gene',
+      renderCell: rowData => {
+        const geneId = genesForVariant.find(
+          geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
+        ).gene.id;
+        return <Link to={`/gene/${geneId}`}>{rowData.geneSymbol}</Link>;
+      },
+    },
     {
       id: 'overallScore',
       label: 'Overall G2V',
@@ -190,7 +200,19 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
         };
       });
   }
-  const columns = [{ id: 'geneSymbol', label: 'Gene' }, ...tissueColumns];
+  const columns = [
+    {
+      id: 'geneSymbol',
+      label: 'Gene',
+      renderCell: rowData => {
+        const geneId = genesForVariant.find(
+          geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
+        ).gene.id;
+        return <Link to={`/gene/${geneId}`}>{rowData.geneSymbol}</Link>;
+      },
+    },
+    ...tissueColumns,
+  ];
   return columns;
 };
 
