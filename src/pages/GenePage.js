@@ -9,7 +9,7 @@ import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 
 const SEARCH_QUERY = gql`
-  query SearchQuery($queryString: String) {
+  query SearchQuery($queryString: String!) {
     search(queryString: $queryString) {
       genes {
         id
