@@ -5,7 +5,6 @@ const locusFilter = ({
   selectedIndexVariants,
   selectedStudies,
 }) => {
-  // return data;
   const {
     genes,
     tagVariants,
@@ -15,13 +14,31 @@ const locusFilter = ({
     tagVariantIndexVariantStudies,
   } = data;
 
+  // add selected field
+  let genesUnfiltered = genes.map(d => ({
+    ...d,
+    selected: selectedGenes && selectedGenes.indexOf(d.id) >= 0,
+  }));
+  let tagVariantsUnfiltered = tagVariants.map(d => ({
+    ...d,
+    selected: selectedTagVariants && selectedTagVariants.indexOf(d.id) >= 0,
+  }));
+  let indexVariantsUnfiltered = indexVariants.map(d => ({
+    ...d,
+    selected: selectedIndexVariants && selectedIndexVariants.indexOf(d.id) >= 0,
+  }));
+  let studiesUnfiltered = studies.map(d => ({
+    ...d,
+    selected: selectedStudies && selectedStudies.indexOf(d.studyId) >= 0,
+  }));
+
   // copy original
-  let genesFiltered = genes.slice();
+  let genesFiltered = genesUnfiltered.slice();
   let geneTagVariantsFiltered = geneTagVariants.slice();
-  let tagVariantsFiltered = tagVariants.slice();
+  let tagVariantsFiltered = tagVariantsUnfiltered.slice();
   let tagVariantIndexVariantStudiesFiltered = tagVariantIndexVariantStudies.slice();
-  let indexVariantsFiltered = indexVariants.slice();
-  let studiesFiltered = studies.slice();
+  let indexVariantsFiltered = indexVariantsUnfiltered.slice();
+  let studiesFiltered = studiesUnfiltered.slice();
 
   // iterative filtering (uses AND between entities; OR within entities)
 
@@ -171,8 +188,16 @@ const locusFilter = ({
     genesFiltered = genesFiltered.filter(d => genesLeft[d.id]);
   }
 
+  // show ALL genes
+  const geneFilteredDict = {};
+  genesFiltered.forEach(d => (geneFilteredDict[d.id] = true));
+  const allGenesWithFilteredProp = genesUnfiltered.map(d => ({
+    ...d,
+    chained: geneFilteredDict[d.id],
+  }));
+
   return {
-    genes: genesFiltered,
+    genes: allGenesWithFilteredProp,
     tagVariants: tagVariantsFiltered,
     indexVariants: indexVariantsFiltered,
     studies: studiesFiltered,
