@@ -147,6 +147,7 @@ class StudyPage extends React.Component {
                       </a>
                     </SubHeading>
                     <Button
+                      gradient
                       onClick={this.handleClickCompareStudies(
                         data.studyInfo.traitReported
                       )}
