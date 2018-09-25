@@ -1,7 +1,28 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { ListTooltip } from 'ot-ui';
+import { theme } from 'ot-charts';
 
-function withTooltip(WrappedComponent, tableColumns) {
+const ATTR_MAP = {
+  phewas: 'fill',
+  manhattan: 'stroke',
+};
+
+const HIGHLIGHT_MAP = {
+  phewas: theme.point.highlightColor,
+  manhattan: theme.line.highlightColor,
+};
+
+const COLOR_MAP = {
+  phewas: theme.point.color,
+  manhattan: theme.line.color,
+};
+
+const ID_MAP = {
+  phewas: 'studyId',
+  manhattan: 'indexVariantId',
+};
+
+function withTooltip(WrappedComponent, tableColumns, type) {
   return class extends Component {
     state = {
       open: false,
@@ -9,15 +30,28 @@ function withTooltip(WrappedComponent, tableColumns) {
       anchorEl: null,
     };
 
-    handleMouseover = (d, el) => {
+    handleMouseOver = data => {
+      const { anchorEl } = this.state;
+      if (anchorEl) {
+        anchorEl.setAttribute(ATTR_MAP[type], COLOR_MAP[type]);
+      }
+
+      const loci = document.querySelector(`.loci-${data[ID_MAP[type]]}`);
+      loci.setAttribute(ATTR_MAP[type], HIGHLIGHT_MAP[type]);
+
       this.setState({
         open: true,
-        anchorData: d,
-        anchorEl: el,
+        anchorData: data,
+        anchorEl: loci,
       });
     };
 
-    handleMouseout = () => {
+    handleMouseLeave = () => {
+      const { anchorEl } = this.state;
+      if (anchorEl) {
+        anchorEl.setAttribute(ATTR_MAP[type], COLOR_MAP[type]);
+      }
+
       this.setState({
         open: false,
         anchorData: null,
@@ -34,14 +68,13 @@ function withTooltip(WrappedComponent, tableColumns) {
           }))
         : [];
       return (
-        <Fragment>
+        <div onMouseLeave={this.handleMouseLeave}>
           <WrappedComponent
-            handleMouseover={this.handleMouseover}
-            handleMouseout={this.handleMouseout}
+            handleMouseover={this.handleMouseOver}
             {...this.props}
           />
           <ListTooltip open={open} anchorEl={anchorEl} dataList={dataList} />
-        </Fragment>
+        </div>
       );
     }
   };

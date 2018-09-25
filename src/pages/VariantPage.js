@@ -12,8 +12,8 @@ import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
-import withTooltip from '../components/withTooltip';
 import LocusLink from '../components/LocusLink';
+import withTooltip from '../components/withTooltip';
 
 function hasAssociatedGenes(data) {
   return data && data.genesForVariantSchema;
@@ -249,7 +249,8 @@ const VariantPage = ({ match }) => {
               position,
               isIndexVariant,
               isTagVariant,
-            })
+            }),
+            'phewas'
           );
           const pheWASAssociations = isPheWASVariant
             ? transformPheWAS(data)

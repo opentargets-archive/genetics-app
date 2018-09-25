@@ -109,7 +109,11 @@ class StudyPage extends React.Component {
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
-    const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns(studyId));
+    const ManhattanWithTooltip = withTooltip(
+      Manhattan,
+      tableColumns(studyId),
+      'manhattan'
+    );
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
