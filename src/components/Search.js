@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { Search as OtSearch, SearchOption, commaSeparate } from 'ot-ui';
 
 const SEARCH_QUERY = gql`
-  query SearchQuery($queryString: String) {
+  query SearchQuery($queryString: String!) {
     search(queryString: $queryString) {
       totalGenes
       totalVariants
