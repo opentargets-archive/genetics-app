@@ -188,16 +188,8 @@ const locusFilter = ({
     genesFiltered = genesFiltered.filter(d => genesLeft[d.id]);
   }
 
-  // show ALL genes
-  const geneFilteredDict = {};
-  genesFiltered.forEach(d => (geneFilteredDict[d.id] = true));
-  const allGenesWithFilteredProp = genesUnfiltered.map(d => ({
-    ...d,
-    chained: geneFilteredDict[d.id],
-  }));
-
   return {
-    genes: allGenesWithFilteredProp,
+    genes: genesFiltered,
     tagVariants: tagVariantsFiltered,
     indexVariants: indexVariantsFiltered,
     studies: studiesFiltered,

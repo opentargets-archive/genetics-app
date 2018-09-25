@@ -18,77 +18,10 @@ import {
 import BasePage from './BasePage';
 import LocusSelection from '../components/LocusSelection';
 import LocusTable from '../components/LocusTable';
-
-import locusFilter from '../logic/locusFilter';
-import locusTable from '../logic/locusTable';
-import locusLookups from '../logic/locusLookups';
+import locusScheme, { LOCUS_SCHEME } from '../logic/locusScheme';
 
 function hasData(data) {
   return data && data.gecko;
-}
-
-function transformData(data, lookups) {
-  const {
-    genes,
-    geneTagVariants,
-    tagVariantIndexVariantStudies,
-    ...rest
-  } = data.gecko;
-  const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
-
-  // gene exons come as flat list, rendering expects list of pairs
-  const genesWithExonPairs = genes.map(d => ({
-    ...d,
-    exons: d.exons.reduce((result, value, index, array) => {
-      if (index % 2 === 0) {
-        result.push(array.slice(index, index + 2));
-      }
-      return result;
-    }, []),
-  }));
-
-  // geneTagVariants come with ids only, but need position info for gene and tagVariant
-  const geneTagVariantsWithPosition = geneTagVariants.map(d => ({
-    ...d,
-    geneTss: geneDict[d.geneId].tss,
-    tagVariantPosition: tagVariantDict[d.tagVariantId].position,
-  }));
-
-  // tagVariantIndexVariantStudies come with ids only, but need position info for tagVariant and indexVariant
-  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies
-    .map(d => ({
-      ...d,
-      tagVariantPosition: tagVariantDict[d.tagVariantId].position,
-      indexVariantPosition: indexVariantDict[d.indexVariantId].position,
-      traitReported: studyDict[d.studyId].traitReported,
-    }))
-    .sort((a, b) => {
-      // render finemapping on top
-      if (a.posteriorProbability && b.posteriorProbability) {
-        return a.r2 - b.r2;
-      } else if (a.posteriorProbability) {
-        return 1;
-      } else if (b.posteriorProbability) {
-        return -1;
-      } else {
-        return a.r2 - b.r2;
-      }
-    });
-
-  console.info(
-    `Rendering ${geneTagVariants.length} (G, TV)s and ${
-      tagVariantIndexVariantStudies.length
-    } (TV, IV, S)s`
-  );
-
-  return {
-    gecko: {
-      genes: genesWithExonPairs,
-      geneTagVariants: geneTagVariantsWithPosition,
-      tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesWithPosition,
-      ...rest,
-    },
-  };
 }
 
 const FullWidthText = ({ children }) => (
@@ -300,17 +233,28 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleDisplayTypeChange = event => {
+    const { displayType, ...rest } = this._parseQueryProps();
+    const newDisplayTypeValue = event.target.value;
+    const newQueryParams = {
+      displayType: newDisplayTypeValue,
+      ...rest,
+    };
+    this._stringifyQueryProps(newQueryParams);
+  };
   render() {
     const {
       start,
       end,
       chromosome,
+      displayType,
       selectedGenes,
       selectedTagVariants,
       selectedIndexVariants,
       selectedStudies,
     } = this._parseQueryProps();
     const locationString = this._locationString();
+    const displayTypeValue = displayType ? displayType : LOCUS_SCHEME.ALL_GENES;
 
     let subheadingSelected = '';
     // if (
@@ -364,22 +308,20 @@ class LocusPage extends React.Component {
         >
           {({ loading, error, data }) => {
             if (hasData(data)) {
-              const lookups = locusLookups(data.gecko);
-              const transformedData = transformData(data, lookups).gecko;
-              const filteredData = locusFilter({
-                data: transformedData,
+              const {
+                lookups,
+                plot,
+                rows,
+                isEmpty,
+                isEmptyFiltered,
+              } = locusScheme({
+                scheme: displayTypeValue,
+                data: data.gecko,
                 selectedGenes,
                 selectedTagVariants,
                 selectedIndexVariants,
                 selectedStudies,
               });
-              const isEmpty =
-                transformedData.geneTagVariants.length === 0 &&
-                transformedData.tagVariantIndexVariantStudies.length === 0;
-              const isEmptyFiltered =
-                filteredData.geneTagVariants.length === 0 &&
-                filteredData.tagVariantIndexVariantStudies.length === 0;
-              const rows = locusTable(filteredData, lookups);
               return (
                 <React.Fragment>
                   <PlotContainer
@@ -389,6 +331,22 @@ class LocusPage extends React.Component {
                         handleZoomOut={this.handleZoomOut}
                         handlePanLeft={this.handlePanLeft}
                         handlePanRight={this.handlePanRight}
+                        handleDisplayTypeChange={this.handleDisplayTypeChange}
+                        displayTypeValue={displayTypeValue}
+                        displayTypeOptions={[
+                          {
+                            value: LOCUS_SCHEME.ALL_GENES,
+                            label: 'Show selection and all genes',
+                          },
+                          {
+                            value: LOCUS_SCHEME.CHAINED,
+                            label: 'Show selection',
+                          },
+                          {
+                            value: LOCUS_SCHEME.ALL,
+                            label: 'Show all data in locus',
+                          },
+                        ]}
                       />
                     }
                   >
@@ -425,7 +383,7 @@ class LocusPage extends React.Component {
                     </PlotContainerSection>
 
                     <Gecko
-                      data={filteredData}
+                      data={plot}
                       start={start}
                       end={end}
                       selectedGenes={selectedGenes}
@@ -484,6 +442,9 @@ class LocusPage extends React.Component {
       queryProps.selectedStudies = Array.isArray(queryProps.selectedStudies)
         ? queryProps.selectedStudies
         : [queryProps.selectedStudies];
+    }
+    if (queryProps.displayType) {
+      queryProps.displayType = parseInt(queryProps.displayType, 10);
     }
     return queryProps;
   }
