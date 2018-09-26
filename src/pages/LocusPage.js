@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
+import { findDOMNode } from 'react-dom';
 
 import { Gecko } from 'ot-charts';
 import {
@@ -12,7 +13,9 @@ import {
   BrowserControls,
   PlotContainer,
   PlotContainerSection,
+  Button,
   commaSeparate,
+  downloadPNG,
 } from 'ot-ui';
 
 import BasePage from './BasePage';
@@ -255,24 +258,8 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     const locationString = this._locationString();
     const displayTypeValue = displayType ? displayType : LOCUS_SCHEME.ALL_GENES;
-
-    let subheadingSelected = '';
-    // if (
-    //   selectedGenes ||
-    //   selectedTagVariants ||
-    //   selectedIndexVariants ||
-    //   selectedStudies
-    // ) {
-    //   const selected = [
-    //     ...(selectedGenes || []),
-    //     ...(selectedTagVariants || []),
-    //     ...(selectedIndexVariants || []),
-    //     ...(selectedStudies || []),
-    //   ];
-    //   subheadingSelected = ` associated with ${selected.join(', ')}`;
-    // }
-    const subheading = `What genetic evidence is there within this locus${subheadingSelected}?`;
-
+    const subheading = `What genetic evidence is there within this locus?`;
+    const geckoPlot = React.createRef();
     return (
       <BasePage>
         <Helmet>
@@ -349,6 +336,21 @@ class LocusPage extends React.Component {
                         ]}
                       />
                     }
+                    right={
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          downloadPNG({
+                            canvasNode: findDOMNode(
+                              geckoPlot.current
+                            ).querySelector('canvas'),
+                            filenameStem: locationString,
+                          });
+                        }}
+                      >
+                        PNG
+                      </Button>
+                    }
                   >
                     {isEmptyFiltered ? (
                       isEmpty ? (
@@ -383,6 +385,7 @@ class LocusPage extends React.Component {
                     </PlotContainerSection>
 
                     <Gecko
+                      ref={geckoPlot}
                       data={plot}
                       start={start}
                       end={end}

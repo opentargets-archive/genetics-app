@@ -6,6 +6,33 @@ import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
 
+// this maps X, Y, and MT chromosomes to relative positions
+// for sorting
+const CHROM_MAP = {
+  X: 0,
+  Y: 1,
+  MT: 2,
+};
+
+const chromosomeComparator = (aChrom, bChrom) => {
+  if (aChrom === bChrom) {
+    return 0;
+  }
+
+  if (isNaN(aChrom) && isNaN(bChrom)) {
+    return CHROM_MAP[aChrom] - CHROM_MAP[bChrom];
+  }
+  if (isNaN(aChrom)) {
+    return 1;
+  }
+
+  if (isNaN(bChrom)) {
+    return -1;
+  }
+
+  return Number(aChrom) - Number(bChrom);
+};
+
 export const tableColumns = studyId => [
   {
     id: 'indexVariantId',
@@ -15,6 +42,17 @@ export const tableColumns = studyId => [
         {rowData.indexVariantId}
       </Link>
     ),
+    comparator: (a, b) => {
+      const { chromosome: aChrom, position: aPos } = a;
+      const { chromosome: bChrom, position: bPos } = b;
+      const chromResult = chromosomeComparator(aChrom, bChrom);
+
+      if (chromResult === 0) {
+        return aPos - bPos;
+      }
+
+      return chromResult;
+    },
   },
   {
     id: 'indexVariantRsId',
