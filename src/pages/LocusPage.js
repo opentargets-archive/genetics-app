@@ -360,8 +360,8 @@ class LocusPage extends React.Component {
                       ) : (
                         <PlotContainerSection>
                           <FullWidthText>
-                            There are associations in this locus, but they are
-                            filtered out. Try removing some filters.
+                            There are associations in this locus, but none match
+                            your filters. Try removing some filters.
                           </FullWidthText>
                         </PlotContainerSection>
                       )
@@ -386,6 +386,7 @@ class LocusPage extends React.Component {
                       data={plot}
                       start={start}
                       end={end}
+                      showGeneVerticals={displayTypeValue === LOCUS_SCHEME.ALL}
                       selectedGenes={selectedGenes}
                       selectedTagVariants={selectedTagVariants}
                       selectedIndexVariants={selectedIndexVariants}
