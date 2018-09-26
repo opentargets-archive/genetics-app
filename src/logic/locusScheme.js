@@ -16,15 +16,6 @@ const geneTagVariantComparator = (a, b) => {
   const scoreA = (a.chained ? 1 : 0) + a.overallScore;
   const scoreB = (b.chained ? 1 : 0) + b.overallScore;
   return scoreA - scoreB;
-  // if (a.chained && b.chained) {
-  //   return a.overallScore - b.overallScore;
-  // } else if (a.chained) {
-  //   return 1;
-  // } else if (b.chained) {
-  //   return -1;
-  // } else {
-  //   return a.overallScore - b.overallScore;
-  // }
 };
 
 const tagVariantIndexVariantStudyComparator = (a, b) => {
@@ -32,15 +23,6 @@ const tagVariantIndexVariantStudyComparator = (a, b) => {
   const scoreA = (a.chained ? 2 : 0) + (a.finemapping ? 1 : 0) + a.r2;
   const scoreB = (b.chained ? 2 : 0) + (b.finemapping ? 1 : 0) + b.r2;
   return scoreA - scoreB;
-  // if (a.posteriorProbability && b.posteriorProbability) {
-  //   return a.r2 - b.r2;
-  // } else if (a.posteriorProbability) {
-  //   return 1;
-  // } else if (b.posteriorProbability) {
-  //   return -1;
-  // } else {
-  //   return a.r2 - b.r2;
-  // }
 };
 
 const locusScheme = ({
