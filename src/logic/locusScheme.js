@@ -20,11 +20,6 @@ const locusScheme = ({
   selectedStudies,
 }) => {
   const lookups = locusLookups(data);
-  const noneSelected =
-    !selectedGenes &&
-    !selectedTagVariants &&
-    !selectedIndexVariants &&
-    !selectedStudies;
   const selected = locusSelected({
     data,
     selectedGenes,
