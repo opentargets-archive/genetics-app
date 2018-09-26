@@ -11,17 +11,25 @@ export const LOCUS_SCHEME = {
   ALL_GENES: 3,
 };
 
+const BIGGER_THAN_POSITION = 1000000000;
+const variantComparator = (a, b) => {
+  // render by ordering (chained, position)
+  const scoreA = (a.chained ? BIGGER_THAN_POSITION : 0) + a.position;
+  const scoreB = (b.chained ? BIGGER_THAN_POSITION : 0) + b.position;
+  return scoreA - scoreB;
+};
+
 const geneTagVariantComparator = (a, b) => {
   // render by ordering (chained, overallScore)
-  const scoreA = (a.chained ? 1 : 0) + a.overallScore;
-  const scoreB = (b.chained ? 1 : 0) + b.overallScore;
+  const scoreA = (a.chained ? 2 : 1) + a.overallScore;
+  const scoreB = (b.chained ? 2 : 1) + b.overallScore;
   return scoreA - scoreB;
 };
 
 const tagVariantIndexVariantStudyComparator = (a, b) => {
   // render by ordering (chained, finemapping, r2)
-  const scoreA = (a.chained ? 2 : 0) + (a.finemapping ? 1 : 0) + a.r2;
-  const scoreB = (b.chained ? 2 : 0) + (b.finemapping ? 1 : 0) + b.r2;
+  const scoreA = (a.chained ? 8 : 4) + (a.finemapping ? 2 : 1) + a.r2;
+  const scoreB = (b.chained ? 8 : 4) + (b.finemapping ? 2 : 1) + b.r2;
   return scoreA - scoreB;
 };
 
@@ -63,8 +71,12 @@ const locusScheme = ({
   } = chained;
 
   const genesFiltered = genes.filter(d => d.chained);
-  const tagVariantsFiltered = tagVariants.filter(d => d.chained);
-  const indexVariantsFiltered = indexVariants.filter(d => d.chained);
+  const tagVariantsFiltered = tagVariants
+    .filter(d => d.chained)
+    .sort(variantComparator);
+  const indexVariantsFiltered = indexVariants
+    .filter(d => d.chained)
+    .sort(variantComparator);
   const studiesFiltered = studies.filter(d => d.chained);
   const geneTagVariantsFiltered = geneTagVariants
     .filter(d => d.chained)
@@ -104,6 +116,8 @@ const locusScheme = ({
       };
       break;
     case LOCUS_SCHEME.ALL:
+      const tagVariantsSorted = tagVariants.sort(variantComparator);
+      const indexVariantsSorted = indexVariants.sort(variantComparator);
       const geneTagVariantsSorted = geneTagVariants.sort(
         geneTagVariantComparator
       );
@@ -112,8 +126,8 @@ const locusScheme = ({
       );
       plot = {
         genes,
-        tagVariants,
-        indexVariants,
+        tagVariants: tagVariantsSorted,
+        indexVariants: indexVariantsSorted,
         studies,
         geneTagVariants: geneTagVariantsSorted,
         tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesSorted,
