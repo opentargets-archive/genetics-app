@@ -26,25 +26,14 @@ function locusTransform({ data, lookups }) {
   }));
 
   // tagVariantIndexVariantStudies come with ids only, but need position info for tagVariant and indexVariant
-  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies
-    .map(d => ({
+  const tagVariantIndexVariantStudiesWithPosition = tagVariantIndexVariantStudies.map(
+    d => ({
       ...d,
       tagVariantPosition: tagVariantDict[d.tagVariantId].position,
       indexVariantPosition: indexVariantDict[d.indexVariantId].position,
       traitReported: studyDict[d.studyId].traitReported,
-    }))
-    .sort((a, b) => {
-      // render finemapping on top
-      if (a.posteriorProbability && b.posteriorProbability) {
-        return a.r2 - b.r2;
-      } else if (a.posteriorProbability) {
-        return 1;
-      } else if (b.posteriorProbability) {
-        return -1;
-      } else {
-        return a.r2 - b.r2;
-      }
-    });
+    })
+  );
 
   console.info(
     `Rendering ${geneTagVariants.length} (G, TV)s and ${
