@@ -21,15 +21,21 @@ const variantComparator = (a, b) => {
 
 const geneTagVariantComparator = (a, b) => {
   // render by ordering (chained, overallScore)
-  const scoreA = (a.chained ? 2 : 1) + a.overallScore;
-  const scoreB = (b.chained ? 2 : 1) + b.overallScore;
+  const scoreA = (a.chained ? 2 : 0) + a.overallScore;
+  const scoreB = (b.chained ? 2 : 0) + b.overallScore;
   return scoreA - scoreB;
 };
 
 const tagVariantIndexVariantStudyComparator = (a, b) => {
   // render by ordering (chained, finemapping, r2)
-  const scoreA = (a.chained ? 8 : 4) + (a.finemapping ? 2 : 1) + a.r2;
-  const scoreB = (b.chained ? 8 : 4) + (b.finemapping ? 2 : 1) + b.r2;
+  const scoreA =
+    (a.chained ? 8 : 4) +
+    (a.posteriorProbability ? 1 + a.posteriorProbability : 0) +
+    a.r2;
+  const scoreB =
+    (b.chained ? 8 : 4) +
+    (b.posteriorProbability ? 1 + b.posteriorProbability : 0) +
+    b.r2;
   return scoreA - scoreB;
 };
 
