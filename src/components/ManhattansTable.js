@@ -7,16 +7,19 @@ export const tableColumns = onDeleteStudy => [
   {
     id: 'deleteRow',
     label: 'Remove',
-    renderCell: rowData => (
-      <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
-    ),
+    renderCell: onDeleteStudy
+      ? rowData => <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
+      : null,
   },
   {
     id: 'studyId',
     label: 'Study ID',
-    renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
-    ),
+    renderCell: rowData =>
+      rowData.pileup ? (
+        <b>Intersection</b>
+      ) : (
+        <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      ),
   },
   {
     id: 'traitReported',
@@ -65,11 +68,20 @@ export const tableColumns = onDeleteStudy => [
   },
 ];
 
-function ManhattansTable({ studies, onDeleteStudy }) {
+function ManhattansTable({
+  studies,
+  rootStudy,
+  onDeleteStudy,
+  pileupPseudoStudy,
+}) {
+  const columns = tableColumns(onDeleteStudy);
+  const columnsFixed = tableColumns(null);
   return (
     <OtTable
-      columns={tableColumns(onDeleteStudy)}
+      columns={columns}
       data={studies}
+      columnsFixed={columnsFixed}
+      dataFixed={[pileupPseudoStudy, rootStudy]}
       sortBy="associationsCount"
       order="desc"
       downloadFileStem="multi-study"

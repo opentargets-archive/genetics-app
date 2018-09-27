@@ -94,6 +94,26 @@ function hasData(data) {
   );
 }
 
+const StudyOptionLabel = ({
+  study,
+  overlappingLociCount,
+  rootOverlapProportion,
+}) => {
+  const { traitReported, pubJournal, pubAuthor, pubDate } = study;
+  let pubInfo = '';
+  if (pubAuthor && pubDate) {
+    pubInfo = ` (${pubAuthor} ${new Date(pubDate).getFullYear()})`;
+  }
+  return (
+    <div>
+      <span style={{ fontWeight: 'bold' }}>{traitReported}</span>
+      <span style={{ fontSize: '0.75rem' }}>{pubInfo}</span>
+      <br />
+      <span style={{ fontSize: '0.65rem' }}>{pubJournal}</span>
+    </div>
+  );
+};
+
 class StudiesPage extends React.Component {
   handleAddStudy = studyId => {
     const { studyIds, ...rest } = this._parseQueryProps();
@@ -136,7 +156,7 @@ class StudiesPage extends React.Component {
 
         <Query
           query={topOverlappedStudiesQuery}
-          variables={{ studyId, studyIds }}
+          variables={{ studyId, studyIds: [studyId, ...studyIds] }}
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
@@ -150,24 +170,68 @@ class StudiesPage extends React.Component {
                 topStudiesByLociOverlap: topStudies,
               } = topOverlappedStudies;
               const { studyIds: studySelectValue } = this._parseQueryProps();
-              const studySelectOptions = topStudies.map(d => ({
-                label: d.study.traitReported,
+
+              // select
+              const rootStudyTop = topStudies.find(
+                d => d.study.studyId === studyId
+              );
+              const topStudiesExcludingRoot = topStudies.filter(
+                d => d.study.id !== studyId
+              );
+              const rootLociCount = rootStudyTop.numOverlapLoci;
+              const studySelectOptions = topStudiesExcludingRoot.map(d => ({
+                label: (
+                  <StudyOptionLabel
+                    study={d.study}
+                    overlappingLociCount={d.numOverlapLoci}
+                    rootOverlapProportion={d.numOverlapLoci / rootLociCount}
+                  />
+                ),
                 value: d.study.studyId,
               }));
-              const studies = overlappingStudies
-                ? overlappingStudies.overlappedVariantsForStudies.map(d => ({
-                    ...d.study,
-                    associations: d.overlaps.map(o => {
-                      const [chromosome, position] = o.variantIdB.split('_');
-                      return {
-                        ...o,
-                        chromosome,
-                        position,
-                        variantId: o.variantIdB,
-                      };
-                    }),
-                  }))
+
+              // table
+              const variantIntersectionSet = overlappingStudies
+                ? overlappingStudies.variantIntersectionSet
                 : [];
+              const transformOverlaps = d => ({
+                ...d.study,
+                associations: d.overlaps.map(o => {
+                  const [chromosome, position] = o.variantIdB.split('_');
+                  return {
+                    ...o,
+                    chromosome,
+                    position,
+                    variantId: o.variantIdB,
+                    inIntersection:
+                      variantIntersectionSet.indexOf(o.variantIdA) >= 0,
+                  };
+                }),
+              });
+              const overlapsRootStudy = overlappingStudies
+                ? overlappingStudies.overlappedVariantsForStudies.find(
+                    d => d.study.studyId === studyId
+                  )
+                : null;
+              const overlapsStudies = overlappingStudies
+                ? overlappingStudies.overlappedVariantsForStudies.filter(
+                    d => d.study.studyId !== studyId
+                  )
+                : [];
+              const pileupPseudoStudy = {
+                pileup: true,
+                associations: variantIntersectionSet.map(d => {
+                  const [chromosome, position] = d.split('_');
+                  return {
+                    variantId: d,
+                    chromosome,
+                    position,
+                    inIntersection: true,
+                  };
+                }),
+              };
+              const rootStudy = transformOverlaps(overlapsRootStudy);
+              const studies = overlapsStudies.map(transformOverlaps);
               return (
                 <React.Fragment>
                   <SubHeading>
@@ -208,6 +272,8 @@ class StudiesPage extends React.Component {
                   />
                   <ManhattansTable
                     studies={studies}
+                    rootStudy={rootStudy}
+                    pileupPseudoStudy={pileupPseudoStudy}
                     onDeleteStudy={this.handleDeleteStudy}
                   />
                 </React.Fragment>
