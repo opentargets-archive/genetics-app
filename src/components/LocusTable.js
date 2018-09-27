@@ -42,7 +42,7 @@ export const tableColumns = [
   },
   {
     id: 'pval',
-    label: 'P-value',
+    label: 'Lead Variant P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {

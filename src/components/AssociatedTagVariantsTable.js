@@ -4,8 +4,13 @@ import { OtTable, commaSeparate } from 'ot-ui';
 
 const tableColumns = variantId => [
   {
+    id: 'leadVariant',
+    label: 'Lead Variant',
+    renderCell: () => variantId,
+  },
+  {
     id: 'tagVariantId',
-    label: 'Variant',
+    label: 'Tag Variant',
     renderCell: rowData =>
       variantId !== rowData.tagVariantId ? (
         <Link to={`/variant/${rowData.tagVariantId}`}>
@@ -15,7 +20,7 @@ const tableColumns = variantId => [
         `${rowData.tagVariantId} (self)`
       ),
   },
-  { id: 'tagVariantRsId', label: 'rsID' },
+  { id: 'tagVariantRsId', label: 'Tag Variant rsID' },
   {
     id: 'studyId',
     label: 'Study ID',
@@ -26,7 +31,7 @@ const tableColumns = variantId => [
   { id: 'traitReported', label: 'Trait' },
   {
     id: 'pval',
-    label: 'P-value',
+    label: 'Lead Variant P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {
@@ -62,7 +67,7 @@ const tableColumns = variantId => [
   },
   {
     id: 'posteriorProbability',
-    label: 'posteriorProbability',
+    label: 'Posterior Probability',
     tooltip:
       'Posterior probability from finemapping that this tag variant is causal',
     renderCell: rowData =>
