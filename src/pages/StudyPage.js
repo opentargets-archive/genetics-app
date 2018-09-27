@@ -137,19 +137,23 @@ class StudyPage extends React.Component {
                   <Fragment>
                     <PageTitle>{data.studyInfo.traitReported}</PageTitle>
                     <SubHeading>
-                      {`${data.studyInfo.pubAuthor} et al (${new Date(
+                      {`${data.studyInfo.pubAuthor} (${new Date(
                         data.studyInfo.pubDate
                       ).getFullYear()}) `}
-                      <em>{`${data.studyInfo.pubJournal} `}</em>
-                      <a
-                        href={`http://europepmc.org/abstract/med/${
-                          data.studyInfo.pmid
-                        }`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {data.studyInfo.pmid}
-                      </a>
+                      {data.studyInfo.pubJournal && (
+                        <em>{`${data.studyInfo.pubJournal} `}</em>
+                      )}
+                      {data.studyInfo.pmid && (
+                        <a
+                          href={`http://europepmc.org/abstract/med/${
+                            data.studyInfo.pmid
+                          }`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {data.studyInfo.pmid}
+                        </a>
+                      )}
                     </SubHeading>
                     <Button
                       gradient
