@@ -196,17 +196,25 @@ class StudiesPage extends React.Component {
                 : [];
               const transformOverlaps = d => ({
                 ...d.study,
-                associations: d.overlaps.map(o => {
-                  const [chromosome, position] = o.variantIdB.split('_');
-                  return {
-                    ...o,
-                    chromosome,
-                    position,
-                    variantId: o.variantIdB,
-                    inIntersection:
-                      variantIntersectionSet.indexOf(o.variantIdA) >= 0,
-                  };
-                }),
+                associations: d.overlaps
+                  .map(o => {
+                    const [chromosome, position] = o.variantIdB.split('_');
+                    return {
+                      ...o,
+                      chromosome,
+                      position,
+                      variantId: o.variantIdB,
+                      inIntersection:
+                        variantIntersectionSet.indexOf(o.variantIdA) >= 0,
+                    };
+                  })
+                  .sort((a, b) => {
+                    return a.inIntersection === b.inIntersection
+                      ? a.position - b.position
+                      : a.inIntersection
+                        ? 1
+                        : -1;
+                  }),
               });
               const overlapsRootStudy = overlappingStudies
                 ? overlappingStudies.overlappedVariantsForStudies.find(
