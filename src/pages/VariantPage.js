@@ -256,8 +256,7 @@ const VariantPage = ({ match }) => {
               isIndexVariant,
               isTagVariant,
             }),
-            'phewas',
-            ListTooltip
+            'phewas'
           );
           const pheWASAssociations = isPheWASVariant
             ? transformPheWAS(data)
