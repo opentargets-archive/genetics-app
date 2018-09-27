@@ -3,8 +3,14 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, SubHeading, DownloadSVGPlot, SectionHeading } from 'ot-ui';
-import { PheWAS } from 'ot-charts';
+import {
+  PageTitle,
+  SubHeading,
+  DownloadSVGPlot,
+  SectionHeading,
+  ListTooltip,
+} from 'ot-ui';
+import { PheWAS, withTooltip } from 'ot-charts';
 
 import BasePage from './BasePage';
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
@@ -12,7 +18,6 @@ import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
-import withTooltip from '../components/withTooltip';
 import LocusLink from '../components/LocusLink';
 
 function hasAssociatedGenes(data) {
@@ -243,13 +248,16 @@ const VariantPage = ({ match }) => {
           const isIndexVariant = hasAssociatedTagVariants(data);
           const PheWASWithTooltip = withTooltip(
             PheWAS,
+            ListTooltip,
             tableColumns({
               variantId,
               chromosome,
               position,
               isIndexVariant,
               isTagVariant,
-            })
+            }),
+            'phewas',
+            ListTooltip
           );
           const pheWASAssociations = isPheWASVariant
             ? transformPheWAS(data)

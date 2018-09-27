@@ -10,13 +10,13 @@ import {
   DownloadSVGPlot,
   SectionHeading,
   Button,
+  ListTooltip,
 } from 'ot-ui';
-import { Manhattan } from 'ot-charts';
+import { Manhattan, withTooltip } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
-import withTooltip from '../components/withTooltip';
 
 const SIGNIFICANCE = 5e-8;
 
@@ -109,7 +109,12 @@ class StudyPage extends React.Component {
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
-    const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns(studyId));
+    const ManhattanWithTooltip = withTooltip(
+      Manhattan,
+      ListTooltip,
+      tableColumns(studyId),
+      'manhattan'
+    );
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
