@@ -15,12 +15,12 @@ const tableColumns = variantId => [
         `${rowData.indexVariantId} (self)`
       ),
   },
+  { id: 'indexVariantRsId', label: 'Lead Variant rsID' },
   {
     id: 'tagVariant',
     label: 'Tag Variant',
     renderCell: () => variantId,
   },
-  { id: 'indexVariantRsId', label: 'Lead Variant rsID' },
   {
     id: 'studyId',
     label: 'Study ID',
