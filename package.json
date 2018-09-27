@@ -30,7 +30,7 @@
     "lodash": "^4.17.10",
     "ot-charts": "^0.0.21",
     "ot-ui": "^0.0.25",
-    "polished": "^1.9.3",
+    "polished": "^2.1.1",
     "query-string": "5",
     "react": "^16.4.2",
     "react-apollo": "^2.1.9",
