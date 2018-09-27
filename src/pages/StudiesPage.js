@@ -277,6 +277,11 @@ class StudiesPage extends React.Component {
                     value={studySelectValue}
                     options={studySelectOptions}
                     handleChange={this.handleChange}
+                    renderValue={() =>
+                      studySelectValue.length > 0
+                        ? `${studySelectValue.length} selected`
+                        : 'Add a study...'
+                    }
                   />
                   <ManhattansTable
                     studies={studies}
