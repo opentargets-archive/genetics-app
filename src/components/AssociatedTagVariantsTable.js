@@ -4,8 +4,13 @@ import { OtTable, commaSeparate } from 'ot-ui';
 
 const tableColumns = variantId => [
   {
+    id: 'leadVariant',
+    label: 'Lead variant',
+    renderCell: () => variantId,
+  },
+  {
     id: 'tagVariantId',
-    label: 'Variant',
+    label: 'Tag variant',
     renderCell: rowData =>
       variantId !== rowData.tagVariantId ? (
         <Link to={`/variant/${rowData.tagVariantId}`}>
