@@ -86,7 +86,7 @@ export const tableColumns = studyId => [
   },
   {
     id: 'bestGenes',
-    label: 'Best Genes',
+    label: 'Top Ranked Genes',
     tooltip:
       'The list of genes with equal best overall score across all variants in either the credible set or LD expansion of a given locus',
     renderCell: rowData => (
