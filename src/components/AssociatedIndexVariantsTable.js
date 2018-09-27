@@ -5,7 +5,7 @@ import { OtTable, commaSeparate } from 'ot-ui';
 const tableColumns = variantId => [
   {
     id: 'indexVariantId',
-    label: 'Variant',
+    label: 'Lead Variant',
     renderCell: rowData =>
       variantId !== rowData.indexVariantId ? (
         <Link to={`/variant/${rowData.indexVariantId}`}>
@@ -15,7 +15,12 @@ const tableColumns = variantId => [
         `${rowData.indexVariantId} (self)`
       ),
   },
-  { id: 'indexVariantRsId', label: 'rsID' },
+  {
+    id: 'tagVariant',
+    label: 'Tag Variant',
+    renderCell: () => variantId,
+  },
+  { id: 'indexVariantRsId', label: 'Lead Variant rsID' },
   {
     id: 'studyId',
     label: 'Study ID',
@@ -26,7 +31,7 @@ const tableColumns = variantId => [
   { id: 'traitReported', label: 'Trait' },
   {
     id: 'pval',
-    label: 'P-value',
+    label: 'Lead Variant P-value',
     renderCell: rowData => rowData.pval.toPrecision(3),
   },
   {
