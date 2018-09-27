@@ -41,7 +41,8 @@ export const tableColumns = ({
   {
     id: 'nCases',
     label: 'N Cases',
-    renderCell: rowData => commaSeparate(rowData.nCases),
+    renderCell: rowData =>
+      rowData.nCases !== null ? commaSeparate(rowData.nCases) : '',
   },
   {
     id: 'nTotal',
