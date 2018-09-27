@@ -4,72 +4,95 @@ import { Query } from 'react-apollo';
 import queryString from 'query-string';
 import gql from 'graphql-tag';
 
-import { PageTitle, SectionHeading } from 'ot-ui';
+import { PageTitle, SectionHeading, SubHeading, MultiSelect } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
-import StudySearch from '../components/StudySearch';
 
-const studyInfoPrefix = 'studyInfo';
-const studyInfo = studyId => `
-studyInfo(studyId: "${studyId}") {
-  studyId
-  traitReported
-  pubAuthor
-  pubDate
-  pubJournal
-  pmid
-  nInitial
-  nReplication
-  nCases
-}
-`;
-
-const manhattanPrefix = 'manhattan';
-const manhattan = studyId => `
-manhattan(studyId: "${studyId}") {
-  associations {
-    variantId
-    variantRsId
-    pval
-    chromosome
-    position
-    credibleSetSize
-    ldSetSize
-    bestGenes {
-      score
-      gene {
-        id
-        symbol
+const topOverlappedStudiesQuery = gql`
+  query TopOverlappedStudiesQuery($studyId: String!, $studyIds: [String!]!) {
+    manhattan(studyId: $studyId) {
+      associations {
+        variantId
+        variantRsId
+        pval
+        chromosome
+        position
       }
     }
+    topOverlappedStudies(studyId: $studyId) {
+      study {
+        studyId
+        traitReported
+        pubAuthor
+        pubDate
+        pubJournal
+        pmid
+        nInitial
+        nReplication
+        nCases
+      }
+      topStudiesByLociOverlap {
+        study {
+          studyId
+          traitReported
+          pubAuthor
+          pubDate
+          pubJournal
+          pmid
+          nInitial
+          nReplication
+          nCases
+        }
+        numOverlapLoci
+      }
+    }
+    overlapInfoForStudy(studyId: $studyId, studyIds: $studyIds) {
+      study {
+        studyId
+        traitReported
+        pubAuthor
+        pubDate
+        pubJournal
+        pmid
+        nInitial
+        nReplication
+        nCases
+      }
+      overlappedVariantsForStudies {
+        study {
+          studyId
+          traitReported
+          pubAuthor
+          pubDate
+          pubJournal
+          pmid
+          nInitial
+          nReplication
+          nCases
+        }
+        overlaps {
+          variantIdA
+          variantIdB
+          overlapAB
+          distinctA
+          distinctB
+        }
+      }
+      variantIntersectionSet
+    }
   }
+`;
+
+function hasData(data) {
+  return (
+    data &&
+    data.manhattan &&
+    data.manhattan.associations &&
+    data.topOverlappedStudies
+  );
 }
-`;
-
-const manhattansQuery = studyIds => gql`
-  query StudiesPageQuery {
-    ${studyIds.map(d => `${studyInfoPrefix}${d}:${studyInfo(d)}`).join(' ')}
-    ${studyIds.map(d => `${manhattanPrefix}${d}:${manhattan(d)}`).join(' ')}
-  }
-`;
-
-const hasData = data => {
-  return data && Object.keys(data).length > 0;
-};
-
-const transformData = (studyIds, data) => {
-  return studyIds
-    .filter(
-      d => data[`${studyInfoPrefix}${d}`] && data[`${manhattanPrefix}${d}`]
-    )
-    .map(d => ({
-      ...data[`${studyInfoPrefix}${d}`],
-      ...data[`${manhattanPrefix}${d}`],
-      associationsCount: data[`${manhattanPrefix}${d}`].associations.length,
-    }));
-};
 
 class StudiesPage extends React.Component {
   handleAddStudy = studyId => {
@@ -92,7 +115,16 @@ class StudiesPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleChange = event => {
+    const { studyIds, ...rest } = this._parseQueryProps();
+    const newQueryParams = { ...rest };
+    if (event.target.value && event.target.value.length > 0) {
+      newQueryParams.studyIds = event.target.value;
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   render() {
+    const { studyId } = this.props.match.params;
     const { studyIds } = this._parseQueryProps();
     return (
       <BasePage>
@@ -101,19 +133,61 @@ class StudiesPage extends React.Component {
           <title>Compare studies</title>
         </Helmet>
         <PageTitle>Compare studies</PageTitle>
-        <div style={{ maxWidth: '400px' }}>
-          <StudySearch handleAddStudy={this.handleAddStudy} />
-        </div>
 
-        <Query query={manhattansQuery(studyIds)} fetchPolicy="network-only">
+        <Query
+          query={topOverlappedStudiesQuery}
+          variables={{ studyId, studyIds }}
+          fetchPolicy="network-only"
+        >
           {({ loading, error, data }) => {
             if (hasData(data)) {
-              const studies = transformData(studyIds, data);
+              const {
+                topOverlappedStudies,
+                overlapInfoForStudy: overlappingStudies,
+              } = data;
+              const {
+                study: studyInfo,
+                topStudiesByLociOverlap: topStudies,
+              } = topOverlappedStudies;
+              const { studyIds: studySelectValue } = this._parseQueryProps();
+              const studySelectOptions = topStudies.map(d => ({
+                label: d.study.traitReported,
+                value: d.study.studyId,
+              }));
+              const studies = overlappingStudies
+                ? overlappingStudies.overlappedVariantsForStudies.map(d => ({
+                    ...d.study,
+                    associations: d.overlaps.map(o => {
+                      const [chromosome, position] = o.variantIdB.split('_');
+                      return {
+                        ...o,
+                        chromosome,
+                        position,
+                        variantId: o.variantIdB,
+                      };
+                    }),
+                  }))
+                : [];
               return (
                 <React.Fragment>
+                  <SubHeading>
+                    {`${studyInfo.traitReported} (${
+                      studyInfo.pubAuthor
+                    } et al ${new Date(studyInfo.pubDate).getFullYear()}) `}
+                    <em>{`${studyInfo.pubJournal} `}</em>
+                    <a
+                      href={`http://europepmc.org/abstract/med/${
+                        studyInfo.pmid
+                      }`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {studyInfo.pmid}
+                    </a>
+                  </SubHeading>
                   <SectionHeading
-                    heading={`Independently-associated loci across ${
-                      studies.length
+                    heading={`Independently-associated loci coinciding with across ${
+                      studyIds.length
                     } studies`}
                     entities={[
                       {
@@ -125,6 +199,12 @@ class StudiesPage extends React.Component {
                         fixed: false,
                       },
                     ]}
+                  />
+                  <SubHeading>Top overlapping studies</SubHeading>
+                  <MultiSelect
+                    value={studySelectValue}
+                    options={studySelectOptions}
+                    handleChange={this.handleChange}
                   />
                   <ManhattansTable
                     studies={studies}
@@ -149,6 +229,8 @@ class StudiesPage extends React.Component {
       queryProps.studyIds = Array.isArray(queryProps.studyIds)
         ? queryProps.studyIds
         : [queryProps.studyIds];
+    } else {
+      queryProps.studyIds = [];
     }
     return queryProps;
   }

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import { Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
@@ -103,7 +104,7 @@ class StudyPage extends React.Component {
       })
       .then(({ data }) => {
         const studyIds = data.search.studies.map(d => d.studyId);
-        history.push(`/studies?${queryString.stringify({ studyIds })}`);
+        history.push(`/studies/?${queryString.stringify({ studyIds })}`);
       });
   };
   render() {
@@ -146,14 +147,9 @@ class StudyPage extends React.Component {
                         {data.studyInfo.pmid}
                       </a>
                     </SubHeading>
-                    <Button
-                      gradient
-                      onClick={this.handleClickCompareStudies(
-                        data.studyInfo.traitReported
-                      )}
-                    >
-                      Compare to related studies
-                    </Button>
+                    <Link to={`/study-comparison/${studyId}`}>
+                      <Button gradient>Compare to related studies</Button>
+                    </Link>
                   </Fragment>
                 ) : null}
                 {hasAssociations(data) ? (
