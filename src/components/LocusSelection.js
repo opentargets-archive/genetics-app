@@ -12,13 +12,20 @@ const LocusSelection = ({
   handleDeleteIndexVariant,
   handleDeleteStudy,
 }) => {
-  const { geneDict, studyDict } = lookups;
+  const { geneDict, tagVariantDict, indexVariantDict, studyDict } = lookups;
+  const noSelection =
+    !selectedStudies &&
+    !selectedIndexVariants &&
+    !selectedTagVariants &&
+    !selectedGenes;
+
+  const geneIsInData = d => geneDict[d];
+  const tagVariantIsInData = d => tagVariantDict[d];
+  const indexVariantIsInData = d => indexVariantDict[d];
+  const studyIsInData = d => studyDict[d];
   return (
     <div>
-      {!selectedStudies &&
-      !selectedIndexVariants &&
-      !selectedTagVariants &&
-      !selectedGenes ? (
+      {noSelection ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
           <SubHeading>No filters applied</SubHeading>
         </div>
@@ -27,13 +34,17 @@ const LocusSelection = ({
         ? selectedStudies.map(d => (
             <Chip
               key={d}
-              label={`${studyDict[d].traitReported}${
-                studyDict[d].pubAuthor && studyDict[d].pubDate
-                  ? ` (${studyDict[d].pubAuthor} ${new Date(
-                      studyDict[d].pubDate
-                    ).getFullYear()})`
-                  : null
-              }`}
+              label={
+                studyIsInData(d)
+                  ? `${studyDict[d].traitReported}${
+                      studyDict[d].pubAuthor && studyDict[d].pubDate
+                        ? ` (${studyDict[d].pubAuthor} ${new Date(
+                            studyDict[d].pubDate
+                          ).getFullYear()})`
+                        : null
+                    }`
+                  : `${d} (no data)`
+              }
               type="study"
               onDelete={handleDeleteStudy(d)}
             />
@@ -43,7 +54,7 @@ const LocusSelection = ({
         ? selectedIndexVariants.map(d => (
             <Chip
               key={d}
-              label={d}
+              label={indexVariantIsInData(d) ? d : `${d} (no data)`}
               type="indexVariant"
               onDelete={handleDeleteIndexVariant(d)}
             />
@@ -53,7 +64,7 @@ const LocusSelection = ({
         ? selectedTagVariants.map(d => (
             <Chip
               key={d}
-              label={d}
+              label={tagVariantIsInData(d) ? d : `${d} (no data)`}
               type="tagVariant"
               onDelete={handleDeleteTagVariant(d)}
             />
@@ -63,7 +74,7 @@ const LocusSelection = ({
         ? selectedGenes.map(d => (
             <Chip
               key={d}
-              label={geneDict[d].symbol}
+              label={geneIsInData(d) ? geneDict[d].symbol : `${d} (no data)`}
               type="gene"
               onDelete={handleDeleteGene(d)}
             />
