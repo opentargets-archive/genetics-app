@@ -3,7 +3,8 @@ const studyIdField = d => d.studyId;
 const gTvIdField = d => `${d.geneId}-${d.tagVariantId}`;
 const tvIvSIdField = d => `${d.tagVariantId}-${d.indexVariantId}-${d.studyId}`;
 const dictReducer = idFieldAccessor => (dict, d) => {
-  return (dict[idFieldAccessor(d)] = true);
+  dict[idFieldAccessor(d)] = true;
+  return dict;
 };
 
 const locusChained = ({ data, dataFiltered }) => {
