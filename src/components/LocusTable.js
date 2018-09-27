@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { OtTable } from 'ot-ui';
 
+import { pvalThreshold } from '../constants';
+
 export const tableColumns = [
   {
     id: 'studyId',
@@ -43,7 +45,10 @@ export const tableColumns = [
   {
     id: 'pval',
     label: 'Lead Variant P-value',
-    renderCell: rowData => rowData.pval.toPrecision(3),
+    renderCell: rowData =>
+      rowData.pval < pvalThreshold
+        ? `<${pvalThreshold}`
+        : rowData.pval.toPrecision(3),
   },
   {
     id: 'method',
