@@ -122,7 +122,10 @@ class StudyPage extends React.Component {
                         {data.studyInfo.pmid}
                       </a>
                     </SubHeading>
-                    <Link to={`/study-comparison/${studyId}`}>
+                    <Link
+                      to={`/study-comparison/${studyId}`}
+                      style={{ textDecoration: 'none' }}
+                    >
                       <Button gradient>Compare to related studies</Button>
                     </Link>
                   </Fragment>
