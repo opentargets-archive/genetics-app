@@ -143,19 +143,17 @@ class StudiesPage extends React.Component {
     const { match, history } = this.props;
     const { studyId } = match.params;
     const { studyIds } = this._parseQueryProps();
-    const { chromosome, position, variantId } = overlap;
+    const { chromosome, position } = overlap;
     const mb = 1000000;
+    // note: cannot pass selectedIndexVariant, since it may not be shared
     history.push(
       `/locus?${queryString.stringify({
         chromosome,
         start: position - mb,
         end: position + mb,
         selectedStudies: [studyId, studyIds],
-        selectedIndexVariants: [variantId],
       })}`
     );
-    // const { studyIds, ...rest } = this._parseQueryProps();
-    console.log('clicked', overlap);
   };
   render() {
     const { studyId } = this.props.match.params;
