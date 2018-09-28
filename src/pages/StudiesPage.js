@@ -148,7 +148,6 @@ class StudiesPage extends React.Component {
         <Helmet>
           <title>Compare studies</title>
         </Helmet>
-        <PageTitle>Compare studies</PageTitle>
 
         <Query
           query={topOverlappedStudiesQuery}
@@ -255,10 +254,11 @@ class StudiesPage extends React.Component {
               const studies = overlapsStudies.map(transformOverlaps);
               return (
                 <React.Fragment>
+                  <PageTitle>{studyInfo.traitReported}</PageTitle>
                   <SubHeading>
-                    {`${studyInfo.traitReported} (${
-                      studyInfo.pubAuthor
-                    } et al ${new Date(studyInfo.pubDate).getFullYear()}) `}
+                    {`${studyInfo.pubAuthor} et al (${new Date(
+                      studyInfo.pubDate
+                    ).getFullYear()}) `}
                     <em>{`${studyInfo.pubJournal} `}</em>
                     <a
                       href={`http://europepmc.org/abstract/med/${
@@ -271,9 +271,17 @@ class StudiesPage extends React.Component {
                     </a>
                   </SubHeading>
                   <SectionHeading
-                    heading={`Independently-associated loci coinciding with across ${
-                      studyIds.length
-                    } studies`}
+                    heading={`Compare overlapping studies`}
+                    subheading={
+                      <React.Fragment>
+                        Which independently-associated loci are shared between{' '}
+                        <b>
+                          {studyInfo.pubAuthor} et al (
+                          {new Date(studyInfo.pubDate).getFullYear()})
+                        </b>{' '}
+                        and other studies?
+                      </React.Fragment>
+                    }
                     entities={[
                       {
                         type: 'study',
@@ -285,8 +293,6 @@ class StudiesPage extends React.Component {
                       },
                     ]}
                   />
-                  <SubHeading>Top overlapping studies</SubHeading>
-
                   <ManhattansTable
                     select={
                       <MultiSelect
