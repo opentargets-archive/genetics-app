@@ -269,6 +269,7 @@ class StudiesPage extends React.Component {
                     chromosome,
                     position,
                     inIntersection: true,
+                    pileup: true,
                   };
                 }),
               };
