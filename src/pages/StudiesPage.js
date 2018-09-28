@@ -357,7 +357,6 @@ class StudiesPage extends React.Component {
                   />
                   <ManhattansVariantsTable
                     data={manhattansVariants}
-                    studyId={studyId}
                     studyIds={[studyId, ...studyIds]}
                     filenameStem={`intersecting-independently-associated-loci`}
                   />

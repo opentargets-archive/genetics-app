@@ -7,7 +7,7 @@ import { getCytoband } from 'ot-charts';
 import LocusLink from './LocusLink';
 import chromosomeComparator from '../logic/chromosomeComparator';
 
-const tableColumns = studyId => [
+const tableColumns = studyIds => [
   {
     id: 'indexVariantId',
     label: 'Variant',
@@ -64,8 +64,7 @@ const tableColumns = studyId => [
       <LocusLink
         chromosome={rowData.chromosome}
         position={rowData.position}
-        selectedIndexVariants={[rowData.indexVariantId]}
-        selectedStudies={[studyId]}
+        selectedStudies={studyIds}
       >
         Locus
       </LocusLink>
@@ -73,10 +72,10 @@ const tableColumns = studyId => [
   },
 ];
 
-function ManhattansVariantsTable({ data, studyId, filenameStem }) {
+function ManhattansVariantsTable({ data, studyIds, filenameStem }) {
   return (
     <OtTable
-      columns={tableColumns(studyId)}
+      columns={tableColumns(studyIds)}
       data={data}
       sortBy="pval"
       order="asc"
