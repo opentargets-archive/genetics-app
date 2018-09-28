@@ -7,9 +7,12 @@ export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
   {
     id: 'deleteRow',
     label: 'Remove',
-    renderCell: onDeleteStudy
-      ? rowData => <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
-      : null,
+    renderCell: rowData =>
+      onDeleteStudy ? (
+        <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
+      ) : !rowData.pileup ? (
+        <b>ROOT</b>
+      ) : null,
   },
   {
     id: 'studyId',
@@ -63,7 +66,7 @@ export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
     id: 'associationsCount',
     label: 'Independently-associated loci',
     tooltip:
-      'Independently-associated loci across studies (overlapping loci are shown in red)',
+      'Independently-associated loci across studies that occur in the ROOT study',
     renderCell: rowData =>
       rowData.pileup && onClickIntersectionLocus ? (
         <ManhattanFlat
@@ -96,6 +99,17 @@ function ManhattansTable({
       sortBy="associationsCount"
       order="desc"
       downloadFileStem="multi-study"
+      message={
+        <React.Fragment>
+          Each selected study in this table is compared to the <b>ROOT</b>{' '}
+          study.
+          <br />
+          <small>
+            Loci overlapping with the ROOT study are shown in <i>black</i>. Loci
+            overlapping across all selected studies are shown in <i>red</i>.
+          </small>
+        </React.Fragment>
+      }
     />
   );
 }
