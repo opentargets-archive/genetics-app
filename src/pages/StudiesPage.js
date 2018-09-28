@@ -9,6 +9,7 @@ import { PageTitle, SectionHeading, SubHeading, MultiSelect } from 'ot-ui';
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
+import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
 import SearchOption from '../components/SearchOption';
 
 const topOverlappedStudiesQuery = gql`
@@ -20,6 +21,13 @@ const topOverlappedStudiesQuery = gql`
         pval
         chromosome
         position
+        bestGenes {
+          score
+          gene {
+            id
+            symbol
+          }
+        }
       }
     }
     topOverlappedStudies(studyId: $studyId) {
@@ -218,7 +226,7 @@ class StudiesPage extends React.Component {
                   value: d.study.studyId,
                 }));
 
-              // table
+              // manhattans table
               const variantIntersectionSet = overlappingStudies
                 ? overlappingStudies.variantIntersectionSet
                 : [];
@@ -273,6 +281,18 @@ class StudiesPage extends React.Component {
               };
               const rootStudy = transformOverlaps(overlapsRootStudy);
               const studies = overlapsStudies.map(transformOverlaps);
+
+              // manhattans variants table
+              const manhattansVariants = data.manhattan.associations
+                .filter(d => variantIntersectionSet.indexOf(d.variantId) >= 0)
+                .map(d => {
+                  const { variantId, variantRsId, ...rest } = d;
+                  return {
+                    ...rest,
+                    indexVariantId: variantId,
+                    indexVariantRsId: variantRsId,
+                  };
+                });
               return (
                 <React.Fragment>
                   <PageTitle>{studyInfo.traitReported}</PageTitle>
@@ -334,6 +354,12 @@ class StudiesPage extends React.Component {
                     pileupPseudoStudy={pileupPseudoStudy}
                     onDeleteStudy={this.handleDeleteStudy}
                     onClickIntersectionLocus={this.handleClick}
+                  />
+                  <ManhattansVariantsTable
+                    data={manhattansVariants}
+                    studyId={studyId}
+                    studyIds={[studyId, ...studyIds]}
+                    filenameStem={`intersecting-independently-associated-loci`}
                   />
                 </React.Fragment>
               );

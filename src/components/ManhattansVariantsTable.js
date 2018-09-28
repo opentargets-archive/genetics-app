@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { OtTable, commaSeparate } from 'ot-ui';
+import { OtTable } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
-import { pvalThreshold } from '../constants';
 import chromosomeComparator from '../logic/chromosomeComparator';
 
-export const tableColumns = studyId => [
+const tableColumns = studyId => [
   {
     id: 'indexVariantId',
-    label: 'Lead Variant',
+    label: 'Variant',
+    tooltip:
+      'The locus tagged by this variant is shared across all selected studies',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
@@ -40,27 +41,6 @@ export const tableColumns = studyId => [
       const [chromosome, position] = rowData.indexVariantId.split('_');
       return getCytoband(chromosome, position);
     },
-  },
-  {
-    id: 'pval',
-    label: 'P-value',
-    renderCell: rowData =>
-      rowData.pval < pvalThreshold
-        ? `<${pvalThreshold}`
-        : rowData.pval.toPrecision(3),
-  },
-  {
-    id: 'credibleSetSize',
-    label: 'Credible Set Size',
-    tooltip: 'Number of variants in 95% credible set at this locus',
-    renderCell: rowData => commaSeparate(rowData.credibleSetSize),
-  },
-  {
-    id: 'ldSetSize',
-    label: 'LD Set Size',
-    tooltip:
-      'Number of variants that are in LD (R2 >= 0.7) with this lead variant',
-    renderCell: rowData => commaSeparate(rowData.ldSetSize),
   },
   {
     id: 'bestGenes',
@@ -93,7 +73,7 @@ export const tableColumns = studyId => [
   },
 ];
 
-function ManhattanTable({ data, studyId, filenameStem }) {
+function ManhattansVariantsTable({ data, studyId, filenameStem }) {
   return (
     <OtTable
       columns={tableColumns(studyId)}
@@ -101,8 +81,9 @@ function ManhattanTable({ data, studyId, filenameStem }) {
       sortBy="pval"
       order="asc"
       downloadFileStem={filenameStem}
+      message="Loci in this table are shared across all selected studies."
     />
   );
 }
 
-export default ManhattanTable;
+export default ManhattansVariantsTable;
