@@ -38,6 +38,7 @@ const SEARCH_QUERY = gql`
         pubAuthor
         pubDate
         pubJournal
+        nInitial
       }
     }
   }
@@ -61,12 +62,6 @@ const asGroupedOptions = data => {
 };
 
 class Search extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
   handleSelectOption = (value, { action }) => {
     const { history } = this.props;
     if (action === 'select-option') {
@@ -113,7 +108,6 @@ class Search extends React.Component {
       <OtSearch
         onInputChange={this.handleInputChange}
         optionComponent={SearchOption}
-        value={this.state.value}
         onSelectOption={this.handleSelectOption}
         placeholder="Search for a gene, variant or trait..."
       />

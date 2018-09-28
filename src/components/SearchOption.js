@@ -31,7 +31,7 @@ const Option = ({ data }) => {
         <SearchOption
           heading={data.traitReported}
           subheading={`${data.pubAuthor} (${pubYear})`}
-          extra={data.pubJournal}
+          extra={`${data.pubJournal} N Study: ${commaSeparate(data.nInitial)}`}
         />
       );
     case 'study-overlap':
