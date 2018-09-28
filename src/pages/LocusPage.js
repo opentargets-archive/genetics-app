@@ -193,7 +193,7 @@ class LocusPage extends React.Component {
       ...rest,
     };
     if (newSelected.length > 0) {
-      newQueryParams[selectedGenes] = newSelected;
+      newQueryParams.selectedGenes = newSelected;
     }
     this._stringifyQueryProps(newQueryParams);
   };
@@ -206,7 +206,7 @@ class LocusPage extends React.Component {
       ...rest,
     };
     if (newSelected.length > 0) {
-      newQueryParams[selectedTagVariants] = newSelected;
+      newQueryParams.selectedTagVariants = newSelected;
     }
     this._stringifyQueryProps(newQueryParams);
   };
@@ -219,7 +219,7 @@ class LocusPage extends React.Component {
       ...rest,
     };
     if (newSelected.length > 0) {
-      newQueryParams[selectedIndexVariants] = newSelected;
+      newQueryParams.selectedIndexVariants = newSelected;
     }
     this._stringifyQueryProps(newQueryParams);
   };
@@ -232,7 +232,7 @@ class LocusPage extends React.Component {
       ...rest,
     };
     if (newSelected.length > 0) {
-      newQueryParams[selectedStudies] = newSelected;
+      newQueryParams.selectedStudies = newSelected;
     }
     this._stringifyQueryProps(newQueryParams);
   };
