@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { commaSeparate } from 'ot-ui';
 
 import {
   PageTitle,
@@ -106,9 +107,9 @@ const StudySize = ({ studyInfo }) => {
   const { nInitial, nReplication, nCases } = studyInfo;
   return (
     <div>
-      {nInitial !== null && `N Study: ${nInitial}`}{' '}
-      {nReplication !== null && `N Replication: ${nReplication}`}{' '}
-      {nCases !== null && `N Cases: ${nCases}`}
+      {nInitial !== null && `N Study: ${commaSeparate(nInitial)}`}{' '}
+      {nReplication !== null && `N Replication: ${commaSeparate(nReplication)}`}{' '}
+      {nCases !== null && `N Cases: ${commaSeparate(nCases)}`}
     </div>
   );
 };
