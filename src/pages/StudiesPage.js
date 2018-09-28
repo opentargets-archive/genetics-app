@@ -9,6 +9,7 @@ import { PageTitle, SectionHeading, SubHeading, MultiSelect } from 'ot-ui';
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
+import SearchOption from '../components/SearchOption';
 
 const topOverlappedStudiesQuery = gql`
   query TopOverlappedStudiesQuery($studyId: String!, $studyIds: [String!]!) {
@@ -98,21 +99,16 @@ const StudyOptionLabel = ({
   study,
   overlappingLociCount,
   rootOverlapProportion,
-}) => {
-  const { traitReported, pubJournal, pubAuthor, pubDate } = study;
-  let pubInfo = '';
-  if (pubAuthor && pubDate) {
-    pubInfo = ` (${pubAuthor} ${new Date(pubDate).getFullYear()})`;
-  }
-  return (
-    <div>
-      <span style={{ fontWeight: 'bold' }}>{traitReported}</span>
-      <span style={{ fontSize: '0.75rem' }}>{pubInfo}</span>
-      <br />
-      <span style={{ fontSize: '0.65rem' }}>{pubJournal}</span>
-    </div>
-  );
-};
+}) => (
+  <SearchOption
+    data={{
+      ...study,
+      overlappingLociCount,
+      rootOverlapProportion,
+      groupType: 'study-overlap',
+    }}
+  />
+);
 
 class StudiesPage extends React.Component {
   handleAddStudy = studyId => {
