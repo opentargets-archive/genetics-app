@@ -175,16 +175,33 @@ class StudiesPage extends React.Component {
                 d => d.study.id !== studyId
               );
               const rootLociCount = rootStudyTop.numOverlapLoci;
-              const studySelectOptions = topStudiesExcludingRoot.map(d => ({
-                label: (
-                  <StudyOptionLabel
-                    study={d.study}
-                    overlappingLociCount={d.numOverlapLoci}
-                    rootOverlapProportion={d.numOverlapLoci / rootLociCount}
-                  />
-                ),
-                value: d.study.studyId,
-              }));
+              const studySelectOptions = topStudiesExcludingRoot
+                .filter(d => d.study.studyId !== studyId)
+                .sort((a, b) => {
+                  // order by (selected, numOverlapLoci, studyId)
+                  const aSelected = studyIds.indexOf(a.study.studyId) >= 0;
+                  const bSelected = studyIds.indexOf(b.study.studyId) >= 0;
+
+                  if (aSelected !== bSelected) {
+                    return aSelected ? -1 : 1;
+                  }
+
+                  if (a.numOverlapLoci !== b.numOverlapLoci) {
+                    return b.numOverlapLoci - a.numOverlapLoci;
+                  }
+
+                  return a.study.studyId >= b.study.studyId;
+                })
+                .map(d => ({
+                  label: (
+                    <StudyOptionLabel
+                      study={d.study}
+                      overlappingLociCount={d.numOverlapLoci}
+                      rootOverlapProportion={d.numOverlapLoci / rootLociCount}
+                    />
+                  ),
+                  value: d.study.studyId,
+                }));
 
               // table
               const variantIntersectionSet = overlappingStudies
