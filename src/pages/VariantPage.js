@@ -263,25 +263,27 @@ const VariantPage = ({ match }) => {
             : null;
           return (
             <React.Fragment>
-              <SubHeading>
-                {isIndexVariant ? (
-                  <LocusLink
-                    chromosome={chromosome}
-                    position={position}
-                    selectedIndexVariants={[variantId]}
-                  >
-                    View locus
-                  </LocusLink>
-                ) : isTagVariant ? (
-                  <LocusLink
-                    chromosome={chromosome}
-                    position={position}
-                    selectedTagVariants={[variantId]}
-                  >
-                    View locus
-                  </LocusLink>
-                ) : null}
-              </SubHeading>
+              <SubHeading
+                left={
+                  isIndexVariant ? (
+                    <LocusLink
+                      chromosome={chromosome}
+                      position={position}
+                      selectedIndexVariants={[variantId]}
+                    >
+                      View locus
+                    </LocusLink>
+                  ) : isTagVariant ? (
+                    <LocusLink
+                      chromosome={chromosome}
+                      position={position}
+                      selectedTagVariants={[variantId]}
+                    >
+                      View locus
+                    </LocusLink>
+                  ) : null
+                }
+              />
               {isGeneVariant ? (
                 <Fragment>
                   <SectionHeading

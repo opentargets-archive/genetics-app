@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chip, SubHeading } from 'ot-ui';
+import { Chip, Typography } from 'ot-ui';
 
 const LocusSelection = ({
   selectedGenes,
@@ -27,7 +27,7 @@ const LocusSelection = ({
     <div>
       {noSelection ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
-          <SubHeading>No filters applied</SubHeading>
+          <Typography variant="subheading">No filters applied</Typography>
         </div>
       ) : null}
       {selectedStudies

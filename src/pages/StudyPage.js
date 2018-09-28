@@ -59,6 +59,9 @@ const manhattanQuery = gql`
       pubDate
       pubJournal
       pmid
+      nInitial
+      nReplication
+      nCases
     }
     manhattan(studyId: $studyId) {
       associations {
@@ -80,6 +83,35 @@ const manhattanQuery = gql`
     }
   }
 `;
+
+const StudyInfo = ({ studyInfo }) => {
+  return (
+    <div>
+      {`${studyInfo.pubAuthor} (${new Date(studyInfo.pubDate).getFullYear()}) `}
+      {studyInfo.pubJournal && <em>{`${studyInfo.pubJournal} `}</em>}
+      {studyInfo.pmid && (
+        <a
+          href={`http://europepmc.org/abstract/med/${studyInfo.pmid}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {studyInfo.pmid}
+        </a>
+      )}
+    </div>
+  );
+};
+
+const StudySize = ({ studyInfo }) => {
+  const { nInitial, nReplication, nCases } = studyInfo;
+  return (
+    <div>
+      {nInitial !== null && `N Study: ${nInitial}`}{' '}
+      {nReplication !== null && `N Replication: ${nReplication}`}{' '}
+      {nCases !== null && `N Cases: ${nCases}`}
+    </div>
+  );
+};
 
 class StudyPage extends React.Component {
   render() {
@@ -112,25 +144,10 @@ class StudyPage extends React.Component {
                 {hasStudyInfo(data) ? (
                   <Fragment>
                     <PageTitle>{data.studyInfo.traitReported}</PageTitle>
-                    <SubHeading>
-                      {`${data.studyInfo.pubAuthor} (${new Date(
-                        data.studyInfo.pubDate
-                      ).getFullYear()}) `}
-                      {data.studyInfo.pubJournal && (
-                        <em>{`${data.studyInfo.pubJournal} `}</em>
-                      )}
-                      {data.studyInfo.pmid && (
-                        <a
-                          href={`http://europepmc.org/abstract/med/${
-                            data.studyInfo.pmid
-                          }`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {data.studyInfo.pmid}
-                        </a>
-                      )}
-                    </SubHeading>
+                    <SubHeading
+                      left={<StudyInfo studyInfo={data.studyInfo} />}
+                      right={<StudySize studyInfo={data.studyInfo} />}
+                    />
                     <Link
                       to={`/study-comparison/${studyId}`}
                       style={{ textDecoration: 'none' }}
