@@ -3,7 +3,9 @@ import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { Search as OtSearch, SearchOption, commaSeparate } from 'ot-ui';
+import { Search as OtSearch } from 'ot-ui';
+
+import SearchOption from './SearchOption';
 
 const SEARCH_QUERY = gql`
   query SearchQuery($queryString: String!) {
@@ -58,44 +60,6 @@ const asGroupedOptions = data => {
   ];
 };
 
-const Option = ({ data }) => {
-  switch (data.groupType) {
-    case 'gene':
-      return (
-        <SearchOption
-          heading={data.symbol}
-          subheading={`${data.chromosome}:${commaSeparate(
-            data.start
-          )}-${commaSeparate(data.end)}`}
-          extra={data.id}
-        />
-      );
-    case 'variant':
-      return (
-        <SearchOption
-          heading={data.variant.id}
-          subheading={data.variant.rsId}
-          extra={
-            data.relatedGenes.length > 0
-              ? `Linked genes: ${data.relatedGenes.join(', ')}`
-              : null
-          }
-        />
-      );
-    case 'study':
-      const pubYear = new Date(data.pubDate).getFullYear();
-      return (
-        <SearchOption
-          heading={data.traitReported}
-          subheading={`${data.pubAuthor} (${pubYear})`}
-          extra={data.pubJournal}
-        />
-      );
-    default:
-      throw Error('Unexpected groupType. Should be gene, variant or study.');
-  }
-};
-
 class Search extends React.Component {
   constructor(props) {
     super(props);
@@ -148,7 +112,7 @@ class Search extends React.Component {
     return (
       <OtSearch
         onInputChange={this.handleInputChange}
-        optionComponent={Option}
+        optionComponent={SearchOption}
         value={this.state.value}
         onSelectOption={this.handleSelectOption}
         placeholder="Search for a gene, variant or trait..."

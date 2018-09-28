@@ -3,20 +3,23 @@ import { Link } from 'react-router-dom';
 import { OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
-export const tableColumns = onDeleteStudy => [
+export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
   {
     id: 'deleteRow',
     label: 'Remove',
-    renderCell: rowData => (
-      <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
-    ),
+    renderCell: onDeleteStudy
+      ? rowData => <CloseButton onClick={onDeleteStudy(rowData.studyId)} />
+      : null,
   },
   {
     id: 'studyId',
     label: 'Study ID',
-    renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
-    ),
+    renderCell: rowData =>
+      rowData.pileup ? (
+        <b>Intersection</b>
+      ) : (
+        <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      ),
   },
   {
     id: 'traitReported',
@@ -60,16 +63,36 @@ export const tableColumns = onDeleteStudy => [
     id: 'associationsCount',
     label: 'Independently-associated loci',
     tooltip:
-      'Independent loci associated with this study (p < 5e-8 are shown in red)',
-    renderCell: rowData => <ManhattanFlat data={rowData.associations} />,
+      'Independently-associated loci across studies (overlapping loci are shown in red)',
+    renderCell: rowData =>
+      rowData.pileup && onClickIntersectionLocus ? (
+        <ManhattanFlat
+          data={rowData.associations}
+          onClick={onClickIntersectionLocus}
+        />
+      ) : (
+        <ManhattanFlat data={rowData.associations} />
+      ),
   },
 ];
 
-function ManhattansTable({ studies, onDeleteStudy }) {
+function ManhattansTable({
+  select,
+  studies,
+  rootStudy,
+  onDeleteStudy,
+  onClickIntersectionLocus,
+  pileupPseudoStudy,
+}) {
+  const columns = tableColumns({ onDeleteStudy });
+  const columnsFixed = tableColumns({ onClickIntersectionLocus });
   return (
     <OtTable
-      columns={tableColumns(onDeleteStudy)}
+      left={select}
+      columns={columns}
       data={studies}
+      columnsFixed={columnsFixed}
+      dataFixed={[pileupPseudoStudy, rootStudy]}
       sortBy="associationsCount"
       order="desc"
       downloadFileStem="multi-study"

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import { Query, withApollo } from 'react-apollo';
+import { Link } from 'react-router-dom';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import queryString from 'query-string';
 
 import {
   PageTitle,
@@ -81,31 +81,7 @@ const manhattanQuery = gql`
   }
 `;
 
-const studySearchQuery = gql`
-  query StudySearchQuery($queryString: String!) {
-    search(queryString: $queryString) {
-      studies {
-        studyId
-      }
-    }
-  }
-`;
-
 class StudyPage extends React.Component {
-  handleClickCompareStudies = traitReported => () => {
-    // TODO: this will search for the first 10 related studies by traitReported,
-    //       but it would be much better to use the overlap table in the future
-    const { client, history } = this.props;
-    client
-      .query({
-        query: studySearchQuery,
-        variables: { queryString: traitReported },
-      })
-      .then(({ data }) => {
-        const studyIds = data.search.studies.map(d => d.studyId);
-        history.push(`/studies?${queryString.stringify({ studyIds })}`);
-      });
-  };
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
@@ -155,14 +131,12 @@ class StudyPage extends React.Component {
                         </a>
                       )}
                     </SubHeading>
-                    <Button
-                      gradient
-                      onClick={this.handleClickCompareStudies(
-                        data.studyInfo.traitReported
-                      )}
+                    <Link
+                      to={`/study-comparison/${studyId}`}
+                      style={{ textDecoration: 'none' }}
                     >
-                      Compare to related studies
-                    </Button>
+                      <Button gradient>Compare to related studies</Button>
+                    </Link>
                   </Fragment>
                 ) : null}
                 {hasAssociations(data) ? (
@@ -210,4 +184,4 @@ class StudyPage extends React.Component {
   }
 }
 
-export default withApollo(StudyPage);
+export default StudyPage;

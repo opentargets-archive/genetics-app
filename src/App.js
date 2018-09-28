@@ -17,7 +17,7 @@ const App = () => (
       <React.Fragment>
         <Route exact path="/" component={HomePage} />
         <Route path="/study/:studyId" component={StudyPage} />
-        <Route path="/studies" component={StudiesPage} />
+        <Route path="/study-comparison/:studyId" component={StudiesPage} />
         <Route path="/gene/:geneId" component={GenePage} />
         <Route path="/variant/:variantId" component={VariantPage} />
         <Route path="/locus" component={LocusPage} />
