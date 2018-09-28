@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -44,46 +44,53 @@ const GenePage = ({ match }) => {
                   <title>{symbol}</title>
                 </Helmet>
                 <PageTitle>{symbol}</PageTitle>
-                <SubHeading>
-                  {`${chromosome}:${commaSeparate(start)}-${commaSeparate(
+                <SubHeading
+                  left={`${chromosome}:${commaSeparate(start)}-${commaSeparate(
                     end
                   )} `}
-                </SubHeading>
-                <SubHeading>
-                  <LocusLink
-                    chromosome={chromosome}
-                    position={position}
-                    selectedGenes={[geneId]}
-                  >
-                    View locus
-                  </LocusLink>
-                </SubHeading>
+                />
+
+                <SubHeading
+                  left={
+                    <LocusLink
+                      chromosome={chromosome}
+                      position={position}
+                      selectedGenes={[geneId]}
+                    >
+                      View locus
+                    </LocusLink>
+                  }
+                />
                 <SectionHeading heading="Useful links" />
-                <SubHeading>
-                  <a
-                    href={`https://www.targetvalidation.org/target/${geneId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open Targets Platform
-                  </a>
-                  <br />
-                  <a
-                    href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ensembl
-                  </a>
-                  <br />
-                  <a
-                    href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GTEx
-                  </a>
-                </SubHeading>
+                <SubHeading
+                  left={
+                    <Fragment>
+                      <a
+                        href={`https://www.targetvalidation.org/target/${geneId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open Targets Platform
+                      </a>
+                      <br />
+                      <a
+                        href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Ensembl
+                      </a>
+                      <br />
+                      <a
+                        href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        GTEx
+                      </a>
+                    </Fragment>
+                  }
+                />
               </React.Fragment>
             );
           } else {

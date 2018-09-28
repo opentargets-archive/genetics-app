@@ -8,7 +8,7 @@ import { findDOMNode } from 'react-dom';
 import { Gecko } from 'ot-charts';
 import {
   PageTitle,
-  SubHeading,
+  Typography,
   SectionHeading,
   BrowserControls,
   PlotContainer,
@@ -29,7 +29,7 @@ function hasData(data) {
 
 const FullWidthText = ({ children }) => (
   <div style={{ width: '100%', textAlign: 'center' }}>
-    <SubHeading>{children}</SubHeading>
+    <Typography variant="subheading">{children}</Typography>
   </div>
 );
 
