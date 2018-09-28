@@ -139,6 +139,24 @@ class StudiesPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleClick = overlap => {
+    const { match, history } = this.props;
+    const { studyId } = match.params;
+    const { studyIds } = this._parseQueryProps();
+    const { chromosome, position, variantId } = overlap;
+    const mb = 1000000;
+    history.push(
+      `/locus?${queryString.stringify({
+        chromosome,
+        start: position - mb,
+        end: position + mb,
+        selectedStudies: [studyId, studyIds],
+        selectedIndexVariants: [variantId],
+      })}`
+    );
+    // const { studyIds, ...rest } = this._parseQueryProps();
+    console.log('clicked', overlap);
+  };
   render() {
     const { studyId } = this.props.match.params;
     const { studyIds } = this._parseQueryProps();
@@ -210,7 +228,10 @@ class StudiesPage extends React.Component {
                 ...d.study,
                 associations: d.overlaps
                   .map(o => {
-                    const [chromosome, position] = o.variantIdB.split('_');
+                    const [chromosome, positionString] = o.variantIdB.split(
+                      '_'
+                    );
+                    const position = parseInt(positionString, 10);
                     return {
                       ...o,
                       chromosome,
@@ -241,7 +262,8 @@ class StudiesPage extends React.Component {
               const pileupPseudoStudy = {
                 pileup: true,
                 associations: variantIntersectionSet.map(d => {
-                  const [chromosome, position] = d.split('_');
+                  const [chromosome, positionString] = d.split('_');
+                  const position = parseInt(positionString, 10);
                   return {
                     variantId: d,
                     chromosome,
@@ -312,6 +334,7 @@ class StudiesPage extends React.Component {
                     rootStudy={rootStudy}
                     pileupPseudoStudy={pileupPseudoStudy}
                     onDeleteStudy={this.handleDeleteStudy}
+                    onClickIntersectionLocus={this.handleClick}
                   />
                 </React.Fragment>
               );

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
-export const tableColumns = onDeleteStudy => [
+export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
   {
     id: 'deleteRow',
     label: 'Remove',
@@ -63,8 +63,16 @@ export const tableColumns = onDeleteStudy => [
     id: 'associationsCount',
     label: 'Independently-associated loci',
     tooltip:
-      'Independent loci associated with this study (p < 5e-8 are shown in red)',
-    renderCell: rowData => <ManhattanFlat data={rowData.associations} />,
+      'Independently-associated loci across studies (overlapping loci are shown in red)',
+    renderCell: rowData =>
+      rowData.pileup && onClickIntersectionLocus ? (
+        <ManhattanFlat
+          data={rowData.associations}
+          onClick={onClickIntersectionLocus}
+        />
+      ) : (
+        <ManhattanFlat data={rowData.associations} />
+      ),
   },
 ];
 
@@ -73,10 +81,11 @@ function ManhattansTable({
   studies,
   rootStudy,
   onDeleteStudy,
+  onClickIntersectionLocus,
   pileupPseudoStudy,
 }) {
-  const columns = tableColumns(onDeleteStudy);
-  const columnsFixed = tableColumns(null);
+  const columns = tableColumns({ onDeleteStudy });
+  const columnsFixed = tableColumns({ onClickIntersectionLocus });
   return (
     <OtTable
       left={select}
