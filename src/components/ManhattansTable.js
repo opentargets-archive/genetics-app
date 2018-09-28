@@ -69,6 +69,7 @@ export const tableColumns = onDeleteStudy => [
 ];
 
 function ManhattansTable({
+  select,
   studies,
   rootStudy,
   onDeleteStudy,
@@ -78,6 +79,7 @@ function ManhattansTable({
   const columnsFixed = tableColumns(null);
   return (
     <OtTable
+      left={select}
       columns={columns}
       data={studies}
       columnsFixed={columnsFixed}

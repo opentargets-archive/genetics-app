@@ -286,17 +286,22 @@ class StudiesPage extends React.Component {
                     ]}
                   />
                   <SubHeading>Top overlapping studies</SubHeading>
-                  <MultiSelect
-                    value={studySelectValue}
-                    options={studySelectOptions}
-                    handleChange={this.handleChange}
-                    renderValue={() =>
-                      studySelectValue.length > 0
-                        ? `${studySelectValue.length} selected`
-                        : 'Add a study...'
-                    }
-                  />
+
                   <ManhattansTable
+                    select={
+                      <MultiSelect
+                        value={studySelectValue}
+                        options={studySelectOptions}
+                        handleChange={this.handleChange}
+                        renderValue={() => {
+                          return studySelectValue && studySelectValue.length > 0
+                            ? `${studySelectValue.length} stud${
+                                studySelectValue.length === 1 ? 'y' : 'ies'
+                              } selected`
+                            : 'Add a study to compare...';
+                        }}
+                      />
+                    }
                     studies={studies}
                     rootStudy={rootStudy}
                     pileupPseudoStudy={pileupPseudoStudy}
