@@ -4,6 +4,8 @@ import * as d3 from 'd3';
 
 import { OtTable, Tabs, Tab, DataCircle, LabelHML, Tooltip } from 'ot-ui';
 
+import { pvalThreshold } from '../constants';
+
 const OVERVIEW = 'overview';
 
 const radiusScale = d3
@@ -152,9 +154,11 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
               const qtlColor = beta > 0 ? 'red' : 'blue';
               return (
                 <Tooltip
-                  title={`Beta: ${beta.toPrecision(3)} pval: ${pval.toPrecision(
-                    3
-                  )}`}
+                  title={`Beta: ${beta.toPrecision(3)} pval: ${
+                    pval < pvalThreshold
+                      ? `<${pvalThreshold}`
+                      : pval.toPrecision(3)
+                  }`}
                 >
                   <span>
                     <DataCircle radius={qtlRadius} colorScheme={qtlColor} />

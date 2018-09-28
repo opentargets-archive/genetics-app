@@ -27,6 +27,12 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/types@7.0.0-beta.51":
   version "7.0.0-beta.51"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.0.0-beta.51.tgz#d802b7b543b5836c778aa691797abf00f3d97ea9"
@@ -6060,15 +6066,15 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.19.tgz#0365b1d4a4ab76b5f57b8391719d92941c08f7a6"
+ot-charts@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.21.tgz#b4a0ba4bf9071c4375e7e60bd1e39aa47ab51d70"
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.24:
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.24.tgz#e2cdf751c7277fa60ef19ee80a39c66011007ba8"
+ot-ui@^0.0.26:
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.26.tgz#97c5ce5e70af69608649eeca5bdce1f723c032e7"
 
 p-finally@^1.0.0:
   version "1.0.0"
@@ -6301,9 +6307,11 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
-polished@^1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/polished/-/polished-1.9.3.tgz#d61b8a0c4624efe31e2583ff24a358932b6b75e1"
+polished@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-2.1.1.tgz#767bd417b9df3fa317bc0f3935d1d6b4cb182235"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
 
 popper.js@^1.14.1:
   version "1.14.4"

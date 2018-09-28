@@ -5,6 +5,7 @@ import { OtTable, commaSeparate } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
+import { pvalThreshold } from '../constants';
 
 // this maps X, Y, and MT chromosomes to relative positions
 // for sorting
@@ -69,7 +70,10 @@ export const tableColumns = studyId => [
   {
     id: 'pval',
     label: 'P-value',
-    renderCell: rowData => rowData.pval.toPrecision(3),
+    renderCell: rowData =>
+      rowData.pval < pvalThreshold
+        ? `<${pvalThreshold}`
+        : rowData.pval.toPrecision(3),
   },
   {
     id: 'credibleSetSize',
@@ -86,7 +90,7 @@ export const tableColumns = studyId => [
   },
   {
     id: 'bestGenes',
-    label: 'Best Genes',
+    label: 'Top Ranked Genes',
     tooltip:
       'The list of genes with equal best overall score across all variants in either the credible set or LD expansion of a given locus',
     renderCell: rowData => (

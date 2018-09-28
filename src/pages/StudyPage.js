@@ -10,13 +10,13 @@ import {
   DownloadSVGPlot,
   SectionHeading,
   Button,
+  ListTooltip,
 } from 'ot-ui';
-import { Manhattan } from 'ot-charts';
+import { Manhattan, withTooltip } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
-import withTooltip from '../components/withTooltip';
 
 const SIGNIFICANCE = 5e-8;
 
@@ -85,7 +85,12 @@ class StudyPage extends React.Component {
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
-    const ManhattanWithTooltip = withTooltip(Manhattan, tableColumns(studyId));
+    const ManhattanWithTooltip = withTooltip(
+      Manhattan,
+      ListTooltip,
+      tableColumns(studyId),
+      'manhattan'
+    );
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
@@ -108,19 +113,23 @@ class StudyPage extends React.Component {
                   <Fragment>
                     <PageTitle>{data.studyInfo.traitReported}</PageTitle>
                     <SubHeading>
-                      {`${data.studyInfo.pubAuthor} et al (${new Date(
+                      {`${data.studyInfo.pubAuthor} (${new Date(
                         data.studyInfo.pubDate
                       ).getFullYear()}) `}
-                      <em>{`${data.studyInfo.pubJournal} `}</em>
-                      <a
-                        href={`http://europepmc.org/abstract/med/${
-                          data.studyInfo.pmid
-                        }`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {data.studyInfo.pmid}
-                      </a>
+                      {data.studyInfo.pubJournal && (
+                        <em>{`${data.studyInfo.pubJournal} `}</em>
+                      )}
+                      {data.studyInfo.pmid && (
+                        <a
+                          href={`http://europepmc.org/abstract/med/${
+                            data.studyInfo.pmid
+                          }`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {data.studyInfo.pmid}
+                        </a>
+                      )}
                     </SubHeading>
                     <Link
                       to={`/study-comparison/${studyId}`}
