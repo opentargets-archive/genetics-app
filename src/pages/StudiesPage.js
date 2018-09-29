@@ -159,7 +159,7 @@ class StudiesPage extends React.Component {
         chromosome,
         start: position - mb,
         end: position + mb,
-        selectedStudies: [studyId, studyIds],
+        selectedStudies: [studyId, ...studyIds],
       })}`
     );
   };
