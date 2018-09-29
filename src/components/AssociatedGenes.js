@@ -22,7 +22,8 @@ const createQtlCellRenderer = schema => {
   };
 };
 
-const tissueComparator = (a, b) => a.label > b.label;
+const tissueComparator = (a, b) =>
+  a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
 
 const createIntervalCellRenderer = schema => {
   return rowData => {
