@@ -82,17 +82,20 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
     },
     ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createQtlCellRenderer(schema),
     })),
     ...genesForVariantSchema.intervals.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createIntervalCellRenderer(schema),
     })),
     ...genesForVariantSchema.functionalPredictions.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createFPCellRenderer(genesForVariant),
     })),
   ];
@@ -302,23 +305,30 @@ class AssociatedGenes extends Component {
 
     return (
       <Fragment>
-        <Tabs value={value} onChange={this.handleChange}>
-          <Tab label="All" value={OVERVIEW} />
+        <Tabs scrollable value={value} onChange={this.handleChange}>
+          <Tab label="Summary" value={OVERVIEW} />
           {schemas.map(schema => {
             return (
               <Tab
                 key={schema.sourceId}
                 value={schema.sourceId}
-                label={schema.sourceId}
+                label={schema.sourceLabel}
               />
             );
           })}
         </Tabs>
-        {value === OVERVIEW && <OtTable columns={columnsAll} data={dataAll} />}
+        {value === OVERVIEW && (
+          <OtTable
+            message="Evidence summary linking this variant to different genes."
+            columns={columnsAll}
+            data={dataAll}
+          />
+        )}
         {schemas.map(schema => {
           return (
             value === schema.sourceId && (
               <OtTable
+                message={schema.sourceDescriptionBreakdown}
                 verticalHeaders
                 key={schema.sourceId}
                 columns={getTissueColumns(
