@@ -145,6 +145,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
         return {
           id: tissue.id,
           label: tissue.name,
+          verticalHeader: true,
           renderCell: rowData => {
             if (rowData[tissue.id]) {
               const qtlRadius = radiusScale(rowData[tissue.id]);
@@ -178,6 +179,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
         return {
           id: tissue.id,
           label: tissue.name,
+          verticalHeader: true,
           renderCell: rowData => {
             if (rowData[tissue.id]) {
               const intervalRadius = radiusScale(rowData[tissue.id]);
@@ -199,6 +201,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
         return {
           id: tissue.id,
           label: tissue.name,
+          verticalHeader: true,
           renderCell: rowData => {
             if (rowData[tissue.id]) {
               return rowData[tissue.id];
