@@ -22,6 +22,8 @@ const createQtlCellRenderer = schema => {
   };
 };
 
+const tissueComparator = (a, b) => a.label > b.label;
+
 const createIntervalCellRenderer = schema => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
@@ -141,74 +143,83 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
 
   switch (schema.type) {
     case 'qtls':
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          verticalHeader: true,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              const qtlRadius = radiusScale(rowData[tissue.id]);
-              const { beta, pval } = findValues(
-                genesForVariant,
-                rowData.geneSymbol,
-                schema.sourceId,
-                tissue.id
-              );
-              const qtlColor = beta > 0 ? 'red' : 'blue';
-              return (
-                <Tooltip
-                  title={`Beta: ${beta.toPrecision(3)} pval: ${
-                    pval < pvalThreshold
-                      ? `<${pvalThreshold}`
-                      : pval.toPrecision(3)
-                  }`}
-                >
-                  <span>
-                    <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
-                  </span>
-                </Tooltip>
-              );
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                const qtlRadius = radiusScale(rowData[tissue.id]);
+                const { beta, pval } = findValues(
+                  genesForVariant,
+                  rowData.geneSymbol,
+                  schema.sourceId,
+                  tissue.id
+                );
+                const qtlColor = beta > 0 ? 'red' : 'blue';
+                return (
+                  <Tooltip
+                    title={`Beta: ${beta.toPrecision(3)} pval: ${
+                      pval < pvalThreshold
+                        ? `<${pvalThreshold}`
+                        : pval.toPrecision(3)
+                    }`}
+                  >
+                    <span>
+                      <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
+                    </span>
+                  </Tooltip>
+                );
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
       break;
     case 'intervals':
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          verticalHeader: true,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              const intervalRadius = radiusScale(rowData[tissue.id]);
-              return (
-                <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
-                  <span>
-                    <DataCircle radius={intervalRadius} colorScheme="default" />
-                  </span>
-                </Tooltip>
-              );
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                const intervalRadius = radiusScale(rowData[tissue.id]);
+                return (
+                  <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
+                    <span>
+                      <DataCircle
+                        radius={intervalRadius}
+                        colorScheme="default"
+                      />
+                    </span>
+                  </Tooltip>
+                );
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
       break;
     case 'functionalPredictions':
     default:
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          verticalHeader: true,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              return rowData[tissue.id];
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                return rowData[tissue.id];
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
   }
   const columns = [
     {
