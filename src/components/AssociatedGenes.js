@@ -325,6 +325,8 @@ class AssociatedGenes extends Component {
     const tabOverview = value === OVERVIEW && (
       <OtTable
         message="Evidence summary linking this variant to different genes."
+        sortBy="overallScore"
+        order="desc"
         columns={columnsAll}
         data={dataAll}
       />
