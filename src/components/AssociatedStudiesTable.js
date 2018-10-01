@@ -51,7 +51,7 @@ const tableColumns = (geneId, chromosome, position) => [
     id: 'nCases',
     label: 'N Cases',
     renderCell: rowData =>
-      rowData.nCases !== null ? commaSeparate(rowData.nCases) : '',
+      rowData.nCases ? commaSeparate(rowData.nCases) : '',
   },
   {
     id: 'locusView',
