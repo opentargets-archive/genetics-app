@@ -19,6 +19,7 @@ import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsT
 import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
+import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 
 function hasAssociatedGenes(data) {
   return data && data.genesForVariantSchema;
@@ -301,7 +302,9 @@ const VariantPage = ({ match }) => {
                     ]}
                   />
                   <AssociatedGenes
-                    genesForVariantSchema={data.genesForVariantSchema}
+                    genesForVariantSchema={transformGenesForVariantsSchema(
+                      data.genesForVariantSchema
+                    )}
                     genesForVariant={data.genesForVariant}
                   />
                 </Fragment>

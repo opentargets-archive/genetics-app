@@ -22,6 +22,9 @@ const createQtlCellRenderer = schema => {
   };
 };
 
+const tissueComparator = (a, b) =>
+  a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
+
 const createIntervalCellRenderer = schema => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
@@ -82,17 +85,20 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
     },
     ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createQtlCellRenderer(schema),
     })),
     ...genesForVariantSchema.intervals.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createIntervalCellRenderer(schema),
     })),
     ...genesForVariantSchema.functionalPredictions.map(schema => ({
       id: schema.sourceId,
-      label: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
       renderCell: createFPCellRenderer(genesForVariant),
     })),
   ];
@@ -138,71 +144,83 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
 
   switch (schema.type) {
     case 'qtls':
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              const qtlRadius = radiusScale(rowData[tissue.id]);
-              const { beta, pval } = findValues(
-                genesForVariant,
-                rowData.geneSymbol,
-                schema.sourceId,
-                tissue.id
-              );
-              const qtlColor = beta > 0 ? 'red' : 'blue';
-              return (
-                <Tooltip
-                  title={`Beta: ${beta.toPrecision(3)} pval: ${
-                    pval < pvalThreshold
-                      ? `<${pvalThreshold}`
-                      : pval.toPrecision(3)
-                  }`}
-                >
-                  <span>
-                    <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
-                  </span>
-                </Tooltip>
-              );
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                const qtlRadius = radiusScale(rowData[tissue.id]);
+                const { beta, pval } = findValues(
+                  genesForVariant,
+                  rowData.geneSymbol,
+                  schema.sourceId,
+                  tissue.id
+                );
+                const qtlColor = beta > 0 ? 'red' : 'blue';
+                return (
+                  <Tooltip
+                    title={`Beta: ${beta.toPrecision(3)} pval: ${
+                      pval < pvalThreshold
+                        ? `<${pvalThreshold}`
+                        : pval.toPrecision(3)
+                    }`}
+                  >
+                    <span>
+                      <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
+                    </span>
+                  </Tooltip>
+                );
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
       break;
     case 'intervals':
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              const intervalRadius = radiusScale(rowData[tissue.id]);
-              return (
-                <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
-                  <span>
-                    <DataCircle radius={intervalRadius} colorScheme="default" />
-                  </span>
-                </Tooltip>
-              );
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                const intervalRadius = radiusScale(rowData[tissue.id]);
+                return (
+                  <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
+                    <span>
+                      <DataCircle
+                        radius={intervalRadius}
+                        colorScheme="default"
+                      />
+                    </span>
+                  </Tooltip>
+                );
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
       break;
     case 'functionalPredictions':
     default:
-      tissueColumns = schema.tissues.map(tissue => {
-        return {
-          id: tissue.id,
-          label: tissue.name,
-          renderCell: rowData => {
-            if (rowData[tissue.id]) {
-              return rowData[tissue.id];
-            }
-          },
-        };
-      });
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                return rowData[tissue.id];
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
   }
   const columns = [
     {
@@ -276,6 +294,10 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
   return data;
 };
 
+const isDisabledColumn = (allData, sourceId) => {
+  return !allData.some(d => d[sourceId]);
+};
+
 class AssociatedGenes extends Component {
   state = {
     value: OVERVIEW,
@@ -300,41 +322,62 @@ class AssociatedGenes extends Component {
     const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
     const dataAll = getDataAll(genesForVariant);
 
-    return (
-      <Fragment>
-        <Tabs value={value} onChange={this.handleChange}>
-          <Tab label="All" value={OVERVIEW} />
-          {schemas.map(schema => {
-            return (
-              <Tab
-                key={schema.sourceId}
-                value={schema.sourceId}
-                label={schema.sourceId}
-              />
-            );
-          })}
-        </Tabs>
-        {value === OVERVIEW && <OtTable columns={columnsAll} data={dataAll} />}
-        {schemas.map(schema => {
+    const tabOverview = value === OVERVIEW && (
+      <OtTable
+        message="Evidence summary linking this variant to different genes."
+        columns={columnsAll}
+        data={dataAll}
+      />
+    );
+
+    const schemaWithColsAndRows = schemas.map(schema => ({
+      ...schema,
+      columns: getTissueColumns(
+        genesForVariantSchema,
+        genesForVariant,
+        schema.sourceId
+      ),
+      rows: getTissueData(
+        genesForVariantSchema,
+        genesForVariant,
+        schema.sourceId
+      ),
+    }));
+
+    const tabsTissues = schemaWithColsAndRows.map(schema => {
+      return (
+        value === schema.sourceId && (
+          <OtTable
+            message={schema.sourceDescriptionBreakdown}
+            verticalHeaders
+            key={schema.sourceId}
+            columns={schema.columns}
+            data={schema.rows}
+          />
+        )
+      );
+    });
+
+    const tabs = (
+      <Tabs scrollable value={value} onChange={this.handleChange}>
+        <Tab label="Summary" value={OVERVIEW} />
+        {schemaWithColsAndRows.map(schema => {
           return (
-            value === schema.sourceId && (
-              <OtTable
-                verticalHeaders
-                key={schema.sourceId}
-                columns={getTissueColumns(
-                  genesForVariantSchema,
-                  genesForVariant,
-                  schema.sourceId
-                )}
-                data={getTissueData(
-                  genesForVariantSchema,
-                  genesForVariant,
-                  schema.sourceId
-                )}
-              />
-            )
+            <Tab
+              key={schema.sourceId}
+              value={schema.sourceId}
+              label={schema.sourceLabel}
+              disabled={isDisabledColumn(dataAll, schema.sourceId)}
+            />
           );
         })}
+      </Tabs>
+    );
+    return (
+      <Fragment>
+        {tabs}
+        {tabOverview}
+        {tabsTissues}
       </Fragment>
     );
   }
