@@ -56,7 +56,7 @@ export const tableColumns = studyId => [
     id: 'bestGenes',
     label: 'Top Ranked Genes',
     tooltip:
-      'The list of genes with equal best overall score across all variants in either the credible set or LD expansion of a given locus',
+      'The list of genes with equal best overall score for this lead variant',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
