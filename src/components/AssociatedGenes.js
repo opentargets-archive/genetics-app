@@ -294,6 +294,10 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
   return data;
 };
 
+const isDisabledColumn = (allData, sourceId) => {
+  return !allData.some(d => d[sourceId]);
+};
+
 class AssociatedGenes extends Component {
   state = {
     value: OVERVIEW,
@@ -318,48 +322,62 @@ class AssociatedGenes extends Component {
     const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
     const dataAll = getDataAll(genesForVariant);
 
-    return (
-      <Fragment>
-        <Tabs scrollable value={value} onChange={this.handleChange}>
-          <Tab label="Summary" value={OVERVIEW} />
-          {schemas.map(schema => {
-            return (
-              <Tab
-                key={schema.sourceId}
-                value={schema.sourceId}
-                label={schema.sourceLabel}
-              />
-            );
-          })}
-        </Tabs>
-        {value === OVERVIEW && (
+    const tabOverview = value === OVERVIEW && (
+      <OtTable
+        message="Evidence summary linking this variant to different genes."
+        columns={columnsAll}
+        data={dataAll}
+      />
+    );
+
+    const schemaWithColsAndRows = schemas.map(schema => ({
+      ...schema,
+      columns: getTissueColumns(
+        genesForVariantSchema,
+        genesForVariant,
+        schema.sourceId
+      ),
+      rows: getTissueData(
+        genesForVariantSchema,
+        genesForVariant,
+        schema.sourceId
+      ),
+    }));
+
+    const tabsTissues = schemaWithColsAndRows.map(schema => {
+      return (
+        value === schema.sourceId && (
           <OtTable
-            message="Evidence summary linking this variant to different genes."
-            columns={columnsAll}
-            data={dataAll}
+            message={schema.sourceDescriptionBreakdown}
+            verticalHeaders
+            key={schema.sourceId}
+            columns={schema.columns}
+            data={schema.rows}
           />
-        )}
-        {schemas.map(schema => {
+        )
+      );
+    });
+
+    const tabs = (
+      <Tabs scrollable value={value} onChange={this.handleChange}>
+        <Tab label="Summary" value={OVERVIEW} />
+        {schemaWithColsAndRows.map(schema => {
           return (
-            value === schema.sourceId && (
-              <OtTable
-                message={schema.sourceDescriptionBreakdown}
-                verticalHeaders
-                key={schema.sourceId}
-                columns={getTissueColumns(
-                  genesForVariantSchema,
-                  genesForVariant,
-                  schema.sourceId
-                )}
-                data={getTissueData(
-                  genesForVariantSchema,
-                  genesForVariant,
-                  schema.sourceId
-                )}
-              />
-            )
+            <Tab
+              key={schema.sourceId}
+              value={schema.sourceId}
+              label={schema.sourceLabel}
+              disabled={isDisabledColumn(dataAll, schema.sourceId)}
+            />
           );
         })}
+      </Tabs>
+    );
+    return (
+      <Fragment>
+        {tabs}
+        {tabOverview}
+        {tabsTissues}
       </Fragment>
     );
   }
