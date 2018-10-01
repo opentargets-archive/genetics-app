@@ -38,6 +38,7 @@ export const tableColumns = [
   {
     id: 'geneId',
     label: 'Gene',
+    tooltip: 'Gene functionally implicated by the tag variant',
     renderCell: rowData => (
       <Link to={`/gene/${rowData.geneId}`}>{rowData.gene.symbol}</Link>
     ),
