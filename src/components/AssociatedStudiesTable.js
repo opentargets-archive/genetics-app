@@ -33,7 +33,7 @@ const tableColumns = (geneId, chromosome, position) => [
     id: 'pubAuthor',
     label: 'Author (Year)',
     renderCell: rowData =>
-      `${rowData.pubAuthor} et al (${new Date(rowData.pubDate).getFullYear()})`,
+      `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
   },
   {
     id: 'nInitial',
