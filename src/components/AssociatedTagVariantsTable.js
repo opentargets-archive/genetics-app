@@ -56,7 +56,7 @@ const tableColumns = variantId => [
     id: 'pubAuthor',
     label: 'Author (Year)',
     renderCell: rowData =>
-      `${rowData.pubAuthor} et al (${new Date(rowData.pubDate).getFullYear()})`,
+      `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
   },
   {
     id: 'nTotal',

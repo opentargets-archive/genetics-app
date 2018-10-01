@@ -297,7 +297,7 @@ class StudiesPage extends React.Component {
                 <React.Fragment>
                   <PageTitle>{studyInfo.traitReported}</PageTitle>
                   <SubHeading>
-                    {`${studyInfo.pubAuthor} et al (${new Date(
+                    {`${studyInfo.pubAuthor} (${new Date(
                       studyInfo.pubDate
                     ).getFullYear()}) `}
                     <em>{`${studyInfo.pubJournal} `}</em>
@@ -317,7 +317,7 @@ class StudiesPage extends React.Component {
                       <React.Fragment>
                         Which independently-associated loci are shared between{' '}
                         <b>
-                          {studyInfo.pubAuthor} et al (
+                          {studyInfo.pubAuthor} (
                           {new Date(studyInfo.pubDate).getFullYear()})
                         </b>{' '}
                         and other studies?
