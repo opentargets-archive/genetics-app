@@ -24,6 +24,10 @@ export const tableColumns = ({
     label: 'Trait',
   },
   {
+    id: 'traitCategory',
+    label: 'Trait Category',
+  },
+  {
     id: 'pval',
     label: 'P-value',
     renderCell: rowData =>

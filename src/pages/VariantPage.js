@@ -37,10 +37,11 @@ function hasAssociations(data) {
 function transformPheWAS(data) {
   return data.pheWAS.associations.map(d => {
     const { study, ...rest } = d;
-    const { studyId, traitReported } = study;
+    const { studyId, traitReported, traitCategory } = study;
     return {
       studyId,
       traitReported,
+      traitCategory,
       ...rest,
     };
   });
@@ -180,6 +181,7 @@ const variantPageQuery = gql`
           studyId
           traitReported
           traitCode
+          traitCategory
         }
         pval
         beta

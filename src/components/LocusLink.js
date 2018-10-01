@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 
+import { Button } from 'ot-ui';
 import { chromosomesWithCumulativeLengths } from 'ot-charts';
 
 const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {
@@ -39,7 +40,14 @@ const LocusLink = ({
   if (selectedStudies) {
     params.selectedStudies = selectedStudies;
   }
-  return <Link to={`/locus?${queryString.stringify(params)}`}>{children}</Link>;
+  return (
+    <Link
+      to={`/locus?${queryString.stringify(params)}`}
+      style={{ textDecoration: 'none' }}
+    >
+      <Button gradient>{children}</Button>
+    </Link>
+  );
 };
 
 export default LocusLink;
