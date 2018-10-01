@@ -70,9 +70,9 @@ export const tableColumns = [
     tooltip:
       'Posterior probability from finemapping that this tag variant is causal',
     renderCell: rowData =>
-      rowData.posteriorProbability
+      rowData.posteriorProbability !== null
         ? rowData.posteriorProbability.toPrecision(3)
-        : 'No information',
+        : '',
   },
   {
     id: 'overallScore',

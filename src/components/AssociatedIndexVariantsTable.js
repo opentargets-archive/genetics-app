@@ -73,7 +73,8 @@ const tableColumns = variantId => [
   {
     id: 'posteriorProbability',
     label: 'Is in 95% Credible Set',
-    renderCell: rowData => (rowData.posteriorProbability ? 'True' : 'False'),
+    renderCell: rowData =>
+      rowData.posteriorProbability !== null ? 'True' : '',
   },
 ];
 
