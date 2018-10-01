@@ -21,7 +21,10 @@ import {
 import BasePage from './BasePage';
 import LocusSelection from '../components/LocusSelection';
 import LocusTable from '../components/LocusTable';
-import locusScheme, { LOCUS_SCHEME } from '../logic/locusScheme';
+import locusScheme, {
+  LOCUS_SCHEME,
+  LOCUS_FINEMAPPING,
+} from '../logic/locusScheme';
 
 function hasData(data) {
   return data && data.gecko;
@@ -245,12 +248,22 @@ class LocusPage extends React.Component {
     };
     this._stringifyQueryProps(newQueryParams);
   };
+  handleDisplayFinemappingChange = event => {
+    const { displayFinemapping, ...rest } = this._parseQueryProps();
+    const newDisplayFinemappingValue = event.target.value;
+    const newQueryParams = {
+      displayFinemapping: newDisplayFinemappingValue,
+      ...rest,
+    };
+    this._stringifyQueryProps(newQueryParams);
+  };
   render() {
     const {
       start,
       end,
       chromosome,
       displayType,
+      displayFinemapping,
       selectedGenes,
       selectedTagVariants,
       selectedIndexVariants,
@@ -258,6 +271,9 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     const locationString = this._locationString();
     const displayTypeValue = displayType ? displayType : LOCUS_SCHEME.ALL_GENES;
+    const displayFinemappingValue = displayFinemapping
+      ? displayFinemapping
+      : LOCUS_FINEMAPPING.ALL;
     const subheading = `What genetic evidence is there within this locus?`;
     const geckoPlot = React.createRef();
     return (
@@ -303,6 +319,9 @@ class LocusPage extends React.Component {
                 isEmptyFiltered,
               } = locusScheme({
                 scheme: displayTypeValue,
+                finemappingOnly:
+                  displayFinemappingValue ===
+                  LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
                 data: data.gecko,
                 selectedGenes,
                 selectedTagVariants,
@@ -319,6 +338,9 @@ class LocusPage extends React.Component {
                         handlePanLeft={this.handlePanLeft}
                         handlePanRight={this.handlePanRight}
                         handleDisplayTypeChange={this.handleDisplayTypeChange}
+                        handleDisplayFinemappingChange={
+                          this.handleDisplayFinemappingChange
+                        }
                         displayTypeValue={displayTypeValue}
                         displayTypeOptions={[
                           {
@@ -332,6 +354,17 @@ class LocusPage extends React.Component {
                           {
                             value: LOCUS_SCHEME.ALL,
                             label: 'Show all data in locus',
+                          },
+                        ]}
+                        displayFinemappingValue={displayFinemappingValue}
+                        displayFinemappingOptions={[
+                          {
+                            value: LOCUS_FINEMAPPING.ALL,
+                            label: 'Show expansion by LD and finemapping',
+                          },
+                          {
+                            value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
+                            label: 'Show expansion by finemapping only',
                           },
                         ]}
                       />
@@ -449,6 +482,12 @@ class LocusPage extends React.Component {
     }
     if (queryProps.displayType) {
       queryProps.displayType = parseInt(queryProps.displayType, 10);
+    }
+    if (queryProps.displayFinemapping) {
+      queryProps.displayFinemapping = parseInt(
+        queryProps.displayFinemapping,
+        10
+      );
     }
     return queryProps;
   }

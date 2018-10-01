@@ -2,6 +2,7 @@ import locusFilter from './locusFilter';
 import locusSelected from './locusSelected';
 import locusTransform from './locusTransform';
 import locusChained from './locusChained';
+import locusFinemapping from './locusFinemapping';
 import locusLookups from './locusLookups';
 import locusTable from './locusTable';
 
@@ -9,6 +10,11 @@ export const LOCUS_SCHEME = {
   CHAINED: 1,
   ALL: 2,
   ALL_GENES: 3,
+};
+
+export const LOCUS_FINEMAPPING = {
+  ALL: 1,
+  FINEMAPPING_ONLY: 2,
 };
 
 const BIGGER_THAN_POSITION = 1000000000;
@@ -41,6 +47,7 @@ const tagVariantIndexVariantStudyComparator = (a, b) => {
 
 const locusScheme = ({
   scheme,
+  finemappingOnly,
   data,
   selectedGenes,
   selectedTagVariants,
@@ -48,8 +55,9 @@ const locusScheme = ({
   selectedStudies,
 }) => {
   const lookups = locusLookups(data);
+  const finemapping = locusFinemapping({ data, finemappingOnly });
   const selected = locusSelected({
-    data,
+    data: finemapping,
     selectedGenes,
     selectedTagVariants,
     selectedIndexVariants,
