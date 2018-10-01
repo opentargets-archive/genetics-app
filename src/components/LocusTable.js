@@ -65,6 +65,16 @@ export const tableColumns = [
       rowData.r2 ? rowData.r2.toPrecision(3) : 'No information',
   },
   {
+    id: 'posteriorProbability',
+    label: 'Posterior Probability',
+    tooltip:
+      'Posterior probability from finemapping that this tag variant is causal',
+    renderCell: rowData =>
+      rowData.posteriorProbability
+        ? rowData.posteriorProbability.toPrecision(3)
+        : 'No information',
+  },
+  {
     id: 'overallScore',
     label: 'Overall G2V',
     renderCell: rowData =>
