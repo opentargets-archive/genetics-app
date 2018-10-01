@@ -5,7 +5,7 @@ import { OtTable } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
-import chromosomeComparator from '../logic/chromosomeComparator';
+import variantIdComparator from '../logic/variantIdComparator';
 
 const tableColumns = studyIds => [
   {
@@ -18,17 +18,7 @@ const tableColumns = studyIds => [
         {rowData.indexVariantId}
       </Link>
     ),
-    comparator: (a, b) => {
-      const { chromosome: aChrom, position: aPos } = a;
-      const { chromosome: bChrom, position: bPos } = b;
-      const chromResult = chromosomeComparator(aChrom, bChrom);
-
-      if (chromResult === 0) {
-        return aPos - bPos;
-      }
-
-      return chromResult;
-    },
+    comparator: variantIdComparator,
   },
   {
     id: 'indexVariantRsId',
@@ -77,7 +67,7 @@ function ManhattansVariantsTable({ data, studyIds, filenameStem }) {
     <OtTable
       columns={tableColumns(studyIds)}
       data={data}
-      sortBy="pval"
+      sortBy="indexVariantId"
       order="asc"
       downloadFileStem={filenameStem}
       message="Loci in this table are shared across all selected studies."

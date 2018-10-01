@@ -6,7 +6,7 @@ import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
-import chromosomeComparator from '../logic/chromosomeComparator';
+import variantIdComparator from '../logic/variantIdComparator';
 
 export const tableColumns = studyId => [
   {
@@ -17,17 +17,7 @@ export const tableColumns = studyId => [
         {rowData.indexVariantId}
       </Link>
     ),
-    comparator: (a, b) => {
-      const { chromosome: aChrom, position: aPos } = a;
-      const { chromosome: bChrom, position: bPos } = b;
-      const chromResult = chromosomeComparator(aChrom, bChrom);
-
-      if (chromResult === 0) {
-        return aPos - bPos;
-      }
-
-      return chromResult;
-    },
+    comparator: variantIdComparator,
   },
   {
     id: 'indexVariantRsId',
