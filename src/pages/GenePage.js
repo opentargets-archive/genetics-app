@@ -7,16 +7,29 @@ import { PageTitle, SubHeading, SectionHeading, commaSeparate } from 'ot-ui';
 
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
+import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
 
 const SEARCH_QUERY = gql`
-  query SearchQuery($queryString: String!) {
-    search(queryString: $queryString) {
+  query GenePageQuery($geneId: String!) {
+    search(queryString: $geneId) {
       genes {
         id
         symbol
         chromosome
         start
         end
+      }
+    }
+    studiesForGene(geneId: $geneId) {
+      study {
+        studyId
+        traitReported
+        pubAuthor
+        pubDate
+        pmid
+        nInitial
+        nReplication
+        nCases
       }
     }
   }
@@ -26,7 +39,7 @@ const GenePage = ({ match }) => {
   const { geneId } = match.params;
   return (
     <BasePage>
-      <Query query={SEARCH_QUERY} variables={{ queryString: geneId }}>
+      <Query query={SEARCH_QUERY} variables={{ geneId }}>
         {({ loading, error, data }) => {
           if (loading) {
             return <span>Fetching gene location and redirecting...</span>;
@@ -34,7 +47,8 @@ const GenePage = ({ match }) => {
             data &&
             data.search &&
             data.search.genes &&
-            data.search.genes.length === 1
+            data.search.genes.length === 1 &&
+            data.studiesForGene
           ) {
             const { chromosome, start, end, symbol } = data.search.genes[0];
             const position = Math.floor((start + end) / 2);
@@ -90,6 +104,26 @@ const GenePage = ({ match }) => {
                       </a>
                     </Fragment>
                   }
+                />
+                <SectionHeading
+                  heading={`Associated studies`}
+                  subheading={`Which studies are associated with ${symbol}?`}
+                  entities={[
+                    {
+                      type: 'study',
+                      fixed: false,
+                    },
+                    {
+                      type: 'gene',
+                      fixed: true,
+                    },
+                  ]}
+                />
+                <AssociatedStudiesTable
+                  data={data.studiesForGene.map(d => d.study)}
+                  geneId={geneId}
+                  chromosome={chromosome}
+                  position={Math.round((start + end) / 2)}
                 />
               </React.Fragment>
             );
