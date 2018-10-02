@@ -244,7 +244,7 @@ function getStudyInfo(data) {
   return data.studyInfo;
 }
 
-function transformManhattansVariants(data, variantIntersectionSet) {
+function getOverlappingVariants(data, variantIntersectionSet) {
   if (!hasManhattan(data)) {
     return [];
   }
@@ -348,7 +348,7 @@ class StudiesPage extends React.Component {
               rootStudy,
               studies,
             } = getStudiesTableData(data, studyId, studyIds);
-            const manhattansVariants = transformManhattansVariants(
+            const overlappingVariants = getOverlappingVariants(
               data,
               variantIntersectionSet
             );
@@ -419,7 +419,7 @@ class StudiesPage extends React.Component {
                 <ManhattansVariantsTable
                   loading={loading}
                   error={error}
-                  data={manhattansVariants}
+                  data={overlappingVariants}
                   studyIds={[studyId, ...studyIds]}
                   filenameStem={`intersecting-independently-associated-loci`}
                 />
