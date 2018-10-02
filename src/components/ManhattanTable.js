@@ -43,14 +43,18 @@ export const tableColumns = studyId => [
     id: 'credibleSetSize',
     label: 'Credible Set Size',
     tooltip: 'Number of variants in 95% credible set at this locus',
-    renderCell: rowData => commaSeparate(rowData.credibleSetSize),
+    renderCell: rowData =>
+      rowData.credibleSetSize
+        ? rowData.commaSeparate(rowData.credibleSetSize)
+        : null,
   },
   {
     id: 'ldSetSize',
     label: 'LD Set Size',
     tooltip:
       'Number of variants that are in LD (R2 >= 0.7) with this lead variant',
-    renderCell: rowData => commaSeparate(rowData.ldSetSize),
+    renderCell: rowData =>
+      rowData.ldSetSize ? commaSeparate(rowData.ldSetSize) : null,
   },
   {
     id: 'bestGenes',
