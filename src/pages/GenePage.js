@@ -73,7 +73,10 @@ const GenePage = ({ match }) => {
                 <title>{symbol}</title>
               </Helmet>
               <PageTitle>
-                {symbol} <span style={{ fontSize: '0.8rem' }}>{geneId}</span>
+                {symbol}{' '}
+                <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                  {geneId}
+                </span>
               </PageTitle>
               <SubHeading
                 left={

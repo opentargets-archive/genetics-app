@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -22,11 +23,14 @@ import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PlotContainer from 'ot-ui/build/components/PlotContainer';
+import StudyInfo from '../components/StudyInfo';
 
+function hasInfo(data) {
+  return data && data.variantInfo;
+}
 function hasAssociatedGenes(data) {
   return data && data.genesForVariantSchema;
 }
-
 function hasAssociations(data) {
   return (
     data &&
@@ -35,7 +39,26 @@ function hasAssociations(data) {
     data.pheWAS.associations.length > 0
   );
 }
+function hasAssociatedIndexVariants(data) {
+  return (
+    data &&
+    data.indexVariantsAndStudiesForTagVariant &&
+    data.indexVariantsAndStudiesForTagVariant.associations &&
+    data.indexVariantsAndStudiesForTagVariant.associations.length > 0
+  );
+}
+function hasAssociatedTagVariants(data) {
+  return (
+    data &&
+    data.tagVariantsAndStudiesForIndexVariant &&
+    data.tagVariantsAndStudiesForIndexVariant.associations &&
+    data.tagVariantsAndStudiesForIndexVariant.associations.length > 0
+  );
+}
 
+function transformVariantInfo(data) {
+  return data.variantInfo;
+}
 function transformPheWAS(data) {
   return data.pheWAS.associations.map(d => {
     const { study, ...rest } = d;
@@ -48,16 +71,6 @@ function transformPheWAS(data) {
     };
   });
 }
-
-function hasAssociatedIndexVariants(data) {
-  return (
-    data &&
-    data.indexVariantsAndStudiesForTagVariant &&
-    data.indexVariantsAndStudiesForTagVariant.associations &&
-    data.indexVariantsAndStudiesForTagVariant.associations.length > 0
-  );
-}
-
 function transformAssociatedIndexVariants(data) {
   const associationsFlattened = data.indexVariantsAndStudiesForTagVariant.associations.map(
     d => {
@@ -76,16 +89,6 @@ function transformAssociatedIndexVariants(data) {
   );
   return associationsFlattened;
 }
-
-function hasAssociatedTagVariants(data) {
-  return (
-    data &&
-    data.tagVariantsAndStudiesForIndexVariant &&
-    data.tagVariantsAndStudiesForIndexVariant.associations &&
-    data.tagVariantsAndStudiesForIndexVariant.associations.length > 0
-  );
-}
-
 function transformAssociatedTagVariants(data) {
   const associationsFlattened = data.tagVariantsAndStudiesForIndexVariant.associations.map(
     d => {
@@ -107,6 +110,17 @@ function transformAssociatedTagVariants(data) {
 
 const variantPageQuery = gql`
   query VariantPageQuery($variantId: String!) {
+    variantInfo(variantId: $variantId) {
+      rsId
+      nearestGene {
+        id
+        symbol
+      }
+      nearestCodingGene {
+        id
+        symbol
+      }
+    }
     genesForVariantSchema {
       qtls {
         id
@@ -244,13 +258,14 @@ const VariantPage = ({ match }) => {
       <Helmet>
         <title>{variantId}</title>
       </Helmet>
-      <PageTitle>{variantId}</PageTitle>
       <Query query={variantPageQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
+          const isVariantWithInfo = hasInfo(data);
           const isGeneVariant = hasAssociatedGenes(data);
           const isPheWASVariant = hasAssociations(data);
           const isTagVariant = hasAssociatedIndexVariants(data);
           const isIndexVariant = hasAssociatedTagVariants(data);
+
           const PheWASWithTooltip = withTooltip(
             PheWAS,
             ListTooltip,
@@ -263,6 +278,10 @@ const VariantPage = ({ match }) => {
             }),
             'phewas'
           );
+
+          const variantInfo = isVariantWithInfo
+            ? transformVariantInfo(data)
+            : {};
           const pheWASAssociations = isPheWASVariant
             ? transformPheWAS(data)
             : [];
@@ -274,6 +293,12 @@ const VariantPage = ({ match }) => {
             : [];
           return (
             <React.Fragment>
+              <PageTitle>
+                {variantId}{' '}
+                <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                  {variantInfo.rsId}
+                </span>
+              </PageTitle>
               <SubHeading
                 left={
                   isIndexVariant ? (
@@ -293,6 +318,29 @@ const VariantPage = ({ match }) => {
                       View locus
                     </LocusLink>
                   ) : null
+                }
+                right={
+                  <div>
+                    {variantInfo.nearestGene ? (
+                      <React.Fragment>
+                        Nearest Gene:{' '}
+                        <Link to={`/gene/${variantInfo.nearestGene.id}`}>
+                          {variantInfo.nearestGene.symbol}
+                        </Link>
+                      </React.Fragment>
+                    ) : null}
+                    {variantInfo.nearestGene && variantInfo.nearestCodingGene
+                      ? ', '
+                      : null}
+                    {variantInfo.nearestCodingGene ? (
+                      <React.Fragment>
+                        Nearest Protein-Coding Gene:{' '}
+                        <Link to={`/gene/${variantInfo.nearestCodingGene.id}`}>
+                          {variantInfo.nearestCodingGene.symbol}
+                        </Link>
+                      </React.Fragment>
+                    ) : null}
+                  </div>
                 }
               />
               <SectionHeading
