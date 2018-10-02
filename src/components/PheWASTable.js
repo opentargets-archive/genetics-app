@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate } from 'ot-ui';
+import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
@@ -33,7 +33,7 @@ export const tableColumns = ({
     renderCell: rowData =>
       rowData.pval < pvalThreshold
         ? `<${pvalThreshold}`
-        : rowData.pval.toPrecision(3),
+        : significantFigures(rowData.pval),
   },
   {
     id: 'beta',
