@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable } from 'ot-ui';
+import * as d3 from 'd3';
+import { OtTable, DataCircle } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 
-export const tableColumns = [
+export const tableColumns = overallScoreScale => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -77,19 +78,25 @@ export const tableColumns = [
   {
     id: 'overallScore',
     label: 'Overall G2V',
-    renderCell: rowData =>
-      rowData.overallScore
-        ? rowData.overallScore.toPrecision(3)
-        : 'No information',
+    renderCell: rowData => (
+      <DataCircle
+        radius={overallScoreScale(rowData.overallScore)}
+        colorScheme="bold"
+      />
+    ),
   },
 ];
 
 function LocusTable({ loading, error, data, filenameStem }) {
+  const overallScoreScale = d3
+    .scaleSqrt()
+    .domain([0, d3.max(data, d => d.overallScore)])
+    .range([0, 6]);
   return (
     <OtTable
       loading={loading}
       error={error}
-      columns={tableColumns}
+      columns={tableColumns(overallScoreScale)}
       data={data}
       sortBy="pval"
       order="asc"
