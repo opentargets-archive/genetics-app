@@ -11,16 +11,33 @@ import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
 import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
 import SearchOption from '../components/SearchOption';
+import StudyInfo from '../components/StudyInfo';
+import StudySize from '../components/StudySize';
 
 const topOverlappedStudiesQuery = gql`
   query TopOverlappedStudiesQuery($studyId: String!, $studyIds: [String!]!) {
+    studyInfo(studyId: $studyId) {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+      nInitial
+      nReplication
+      nCases
+    }
     manhattan(studyId: $studyId) {
       associations {
-        variantId
-        variantRsId
+        variant {
+          id
+          rsId
+          chromosome
+          position
+        }
         pval
-        chromosome
-        position
+        credibleSetSize
+        ldSetSize
         bestGenes {
           score
           gene {
@@ -94,13 +111,155 @@ const topOverlappedStudiesQuery = gql`
   }
 `;
 
-function hasData(data) {
-  return (
-    data &&
-    data.manhattan &&
-    data.manhattan.associations &&
-    data.topOverlappedStudies
+function hasStudyInfo(data) {
+  return data && data.studyInfo;
+}
+
+function hasManhattan(data) {
+  return data && data.manhattan && data.manhattan.associations;
+}
+
+function hasTopOverlappedStudies(data) {
+  return data && data.topOverlappedStudies;
+}
+
+function hasOverlapInfoForStudy(data) {
+  return data && data.overlapInfoForStudy;
+}
+
+function getStudiesTableData(data, studyId, studyIds) {
+  if (!hasOverlapInfoForStudy(data) || !hasTopOverlappedStudies(data)) {
+    return {
+      studySelectOptions: [],
+      pileupPseudoStudy: { pileup: true, associations: [] },
+      variantIntersectionSet: hasOverlapInfoForStudy(data)
+        ? data.overlapInfoForStudy.variantIntersectionSet
+        : [],
+      rootStudy: { associations: [] },
+      studies: [],
+    };
+  }
+  const {
+    topOverlappedStudies,
+    overlapInfoForStudy: overlappingStudies,
+  } = data;
+  const { topStudiesByLociOverlap: topStudies } = topOverlappedStudies;
+
+  // select
+  const rootStudyTop = topStudies.find(d => d.study.studyId === studyId);
+  const topStudiesExcludingRoot = topStudies.filter(
+    d => d.study.id !== studyId
   );
+  const rootLociCount = rootStudyTop.numOverlapLoci;
+  const studySelectOptions = topStudiesExcludingRoot
+    .filter(d => d.study.studyId !== studyId)
+    .sort((a, b) => {
+      // order by (selected, numOverlapLoci, studyId)
+      const aSelected = studyIds.indexOf(a.study.studyId) >= 0;
+      const bSelected = studyIds.indexOf(b.study.studyId) >= 0;
+
+      if (aSelected !== bSelected) {
+        return aSelected ? -1 : 1;
+      }
+
+      if (a.numOverlapLoci !== b.numOverlapLoci) {
+        return b.numOverlapLoci - a.numOverlapLoci;
+      }
+
+      return a.study.studyId >= b.study.studyId;
+    })
+    .map(d => ({
+      label: (
+        <StudyOptionLabel
+          study={d.study}
+          overlappingLociCount={d.numOverlapLoci}
+          rootOverlapProportion={d.numOverlapLoci / rootLociCount}
+        />
+      ),
+      value: d.study.studyId,
+    }));
+
+  const variantIntersectionSet = overlappingStudies
+    ? overlappingStudies.variantIntersectionSet
+    : [];
+  const transformOverlaps = d => ({
+    ...d.study,
+    associations: d.overlaps
+      .map(o => {
+        const [chromosome, positionString] = o.variantIdB.split('_');
+        const position = parseInt(positionString, 10);
+        return {
+          ...o,
+          chromosome,
+          position,
+          variantId: o.variantIdB,
+          inIntersection: variantIntersectionSet.indexOf(o.variantIdA) >= 0,
+        };
+      })
+      .sort((a, b) => {
+        return a.inIntersection === b.inIntersection
+          ? a.position - b.position
+          : a.inIntersection
+            ? 1
+            : -1;
+      }),
+  });
+  const overlapsRootStudy = overlappingStudies
+    ? overlappingStudies.overlappedVariantsForStudies.find(
+        d => d.study.studyId === studyId
+      )
+    : null;
+  const overlapsStudies = overlappingStudies
+    ? overlappingStudies.overlappedVariantsForStudies.filter(
+        d => d.study.studyId !== studyId
+      )
+    : [];
+  const pileupPseudoStudy = {
+    pileup: true,
+    associations: variantIntersectionSet.map(d => {
+      const [chromosome, positionString] = d.split('_');
+      const position = parseInt(positionString, 10);
+      return {
+        variantId: d,
+        chromosome,
+        position,
+        inIntersection: true,
+        pileup: true,
+      };
+    }),
+  };
+  const rootStudy = transformOverlaps(overlapsRootStudy);
+  const studies = overlapsStudies.map(transformOverlaps);
+
+  return {
+    studySelectOptions,
+    pileupPseudoStudy,
+    variantIntersectionSet,
+    rootStudy,
+    studies,
+  };
+}
+
+function getStudyInfo(data) {
+  return data.studyInfo;
+}
+
+function transformManhattansVariants(data, variantIntersectionSet) {
+  if (!hasManhattan(data)) {
+    return [];
+  }
+  return data.manhattan.associations
+    .filter(d => variantIntersectionSet.indexOf(d.variant.id) >= 0)
+    .map(d => {
+      const { variant, ...rest } = d;
+      return {
+        ...rest,
+        indexVariantId: variant.id,
+        indexVariantRsId: variant.rsId,
+        chromosome: variant.chromosome,
+        position: variant.position,
+      };
+    });
 }
 
 const StudyOptionLabel = ({
@@ -179,141 +338,40 @@ class StudiesPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            if (hasData(data)) {
-              const {
-                topOverlappedStudies,
-                overlapInfoForStudy: overlappingStudies,
-              } = data;
-              const {
-                study: studyInfo,
-                topStudiesByLociOverlap: topStudies,
-              } = topOverlappedStudies;
-              const { studyIds: studySelectValue } = this._parseQueryProps();
-
-              // select
-              const rootStudyTop = topStudies.find(
-                d => d.study.studyId === studyId
-              );
-              const topStudiesExcludingRoot = topStudies.filter(
-                d => d.study.id !== studyId
-              );
-              const rootLociCount = rootStudyTop.numOverlapLoci;
-              const studySelectOptions = topStudiesExcludingRoot
-                .filter(d => d.study.studyId !== studyId)
-                .sort((a, b) => {
-                  // order by (selected, numOverlapLoci, studyId)
-                  const aSelected = studyIds.indexOf(a.study.studyId) >= 0;
-                  const bSelected = studyIds.indexOf(b.study.studyId) >= 0;
-
-                  if (aSelected !== bSelected) {
-                    return aSelected ? -1 : 1;
+            const isStudyWithInfo = hasStudyInfo(data);
+            const { studyIds: studySelectValue } = this._parseQueryProps();
+            const studyInfo = isStudyWithInfo ? getStudyInfo(data) : {};
+            const {
+              studySelectOptions,
+              pileupPseudoStudy,
+              variantIntersectionSet,
+              rootStudy,
+              studies,
+            } = getStudiesTableData(data, studyId, studyIds);
+            const manhattansVariants = transformManhattansVariants(
+              data,
+              variantIntersectionSet
+            );
+            return (
+              <React.Fragment>
+                <PageTitle>{studyInfo.traitReported}</PageTitle>
+                <SubHeading
+                  left={
+                    isStudyWithInfo ? (
+                      <StudyInfo studyInfo={data.studyInfo} />
+                    ) : null
                   }
-
-                  if (a.numOverlapLoci !== b.numOverlapLoci) {
-                    return b.numOverlapLoci - a.numOverlapLoci;
+                  right={
+                    isStudyWithInfo ? (
+                      <StudySize studyInfo={data.studyInfo} />
+                    ) : null
                   }
+                />
 
-                  return a.study.studyId >= b.study.studyId;
-                })
-                .map(d => ({
-                  label: (
-                    <StudyOptionLabel
-                      study={d.study}
-                      overlappingLociCount={d.numOverlapLoci}
-                      rootOverlapProportion={d.numOverlapLoci / rootLociCount}
-                    />
-                  ),
-                  value: d.study.studyId,
-                }));
-
-              // manhattans table
-              const variantIntersectionSet = overlappingStudies
-                ? overlappingStudies.variantIntersectionSet
-                : [];
-              const transformOverlaps = d => ({
-                ...d.study,
-                associations: d.overlaps
-                  .map(o => {
-                    const [chromosome, positionString] = o.variantIdB.split(
-                      '_'
-                    );
-                    const position = parseInt(positionString, 10);
-                    return {
-                      ...o,
-                      chromosome,
-                      position,
-                      variantId: o.variantIdB,
-                      inIntersection:
-                        variantIntersectionSet.indexOf(o.variantIdA) >= 0,
-                    };
-                  })
-                  .sort((a, b) => {
-                    return a.inIntersection === b.inIntersection
-                      ? a.position - b.position
-                      : a.inIntersection
-                        ? 1
-                        : -1;
-                  }),
-              });
-              const overlapsRootStudy = overlappingStudies
-                ? overlappingStudies.overlappedVariantsForStudies.find(
-                    d => d.study.studyId === studyId
-                  )
-                : null;
-              const overlapsStudies = overlappingStudies
-                ? overlappingStudies.overlappedVariantsForStudies.filter(
-                    d => d.study.studyId !== studyId
-                  )
-                : [];
-              const pileupPseudoStudy = {
-                pileup: true,
-                associations: variantIntersectionSet.map(d => {
-                  const [chromosome, positionString] = d.split('_');
-                  const position = parseInt(positionString, 10);
-                  return {
-                    variantId: d,
-                    chromosome,
-                    position,
-                    inIntersection: true,
-                    pileup: true,
-                  };
-                }),
-              };
-              const rootStudy = transformOverlaps(overlapsRootStudy);
-              const studies = overlapsStudies.map(transformOverlaps);
-
-              // manhattans variants table
-              const manhattansVariants = data.manhattan.associations
-                .filter(d => variantIntersectionSet.indexOf(d.variantId) >= 0)
-                .map(d => {
-                  const { variantId, variantRsId, ...rest } = d;
-                  return {
-                    ...rest,
-                    indexVariantId: variantId,
-                    indexVariantRsId: variantRsId,
-                  };
-                });
-              return (
-                <React.Fragment>
-                  <PageTitle>{studyInfo.traitReported}</PageTitle>
-                  <SubHeading>
-                    {`${studyInfo.pubAuthor} (${new Date(
-                      studyInfo.pubDate
-                    ).getFullYear()}) `}
-                    <em>{`${studyInfo.pubJournal} `}</em>
-                    <a
-                      href={`http://europepmc.org/abstract/med/${
-                        studyInfo.pmid
-                      }`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {studyInfo.pmid}
-                    </a>
-                  </SubHeading>
-                  <SectionHeading
-                    heading={`Compare overlapping studies`}
-                    subheading={
+                <SectionHeading
+                  heading={`Compare overlapping studies`}
+                  subheading={
+                    isStudyWithInfo ? (
                       <React.Fragment>
                         Which independently-associated loci are shared between{' '}
                         <b>
@@ -322,49 +380,51 @@ class StudiesPage extends React.Component {
                         </b>{' '}
                         and other studies?
                       </React.Fragment>
-                    }
-                    entities={[
-                      {
-                        type: 'study',
-                        fixed: true,
-                      },
-                      {
-                        type: 'indexVariant',
-                        fixed: false,
-                      },
-                    ]}
-                  />
-                  <ManhattansTable
-                    select={
-                      <MultiSelect
-                        value={studySelectValue}
-                        options={studySelectOptions}
-                        handleChange={this.handleChange}
-                        renderValue={() => {
-                          return studySelectValue && studySelectValue.length > 0
-                            ? `${studySelectValue.length} stud${
-                                studySelectValue.length === 1 ? 'y' : 'ies'
-                              } selected`
-                            : 'Add a study to compare...';
-                        }}
-                      />
-                    }
-                    studies={studies}
-                    rootStudy={rootStudy}
-                    pileupPseudoStudy={pileupPseudoStudy}
-                    onDeleteStudy={this.handleDeleteStudy}
-                    onClickIntersectionLocus={this.handleClick}
-                  />
-                  <ManhattansVariantsTable
-                    data={manhattansVariants}
-                    studyIds={[studyId, ...studyIds]}
-                    filenameStem={`intersecting-independently-associated-loci`}
-                  />
-                </React.Fragment>
-              );
-            } else {
-              return null;
-            }
+                    ) : null
+                  }
+                  entities={[
+                    {
+                      type: 'study',
+                      fixed: true,
+                    },
+                    {
+                      type: 'indexVariant',
+                      fixed: false,
+                    },
+                  ]}
+                />
+                <ManhattansTable
+                  loading={loading}
+                  error={error}
+                  select={
+                    <MultiSelect
+                      value={studySelectValue}
+                      options={studySelectOptions}
+                      handleChange={this.handleChange}
+                      renderValue={() => {
+                        return studySelectValue && studySelectValue.length > 0
+                          ? `${studySelectValue.length} stud${
+                              studySelectValue.length === 1 ? 'y' : 'ies'
+                            } selected`
+                          : 'Add a study to compare...';
+                      }}
+                    />
+                  }
+                  studies={studies}
+                  rootStudy={rootStudy}
+                  pileupPseudoStudy={pileupPseudoStudy}
+                  onDeleteStudy={this.handleDeleteStudy}
+                  onClickIntersectionLocus={this.handleClick}
+                />
+                <ManhattansVariantsTable
+                  loading={loading}
+                  error={error}
+                  data={manhattansVariants}
+                  studyIds={[studyId, ...studyIds]}
+                  filenameStem={`intersecting-independently-associated-loci`}
+                />
+              </React.Fragment>
+            );
           }}
         </Query>
       </BasePage>
