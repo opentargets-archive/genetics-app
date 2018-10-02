@@ -33,11 +33,13 @@ function hasAssociations(data) {
 function transformAssociations(data) {
   return {
     associations: data.manhattan.associations.map(d => {
-      const { variantId, variantRsId, ...rest } = d;
+      const { variant, ...rest } = d;
       return {
         ...rest,
-        indexVariantId: variantId,
-        indexVariantRsId: variantRsId,
+        indexVariantId: variant.id,
+        indexVariantRsId: variant.rsId,
+        chromosome: variant.chromosome,
+        position: variant.position,
       };
     }),
   };
@@ -68,11 +70,13 @@ const manhattanQuery = gql`
     }
     manhattan(studyId: $studyId) {
       associations {
-        variantId
-        variantRsId
+        variant {
+          id
+          rsId
+          chromosome
+          position
+        }
         pval
-        chromosome
-        position
         credibleSetSize
         ldSetSize
         bestGenes {
