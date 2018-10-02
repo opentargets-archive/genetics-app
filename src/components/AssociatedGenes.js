@@ -2,7 +2,15 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
-import { OtTable, Tabs, Tab, DataCircle, LabelHML, Tooltip } from 'ot-ui';
+import {
+  OtTable,
+  Tabs,
+  Tab,
+  DataCircle,
+  LabelHML,
+  Tooltip,
+  significantFigures,
+} from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 
@@ -165,7 +173,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
                     title={`Beta: ${beta.toPrecision(3)} pval: ${
                       pval < pvalThreshold
                         ? `<${pvalThreshold}`
-                        : pval.toPrecision(3)
+                        : significantFigures(pval)
                     }`}
                   >
                     <span>

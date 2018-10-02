@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { OtTable, DataCircle } from 'ot-ui';
+import { OtTable, DataCircle, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 
@@ -50,7 +50,7 @@ export const tableColumns = overallScoreScale => [
     renderCell: rowData =>
       rowData.pval < pvalThreshold
         ? `<${pvalThreshold}`
-        : rowData.pval.toPrecision(3),
+        : significantFigures(rowData.pval),
   },
   {
     id: 'method',
