@@ -38,11 +38,13 @@ export const tableColumns = ({
   {
     id: 'beta',
     label: 'Beta',
+    tooltip: 'Beta is with respect to the ALT allele',
     renderCell: rowData => (rowData.beta ? rowData.beta.toPrecision(3) : null),
   },
   {
     id: 'oddsRatio',
     label: 'Odds Ratio',
+    tooltip: 'Odds ratio is with respect to the ALT allele',
     renderCell: rowData =>
       rowData.oddsRatio ? rowData.oddsRatio.toPrecision(3) : null,
   },
