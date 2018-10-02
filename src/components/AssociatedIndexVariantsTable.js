@@ -85,6 +85,8 @@ const AssociatedIndexVariantsTable = ({
   variantId,
 }) => (
   <OtTable
+    loading={loading}
+    error={error}
     columns={tableColumns(variantId)}
     data={data}
     sortBy="pval"
