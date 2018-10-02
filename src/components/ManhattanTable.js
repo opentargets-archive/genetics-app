@@ -44,9 +44,7 @@ export const tableColumns = studyId => [
     label: 'Credible Set Size',
     tooltip: 'Number of variants in 95% credible set at this locus',
     renderCell: rowData =>
-      rowData.credibleSetSize
-        ? rowData.commaSeparate(rowData.credibleSetSize)
-        : null,
+      rowData.credibleSetSize ? commaSeparate(rowData.credibleSetSize) : null,
   },
   {
     id: 'ldSetSize',
