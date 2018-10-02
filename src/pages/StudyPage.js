@@ -48,7 +48,9 @@ function hasStudyInfo(data) {
 }
 
 function significantLoci(data) {
-  return data.manhattan.associations.filter(d => d.pval < SIGNIFICANCE).length;
+  return hasAssociations(data)
+    ? data.manhattan.associations.filter(d => d.pval < SIGNIFICANCE).length
+    : 0;
 }
 
 const manhattanQuery = gql`
@@ -137,62 +139,72 @@ class StudyPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            const manhattan = hasAssociations(data)
+            const isStudyWithInfo = hasStudyInfo(data);
+            const isAssociatedStudy = hasAssociations(data);
+            const significantLociCount = significantLoci(data);
+
+            const manhattan = isAssociatedStudy
               ? transformAssociations(data)
               : { associations: [] };
             return (
               <Fragment>
-                {hasStudyInfo(data) ? (
-                  <Fragment>
-                    <PageTitle>{data.studyInfo.traitReported}</PageTitle>
-                    <SubHeading
-                      left={<StudyInfo studyInfo={data.studyInfo} />}
-                      right={<StudySize studyInfo={data.studyInfo} />}
-                    />
-                    <Link
-                      to={`/study-comparison/${studyId}`}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <Button gradient>Compare to related studies</Button>
-                    </Link>
-                  </Fragment>
-                ) : null}
-                {hasAssociations(data) ? (
-                  <Fragment>
-                    <SectionHeading
-                      heading="Independently-associated loci"
-                      subheading={`Found ${significantLoci(
-                        data
-                      )} loci with genome-wide
-                    significance (p-value < 5e-8)`}
-                      entities={[
-                        {
-                          type: 'study',
-                          fixed: true,
-                        },
-                        {
-                          type: 'indexVariant',
-                          fixed: false,
-                        },
-                      ]}
-                    />
+                <PageTitle>
+                  {isStudyWithInfo ? data.studyInfo.traitReported : null}
+                </PageTitle>
+                <SubHeading
+                  left={
+                    isStudyWithInfo ? (
+                      <StudyInfo studyInfo={data.studyInfo} />
+                    ) : null
+                  }
+                  right={
+                    isStudyWithInfo ? (
+                      <StudySize studyInfo={data.studyInfo} />
+                    ) : null
+                  }
+                />
+                <Link
+                  to={`/study-comparison/${studyId}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Button gradient>Compare to related studies</Button>
+                </Link>
 
-                    <DownloadSVGPlot
-                      svgContainer={manhattanPlot}
-                      filenameStem={`${studyId}-independently-associated-loci`}
-                    >
-                      <ManhattanWithTooltip
-                        data={manhattan}
-                        ref={manhattanPlot}
-                      />
-                    </DownloadSVGPlot>
-                    <ManhattanTable
-                      data={manhattan.associations}
-                      studyId={studyId}
-                      filenameStem={`${studyId}-independently-associated-loci`}
-                    />
-                  </Fragment>
-                ) : null}
+                <SectionHeading
+                  heading="Independently-associated loci"
+                  subheading={
+                    !loading
+                      ? `Found ${significantLociCount} loci with genome-wide
+                    significance (p-value < 5e-8)`
+                      : null
+                  }
+                  entities={[
+                    {
+                      type: 'study',
+                      fixed: true,
+                    },
+                    {
+                      type: 'indexVariant',
+                      fixed: false,
+                    },
+                  ]}
+                />
+
+                <DownloadSVGPlot
+                  loading={loading}
+                  error={error}
+                  svgContainer={manhattanPlot}
+                  filenameStem={`${studyId}-independently-associated-loci`}
+                >
+                  <ManhattanWithTooltip data={manhattan} ref={manhattanPlot} />
+                </DownloadSVGPlot>
+                <ManhattanTable
+                  loading={loading}
+                  error={error}
+                  data={manhattan.associations}
+                  studyId={studyId}
+                  filenameStem={`${studyId}-independently-associated-loci`}
+                />
               </Fragment>
             );
           }}
