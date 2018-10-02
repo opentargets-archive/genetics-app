@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { commaSeparate } from 'ot-ui';
 
 import {
   PageTitle,
@@ -18,6 +17,8 @@ import { Manhattan, withTooltip } from 'ot-charts';
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
+import StudyInfo from '../components/StudyInfo';
+import StudySize from '../components/StudySize';
 
 const SIGNIFICANCE = 5e-8;
 
@@ -90,35 +91,6 @@ const manhattanQuery = gql`
     }
   }
 `;
-
-const StudyInfo = ({ studyInfo }) => {
-  return (
-    <div>
-      {`${studyInfo.pubAuthor} (${new Date(studyInfo.pubDate).getFullYear()}) `}
-      {studyInfo.pubJournal && <em>{`${studyInfo.pubJournal} `}</em>}
-      {studyInfo.pmid && (
-        <a
-          href={`http://europepmc.org/abstract/med/${studyInfo.pmid}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {studyInfo.pmid}
-        </a>
-      )}
-    </div>
-  );
-};
-
-const StudySize = ({ studyInfo }) => {
-  const { nInitial, nReplication, nCases } = studyInfo;
-  return (
-    <div>
-      {nInitial !== null && `N Study: ${commaSeparate(nInitial)}`}{' '}
-      {nReplication !== null && `N Replication: ${commaSeparate(nReplication)}`}{' '}
-      {nCases !== null && `N Cases: ${commaSeparate(nCases)}`}
-    </div>
-  );
-};
 
 class StudyPage extends React.Component {
   render() {
