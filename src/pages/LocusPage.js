@@ -310,136 +310,136 @@ class LocusPage extends React.Component {
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
-            if (hasData(data)) {
-              const {
-                lookups,
-                plot,
-                rows,
-                isEmpty,
-                isEmptyFiltered,
-              } = locusScheme({
-                scheme: displayTypeValue,
-                finemappingOnly:
-                  displayFinemappingValue ===
-                  LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-                data: data.gecko,
-                selectedGenes,
-                selectedTagVariants,
-                selectedIndexVariants,
-                selectedStudies,
-              });
-              return (
-                <React.Fragment>
-                  <PlotContainer
-                    left={
-                      <BrowserControls
-                        handleZoomIn={this.handleZoomIn}
-                        handleZoomOut={this.handleZoomOut}
-                        handlePanLeft={this.handlePanLeft}
-                        handlePanRight={this.handlePanRight}
-                        handleDisplayTypeChange={this.handleDisplayTypeChange}
-                        handleDisplayFinemappingChange={
-                          this.handleDisplayFinemappingChange
-                        }
-                        displayTypeValue={displayTypeValue}
-                        displayTypeOptions={[
-                          {
-                            value: LOCUS_SCHEME.ALL_GENES,
-                            label: 'Show selection and all genes',
-                          },
-                          {
-                            value: LOCUS_SCHEME.CHAINED,
-                            label: 'Show selection',
-                          },
-                          {
-                            value: LOCUS_SCHEME.ALL,
-                            label: 'Show all data in locus',
-                          },
-                        ]}
-                        displayFinemappingValue={displayFinemappingValue}
-                        displayFinemappingOptions={[
-                          {
-                            value: LOCUS_FINEMAPPING.ALL,
-                            label: 'Show expansion by LD and finemapping',
-                          },
-                          {
-                            value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-                            label: 'Show expansion by finemapping only',
-                          },
-                        ]}
-                      />
-                    }
-                    right={
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          downloadPNG({
-                            canvasNode: findDOMNode(
-                              geckoPlot.current
-                            ).querySelector('canvas'),
-                            filenameStem: locationString,
-                          });
-                        }}
-                      >
-                        PNG
-                      </Button>
-                    }
-                  >
-                    {isEmptyFiltered ? (
-                      isEmpty ? (
-                        <PlotContainerSection>
-                          <FullWidthText>
-                            There are no associations in this locus.
-                          </FullWidthText>
-                        </PlotContainerSection>
-                      ) : (
-                        <PlotContainerSection>
-                          <FullWidthText>
-                            There are associations in this locus, but none match
-                            your filters. Try removing some filters.
-                          </FullWidthText>
-                        </PlotContainerSection>
-                      )
-                    ) : null}
-                    <PlotContainerSection>
-                      <LocusSelection
-                        {...{
-                          selectedGenes,
-                          selectedTagVariants,
-                          selectedIndexVariants,
-                          selectedStudies,
-                        }}
-                        lookups={lookups}
-                        handleDeleteGene={this.handleDeleteGene}
-                        handleDeleteTagVariant={this.handleDeleteTagVariant}
-                        handleDeleteIndexVariant={this.handleDeleteIndexVariant}
-                        handleDeleteStudy={this.handleDeleteStudy}
-                      />
-                    </PlotContainerSection>
-
-                    <Gecko
-                      ref={geckoPlot}
-                      data={plot}
-                      start={start}
-                      end={end}
-                      showGeneVerticals={displayTypeValue === LOCUS_SCHEME.ALL}
-                      selectedGenes={selectedGenes}
-                      selectedTagVariants={selectedTagVariants}
-                      selectedIndexVariants={selectedIndexVariants}
-                      selectedStudies={selectedStudies}
-                      handleClick={this.handleClick}
-                      handleMousemove={this.handleMousemove}
+            const isValidLocus = hasData(data);
+            const {
+              lookups,
+              plot,
+              rows,
+              isEmpty,
+              isEmptyFiltered,
+            } = locusScheme({
+              scheme: displayTypeValue,
+              finemappingOnly:
+                displayFinemappingValue === LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
+              data: isValidLocus ? data.gecko : null,
+              selectedGenes,
+              selectedTagVariants,
+              selectedIndexVariants,
+              selectedStudies,
+            });
+            return (
+              <React.Fragment>
+                <PlotContainer
+                  loading={loading}
+                  error={error}
+                  left={
+                    <BrowserControls
+                      handleZoomIn={this.handleZoomIn}
+                      handleZoomOut={this.handleZoomOut}
+                      handlePanLeft={this.handlePanLeft}
+                      handlePanRight={this.handlePanRight}
+                      handleDisplayTypeChange={this.handleDisplayTypeChange}
+                      handleDisplayFinemappingChange={
+                        this.handleDisplayFinemappingChange
+                      }
+                      displayTypeValue={displayTypeValue}
+                      displayTypeOptions={[
+                        {
+                          value: LOCUS_SCHEME.ALL_GENES,
+                          label: 'Show selection and all genes',
+                        },
+                        {
+                          value: LOCUS_SCHEME.CHAINED,
+                          label: 'Show selection',
+                        },
+                        {
+                          value: LOCUS_SCHEME.ALL,
+                          label: 'Show all data in locus',
+                        },
+                      ]}
+                      displayFinemappingValue={displayFinemappingValue}
+                      displayFinemappingOptions={[
+                        {
+                          value: LOCUS_FINEMAPPING.ALL,
+                          label: 'Show expansion by LD and finemapping',
+                        },
+                        {
+                          value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
+                          label: 'Show expansion by finemapping only',
+                        },
+                      ]}
                     />
-                  </PlotContainer>
-                  <LocusTable
-                    data={rows}
-                    filenameStem={`${chromosome}-${start}-${end}-locus`}
+                  }
+                  right={
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        downloadPNG({
+                          canvasNode: findDOMNode(
+                            geckoPlot.current
+                          ).querySelector('canvas'),
+                          filenameStem: locationString,
+                        });
+                      }}
+                    >
+                      PNG
+                    </Button>
+                  }
+                >
+                  {isEmptyFiltered ? (
+                    isEmpty ? (
+                      <PlotContainerSection>
+                        <FullWidthText>
+                          There are no associations in this locus.
+                        </FullWidthText>
+                      </PlotContainerSection>
+                    ) : (
+                      <PlotContainerSection>
+                        <FullWidthText>
+                          There are associations in this locus, but none match
+                          your filters. Try removing some filters.
+                        </FullWidthText>
+                      </PlotContainerSection>
+                    )
+                  ) : null}
+                  <PlotContainerSection>
+                    <LocusSelection
+                      {...{
+                        selectedGenes,
+                        selectedTagVariants,
+                        selectedIndexVariants,
+                        selectedStudies,
+                      }}
+                      lookups={lookups}
+                      handleDeleteGene={this.handleDeleteGene}
+                      handleDeleteTagVariant={this.handleDeleteTagVariant}
+                      handleDeleteIndexVariant={this.handleDeleteIndexVariant}
+                      handleDeleteStudy={this.handleDeleteStudy}
+                    />
+                  </PlotContainerSection>
+
+                  <Gecko
+                    ref={geckoPlot}
+                    data={plot}
+                    start={start}
+                    end={end}
+                    showGeneVerticals={displayTypeValue === LOCUS_SCHEME.ALL}
+                    selectedGenes={selectedGenes}
+                    selectedTagVariants={selectedTagVariants}
+                    selectedIndexVariants={selectedIndexVariants}
+                    selectedStudies={selectedStudies}
+                    handleClick={this.handleClick}
+                    handleMousemove={this.handleMousemove}
                   />
-                </React.Fragment>
-              );
-            } else {
-              return null;
-            }
+                </PlotContainer>
+                <LocusTable
+                  loading={loading}
+                  error={error}
+                  data={rows}
+                  filenameStem={`${chromosome}-${start}-${end}-locus`}
+                />
+              </React.Fragment>
+            );
           }}
         </Query>
       </BasePage>

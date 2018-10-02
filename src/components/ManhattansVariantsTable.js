@@ -62,9 +62,17 @@ const tableColumns = studyIds => [
   },
 ];
 
-function ManhattansVariantsTable({ data, studyIds, filenameStem }) {
+function ManhattansVariantsTable({
+  loading,
+  error,
+  data,
+  studyIds,
+  filenameStem,
+}) {
   return (
     <OtTable
+      loading={loading}
+      error={error}
       columns={tableColumns(studyIds)}
       data={data}
       sortBy="indexVariantId"

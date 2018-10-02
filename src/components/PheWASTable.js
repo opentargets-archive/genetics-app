@@ -83,6 +83,8 @@ export const tableColumns = ({
 ];
 
 function PheWASTable({
+  loading,
+  error,
   associations,
   variantId,
   chromosome,
@@ -92,6 +94,8 @@ function PheWASTable({
 }) {
   return (
     <OtTable
+      loading={loading}
+      error={error}
       columns={tableColumns({
         variantId,
         chromosome,

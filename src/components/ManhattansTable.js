@@ -80,6 +80,8 @@ export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
 ];
 
 function ManhattansTable({
+  loading,
+  error,
   select,
   studies,
   rootStudy,
@@ -91,6 +93,8 @@ function ManhattansTable({
   const columnsFixed = tableColumns({ onClickIntersectionLocus });
   return (
     <OtTable
+      loading={loading}
+      error={error}
       left={select}
       columns={columns}
       data={studies}

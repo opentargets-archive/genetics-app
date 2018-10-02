@@ -45,6 +45,21 @@ const tagVariantIndexVariantStudyComparator = (a, b) => {
   return scoreA - scoreB;
 };
 
+const EMPTY_PLOT = {
+  genes: [],
+  tagVariants: [],
+  indexVariants: [],
+  studies: [],
+  geneTagVariants: [],
+  tagVariantIndexVariantStudies: [],
+};
+const EMPTY_LOOKUPS = {
+  geneDict: {},
+  tagVariantDict: {},
+  indexVariantDict: {},
+  studyDict: {},
+};
+
 const locusScheme = ({
   scheme,
   finemappingOnly,
@@ -54,6 +69,16 @@ const locusScheme = ({
   selectedIndexVariants,
   selectedStudies,
 }) => {
+  if (!data) {
+    return {
+      plot: EMPTY_PLOT,
+      rows: [],
+      lookups: EMPTY_LOOKUPS,
+      isEmpty: true,
+      isEmptyFiltered: true,
+    };
+  }
+
   const lookups = locusLookups(data);
   const finemapping = locusFinemapping({ data, finemappingOnly });
   const selected = locusSelected({

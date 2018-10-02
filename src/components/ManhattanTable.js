@@ -83,9 +83,11 @@ export const tableColumns = studyId => [
   },
 ];
 
-function ManhattanTable({ data, studyId, filenameStem }) {
+function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
   return (
     <OtTable
+      loading={loading}
+      error={error}
       columns={tableColumns(studyId)}
       data={data}
       sortBy="pval"

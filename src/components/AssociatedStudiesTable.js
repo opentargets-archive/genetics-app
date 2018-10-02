@@ -79,6 +79,8 @@ const AssociatedStudiesTable = ({
   position,
 }) => (
   <OtTable
+    loading={loading}
+    error={error}
     columns={tableColumns(geneId, chromosome, position)}
     data={data}
     sortBy="nInitial"

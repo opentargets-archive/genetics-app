@@ -84,9 +84,11 @@ export const tableColumns = [
   },
 ];
 
-function LocusTable({ data, filenameStem }) {
+function LocusTable({ loading, error, data, filenameStem }) {
   return (
     <OtTable
+      loading={loading}
+      error={error}
       columns={tableColumns}
       data={data}
       sortBy="pval"
