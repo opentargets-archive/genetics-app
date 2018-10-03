@@ -23,7 +23,6 @@ import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PlotContainer from 'ot-ui/build/components/PlotContainer';
-import StudyInfo from '../components/StudyInfo';
 
 function hasInfo(data) {
   return data && data.variantInfo;

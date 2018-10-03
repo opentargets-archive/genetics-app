@@ -10,7 +10,6 @@ const BasePage = ({ children }) => (
     header={<NavBar name="Genetics" search={<Search />} />}
     footer={
       <Footer
-        style={{ bottom: 0 }}
         version={pkg.version}
         commitHash={
           process.env.REACT_APP_REVISION
