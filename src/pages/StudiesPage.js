@@ -153,7 +153,11 @@ function getStudiesTableData(data, studyId, studyIds) {
   );
   if (!rootStudyTop) {
     // handle case of manhattan data but no ld/finemapping (eg. GCST004132)
-    if (topStudiesExcludingRoot.length === 0 && hasManhattan(data)) {
+    if (
+      topStudiesExcludingRoot.length === 0 &&
+      hasManhattan(data) &&
+      hasStudyInfo(data)
+    ) {
       const associationsRoot = data.manhattan.associations.map(d => ({
         ...d,
         ...d.variant,
@@ -168,6 +172,7 @@ function getStudiesTableData(data, studyId, studyIds) {
         ...EMPTY_CASE,
         pileupPseudoStudy: { pileup: true, associations: associationsPileup },
         rootStudy: {
+          ...data.studyInfo,
           associations: associationsRoot,
         },
       };
