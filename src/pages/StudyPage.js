@@ -199,12 +199,13 @@ class StudyPage extends React.Component {
                 <ManhattanTable
                   loading={loading}
                   error={error}
-                  data={manhattan.associations.filter(
-                    d =>
-                      this.state.focusChromosome
-                        ? d.chromosome === this.state.focusChromosome
-                        : true
-                  )}
+                  data={
+                    this.state.focusChromosome
+                      ? manhattan.associations.filter(
+                          d => d.chromosome === this.state.focusChromosome
+                        )
+                      : manhattan.associations
+                  }
                   studyId={studyId}
                   filenameStem={`${studyId}-independently-associated-loci`}
                 />
