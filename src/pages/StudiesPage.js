@@ -128,16 +128,17 @@ function hasOverlapInfoForStudy(data) {
 }
 
 function getStudiesTableData(data, studyId, studyIds) {
+  const EMPTY_CASE = {
+    studySelectOptions: [],
+    pileupPseudoStudy: { pileup: true, associations: [] },
+    variantIntersectionSet: hasOverlapInfoForStudy(data)
+      ? data.overlapInfoForStudy.variantIntersectionSet
+      : [],
+    rootStudy: { associations: [] },
+    studies: [],
+  };
   if (!hasOverlapInfoForStudy(data) || !hasTopOverlappedStudies(data)) {
-    return {
-      studySelectOptions: [],
-      pileupPseudoStudy: { pileup: true, associations: [] },
-      variantIntersectionSet: hasOverlapInfoForStudy(data)
-        ? data.overlapInfoForStudy.variantIntersectionSet
-        : [],
-      rootStudy: { associations: [] },
-      studies: [],
-    };
+    return EMPTY_CASE;
   }
   const {
     topOverlappedStudies,
@@ -150,6 +151,31 @@ function getStudiesTableData(data, studyId, studyIds) {
   const topStudiesExcludingRoot = topStudies.filter(
     d => d.study.id !== studyId
   );
+  if (!rootStudyTop) {
+    // handle case of manhattan data but no ld/finemapping (eg. GCST004132)
+    if (topStudiesExcludingRoot.length === 0 && hasManhattan(data)) {
+      const associationsRoot = data.manhattan.associations.map(d => ({
+        ...d,
+        ...d.variant,
+        variantId: d.variant.id,
+        inIntersection: true,
+      }));
+      const associationsPileup = associationsRoot.map(d => ({
+        ...d,
+        pileup: true,
+      }));
+      return {
+        ...EMPTY_CASE,
+        pileupPseudoStudy: { pileup: true, associations: associationsPileup },
+        rootStudy: {
+          associations: associationsRoot,
+        },
+      };
+    } else {
+      return EMPTY_CASE;
+    }
+  }
+
   const rootLociCount = rootStudyTop.numOverlapLoci;
   const studySelectOptions = topStudiesExcludingRoot
     .filter(d => d.study.studyId !== studyId)
@@ -244,12 +270,21 @@ function getStudyInfo(data) {
   return data.studyInfo;
 }
 
-function getOverlappingVariants(data, variantIntersectionSet) {
+function getOverlappingVariants(
+  data,
+  variantIntersectionSet,
+  studiesToCompare
+) {
   if (!hasManhattan(data)) {
     return [];
   }
   return data.manhattan.associations
-    .filter(d => variantIntersectionSet.indexOf(d.variant.id) >= 0)
+    .filter(
+      d =>
+        studiesToCompare
+          ? variantIntersectionSet.indexOf(d.variant.id) >= 0
+          : true
+    )
     .map(d => {
       const { variant, ...rest } = d;
       return {
@@ -350,7 +385,8 @@ class StudiesPage extends React.Component {
             } = getStudiesTableData(data, studyId, studyIds);
             const overlappingVariants = getOverlappingVariants(
               data,
-              variantIntersectionSet
+              variantIntersectionSet,
+              studies.length > 0
             );
             return (
               <React.Fragment>
