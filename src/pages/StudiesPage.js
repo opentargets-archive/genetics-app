@@ -442,6 +442,7 @@ class StudiesPage extends React.Component {
                       value={studySelectValue}
                       options={studySelectOptions}
                       handleChange={this.handleChange}
+                      multiple
                       renderValue={() => {
                         return studySelectValue && studySelectValue.length > 0
                           ? `${studySelectValue.length} stud${

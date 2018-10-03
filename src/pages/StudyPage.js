@@ -11,8 +11,9 @@ import {
   SectionHeading,
   Button,
   ListTooltip,
+  MultiSelect,
 } from 'ot-ui';
-import { Manhattan, withTooltip } from 'ot-charts';
+import { Manhattan, withTooltip, chromosomeNames } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
@@ -93,6 +94,9 @@ const manhattanQuery = gql`
 `;
 
 class StudyPage extends React.Component {
+  state = {
+    focusChromosome: '',
+  };
   render() {
     const { studyId } = this.props.match.params;
     let manhattanPlot = React.createRef();
@@ -167,17 +171,41 @@ class StudyPage extends React.Component {
                 />
 
                 <DownloadSVGPlot
+                  left={
+                    <MultiSelect
+                      value={this.state.focusChromosome}
+                      options={[
+                        { label: 'All chromosomes', value: '' },
+                        ...chromosomeNames.map(d => ({
+                          label: `Chromosome ${d}`,
+                          value: d,
+                        })),
+                      ]}
+                      handleChange={this.handleChange}
+                    />
+                  }
                   loading={loading}
                   error={error}
                   svgContainer={manhattanPlot}
                   filenameStem={`${studyId}-independently-associated-loci`}
                 >
-                  <ManhattanWithTooltip data={manhattan} ref={manhattanPlot} />
+                  <ManhattanWithTooltip
+                    data={manhattan}
+                    focusChromosome={this.state.focusChromosome}
+                    handleChromosomeClick={this.handleChromosomeClick}
+                    ref={manhattanPlot}
+                  />
                 </DownloadSVGPlot>
                 <ManhattanTable
                   loading={loading}
                   error={error}
-                  data={manhattan.associations}
+                  data={
+                    this.state.focusChromosome
+                      ? manhattan.associations.filter(
+                          d => d.chromosome === this.state.focusChromosome
+                        )
+                      : manhattan.associations
+                  }
                   studyId={studyId}
                   filenameStem={`${studyId}-independently-associated-loci`}
                 />
@@ -188,6 +216,16 @@ class StudyPage extends React.Component {
       </BasePage>
     );
   }
+  handleChange = event => {
+    this.setState({ focusChromosome: event.target.value });
+  };
+  handleChromosomeClick = chromosome => {
+    if (chromosome) {
+      this.setState({ focusChromosome: chromosome });
+    } else {
+      this.setState({ focusChromosome: '' });
+    }
+  };
 }
 
 export default StudyPage;
