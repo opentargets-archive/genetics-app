@@ -57,6 +57,10 @@ function significantLoci(data) {
     : 0;
 }
 
+function loci(data) {
+  return hasAssociations(data) ? data.manhattan.associations.length : 0;
+}
+
 const manhattanQuery = gql`
   query StudyPageQuery($studyId: String!) {
     studyInfo(studyId: $studyId) {
@@ -122,6 +126,7 @@ class StudyPage extends React.Component {
             const isStudyWithInfo = hasStudyInfo(data);
             const isAssociatedStudy = hasAssociations(data);
             const significantLociCount = significantLoci(data);
+            const lociCount = loci(data);
 
             const manhattan = isAssociatedStudy
               ? transformAssociations(data)
@@ -155,7 +160,7 @@ class StudyPage extends React.Component {
                   subheading={
                     !loading
                       ? `Found ${significantLociCount} loci with genome-wide
-                    significance (p-value < 5e-8)`
+                    significance (p-value < 5e-8) out of ${lociCount}`
                       : null
                   }
                   entities={[
