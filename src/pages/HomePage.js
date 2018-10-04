@@ -16,8 +16,8 @@ const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174' },
   { label: '1_154426264_C_T', url: '/variant/1_154426264_C_T' },
   {
-    label: 'Atrial fibrillation (Roselli C et al. 2018)',
-    url: '/study/GCST006061',
+    label: "Crohn's disease (de Lange KM et al. 2017)",
+    url: '/study/GCST004132',
   },
 ];
 
