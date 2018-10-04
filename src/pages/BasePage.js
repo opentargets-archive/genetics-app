@@ -7,7 +7,14 @@ import Search from '../components/Search';
 
 const BasePage = ({ children }) => (
   <Page
-    header={<NavBar name="Genetics" search={<Search />} />}
+    header={
+      <NavBar
+        name="Genetics"
+        search={<Search />}
+        docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
+        contact="mailto:geneticsportal@opentargets.org"
+      />
+    }
     footer={
       <Footer
         version={pkg.version}
