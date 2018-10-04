@@ -30,12 +30,6 @@ const HomePage = () => (
     <HomeBox name="Genetics">
       <Search />
       <SearchExamples examples={EXAMPLES} />
-      <p>
-        This platform uses GRCh37 from the{' '}
-        <a href="https://www.ncbi.nlm.nih.gov/grc">
-          Genome Reference Consortium
-        </a>
-      </p>
     </HomeBox>
   </div>
 );
