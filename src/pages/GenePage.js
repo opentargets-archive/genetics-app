@@ -3,11 +3,26 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { PageTitle, SubHeading, SectionHeading, commaSeparate } from 'ot-ui';
+import {
+  PageTitle,
+  SubHeading,
+  SectionHeading,
+  commaSeparate,
+  Button,
+  Typography,
+} from 'ot-ui';
 
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
+import { Grid } from '@material-ui/core';
+import LaunchIcon from '@material-ui/icons/Launch';
+import LocusIcon from '@material-ui/icons/MyLocation';
+import MouseIcon from '@material-ui/icons/Pets';
+import DrugsIcon from '@material-ui/icons/Favorite';
+import PathwaysIcon from '@material-ui/icons/Pets';
+import ProfileIcon from '@material-ui/icons/Info';
+import ExpressionIcon from '@material-ui/icons/Pets';
 
 const SEARCH_QUERY = gql`
   query GenePageQuery($geneId: String!) {
@@ -95,7 +110,8 @@ const GenePage = ({ match }) => {
                       position={Math.round((start + end) / 2)}
                       selectedGenes={[geneId]}
                     >
-                      View locus
+                      {/* View locus */}
+                      View Locus Plot
                     </LocusLink>
                   ) : null
                 }
