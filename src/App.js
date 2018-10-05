@@ -10,18 +10,31 @@ import GenePage from './pages/GenePage';
 import VariantPage from './pages/VariantPage';
 import LocusPage from './pages/LocusPage';
 import RegionalPage from './pages/RegionalPage';
+import withPageAnalytics from './analytics/withPageAnalytics';
 
 const App = () => (
   <OtUiThemeProvider>
     <Router>
       <React.Fragment>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/study/:studyId" component={StudyPage} />
-        <Route path="/study-comparison/:studyId" component={StudiesPage} />
-        <Route path="/gene/:geneId" component={GenePage} />
-        <Route path="/variant/:variantId" component={VariantPage} />
-        <Route path="/locus" component={LocusPage} />
-        <Route path="/regional/:studyId/:variantId" component={RegionalPage} />
+        <Route exact path="/" component={withPageAnalytics(HomePage)} />
+        <Route
+          path="/study/:studyId"
+          component={withPageAnalytics(StudyPage)}
+        />
+        <Route
+          path="/study-comparison/:studyId"
+          component={withPageAnalytics(StudiesPage)}
+        />
+        <Route path="/gene/:geneId" component={withPageAnalytics(GenePage)} />
+        <Route
+          path="/variant/:variantId"
+          component={withPageAnalytics(VariantPage)}
+        />
+        <Route path="/locus" component={withPageAnalytics(LocusPage)} />
+        <Route
+          path="/regional/:studyId/:variantId"
+          component={withPageAnalytics(RegionalPage)}
+        />
       </React.Fragment>
     </Router>
   </OtUiThemeProvider>
