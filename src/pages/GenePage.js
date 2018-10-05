@@ -23,6 +23,9 @@ import DrugsIcon from '@material-ui/icons/Favorite';
 import PathwaysIcon from '@material-ui/icons/Pets';
 import ProfileIcon from '@material-ui/icons/Info';
 import ExpressionIcon from '@material-ui/icons/Pets';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { withStyles } from '@material-ui/core/styles';
 
 const SEARCH_QUERY = gql`
   query GenePageQuery($geneId: String!) {
@@ -33,6 +36,7 @@ const SEARCH_QUERY = gql`
         chromosome
         start
         end
+        bioType
       }
     }
     studiesForGene(geneId: $geneId) {
@@ -68,7 +72,15 @@ function hasAssociatedStudies(data) {
   return data && data.studiesForGene;
 }
 
-const GenePage = ({ match }) => {
+const styles = () => {
+  return {
+    card: {
+      height: '100%',
+    },
+  };
+};
+
+const GenePage = ({ match, classes }) => {
   const { geneId } = match.params;
   return (
     <BasePage>
@@ -87,65 +99,73 @@ const GenePage = ({ match }) => {
               <Helmet>
                 <title>{symbol}</title>
               </Helmet>
-              <PageTitle>
-                {symbol}{' '}
-                <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                  {geneId}
-                </span>
-              </PageTitle>
-              <SubHeading
-                left={
-                  isValidGene
-                    ? `${chromosome}:${commaSeparate(start)}-${commaSeparate(
-                        end
-                      )} `
-                    : null
-                }
-              />
-              <SubHeading
-                left={
-                  isValidGene ? (
-                    <LocusLink
-                      chromosome={chromosome}
-                      position={Math.round((start + end) / 2)}
-                      selectedGenes={[geneId]}
-                    >
-                      {/* View locus */}
-                      View Locus Plot
-                    </LocusLink>
-                  ) : null
-                }
-              />
-              <SectionHeading heading="Useful links" />
-              <SubHeading
-                left={
-                  <Fragment>
-                    <a
-                      href={`https://www.targetvalidation.org/target/${geneId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Open Targets Platform
-                    </a>
-                    <br />
-                    <a
-                      href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Ensembl
-                    </a>
-                    <br />
-                    <a
-                      href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      GTEx
-                    </a>
-                  </Fragment>
-                }
-              />
+              <Grid container style={{ marginBottom: '10px' }}>
+                <Grid item md="12">
+                  <Card>
+                    <CardContent>
+                      <Grid container justify="space-between">
+                        <Grid item>
+                          <Typography variant="display1">{symbol}</Typography>
+                        </Grid>
+                        {isValidGene ? (
+                          <Grid item>
+                            <LocusLink
+                              chromosome={chromosome}
+                              position={Math.round((start + end) / 2)}
+                              selectedGenes={[geneId]}
+                            >
+                              View associated variants and traits within Locus
+                              View plot
+                            </LocusLink>
+                          </Grid>
+                        ) : null}
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+              <Grid container justify="space-between" spacing={8}>
+                <Grid item md="8">
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography>
+                        Information about {symbol} from the Open Targets
+                        Platform
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item md="4">
+                  <Card className={classes.card}>
+                    <CardContent>
+                      Other links
+                      <a
+                        href={`https://www.targetvalidation.org/target/${geneId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open Targets Platform
+                      </a>
+                      <br />
+                      <a
+                        href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Ensembl
+                      </a>
+                      <br />
+                      <a
+                        href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        GTEx
+                      </a>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
               <SectionHeading
                 heading={`Associated studies`}
                 subheading={`Which studies are associated with ${symbol}?`}
@@ -176,4 +196,4 @@ const GenePage = ({ match }) => {
   );
 };
 
-export default GenePage;
+export default withStyles(styles)(GenePage);
