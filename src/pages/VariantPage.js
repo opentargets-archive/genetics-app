@@ -202,7 +202,7 @@ const variantPageQuery = gql`
         beta
         oddsRatio
         nTotal
-        nCases
+        nCases: nCasesStudy
       }
     }
     indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
