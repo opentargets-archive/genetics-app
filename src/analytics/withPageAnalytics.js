@@ -11,7 +11,7 @@ if (useAnalytics()) {
 
 // see https://github.com/react-ga/react-ga/issues/122
 
-const withPageAnalytics = (WrappedComponent, options = {}) => {
+const withPageAnalytics = (pageId, WrappedComponent, options = {}) => {
   // only track on production
   if (!useAnalytics()) {
     return WrappedComponent;
@@ -35,13 +35,12 @@ const withPageAnalytics = (WrappedComponent, options = {}) => {
       trackPage(page);
     }
     componentWillUnmount() {
-      const page = this.props.location.pathname;
       const unmountedAt = new Date();
       const duration = unmountedAt - this.state.loadedAt;
       reportAnalyticsEvent({
         category: 'page',
         action: 'leave',
-        label: page,
+        label: pageId,
         value: duration,
       });
     }
