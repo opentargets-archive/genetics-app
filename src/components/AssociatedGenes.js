@@ -313,6 +313,11 @@ class AssociatedGenes extends Component {
   };
 
   handleChange = (_, value) => {
+    reportAnalyticsEvent({
+      category: 'tabs',
+      action: 'change-tab',
+      label: `variant:associated-genes:${value}`,
+    });
     this.setState({ value });
   };
 
