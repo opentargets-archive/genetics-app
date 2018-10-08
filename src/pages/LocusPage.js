@@ -25,6 +25,7 @@ import locusScheme, {
   LOCUS_SCHEME,
   LOCUS_FINEMAPPING,
 } from '../logic/locusScheme';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 function hasData(data) {
   return data && data.gecko;
@@ -245,6 +246,12 @@ class LocusPage extends React.Component {
   handleDisplayTypeChange = event => {
     const { displayType, ...rest } = this._parseQueryProps();
     const newDisplayTypeValue = event.target.value;
+    reportAnalyticsEvent({
+      category: 'visualisation',
+      action: 'filter',
+      label: 'locus:display-type',
+      value: newDisplayTypeValue,
+    });
     const newQueryParams = {
       displayType: newDisplayTypeValue,
       ...rest,
@@ -254,6 +261,12 @@ class LocusPage extends React.Component {
   handleDisplayFinemappingChange = event => {
     const { displayFinemapping, ...rest } = this._parseQueryProps();
     const newDisplayFinemappingValue = event.target.value;
+    reportAnalyticsEvent({
+      category: 'visualisation',
+      action: 'filter',
+      label: 'locus:display-finemapping',
+      value: newDisplayFinemappingValue,
+    });
     const newQueryParams = {
       displayFinemapping: newDisplayFinemappingValue,
       ...rest,
