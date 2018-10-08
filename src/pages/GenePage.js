@@ -126,7 +126,7 @@ const GenePage = ({ match, classes }) => {
                 <Grid item md={8}>
                   <Card className={classes.card}>
                     <CardContent>
-                      <Typography>
+                      <Typography variant="subheading">
                         Information about {symbol} from the Open Targets
                         Platform
                       </Typography>
