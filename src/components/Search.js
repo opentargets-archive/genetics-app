@@ -29,7 +29,6 @@ const SEARCH_QUERY = gql`
           refAllele
           altAllele
         }
-        relatedGenes
       }
       studies {
         studyId

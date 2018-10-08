@@ -18,11 +18,6 @@ const Option = ({ data }) => {
         <SearchOption
           heading={data.variant.id}
           subheading={data.variant.rsId}
-          extra={
-            data.relatedGenes.length > 0
-              ? `Linked genes: ${data.relatedGenes.join(', ')}`
-              : null
-          }
         />
       );
     case 'study':
