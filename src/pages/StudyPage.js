@@ -194,6 +194,13 @@ class StudyPage extends React.Component {
                   error={error}
                   svgContainer={manhattanPlot}
                   filenameStem={`${studyId}-independently-associated-loci`}
+                  reportDownloadEvent={() => {
+                    reportAnalyticsEvent({
+                      category: 'visualisation',
+                      action: 'download',
+                      label: `study:manhattan:svg`,
+                    });
+                  }}
                 >
                   <ManhattanWithTooltip
                     data={manhattan}
