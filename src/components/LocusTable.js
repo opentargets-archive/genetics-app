@@ -77,7 +77,7 @@ export const tableColumns = overallScoreScale => [
   },
   {
     id: 'overallScore',
-    label: 'Overall G2V',
+    label: 'Overall V2G',
     renderCell: rowData => (
       <DataCircle
         radius={overallScoreScale(rowData.overallScore)}

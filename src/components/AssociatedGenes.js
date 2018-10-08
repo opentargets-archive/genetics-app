@@ -85,7 +85,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
     },
     {
       id: 'overallScore',
-      label: 'Overall G2V',
+      label: 'Overall V2G',
       renderCell: rowData => {
         const circleRadius = overallScoreScale(rowData.overallScore);
         return <DataCircle radius={circleRadius} colorScheme="bold" />;
