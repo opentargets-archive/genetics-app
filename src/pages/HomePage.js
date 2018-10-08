@@ -49,6 +49,8 @@ const HomePage = ({ history }) => (
     <HomeBox name="Genetics">
       <Search />
       <Typography style={{ marginTop: '25px' }}>
+        Examples:
+        <br />
         {EXAMPLES.map((d, i) => (
           <a
             key={i}
@@ -59,9 +61,9 @@ const HomePage = ({ history }) => (
             {d.label}
           </a>
         ))}
-        <Button style={{ float: 'right' }} gradient onClick={lucky(history)}>
-          I'm feeling lucky
-        </Button>
+        <a href="#" style={{ float: 'right' }} onClick={lucky(history)}>
+          I'm feeling lucky!
+        </a>
       </Typography>
     </HomeBox>
   </div>
