@@ -391,6 +391,11 @@ class LocusPage extends React.Component {
                     <Button
                       variant="outlined"
                       onClick={() => {
+                        reportAnalyticsEvent({
+                          category: 'visualisation',
+                          action: 'download',
+                          label: 'locus:png',
+                        });
                         downloadPNG({
                           canvasNode: findDOMNode(
                             geckoPlot.current
