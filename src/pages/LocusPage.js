@@ -154,11 +154,21 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     switch (type) {
       case 'gene':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:gene`,
+        });
         if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
           selectedGenes = [d.id, ...(selectedGenes || [])];
         }
         break;
       case 'tagVariant':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:tag-variant`,
+        });
         if (
           !selectedTagVariants ||
           !selectedTagVariants.find(d2 => d2 === d.id)
@@ -167,6 +177,11 @@ class LocusPage extends React.Component {
         }
         break;
       case 'indexVariant':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:index-variant`,
+        });
         if (
           !selectedIndexVariants ||
           !selectedIndexVariants.find(d2 => d2 === d.id)
@@ -175,6 +190,11 @@ class LocusPage extends React.Component {
         }
         break;
       case 'study':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:study`,
+        });
         if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
           selectedStudies = [d.studyId, ...(selectedStudies || [])];
         }
