@@ -6,6 +6,7 @@ import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
 import variantIdComparator from '../logic/variantIdComparator';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const tableColumns = studyIds => [
   {
@@ -79,6 +80,20 @@ function ManhattansVariantsTable({
       order="asc"
       downloadFileStem={filenameStem}
       message="Loci in this table are shared across all selected studies."
+      reportTableDownloadEvent={format => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'download',
+          label: `study-comparison:intersecting-loci:${format}`,
+        });
+      }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `study-comparison:intersecting-loci:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

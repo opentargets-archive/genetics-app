@@ -10,7 +10,7 @@ const BasePage = ({ children }) => (
     header={
       <NavBar
         name="Genetics"
-        search={<Search />}
+        search={<Search searchLocation="navbar" />}
         docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
         contact="mailto:geneticsportal@opentargets.org"
       />

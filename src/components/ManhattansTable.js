@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+
 export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
   {
     id: 'deleteRow',
@@ -114,6 +116,20 @@ function ManhattansTable({
           </small>
         </React.Fragment>
       }
+      reportTableDownloadEvent={format => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'download',
+          label: `study-comparison:selected-studies:${format}`,
+        });
+      }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `study-comparison:selected-studies:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

@@ -25,6 +25,7 @@ import locusScheme, {
   LOCUS_SCHEME,
   LOCUS_FINEMAPPING,
 } from '../logic/locusScheme';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 function hasData(data) {
   return data && data.gecko;
@@ -153,11 +154,21 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     switch (type) {
       case 'gene':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:gene`,
+        });
         if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
           selectedGenes = [d.id, ...(selectedGenes || [])];
         }
         break;
       case 'tagVariant':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:tag-variant`,
+        });
         if (
           !selectedTagVariants ||
           !selectedTagVariants.find(d2 => d2 === d.id)
@@ -166,6 +177,11 @@ class LocusPage extends React.Component {
         }
         break;
       case 'indexVariant':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:index-variant`,
+        });
         if (
           !selectedIndexVariants ||
           !selectedIndexVariants.find(d2 => d2 === d.id)
@@ -174,6 +190,11 @@ class LocusPage extends React.Component {
         }
         break;
       case 'study':
+        reportAnalyticsEvent({
+          category: 'visualisation',
+          action: 'click',
+          label: `locus:study`,
+        });
         if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
           selectedStudies = [d.studyId, ...(selectedStudies || [])];
         }
@@ -245,6 +266,12 @@ class LocusPage extends React.Component {
   handleDisplayTypeChange = event => {
     const { displayType, ...rest } = this._parseQueryProps();
     const newDisplayTypeValue = event.target.value;
+    reportAnalyticsEvent({
+      category: 'visualisation',
+      action: 'filter',
+      label: 'locus:display-type',
+      value: newDisplayTypeValue,
+    });
     const newQueryParams = {
       displayType: newDisplayTypeValue,
       ...rest,
@@ -254,6 +281,12 @@ class LocusPage extends React.Component {
   handleDisplayFinemappingChange = event => {
     const { displayFinemapping, ...rest } = this._parseQueryProps();
     const newDisplayFinemappingValue = event.target.value;
+    reportAnalyticsEvent({
+      category: 'visualisation',
+      action: 'filter',
+      label: 'locus:display-finemapping',
+      value: newDisplayFinemappingValue,
+    });
     const newQueryParams = {
       displayFinemapping: newDisplayFinemappingValue,
       ...rest,
@@ -378,6 +411,11 @@ class LocusPage extends React.Component {
                     <Button
                       variant="outlined"
                       onClick={() => {
+                        reportAnalyticsEvent({
+                          category: 'visualisation',
+                          action: 'download',
+                          label: 'locus:png',
+                        });
                         downloadPNG({
                           canvasNode: findDOMNode(
                             geckoPlot.current
