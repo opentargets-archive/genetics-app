@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -130,7 +130,7 @@ const GenePage = ({ match, classes }) => {
                         Information about {symbol} from the Open Targets
                         Platform
                       </Typography>
-                      <Grid container>
+                      <Grid container justify="space-around">
                         <Grid item>
                           <OverviewIcon />
                           <Typography>Target profile overview</Typography>
@@ -157,7 +157,7 @@ const GenePage = ({ match, classes }) => {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item md="4">
+                <Grid item md={4}>
                   <Card className={classes.card}>
                     <CardContent>
                       <Grid container>
