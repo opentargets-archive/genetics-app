@@ -82,6 +82,7 @@ const geckoQuery = gql`
   }
 `;
 
+const ZOOM_LIMIT = 2000000;
 const ZOOM_FACTOR = 1.25;
 const PAN_FACTOR = 0.1;
 
@@ -104,7 +105,9 @@ class LocusPage extends React.Component {
     const { start, end, ...rest } = this._parseQueryProps();
     const gap = end - start;
     const midPoint = (start + end) / 2;
-    const newGap = gap * ZOOM_FACTOR;
+
+    const newGap =
+      gap * ZOOM_FACTOR > ZOOM_LIMIT ? ZOOM_LIMIT : gap * ZOOM_FACTOR;
     const newStart = Math.round(midPoint - newGap / 2);
     const newEnd = Math.round(midPoint + newGap / 2);
     const newQueryParams = {
@@ -368,6 +371,7 @@ class LocusPage extends React.Component {
                           label: 'Show expansion by finemapping only',
                         },
                       ]}
+                      disabledZoomOut={end - start >= ZOOM_LIMIT}
                     />
                   }
                   right={
