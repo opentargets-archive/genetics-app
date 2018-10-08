@@ -1,9 +1,16 @@
+import React from 'react';
+
 // TODO: this data should be part of the API response
 const SOURCE_MAP = {
   gtex_v7: {
     sourceLabel: 'eQTL (GTEx V7)',
-    sourceDescriptionOverview:
-      'Summary of evidence linking this variant to gene expression in *any* of the 44 GTEx V7 tissues. See **eQTL (GTEx V7)** tab for tissue breakdown.',
+    sourceDescriptionOverview: (
+      <React.Fragment>
+        Summary of evidence linking this variant to gene expression in{' '}
+        <i>any</i> of the 44 GTEx V7 tissues. See <b>eQTL (GTEx V7)</b> tab for
+        tissue breakdown.
+      </React.Fragment>
+    ),
     sourceDescriptionBreakdown:
       'Evidence linking this variant to gene expression in each of the 44 GTEx V7 tissues.',
     pmid: '29022597',
@@ -12,8 +19,12 @@ const SOURCE_MAP = {
     sourceLabel: 'pQTL (Sun, 2018)',
     sourceDescriptionOverview:
       'Summary of evidence linking this variant to protein abundance in blood plasma.',
-    sourceDescriptionBreakdown:
-      'Evidence linking this variant to protein abundance in Sun *et al.* (2018) pQTL data.',
+    sourceDescriptionBreakdown: (
+      <React.Fragment>
+        Evidence linking this variant to protein abundance in Sun <i>et al.</i>{' '}
+        (2018) pQTL data.
+      </React.Fragment>
+    ),
     pmid: '29875488',
   },
   thurman2012: {
@@ -34,8 +45,12 @@ const SOURCE_MAP = {
   },
   javierre2016: {
     sourceLabel: 'PCHi-C (Javierre, 2016)',
-    sourceDescriptionOverview:
-      'Summary of evidence linking this variant to genes using Promoter Capture Hi-C in *any* of the 17 human primary hematopoietic cell types.',
+    sourceDescriptionOverview: (
+      <React.Fragment>
+        Summary of evidence linking this variant to genes using Promoter Capture
+        Hi-C in <i>any</i> of the 17 human primary hematopoietic cell types.
+      </React.Fragment>
+    ),
     sourceDescriptionBreakdown:
       'Evidence linking this variant to genes using Promoter Capture Hi-C in each of the 17 human primary hematopoietic cell types.',
     pmid: '27863249',
