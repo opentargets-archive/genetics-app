@@ -61,12 +61,11 @@ function transformVariantInfo(data) {
 function transformPheWAS(data) {
   return data.pheWAS.associations.map(d => {
     const { study, ...rest } = d;
-    const { studyId, traitReported, traitCategory, nCases } = study;
+    const { studyId, traitReported, traitCategory } = study;
     return {
       studyId,
       traitReported,
       traitCategory,
-      nCases,
       ...rest,
     };
   });
@@ -198,12 +197,12 @@ const variantPageQuery = gql`
           traitReported
           traitCode
           traitCategory
-          nCases
         }
         pval
         beta
         oddsRatio
         nTotal
+        nCases: nCasesStudy
       }
     }
     indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
