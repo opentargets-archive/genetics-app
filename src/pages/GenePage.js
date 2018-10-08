@@ -132,26 +132,46 @@ const GenePage = ({ match, classes }) => {
                       </Typography>
                       <Grid container justify="space-around">
                         <Grid item>
-                          <OverviewIcon />
-                          <Typography>Target profile overview</Typography>
+                          <a
+                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                          >
+                            <OverviewIcon />
+                            <Typography>Target profile overview</Typography>
+                          </a>
                         </Grid>
                         <Grid item>
-                          <DrugsIcon />
-                          <Typography>Is there known drug data</Typography>
+                          <a
+                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                          >
+                            <DrugsIcon />
+                            <Typography>Is there known drug data</Typography>
+                          </a>
                         </Grid>
                         <Grid item>
-                          <MouseIcon />
-                          <Typography>
-                            Is there mouse phenotype data?
-                          </Typography>
+                          <a
+                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                          >
+                            <MouseIcon />
+                            <Typography>
+                              Is there mouse phenotype data?
+                            </Typography>
+                          </a>
                         </Grid>
                         <Grid item>
-                          <PathwaysIcon />
-                          <Typography>Is there pathway data?</Typography>
+                          <a
+                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                          >
+                            <PathwaysIcon />
+                            <Typography>Is there pathway data?</Typography>
+                          </a>
                         </Grid>
                         <Grid item>
-                          <ExpressionIcon />
-                          <Typography>Is there expression data?</Typography>
+                          <a
+                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                          >
+                            <ExpressionIcon />
+                            <Typography>Is there expression data?</Typography>
+                          </a>
                         </Grid>
                       </Grid>
                     </CardContent>
