@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Splash, HomeBox, Button, Typography } from 'ot-ui';
 
 import Search from '../components/Search';
-import reportAnalyticsEvent from './reportAnalyticsEvent';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const LUCKY_EXAMPLES = [
   '/study-comparison/GCST006061?studyIds=GCST004297&studyIds=GCST004373&studyIds=GCST001499&studyIds=GCST004295',
