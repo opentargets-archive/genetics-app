@@ -16,7 +16,7 @@ const App = () => (
   <OtUiThemeProvider>
     <Router>
       <React.Fragment>
-        <Route exact path="/" component={withPageAnalytics(HomePage)} />
+        <Route exact path="/" component={withPageAnalytics('home', HomePage)} />
         <Route
           path="/study/:studyId"
           component={withPageAnalytics('study', StudyPage)}
