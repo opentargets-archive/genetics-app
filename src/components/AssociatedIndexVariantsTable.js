@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const tableColumns = variantId => [
   {
@@ -93,6 +94,13 @@ const AssociatedIndexVariantsTable = ({
     sortBy="pval"
     order="asc"
     downloadFileStem={filenameStem}
+    reportTableDownloadEvent={format => {
+      reportAnalyticsEvent({
+        category: 'table',
+        action: 'download',
+        label: `variant:associated-index-variants:${format}`,
+      });
+    }}
   />
 );
 

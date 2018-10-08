@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { OtTable, commaSeparate } from 'ot-ui';
 
 import LocusLink from './LocusLink';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const tableColumns = (geneId, chromosome, position) => [
   {
@@ -86,6 +87,13 @@ const AssociatedStudiesTable = ({
     sortBy="nInitial"
     order="desc"
     downloadFileStem={filenameStem}
+    reportTableDownloadEvent={format => {
+      reportAnalyticsEvent({
+        category: 'table',
+        action: 'download',
+        label: `gene:associated-studies:${format}`,
+      });
+    }}
   />
 );
 

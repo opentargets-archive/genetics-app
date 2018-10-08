@@ -4,6 +4,7 @@ import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 export const tableColumns = ({
   variantId,
@@ -110,6 +111,13 @@ function PheWASTable({
       order="asc"
       downloadFileStem="associated-studies"
       excludeDownloadColumns={['locusView']}
+      reportTableDownloadEvent={format => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'download',
+          label: `variant:phewas:${format}`,
+        });
+      }}
     />
   );
 }
