@@ -58,9 +58,9 @@ const SOURCE_MAP = {
   vep: {
     sourceLabel: 'VEP (Ensembl)',
     sourceDescriptionOverview:
-      "Most severe coding-sequence consequence(s) from Ensembl's Variant Effect Predictor.",
+      "Most severe coding sequence consequence(s) from Ensembl's Variant Effect Predictor.",
     sourceDescriptionBreakdown:
-      "Most severe coding-sequence consequence(s) from Ensembl's Variant Effect Predictor.",
+      "Most severe coding sequence consequence(s) from Ensembl's Variant Effect Predictor.",
     pmid: '27268795',
   },
 };
