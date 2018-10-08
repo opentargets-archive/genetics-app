@@ -77,10 +77,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       id: 'geneSymbol',
       label: 'Gene',
       renderCell: rowData => {
-        const geneId = genesForVariant.find(
-          geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
-        ).gene.id;
-        return <Link to={`/gene/${geneId}`}>{rowData.geneSymbol}</Link>;
+        return <Link to={`/gene/${rowData.geneId}`}>{rowData.geneSymbol}</Link>;
       },
     },
     {
@@ -118,6 +115,7 @@ const getDataAll = genesForVariant => {
   const data = [];
   genesForVariant.forEach(item => {
     const row = {
+      geneId: item.gene.id,
       geneSymbol: item.gene.symbol,
       overallScore: item.overallScore,
     };
@@ -235,10 +233,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
       id: 'geneSymbol',
       label: 'Gene',
       renderCell: rowData => {
-        const geneId = genesForVariant.find(
-          geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
-        ).gene.id;
-        return <Link to={`/gene/${geneId}`}>{rowData.geneSymbol}</Link>;
+        return <Link to={`/gene/${rowData.geneId}`}>{rowData.geneSymbol}</Link>;
       },
     },
     ...tissueColumns,
@@ -283,7 +278,10 @@ const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
     });
 
   genesForVariant.forEach(geneForVariant => {
-    const row = { geneSymbol: geneForVariant.gene.symbol };
+    const row = {
+      geneId: geneForVariant.gene.id,
+      geneSymbol: geneForVariant.gene.symbol,
+    };
     const element = geneForVariant[searchField].find(
       item => item.sourceId === sourceId
     );
