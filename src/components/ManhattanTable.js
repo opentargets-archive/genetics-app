@@ -103,6 +103,13 @@ function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
           label: `study:manhattan:${format}`,
         });
       }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `study:manhattan:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

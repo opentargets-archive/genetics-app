@@ -87,6 +87,13 @@ function ManhattansVariantsTable({
           label: `study-comparison:intersecting-loci:${format}`,
         });
       }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `study-comparison:intersecting-loci:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

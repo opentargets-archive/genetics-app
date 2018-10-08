@@ -109,6 +109,13 @@ function LocusTable({ loading, error, data, filenameStem }) {
           label: `locus:${format}`,
         });
       }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `locus:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

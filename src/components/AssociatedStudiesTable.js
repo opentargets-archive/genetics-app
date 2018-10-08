@@ -94,6 +94,13 @@ const AssociatedStudiesTable = ({
         label: `gene:associated-studies:${format}`,
       });
     }}
+    reportTableSortEvent={(sortBy, order) => {
+      reportAnalyticsEvent({
+        category: 'table',
+        action: 'sort-column',
+        label: `gene:associated-studies:${sortBy}(${order})`,
+      });
+    }}
   />
 );
 

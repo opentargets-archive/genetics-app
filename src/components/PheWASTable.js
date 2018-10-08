@@ -118,6 +118,13 @@ function PheWASTable({
           label: `variant:phewas:${format}`,
         });
       }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `variant:phewas:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

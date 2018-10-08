@@ -123,6 +123,13 @@ function ManhattansTable({
           label: `study-comparison:selected-studies:${format}`,
         });
       }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `study-comparison:selected-studies:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

@@ -350,6 +350,13 @@ class AssociatedGenes extends Component {
             label: `variant:associated-genes:overview:${format}`,
           });
         }}
+        reportTableSortEvent={(sortBy, order) => {
+          reportAnalyticsEvent({
+            category: 'table',
+            action: 'sort-column',
+            label: `variant:associated-genes:overview:${sortBy}(${order})`,
+          });
+        }}
       />
     );
 
@@ -381,6 +388,15 @@ class AssociatedGenes extends Component {
                 category: 'table',
                 action: 'download',
                 label: `variant:associated-genes:${schema.sourceId}:${format}`,
+              });
+            }}
+            reportTableSortEvent={(sortBy, order) => {
+              reportAnalyticsEvent({
+                category: 'table',
+                action: 'sort-column',
+                label: `variant:associated-genes:${
+                  schema.sourceId
+                }:${sortBy}(${order})`,
               });
             }}
           />

@@ -101,6 +101,13 @@ const AssociatedIndexVariantsTable = ({
         label: `variant:associated-index-variants:${format}`,
       });
     }}
+    reportTableSortEvent={(sortBy, order) => {
+      reportAnalyticsEvent({
+        category: 'table',
+        action: 'sort-column',
+        label: `variant:associated-index-variants:${sortBy}(${order})`,
+      });
+    }}
   />
 );
 

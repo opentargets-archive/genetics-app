@@ -105,6 +105,13 @@ const AssociatedTagVariantsTable = ({
         label: `variant:associated-tag-variants:${format}`,
       });
     }}
+    reportTableSortEvent={(sortBy, order) => {
+      reportAnalyticsEvent({
+        category: 'table',
+        action: 'sort-column',
+        label: `variant:associated-tag-variants:${sortBy}(${order})`,
+      });
+    }}
   />
 );
 
