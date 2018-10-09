@@ -1,16 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { Splash, HomeBox, Button, Typography } from 'ot-ui';
+import { Splash, HomeBox, Typography } from 'ot-ui';
 
 import Search from '../components/Search';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-
-const LUCKY_EXAMPLES = [
-  '/study-comparison/GCST006061?studyIds=GCST004297&studyIds=GCST004373&studyIds=GCST001499&studyIds=GCST004295',
-  '/study-comparison/GCST003048?studyIds=GCST004946&studyIds=GCST002539&studyIds=GCST001242&studyIds=GCST001565',
-  '/locus?chromosome=1&end=99512127&selectedStudies=GCST003048&selectedStudies=GCST004946&selectedStudies=GCST002539&selectedStudies=GCST001242&selectedStudies=GCST001565&start=97512127',
-];
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -26,11 +20,6 @@ const EXAMPLES = [
     type: 'study',
   },
 ];
-
-const lucky = history => () => {
-  const url = LUCKY_EXAMPLES[Math.floor(Math.random() * LUCKY_EXAMPLES.length)];
-  history.push(url);
-};
 
 const clickExample = type => () => {
   reportAnalyticsEvent({
@@ -61,9 +50,6 @@ const HomePage = ({ history }) => (
             {d.label}
           </a>
         ))}
-        <a href="#" style={{ float: 'right' }} onClick={lucky(history)}>
-          I'm feeling lucky!
-        </a>
       </Typography>
     </HomeBox>
   </div>
