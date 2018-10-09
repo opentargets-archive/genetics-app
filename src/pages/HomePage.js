@@ -29,7 +29,7 @@ const clickExample = type => () => {
   });
 };
 
-const HomePage = ({ history }) => (
+const HomePage = () => (
   <div>
     <Helmet>
       <title>Open Targets Genetics</title>
