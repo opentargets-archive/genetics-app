@@ -21,6 +21,7 @@ import { Grid } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
+import LinkIcon from '@material-ui/icons/Link';
 
 const SEARCH_QUERY = gql`
   query GenePageQuery($geneId: String!) {
@@ -67,13 +68,24 @@ function hasAssociatedStudies(data) {
   return data && data.studiesForGene;
 }
 
-const styles = () => {
+const styles = theme => {
   return {
     card: {
       height: '100%',
     },
     link: {
       textDecoration: 'none',
+    },
+    platformLink: {
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    iconLink: {
+      '&:hover': {
+        fill: theme.palette.primary.dark,
+      },
     },
   };
 };
@@ -133,25 +145,28 @@ const GenePage = ({ match, classes }) => {
                       <Grid container justify="space-around">
                         <Grid item>
                           <a
+                            className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
                           >
-                            <OverviewIcon />
+                            <OverviewIcon className={classes.iconLink} />
                             <Typography>Target profile overview</Typography>
                           </a>
                         </Grid>
                         <Grid item>
                           <a
+                            className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
                           >
-                            <DrugsIcon />
+                            <DrugsIcon className={classes.iconLink} />
                             <Typography>Is there known drug data</Typography>
                           </a>
                         </Grid>
                         <Grid item>
                           <a
+                            className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
                           >
-                            <MouseIcon />
+                            <MouseIcon className={classes.iconLink} />
                             <Typography>
                               Is there mouse phenotype data?
                             </Typography>
@@ -159,17 +174,19 @@ const GenePage = ({ match, classes }) => {
                         </Grid>
                         <Grid item>
                           <a
+                            className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
                           >
-                            <PathwaysIcon />
+                            <PathwaysIcon className={classes.iconLink} />
                             <Typography>Is there pathway data?</Typography>
                           </a>
                         </Grid>
                         <Grid item>
                           <a
+                            className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
                           >
-                            <ExpressionIcon />
+                            <ExpressionIcon className={classes.iconLink} />
                             <Typography>Is there expression data?</Typography>
                           </a>
                         </Grid>
@@ -193,7 +210,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">Ensembl</Button>
+                            <Button variant="outlined">
+                              Ensembl <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                         <Grid item>
@@ -203,7 +222,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">ExAC</Button>
+                            <Button variant="outlined">
+                              ExAC <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                         <Grid item>
@@ -213,7 +234,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">Gene Cards</Button>
+                            <Button variant="outlined">
+                              Gene Cards <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                         <Grid item>
@@ -223,7 +246,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">GTEx</Button>
+                            <Button variant="outlined">
+                              GTEx <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                         <Grid item>
@@ -233,7 +258,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">HGNC</Button>
+                            <Button variant="outlined">
+                              HGNC <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                         <Grid item>
@@ -243,7 +270,9 @@ const GenePage = ({ match, classes }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button variant="outlined">UniProt</Button>
+                            <Button variant="outlined">
+                              UniProt <LinkIcon />
+                            </Button>
                           </a>
                         </Grid>
                       </Grid>
