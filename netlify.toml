@@ -3,3 +3,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# redirect domain aliases to primary domain
+[[redirects]]
+  from = "https://genetics.opentargets.io/*"
+  to = "https://genetics.opentargets.org/:splat"
+  status = 301
+  force = true
