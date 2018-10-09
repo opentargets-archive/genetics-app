@@ -211,6 +211,16 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   handleMousemove = (d, type, point) => {};
+  handleAddGene = newSelectedGenes => {
+    const { selectedGenes, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedGenes && newSelectedGenes.length > 0) {
+      newQueryParams.selectedGenes = newSelectedGenes.map(d => d.id);
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleDeleteGene = id => () => {
     const { selectedGenes, ...rest } = this._parseQueryProps();
     const newSelected = selectedGenes
@@ -479,6 +489,13 @@ class LocusPage extends React.Component {
                   error={error}
                   data={rows}
                   filenameStem={`${chromosome}-${start}-${end}-locus`}
+                  geneFilterValue={
+                    selectedGenes
+                      ? plot.genes.filter(d => selectedGenes.indexOf(d.id) >= 0)
+                      : []
+                  }
+                  geneFilterOptions={plot.genes}
+                  geneFilterHandler={this.handleAddGene}
                 />
               </React.Fragment>
             );

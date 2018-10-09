@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { OtTable, DataCircle, significantFigures } from 'ot-ui';
+import { OtTable, DataCircle, significantFigures, Autocomplete } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-export const tableColumns = overallScoreScale => [
+export const tableColumns = ({
+  overallScoreScale,
+  geneFilterValue,
+  geneFilterOptions,
+  geneFilterHandler,
+}) => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -41,6 +46,17 @@ export const tableColumns = overallScoreScale => [
     id: 'geneId',
     label: 'Gene',
     tooltip: 'Gene functionally implicated by the tag variant',
+    renderFilter: () => (
+      <Autocomplete
+        options={geneFilterOptions}
+        value={geneFilterValue}
+        getOptionLabel={d => d.symbol}
+        getOptionValue={d => d.id}
+        handleSelectOption={geneFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/gene/${rowData.geneId}`}>{rowData.gene.symbol}</Link>
     ),
@@ -88,7 +104,15 @@ export const tableColumns = overallScoreScale => [
   },
 ];
 
-function LocusTable({ loading, error, data, filenameStem }) {
+function LocusTable({
+  loading,
+  error,
+  data,
+  filenameStem,
+  geneFilterValue,
+  geneFilterOptions,
+  geneFilterHandler,
+}) {
   const overallScoreScale = d3
     .scaleSqrt()
     .domain([0, d3.max(data, d => d.overallScore)])
@@ -97,7 +121,13 @@ function LocusTable({ loading, error, data, filenameStem }) {
     <OtTable
       loading={loading}
       error={error}
-      columns={tableColumns(overallScoreScale)}
+      columns={tableColumns({
+        overallScoreScale,
+        geneFilterValue,
+        geneFilterOptions,
+        geneFilterHandler,
+      })}
+      filters
       data={data}
       sortBy="pval"
       order="asc"
