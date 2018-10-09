@@ -99,10 +99,17 @@ const locusScheme = ({
   });
   const transformed = locusTransform({ data: selected, lookups });
   const entities = {
-    genes: _.sortBy(transformed.genes, ['symbol']),
+    genes: _.sortBy(transformed.genes, [d => !d.selected, 'symbol']),
     tagVariants: transformed.tagVariants,
-    indexVariants: transformed.indexVariants,
-    studies: transformed.studies,
+    indexVariants: _.sortBy(transformed.indexVariants, [
+      d => !d.selected,
+      'id',
+    ]),
+    studies: _.sortBy(transformed.studies, [
+      d => !d.selected,
+      'traitReported',
+      'pubAuthor',
+    ]),
   };
   const filtered = locusFilter({
     data: transformed,
