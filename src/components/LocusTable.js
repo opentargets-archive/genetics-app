@@ -12,6 +12,12 @@ export const tableColumns = ({
   geneFilterValue,
   geneFilterOptions,
   geneFilterHandler,
+  tagVariantFilterValue,
+  tagVariantFilterOptions,
+  tagVariantFilterHandler,
+  indexVariantFilterValue,
+  indexVariantFilterOptions,
+  indexVariantFilterHandler,
   studyFilterValue,
   studyFilterOptions,
   studyFilterHandler,
@@ -46,6 +52,17 @@ export const tableColumns = ({
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
+    renderFilter: () => (
+      <Autocomplete
+        options={indexVariantFilterOptions}
+        value={indexVariantFilterValue}
+        getOptionLabel={d => `${d.id} (${d.rsId})`}
+        getOptionValue={d => d.id}
+        handleSelectOption={indexVariantFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
@@ -55,6 +72,17 @@ export const tableColumns = ({
   {
     id: 'tagVariantId',
     label: 'Tag Variant',
+    // renderFilter: () => (
+    //   <Autocomplete
+    //     options={tagVariantFilterOptions}
+    //     value={tagVariantFilterValue}
+    //     getOptionLabel={d => `${d.id} (${d.rsId})`}
+    //     getOptionValue={d => d.id}
+    //     handleSelectOption={tagVariantFilterHandler}
+    //     placeholder="None"
+    //     multiple
+    //   />
+    // ),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.tagVariantId}`}>
         {rowData.tagVariantId}
@@ -131,6 +159,12 @@ function LocusTable({
   geneFilterValue,
   geneFilterOptions,
   geneFilterHandler,
+  tagVariantFilterValue,
+  tagVariantFilterOptions,
+  tagVariantFilterHandler,
+  indexVariantFilterValue,
+  indexVariantFilterOptions,
+  indexVariantFilterHandler,
   studyFilterValue,
   studyFilterOptions,
   studyFilterHandler,
@@ -148,6 +182,12 @@ function LocusTable({
         geneFilterValue,
         geneFilterOptions,
         geneFilterHandler,
+        tagVariantFilterValue,
+        tagVariantFilterOptions,
+        tagVariantFilterHandler,
+        indexVariantFilterValue,
+        indexVariantFilterOptions,
+        indexVariantFilterHandler,
         studyFilterValue,
         studyFilterOptions,
         studyFilterHandler,

@@ -221,6 +221,30 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleAddTagVariant = newSelectedTagVariants => {
+    const { selectedTagVariants, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedTagVariants && newSelectedTagVariants.length > 0) {
+      newQueryParams.selectedTagVariants = newSelectedTagVariants.map(
+        d => d.id
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleAddIndexVariant = newSelectedIndexVariants => {
+    const { selectedIndexVariants, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedIndexVariants && newSelectedIndexVariants.length > 0) {
+      newQueryParams.selectedIndexVariants = newSelectedIndexVariants.map(
+        d => d.id
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleAddStudy = newSelectedStudies => {
     const { selectedStudies, ...rest } = this._parseQueryProps();
     const newQueryParams = {
@@ -509,6 +533,24 @@ class LocusPage extends React.Component {
                   }
                   geneFilterOptions={entities.genes}
                   geneFilterHandler={this.handleAddGene}
+                  tagVariantFilterValue={
+                    selectedTagVariants
+                      ? entities.tagVariants.filter(
+                          d => selectedTagVariants.indexOf(d.id) >= 0
+                        )
+                      : []
+                  }
+                  tagVariantFilterOptions={entities.tagVariants}
+                  tagVariantFilterHandler={this.handleAddTagVariant}
+                  indexVariantFilterValue={
+                    selectedIndexVariants
+                      ? entities.indexVariants.filter(
+                          d => selectedIndexVariants.indexOf(d.id) >= 0
+                        )
+                      : []
+                  }
+                  indexVariantFilterOptions={entities.indexVariants}
+                  indexVariantFilterHandler={this.handleAddIndexVariant}
                   studyFilterValue={
                     selectedStudies
                       ? entities.studies.filter(
