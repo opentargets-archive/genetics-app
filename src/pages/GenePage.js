@@ -170,16 +170,16 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:known_drug`}
                           >
                             <DrugsIcon className={classes.iconLink} />
-                            <Typography>Is there known drug data</Typography>
+                            <Typography>Is there known drug data?</Typography>
                           </a>
                         </Grid>
                         <Grid item>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:mouse_phenotypes`}
                           >
                             <MouseIcon className={classes.iconLink} />
                             <Typography>
@@ -190,7 +190,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:affected_pathway`}
                           >
                             <PathwaysIcon className={classes.iconLink} />
                             <Typography>Is there pathway data?</Typography>
@@ -199,7 +199,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:expression`}
                           >
                             <ExpressionIcon className={classes.iconLink} />
                             <Typography>Is there expression data?</Typography>
