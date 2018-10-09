@@ -98,19 +98,7 @@ const locusScheme = ({
     selectedStudies,
   });
   const transformed = locusTransform({ data: selected, lookups });
-  const entities = {
-    genes: _.sortBy(transformed.genes, [d => !d.selected, 'symbol']),
-    tagVariants: transformed.tagVariants,
-    indexVariants: _.sortBy(transformed.indexVariants, [
-      d => !d.selected,
-      'id',
-    ]),
-    studies: _.sortBy(transformed.studies, [
-      d => !d.selected,
-      'traitReported',
-      'pubAuthor',
-    ]),
-  };
+
   const filtered = locusFilter({
     data: transformed,
     selectedGenes,
@@ -130,6 +118,23 @@ const locusScheme = ({
     geneTagVariants,
     tagVariantIndexVariantStudies,
   } = chained;
+
+  const entities = {
+    genes: _.sortBy(genes, [d => !d.selected, d => !d.chained, 'symbol']),
+    tagVariants: tagVariants,
+    indexVariants: _.sortBy(indexVariants, [
+      d => !d.selected,
+      d => !d.chained,
+
+      'id',
+    ]),
+    studies: _.sortBy(studies, [
+      d => !d.selected,
+      d => !d.chained,
+      'traitReported',
+      'pubAuthor',
+    ]),
+  };
 
   const genesFiltered = genes.filter(d => d.chained);
   const tagVariantsFiltered = tagVariants
