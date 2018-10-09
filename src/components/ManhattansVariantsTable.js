@@ -13,7 +13,7 @@ const tableColumns = studyIds => [
     id: 'indexVariantId',
     label: 'Variant',
     tooltip:
-      'The locus tagged by this variant is shared across all selected studies',
+      'This locus is shared across all selected studies. Only the lead variant in the root study is shown.',
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
