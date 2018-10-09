@@ -218,7 +218,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                            href={`http://exac.broadinstitute.org/gene/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -230,7 +230,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                            href={`https://www.genecards.org/cgi-bin/carddisp.pl?gene=${symbol}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -254,7 +254,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
+                            href={`https://www.genenames.org/cgi-bin/search?search_type=all&search=${symbol}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -266,7 +266,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://gtexportal.org/home/eqtls/byGene?geneId=${symbol}&tissueName=All`}
+                            href={`https://www.uniprot.org/uniprot/?query=${symbol}&sort=score`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
