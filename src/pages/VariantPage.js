@@ -23,6 +23,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PlotContainer from 'ot-ui/build/components/PlotContainer';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 function hasInfo(data) {
   return data && data.variantInfo;
@@ -394,6 +395,13 @@ const VariantPage = ({ match }) => {
                   error={error}
                   svgContainer={pheWASPlot}
                   filenameStem={`${variantId}-traits`}
+                  reportDownloadEvent={() => {
+                    reportAnalyticsEvent({
+                      category: 'visualisation',
+                      action: 'download',
+                      label: `variant:phewas:svg`,
+                    });
+                  }}
                 >
                   <PheWASWithTooltip
                     associations={pheWASAssociations}

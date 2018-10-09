@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import { OtTable, DataCircle, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 export const tableColumns = overallScoreScale => [
   {
@@ -101,6 +102,20 @@ function LocusTable({ loading, error, data, filenameStem }) {
       sortBy="pval"
       order="asc"
       downloadFileStem={filenameStem}
+      reportTableDownloadEvent={format => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'download',
+          label: `locus:${format}`,
+        });
+      }}
+      reportTableSortEvent={(sortBy, order) => {
+        reportAnalyticsEvent({
+          category: 'table',
+          action: 'sort-column',
+          label: `locus:${sortBy}(${order})`,
+        });
+      }}
     />
   );
 }

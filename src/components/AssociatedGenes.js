@@ -13,6 +13,7 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const OVERVIEW = 'overview';
 
@@ -310,6 +311,11 @@ class AssociatedGenes extends Component {
   };
 
   handleChange = (_, value) => {
+    reportAnalyticsEvent({
+      category: 'tabs',
+      action: 'change-tab',
+      label: `variant:associated-genes:${value}`,
+    });
     this.setState({ value });
   };
 
@@ -335,6 +341,20 @@ class AssociatedGenes extends Component {
         order="desc"
         columns={columnsAll}
         data={dataAll}
+        reportTableDownloadEvent={format => {
+          reportAnalyticsEvent({
+            category: 'table',
+            action: 'download',
+            label: `variant:associated-genes:overview:${format}`,
+          });
+        }}
+        reportTableSortEvent={(sortBy, order) => {
+          reportAnalyticsEvent({
+            category: 'table',
+            action: 'sort-column',
+            label: `variant:associated-genes:overview:${sortBy}(${order})`,
+          });
+        }}
       />
     );
 
@@ -361,6 +381,22 @@ class AssociatedGenes extends Component {
             key={schema.sourceId}
             columns={schema.columns}
             data={schema.rows}
+            reportTableDownloadEvent={format => {
+              reportAnalyticsEvent({
+                category: 'table',
+                action: 'download',
+                label: `variant:associated-genes:${schema.sourceId}:${format}`,
+              });
+            }}
+            reportTableSortEvent={(sortBy, order) => {
+              reportAnalyticsEvent({
+                category: 'table',
+                action: 'sort-column',
+                label: `variant:associated-genes:${
+                  schema.sourceId
+                }:${sortBy}(${order})`,
+              });
+            }}
           />
         )
       );

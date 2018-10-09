@@ -3,6 +3,7 @@ import GoogleAnalytics from 'react-ga';
 
 import { ANALYTICS_TOKEN } from './constants';
 import useAnalytics from './useAnalytics';
+import reportAnalyticsEvent from './reportAnalyticsEvent';
 
 if (useAnalytics()) {
   GoogleAnalytics.initialize(ANALYTICS_TOKEN);
@@ -10,7 +11,7 @@ if (useAnalytics()) {
 
 // see https://github.com/react-ga/react-ga/issues/122
 
-const withPageAnalytics = (WrappedComponent, options = {}) => {
+const withPageAnalytics = (pageId, WrappedComponent, options = {}) => {
   // only track on production
   if (!useAnalytics()) {
     return WrappedComponent;
@@ -25,11 +26,24 @@ const withPageAnalytics = (WrappedComponent, options = {}) => {
   };
 
   const HOC = class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { loadedAt: new Date() };
+    }
     componentDidMount() {
       const page = this.props.location.pathname;
       trackPage(page);
     }
-
+    componentWillUnmount() {
+      const unmountedAt = new Date();
+      const duration = unmountedAt - this.state.loadedAt;
+      reportAnalyticsEvent({
+        category: 'page',
+        action: 'leave',
+        label: pageId,
+        value: duration,
+      });
+    }
     componentWillReceiveProps(nextProps) {
       const currentPage = this.props.location.pathname;
       const nextPage = nextProps.location.pathname;

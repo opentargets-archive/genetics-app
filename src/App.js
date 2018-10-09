@@ -16,24 +16,30 @@ const App = () => (
   <OtUiThemeProvider>
     <Router>
       <React.Fragment>
-        <Route exact path="/" component={withPageAnalytics(HomePage)} />
+        <Route exact path="/" component={withPageAnalytics('home', HomePage)} />
         <Route
           path="/study/:studyId"
-          component={withPageAnalytics(StudyPage)}
+          component={withPageAnalytics('study', StudyPage)}
         />
         <Route
           path="/study-comparison/:studyId"
-          component={withPageAnalytics(StudiesPage)}
+          component={withPageAnalytics('study-comparison', StudiesPage)}
         />
-        <Route path="/gene/:geneId" component={withPageAnalytics(GenePage)} />
+        <Route
+          path="/gene/:geneId"
+          component={withPageAnalytics('gene', GenePage)}
+        />
         <Route
           path="/variant/:variantId"
-          component={withPageAnalytics(VariantPage)}
+          component={withPageAnalytics('variant', VariantPage)}
         />
-        <Route path="/locus" component={withPageAnalytics(LocusPage)} />
+        <Route
+          path="/locus"
+          component={withPageAnalytics('locus', LocusPage)}
+        />
         <Route
           path="/regional/:studyId/:variantId"
-          component={withPageAnalytics(RegionalPage)}
+          component={withPageAnalytics('regional', RegionalPage)}
         />
       </React.Fragment>
     </Router>

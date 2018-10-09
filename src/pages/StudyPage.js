@@ -20,6 +20,7 @@ import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const SIGNIFICANCE = 5e-8;
 
@@ -193,6 +194,13 @@ class StudyPage extends React.Component {
                   error={error}
                   svgContainer={manhattanPlot}
                   filenameStem={`${studyId}-independently-associated-loci`}
+                  reportDownloadEvent={() => {
+                    reportAnalyticsEvent({
+                      category: 'visualisation',
+                      action: 'download',
+                      label: `study:manhattan:svg`,
+                    });
+                  }}
                 >
                   <ManhattanWithTooltip
                     data={manhattan}
@@ -222,10 +230,22 @@ class StudyPage extends React.Component {
     );
   }
   handleChange = event => {
+    if (event.target.value) {
+      reportAnalyticsEvent({
+        category: 'visualisation',
+        action: 'filter',
+        label: `study:manhattan:chromosome`,
+      });
+    }
     this.setState({ focusChromosome: event.target.value });
   };
   handleChromosomeClick = chromosome => {
     if (chromosome) {
+      reportAnalyticsEvent({
+        category: 'visualisation',
+        action: 'filter',
+        label: `study:manhattan:chromosome`,
+      });
       this.setState({ focusChromosome: chromosome });
     } else {
       this.setState({ focusChromosome: '' });
