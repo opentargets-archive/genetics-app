@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import locusFilter from './locusFilter';
 import locusSelected from './locusSelected';
 import locusTransform from './locusTransform';
@@ -59,6 +61,12 @@ const EMPTY_LOOKUPS = {
   indexVariantDict: {},
   studyDict: {},
 };
+const EMPTY_ENTITIES = {
+  genes: [],
+  tagVariants: [],
+  indexVariants: [],
+  studies: [],
+};
 
 const locusScheme = ({
   scheme,
@@ -72,6 +80,7 @@ const locusScheme = ({
   if (!data) {
     return {
       plot: EMPTY_PLOT,
+      entities: EMPTY_ENTITIES,
       rows: [],
       lookups: EMPTY_LOOKUPS,
       isEmpty: true,
@@ -89,6 +98,12 @@ const locusScheme = ({
     selectedStudies,
   });
   const transformed = locusTransform({ data: selected, lookups });
+  const entities = {
+    genes: _.sortBy(transformed.genes, ['symbol']),
+    tagVariants: transformed.tagVariants,
+    indexVariants: transformed.indexVariants,
+    studies: transformed.studies,
+  };
   const filtered = locusFilter({
     data: transformed,
     selectedGenes,
@@ -186,6 +201,7 @@ const locusScheme = ({
   return {
     plot,
     rows,
+    entities,
     lookups,
     isEmpty,
     isEmptyFiltered,

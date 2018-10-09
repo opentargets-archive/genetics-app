@@ -361,6 +361,7 @@ class LocusPage extends React.Component {
               lookups,
               plot,
               rows,
+              entities,
               isEmpty,
               isEmptyFiltered,
             } = locusScheme({
@@ -491,10 +492,12 @@ class LocusPage extends React.Component {
                   filenameStem={`${chromosome}-${start}-${end}-locus`}
                   geneFilterValue={
                     selectedGenes
-                      ? plot.genes.filter(d => selectedGenes.indexOf(d.id) >= 0)
+                      ? entities.genes.filter(
+                          d => selectedGenes.indexOf(d.id) >= 0
+                        )
                       : []
                   }
-                  geneFilterOptions={plot.genes}
+                  geneFilterOptions={entities.genes}
                   geneFilterHandler={this.handleAddGene}
                 />
               </React.Fragment>
