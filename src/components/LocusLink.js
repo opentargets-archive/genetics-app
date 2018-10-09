@@ -20,6 +20,7 @@ const LocusLink = ({
   selectedTagVariants,
   selectedIndexVariants,
   selectedStudies,
+  classes,
 }) => {
   const chromosomeObj = chromosomeDict[chromosome];
   const start = position > mb ? position - mb : 0;
@@ -45,7 +46,9 @@ const LocusLink = ({
       to={`/locus?${queryString.stringify(params)}`}
       style={{ textDecoration: 'none' }}
     >
-      <Button gradient>{children}</Button>
+      <Button className={classes ? classes.button : null} gradient>
+        {children}
+      </Button>
     </Link>
   );
 };

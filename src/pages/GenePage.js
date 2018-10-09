@@ -7,6 +7,7 @@ import {
   SectionHeading,
   Button,
   Typography,
+  LocusIcon,
   OverviewIcon,
   DrugsIcon,
   MouseIcon,
@@ -73,6 +74,15 @@ const styles = theme => {
     card: {
       height: '100%',
     },
+    locusLinkButton: {
+      width: '240px',
+      height: '60px',
+    },
+    locusIcon: {
+      fill: 'white',
+      width: '40px',
+      height: '40px',
+    },
     link: {
       textDecoration: 'none',
     },
@@ -92,6 +102,9 @@ const styles = theme => {
 
 const GenePage = ({ match, classes }) => {
   const { geneId } = match.params;
+  const locusLinkClasses = {
+    button: classes.locusLinkButton,
+  };
   return (
     <BasePage>
       <Query query={SEARCH_QUERY} variables={{ geneId }}>
@@ -123,9 +136,11 @@ const GenePage = ({ match, classes }) => {
                               chromosome={chromosome}
                               position={Math.round((start + end) / 2)}
                               selectedGenes={[geneId]}
+                              classes={locusLinkClasses}
                             >
                               View associated variants and traits within Locus
                               View plot
+                              <LocusIcon className={classes.locusIcon} />
                             </LocusLink>
                           </Grid>
                         ) : null}
