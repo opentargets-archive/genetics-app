@@ -5,6 +5,7 @@ import { OtTable, DataCircle, significantFigures, Autocomplete } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import StudyDetailCell from './StudyDetailCell';
 
 export const tableColumns = ({
   overallScoreScale,
@@ -40,10 +41,7 @@ export const tableColumns = ({
         multiple
       />
     ),
-    renderCell: rowData =>
-      `${rowData.study.traitReported} (${rowData.study.pubAuthor} ${new Date(
-        rowData.study.pubDate
-      ).getFullYear()})`,
+    renderCell: rowData => <StudyDetailCell {...rowData.study} />,
   },
   {
     id: 'indexVariantId',
