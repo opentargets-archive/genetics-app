@@ -221,7 +221,7 @@ const GenePage = ({ match, classes }) => {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                            href={`https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
