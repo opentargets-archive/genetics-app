@@ -11,6 +11,9 @@ export const tableColumns = ({
   geneFilterValue,
   geneFilterOptions,
   geneFilterHandler,
+  studyFilterValue,
+  studyFilterOptions,
+  studyFilterHandler,
 }) => [
   {
     id: 'studyId',
@@ -21,8 +24,26 @@ export const tableColumns = ({
   },
   {
     id: 'traitReported',
-    label: 'Trait',
-    renderCell: rowData => rowData.study.traitReported,
+    label: 'Study Detail',
+    renderFilter: () => (
+      <Autocomplete
+        options={studyFilterOptions}
+        value={studyFilterValue}
+        getOptionLabel={d =>
+          `${d.traitReported} (${d.pubAuthor} ${new Date(
+            d.pubDate
+          ).getFullYear()})`
+        }
+        getOptionValue={d => d.studyId}
+        handleSelectOption={studyFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
+    renderCell: rowData =>
+      `${rowData.study.traitReported} (${rowData.study.pubAuthor} ${new Date(
+        rowData.study.pubDate
+      ).getFullYear()})`,
   },
   {
     id: 'indexVariantId',
@@ -112,6 +133,9 @@ function LocusTable({
   geneFilterValue,
   geneFilterOptions,
   geneFilterHandler,
+  studyFilterValue,
+  studyFilterOptions,
+  studyFilterHandler,
 }) {
   const overallScoreScale = d3
     .scaleSqrt()
@@ -126,6 +150,9 @@ function LocusTable({
         geneFilterValue,
         geneFilterOptions,
         geneFilterHandler,
+        studyFilterValue,
+        studyFilterOptions,
+        studyFilterHandler,
       })}
       filters
       data={data}

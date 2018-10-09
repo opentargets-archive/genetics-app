@@ -221,6 +221,16 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleAddStudy = newSelectedStudies => {
+    const { selectedStudies, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedStudies && newSelectedStudies.length > 0) {
+      newQueryParams.selectedStudies = newSelectedStudies.map(d => d.studyId);
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleDeleteGene = id => () => {
     const { selectedGenes, ...rest } = this._parseQueryProps();
     const newSelected = selectedGenes
@@ -499,6 +509,15 @@ class LocusPage extends React.Component {
                   }
                   geneFilterOptions={entities.genes}
                   geneFilterHandler={this.handleAddGene}
+                  studyFilterValue={
+                    selectedStudies
+                      ? entities.studies.filter(
+                          d => selectedStudies.indexOf(d.studyId) >= 0
+                        )
+                      : []
+                  }
+                  studyFilterOptions={entities.studies}
+                  studyFilterHandler={this.handleAddStudy}
                 />
               </React.Fragment>
             );
