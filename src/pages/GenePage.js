@@ -170,32 +170,6 @@ class GenePage extends React.Component {
                 ? data.studiesForGene.map(d => d.study)
                 : [];
 
-            // filters
-            const traitFilterOptions = _.sortBy(
-              _.uniq(associatedStudies.map(d => d.traitReported)).map(d => ({
-                label: d,
-                value: d,
-                selected: traitFilterUrl
-                  ? traitFilterUrl.indexOf(d) >= 0
-                  : false,
-              })),
-              [d => !d.selected, 'value']
-            );
-            const traitFilterValue = traitFilterOptions.filter(d => d.selected);
-            const authorFilterOptions = _.sortBy(
-              _.uniq(associatedStudies.map(d => d.pubAuthor)).map(d => ({
-                label: d,
-                value: d,
-                selected: authorFilterUrl
-                  ? authorFilterUrl.indexOf(d) >= 0
-                  : false,
-              })),
-              [d => !d.selected, 'value']
-            );
-            const authorFilterValue = authorFilterOptions.filter(
-              d => d.selected
-            );
-
             // filtered
             const associatedStudiesFiltered = associatedStudies.filter(d => {
               return (
@@ -207,6 +181,36 @@ class GenePage extends React.Component {
                   : true)
               );
             });
+
+            // filters
+            const traitFilterOptions = _.sortBy(
+              _.uniq(associatedStudiesFiltered.map(d => d.traitReported)).map(
+                d => ({
+                  label: d,
+                  value: d,
+                  selected: traitFilterUrl
+                    ? traitFilterUrl.indexOf(d) >= 0
+                    : false,
+                })
+              ),
+              [d => !d.selected, 'value']
+            );
+            const traitFilterValue = traitFilterOptions.filter(d => d.selected);
+            const authorFilterOptions = _.sortBy(
+              _.uniq(associatedStudiesFiltered.map(d => d.pubAuthor)).map(
+                d => ({
+                  label: d,
+                  value: d,
+                  selected: authorFilterUrl
+                    ? authorFilterUrl.indexOf(d) >= 0
+                    : false,
+                })
+              ),
+              [d => !d.selected, 'value']
+            );
+            const authorFilterValue = authorFilterOptions.filter(
+              d => d.selected
+            );
 
             const { chromosome, start, end, symbol } = gene;
             return (
