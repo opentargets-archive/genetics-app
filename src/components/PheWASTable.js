@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
+import {
+  OtTable,
+  commaSeparate,
+  significantFigures,
+  Autocomplete,
+} from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
@@ -12,6 +17,12 @@ export const tableColumns = ({
   position,
   isIndexVariant,
   isTagVariant,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
+  categoryFilterValue,
+  categoryFilterOptions,
+  categoryFilterHandler,
 }) => [
   {
     id: 'studyId',
@@ -23,10 +34,28 @@ export const tableColumns = ({
   {
     id: 'traitReported',
     label: 'Trait',
+    renderFilter: () => (
+      <Autocomplete
+        options={traitFilterOptions}
+        value={traitFilterValue}
+        handleSelectOption={traitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'traitCategory',
     label: 'Trait Category',
+    renderFilter: () => (
+      <Autocomplete
+        options={categoryFilterOptions}
+        value={categoryFilterValue}
+        handleSelectOption={categoryFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pval',
@@ -94,6 +123,12 @@ function PheWASTable({
   position,
   isIndexVariant,
   isTagVariant,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
+  categoryFilterValue,
+  categoryFilterOptions,
+  categoryFilterHandler,
 }) {
   return (
     <OtTable
@@ -105,10 +140,17 @@ function PheWASTable({
         position,
         isIndexVariant,
         isTagVariant,
+        traitFilterValue,
+        traitFilterOptions,
+        traitFilterHandler,
+        categoryFilterValue,
+        categoryFilterOptions,
+        categoryFilterHandler,
       })}
       data={associations}
       sortBy="pval"
       order="asc"
+      filters
       downloadFileStem="associated-studies"
       excludeDownloadColumns={['locusView']}
       reportTableDownloadEvent={format => {
