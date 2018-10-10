@@ -8,6 +8,7 @@ import _ from 'lodash';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 
 import {
   PageTitle,
@@ -251,6 +252,17 @@ const variantPageQuery = gql`
   }
 `;
 
+const styles = () => {
+  return {
+    header: {
+      display: 'inline-block',
+    },
+    headerSection: {
+      padding: '5px',
+    },
+  };
+};
+
 class VariantPage extends React.Component {
   handlePhewasTraitFilter = newPhewasTraitFilterValue => {
     const { phewasTraitFilter, ...rest } = this._parseQueryProps();
@@ -306,7 +318,7 @@ class VariantPage extends React.Component {
     });
   }
   render() {
-    const { match } = this.props;
+    const { match, classes } = this.props;
     let pheWASPlot = React.createRef();
     const { variantId } = match.params;
     const [chromosome, positionString] = variantId.split('_');
@@ -400,11 +412,17 @@ class VariantPage extends React.Component {
 
             return (
               <Fragment>
-                <Paper>
+                <Paper className={classes.headerSection}>
                   <Grid container>
                     <Grid item>
-                      <Typography variant="display1">{variantId}</Typography>
-                      <Typography variant="title" color="textSecondary">
+                      <Typography className={classes.header} variant="display1">
+                        {variantId}
+                      </Typography>{' '}
+                      <Typography
+                        className={classes.header}
+                        variant="title"
+                        color="textSecondary"
+                      >
                         {variantInfo.rsId}
                       </Typography>
                     </Grid>
@@ -427,27 +445,30 @@ class VariantPage extends React.Component {
                       ) : null}
                     </Grid>
                     <Grid item>
-                      {variantInfo.nearestGene ? (
-                        <Fragment>
-                          Nearest Gene:{' '}
-                          <Link to={`/gene/${variantInfo.nearestGene.id}`}>
-                            {variantInfo.nearestGene.symbol}
-                          </Link>
-                        </Fragment>
-                      ) : null}
-                      {variantInfo.nearestGene && variantInfo.nearestCodingGene
-                        ? ', '
-                        : null}
-                      {variantInfo.nearestCodingGene ? (
-                        <Fragment>
-                          Nearest Protein-Coding Gene:{' '}
-                          <Link
-                            to={`/gene/${variantInfo.nearestCodingGene.id}`}
-                          >
-                            {variantInfo.nearestCodingGene.symbol}
-                          </Link>
-                        </Fragment>
-                      ) : null}
+                      <Typography>
+                        {variantInfo.nearestGene ? (
+                          <Fragment>
+                            Nearest Gene:{' '}
+                            <Link to={`/gene/${variantInfo.nearestGene.id}`}>
+                              {variantInfo.nearestGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                        {variantInfo.nearestGene &&
+                        variantInfo.nearestCodingGene
+                          ? ', '
+                          : null}
+                        {variantInfo.nearestCodingGene ? (
+                          <Fragment>
+                            Nearest Protein-Coding Gene:{' '}
+                            <Link
+                              to={`/gene/${variantInfo.nearestCodingGene.id}`}
+                            >
+                              {variantInfo.nearestCodingGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Paper>
@@ -594,4 +615,4 @@ class VariantPage extends React.Component {
   }
 }
 
-export default VariantPage;
+export default withStyles(styles)(VariantPage);
