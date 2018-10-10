@@ -12,6 +12,9 @@ const tableColumns = ({
   traitFilterValue,
   traitFilterOptions,
   traitFilterHandler,
+  authorFilterValue,
+  authorFilterOptions,
+  authorFilterHandler,
 }) => [
   {
     id: 'studyId',
@@ -49,6 +52,15 @@ const tableColumns = ({
   {
     id: 'pubAuthor',
     label: 'Author (Year)',
+    renderFilter: () => (
+      <Autocomplete
+        options={authorFilterOptions}
+        value={authorFilterValue}
+        handleSelectOption={authorFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData =>
       `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
   },
@@ -97,6 +109,9 @@ const AssociatedStudiesTable = ({
   traitFilterValue,
   traitFilterOptions,
   traitFilterHandler,
+  authorFilterValue,
+  authorFilterOptions,
+  authorFilterHandler,
 }) => (
   <OtTable
     loading={loading}
@@ -109,6 +124,9 @@ const AssociatedStudiesTable = ({
       traitFilterValue,
       traitFilterOptions,
       traitFilterHandler,
+      authorFilterValue,
+      authorFilterOptions,
+      authorFilterHandler,
     })}
     data={data}
     sortBy="nInitial"

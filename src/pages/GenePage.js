@@ -113,6 +113,16 @@ class GenePage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handleAuthorFilter = newFilterValue => {
+    const { authorFilter, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newFilterValue && newFilterValue.length > 0) {
+      newQueryParams.authorFilter = newFilterValue.map(d => d.value);
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   _parseQueryProps() {
     const { history } = this.props;
     const queryProps = queryString.parse(history.location.search);
@@ -122,6 +132,11 @@ class GenePage extends React.Component {
       queryProps.traitFilter = Array.isArray(queryProps.traitFilter)
         ? queryProps.traitFilter
         : [queryProps.traitFilter];
+    }
+    if (queryProps.authorFilter) {
+      queryProps.authorFilter = Array.isArray(queryProps.authorFilter)
+        ? queryProps.authorFilter
+        : [queryProps.authorFilter];
     }
     return queryProps;
   }
@@ -135,7 +150,10 @@ class GenePage extends React.Component {
   render() {
     const { match, classes } = this.props;
     const { geneId } = match.params;
-    const { traitFilter: traitFilterUrl } = this._parseQueryProps();
+    const {
+      traitFilter: traitFilterUrl,
+      authorFilter: authorFilterUrl,
+    } = this._parseQueryProps();
     const locusLinkClasses = {
       button: classes.locusLinkButton,
     };
@@ -164,12 +182,30 @@ class GenePage extends React.Component {
               [d => !d.selected, 'value']
             );
             const traitFilterValue = traitFilterOptions.filter(d => d.selected);
+            const authorFilterOptions = _.sortBy(
+              _.uniq(associatedStudies.map(d => d.pubAuthor)).map(d => ({
+                label: d,
+                value: d,
+                selected: authorFilterUrl
+                  ? authorFilterUrl.indexOf(d) >= 0
+                  : false,
+              })),
+              [d => !d.selected, 'value']
+            );
+            const authorFilterValue = authorFilterOptions.filter(
+              d => d.selected
+            );
 
             // filtered
             const associatedStudiesFiltered = associatedStudies.filter(d => {
-              return traitFilterUrl
-                ? traitFilterUrl.indexOf(d.traitReported) >= 0
-                : true;
+              return (
+                (traitFilterUrl
+                  ? traitFilterUrl.indexOf(d.traitReported) >= 0
+                  : true) &&
+                (authorFilterUrl
+                  ? authorFilterUrl.indexOf(d.pubAuthor) >= 0
+                  : true)
+              );
             });
 
             const { chromosome, start, end, symbol } = gene;
@@ -375,6 +411,9 @@ class GenePage extends React.Component {
                   traitFilterValue={traitFilterValue}
                   traitFilterOptions={traitFilterOptions}
                   traitFilterHandler={this.handleTraitFilter}
+                  authorFilterValue={authorFilterValue}
+                  authorFilterOptions={authorFilterOptions}
+                  authorFilterHandler={this.handleAuthorFilter}
                 />
               </React.Fragment>
             );
