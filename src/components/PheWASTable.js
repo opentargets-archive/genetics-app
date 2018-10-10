@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'react-virtualized-select/styles.css';
 import {
   OtTable,
   commaSeparate,
