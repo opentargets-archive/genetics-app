@@ -411,19 +411,16 @@ class VariantPage extends React.Component {
                   </Grid>
                   <Grid container justify="space-between">
                     <Grid item>
-                      {isIndexVariant ? (
+                      {isIndexVariant || isTagVariant ? (
                         <LocusLink
                           chromosome={chromosome}
                           position={position}
-                          selectedIndexVariants={[variantId]}
-                        >
-                          View locus
-                        </LocusLink>
-                      ) : isTagVariant ? (
-                        <LocusLink
-                          chromosome={chromosome}
-                          position={position}
-                          selectedTagVariants={[variantId]}
+                          selectedIndexVariants={
+                            isIndexVariant ? [variantId] : null
+                          }
+                          selectedTagVariants={
+                            isTagVariant ? [variantId] : null
+                          }
                         >
                           View locus
                         </LocusLink>
