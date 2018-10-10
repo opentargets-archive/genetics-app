@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate } from 'ot-ui';
+import { OtTable, commaSeparate, Autocomplete } from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-const tableColumns = (geneId, chromosome, position) => [
+const tableColumns = ({
+  geneId,
+  chromosome,
+  position,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
+}) => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -16,6 +23,15 @@ const tableColumns = (geneId, chromosome, position) => [
   {
     id: 'traitReported',
     label: 'Trait',
+    renderFilter: () => (
+      <Autocomplete
+        options={traitFilterOptions}
+        value={traitFilterValue}
+        handleSelectOption={traitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pmid',
@@ -78,11 +94,22 @@ const AssociatedStudiesTable = ({
   geneId,
   chromosome,
   position,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
 }) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns(geneId, chromosome, position)}
+    filters
+    columns={tableColumns({
+      geneId,
+      chromosome,
+      position,
+      traitFilterValue,
+      traitFilterOptions,
+      traitFilterHandler,
+    })}
     data={data}
     sortBy="nInitial"
     order="desc"
