@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
+import 'react-virtualized-select/styles.css';
+import {
+  OtTable,
+  commaSeparate,
+  significantFigures,
+  Autocomplete,
+} from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
@@ -12,6 +18,9 @@ export const tableColumns = ({
   position,
   isIndexVariant,
   isTagVariant,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
 }) => [
   {
     id: 'studyId',
@@ -23,6 +32,15 @@ export const tableColumns = ({
   {
     id: 'traitReported',
     label: 'Trait',
+    renderFilter: () => (
+      <Autocomplete
+        options={traitFilterOptions}
+        value={traitFilterValue}
+        handleSelectOption={traitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'traitCategory',
@@ -94,6 +112,9 @@ function PheWASTable({
   position,
   isIndexVariant,
   isTagVariant,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
 }) {
   return (
     <OtTable
@@ -105,10 +126,14 @@ function PheWASTable({
         position,
         isIndexVariant,
         isTagVariant,
+        traitFilterValue,
+        traitFilterOptions,
+        traitFilterHandler,
       })}
       data={associations}
       sortBy="pval"
       order="asc"
+      filters
       downloadFileStem="associated-studies"
       excludeDownloadColumns={['locusView']}
       reportTableDownloadEvent={format => {
