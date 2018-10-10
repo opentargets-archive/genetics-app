@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import locusFilter from './locusFilter';
 import locusSelected from './locusSelected';
 import locusTransform from './locusTransform';
@@ -59,6 +61,12 @@ const EMPTY_LOOKUPS = {
   indexVariantDict: {},
   studyDict: {},
 };
+const EMPTY_ENTITIES = {
+  genes: [],
+  tagVariants: [],
+  indexVariants: [],
+  studies: [],
+};
 
 const locusScheme = ({
   scheme,
@@ -72,6 +80,7 @@ const locusScheme = ({
   if (!data) {
     return {
       plot: EMPTY_PLOT,
+      entities: EMPTY_ENTITIES,
       rows: [],
       lookups: EMPTY_LOOKUPS,
       isEmpty: true,
@@ -89,6 +98,7 @@ const locusScheme = ({
     selectedStudies,
   });
   const transformed = locusTransform({ data: selected, lookups });
+
   const filtered = locusFilter({
     data: transformed,
     selectedGenes,
@@ -108,6 +118,23 @@ const locusScheme = ({
     geneTagVariants,
     tagVariantIndexVariantStudies,
   } = chained;
+
+  const entities = {
+    genes: _.sortBy(genes, [d => !d.selected, d => !d.chained, 'symbol']),
+    tagVariants: tagVariants,
+    indexVariants: _.sortBy(indexVariants, [
+      d => !d.selected,
+      d => !d.chained,
+
+      'id',
+    ]),
+    studies: _.sortBy(studies, [
+      d => !d.selected,
+      d => !d.chained,
+      'traitReported',
+      'pubAuthor',
+    ]),
+  };
 
   const genesFiltered = genes.filter(d => d.chained);
   const tagVariantsFiltered = tagVariants
@@ -186,6 +213,7 @@ const locusScheme = ({
   return {
     plot,
     rows,
+    entities,
     lookups,
     isEmpty,
     isEmptyFiltered,

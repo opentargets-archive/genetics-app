@@ -211,6 +211,50 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   handleMousemove = (d, type, point) => {};
+  handleAddGene = newSelectedGenes => {
+    const { selectedGenes, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedGenes && newSelectedGenes.length > 0) {
+      newQueryParams.selectedGenes = newSelectedGenes.map(d => d.id);
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleAddTagVariant = newSelectedTagVariants => {
+    const { selectedTagVariants, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedTagVariants && newSelectedTagVariants.length > 0) {
+      newQueryParams.selectedTagVariants = newSelectedTagVariants.map(
+        d => d.id
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleAddIndexVariant = newSelectedIndexVariants => {
+    const { selectedIndexVariants, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedIndexVariants && newSelectedIndexVariants.length > 0) {
+      newQueryParams.selectedIndexVariants = newSelectedIndexVariants.map(
+        d => d.id
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
+  handleAddStudy = newSelectedStudies => {
+    const { selectedStudies, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newSelectedStudies && newSelectedStudies.length > 0) {
+      newQueryParams.selectedStudies = newSelectedStudies.map(d => d.studyId);
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleDeleteGene = id => () => {
     const { selectedGenes, ...rest } = this._parseQueryProps();
     const newSelected = selectedGenes
@@ -351,6 +395,7 @@ class LocusPage extends React.Component {
               lookups,
               plot,
               rows,
+              entities,
               isEmpty,
               isEmptyFiltered,
             } = locusScheme({
@@ -479,6 +524,42 @@ class LocusPage extends React.Component {
                   error={error}
                   data={rows}
                   filenameStem={`${chromosome}-${start}-${end}-locus`}
+                  geneFilterValue={
+                    selectedGenes
+                      ? entities.genes.filter(
+                          d => selectedGenes.indexOf(d.id) >= 0
+                        )
+                      : []
+                  }
+                  geneFilterOptions={entities.genes}
+                  geneFilterHandler={this.handleAddGene}
+                  tagVariantFilterValue={
+                    selectedTagVariants
+                      ? entities.tagVariants.filter(
+                          d => selectedTagVariants.indexOf(d.id) >= 0
+                        )
+                      : []
+                  }
+                  tagVariantFilterOptions={entities.tagVariants}
+                  tagVariantFilterHandler={this.handleAddTagVariant}
+                  indexVariantFilterValue={
+                    selectedIndexVariants
+                      ? entities.indexVariants.filter(
+                          d => selectedIndexVariants.indexOf(d.id) >= 0
+                        )
+                      : []
+                  }
+                  indexVariantFilterOptions={entities.indexVariants}
+                  indexVariantFilterHandler={this.handleAddIndexVariant}
+                  studyFilterValue={
+                    selectedStudies
+                      ? entities.studies.filter(
+                          d => selectedStudies.indexOf(d.studyId) >= 0
+                        )
+                      : []
+                  }
+                  studyFilterOptions={entities.studies}
+                  studyFilterHandler={this.handleAddStudy}
                 />
               </React.Fragment>
             );

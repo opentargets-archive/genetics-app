@@ -1,11 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate } from 'ot-ui';
+import { OtTable, commaSeparate, Autocomplete } from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-const tableColumns = (geneId, chromosome, position) => [
+const tableColumns = ({
+  geneId,
+  chromosome,
+  position,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
+  authorFilterValue,
+  authorFilterOptions,
+  authorFilterHandler,
+}) => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -16,6 +26,15 @@ const tableColumns = (geneId, chromosome, position) => [
   {
     id: 'traitReported',
     label: 'Trait',
+    renderFilter: () => (
+      <Autocomplete
+        options={traitFilterOptions}
+        value={traitFilterValue}
+        handleSelectOption={traitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pmid',
@@ -33,6 +52,15 @@ const tableColumns = (geneId, chromosome, position) => [
   {
     id: 'pubAuthor',
     label: 'Author (Year)',
+    renderFilter: () => (
+      <Autocomplete
+        options={authorFilterOptions}
+        value={authorFilterValue}
+        handleSelectOption={authorFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData =>
       `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
   },
@@ -78,11 +106,28 @@ const AssociatedStudiesTable = ({
   geneId,
   chromosome,
   position,
+  traitFilterValue,
+  traitFilterOptions,
+  traitFilterHandler,
+  authorFilterValue,
+  authorFilterOptions,
+  authorFilterHandler,
 }) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns(geneId, chromosome, position)}
+    filters
+    columns={tableColumns({
+      geneId,
+      chromosome,
+      position,
+      traitFilterValue,
+      traitFilterOptions,
+      traitFilterHandler,
+      authorFilterValue,
+      authorFilterOptions,
+      authorFilterHandler,
+    })}
     data={data}
     sortBy="nInitial"
     order="desc"

@@ -1,12 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { OtTable, DataCircle, significantFigures } from 'ot-ui';
+import { OtTable, DataCircle, significantFigures, Autocomplete } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import StudyDetailCell from './StudyDetailCell';
 
-export const tableColumns = overallScoreScale => [
+export const tableColumns = ({
+  overallScoreScale,
+  geneFilterValue,
+  geneFilterOptions,
+  geneFilterHandler,
+  tagVariantFilterValue,
+  tagVariantFilterOptions,
+  tagVariantFilterHandler,
+  indexVariantFilterValue,
+  indexVariantFilterOptions,
+  indexVariantFilterHandler,
+  studyFilterValue,
+  studyFilterOptions,
+  studyFilterHandler,
+}) => [
   {
     id: 'studyId',
     label: 'Study ID',
@@ -16,12 +31,38 @@ export const tableColumns = overallScoreScale => [
   },
   {
     id: 'traitReported',
-    label: 'Trait',
-    renderCell: rowData => rowData.study.traitReported,
+    label: 'Study Detail',
+    renderFilter: () => (
+      <Autocomplete
+        options={studyFilterOptions}
+        value={studyFilterValue}
+        getOptionLabel={d =>
+          `${d.traitReported} (${d.pubAuthor} ${new Date(
+            d.pubDate
+          ).getFullYear()})`
+        }
+        getOptionValue={d => d.studyId}
+        handleSelectOption={studyFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
+    renderCell: rowData => <StudyDetailCell {...rowData.study} />,
   },
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
+    renderFilter: () => (
+      <Autocomplete
+        options={indexVariantFilterOptions}
+        value={indexVariantFilterValue}
+        getOptionLabel={d => `${d.id} (${d.rsId})`}
+        getOptionValue={d => d.id}
+        handleSelectOption={indexVariantFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
@@ -31,6 +72,17 @@ export const tableColumns = overallScoreScale => [
   {
     id: 'tagVariantId',
     label: 'Tag Variant',
+    renderFilter: () => (
+      <Autocomplete
+        options={tagVariantFilterOptions}
+        value={tagVariantFilterValue}
+        getOptionLabel={d => `${d.id} (${d.rsId})`}
+        getOptionValue={d => d.id}
+        handleSelectOption={tagVariantFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.tagVariantId}`}>
         {rowData.tagVariantId}
@@ -41,6 +93,17 @@ export const tableColumns = overallScoreScale => [
     id: 'geneId',
     label: 'Gene',
     tooltip: 'Gene functionally implicated by the tag variant',
+    renderFilter: () => (
+      <Autocomplete
+        options={geneFilterOptions}
+        value={geneFilterValue}
+        getOptionLabel={d => d.symbol}
+        getOptionValue={d => d.id}
+        handleSelectOption={geneFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/gene/${rowData.geneId}`}>{rowData.gene.symbol}</Link>
     ),
@@ -88,7 +151,24 @@ export const tableColumns = overallScoreScale => [
   },
 ];
 
-function LocusTable({ loading, error, data, filenameStem }) {
+function LocusTable({
+  loading,
+  error,
+  data,
+  filenameStem,
+  geneFilterValue,
+  geneFilterOptions,
+  geneFilterHandler,
+  tagVariantFilterValue,
+  tagVariantFilterOptions,
+  tagVariantFilterHandler,
+  indexVariantFilterValue,
+  indexVariantFilterOptions,
+  indexVariantFilterHandler,
+  studyFilterValue,
+  studyFilterOptions,
+  studyFilterHandler,
+}) {
   const overallScoreScale = d3
     .scaleSqrt()
     .domain([0, d3.max(data, d => d.overallScore)])
@@ -97,7 +177,22 @@ function LocusTable({ loading, error, data, filenameStem }) {
     <OtTable
       loading={loading}
       error={error}
-      columns={tableColumns(overallScoreScale)}
+      columns={tableColumns({
+        overallScoreScale,
+        geneFilterValue,
+        geneFilterOptions,
+        geneFilterHandler,
+        tagVariantFilterValue,
+        tagVariantFilterOptions,
+        tagVariantFilterHandler,
+        indexVariantFilterValue,
+        indexVariantFilterOptions,
+        indexVariantFilterHandler,
+        studyFilterValue,
+        studyFilterOptions,
+        studyFilterHandler,
+      })}
+      filters
       data={data}
       sortBy="pval"
       order="asc"
