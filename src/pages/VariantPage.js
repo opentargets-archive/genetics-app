@@ -471,6 +471,9 @@ class VariantPage extends React.Component {
                       </Typography>
                     </Grid>
                   </Grid>
+                  <Grid>
+                    <a href={`https://www.ensembl.org`}>Ensembl</a>
+                  </Grid>
                 </Paper>
                 <SectionHeading
                   heading="Assigned genes"
