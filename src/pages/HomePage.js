@@ -51,6 +51,15 @@ const HomePage = () => (
           </a>
         ))}
       </Typography>
+      <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
+        <a
+          href="http://eepurl.com/dHnchn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Subscribe to our newsletter
+        </a>
+      </Typography>
     </HomeBox>
   </div>
 );
