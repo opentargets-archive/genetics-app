@@ -1,6 +1,6 @@
 # Open Targets Genetics App
 
-This repo contains the web application code for [Open Targets Genetics](https://genetics-app.netlify.com).
+This repo contains the web application code for [Open Targets Genetics](https://genetics.opentargets.org).
 
 It is one component of several and the overarching project is described [here](https://github.com/opentargets/genetics), which is also where issues can be raised.
 
