@@ -72,17 +72,17 @@ export const tableColumns = ({
   {
     id: 'tagVariantId',
     label: 'Tag Variant',
-    // renderFilter: () => (
-    //   <Autocomplete
-    //     options={tagVariantFilterOptions}
-    //     value={tagVariantFilterValue}
-    //     getOptionLabel={d => `${d.id} (${d.rsId})`}
-    //     getOptionValue={d => d.id}
-    //     handleSelectOption={tagVariantFilterHandler}
-    //     placeholder="None"
-    //     multiple
-    //   />
-    // ),
+    renderFilter: () => (
+      <Autocomplete
+        options={tagVariantFilterOptions}
+        value={tagVariantFilterValue}
+        getOptionLabel={d => `${d.id} (${d.rsId})`}
+        getOptionValue={d => d.id}
+        handleSelectOption={tagVariantFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.tagVariantId}`}>
         {rowData.tagVariantId}
