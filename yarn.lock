@@ -6066,15 +6066,15 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.32:
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.32.tgz#98e204d083810f0e51f2e22fac40b70edbbe05ed"
+ot-charts@^0.0.33:
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.33.tgz#d731bf6055072bf667f770a6865e32d936c119d7"
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.45:
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.45.tgz#edb8a090f79803c229ee07f0bb302c3f760fda3e"
+ot-ui@^0.0.46:
+  version "0.0.46"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.46.tgz#0f46e2795b7fe275fea8cfb3917e3334597bdfdc"
 
 p-finally@^1.0.0:
   version "1.0.0"
