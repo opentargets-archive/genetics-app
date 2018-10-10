@@ -20,6 +20,9 @@ export const tableColumns = ({
   traitFilterValue,
   traitFilterOptions,
   traitFilterHandler,
+  categoryFilterValue,
+  categoryFilterOptions,
+  categoryFilterHandler,
 }) => [
   {
     id: 'studyId',
@@ -44,6 +47,15 @@ export const tableColumns = ({
   {
     id: 'traitCategory',
     label: 'Trait Category',
+    renderFilter: () => (
+      <Autocomplete
+        options={categoryFilterOptions}
+        value={categoryFilterValue}
+        handleSelectOption={categoryFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pval',
@@ -114,6 +126,9 @@ function PheWASTable({
   traitFilterValue,
   traitFilterOptions,
   traitFilterHandler,
+  categoryFilterValue,
+  categoryFilterOptions,
+  categoryFilterHandler,
 }) {
   return (
     <OtTable
@@ -128,6 +143,9 @@ function PheWASTable({
         traitFilterValue,
         traitFilterOptions,
         traitFilterHandler,
+        categoryFilterValue,
+        categoryFilterOptions,
+        categoryFilterHandler,
       })}
       data={associations}
       sortBy="pval"

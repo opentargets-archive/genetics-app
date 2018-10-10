@@ -262,6 +262,21 @@ class VariantPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
+  handlePhewasCategoryFilter = newPhewasCategoryFilterValue => {
+    const { phewasCategoryFilter, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (
+      newPhewasCategoryFilterValue &&
+      newPhewasCategoryFilterValue.length > 0
+    ) {
+      newQueryParams.phewasCategoryFilter = newPhewasCategoryFilterValue.map(
+        d => d.value
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   _parseQueryProps() {
     const { history } = this.props;
     const queryProps = queryString.parse(history.location.search);
@@ -271,6 +286,13 @@ class VariantPage extends React.Component {
       queryProps.phewasTraitFilter = Array.isArray(queryProps.phewasTraitFilter)
         ? queryProps.phewasTraitFilter
         : [queryProps.phewasTraitFilter];
+    }
+    if (queryProps.phewasCategoryFilter) {
+      queryProps.phewasCategoryFilter = Array.isArray(
+        queryProps.phewasCategoryFilter
+      )
+        ? queryProps.phewasCategoryFilter
+        : [queryProps.phewasCategoryFilter];
     }
     return queryProps;
   }
@@ -287,7 +309,10 @@ class VariantPage extends React.Component {
     const { variantId } = match.params;
     const [chromosome, positionString] = variantId.split('_');
     const position = parseInt(positionString, 10);
-    const { phewasTraitFilter: phewasTraitFilterUrl } = this._parseQueryProps();
+    const {
+      phewasTraitFilter: phewasTraitFilterUrl,
+      phewasCategoryFilter: phewasCategoryFilterUrl,
+    } = this._parseQueryProps();
     return (
       <BasePage>
         <ScrollToTop onRouteChange />
@@ -330,13 +355,14 @@ class VariantPage extends React.Component {
 
             // phewas - filtered
             const pheWASAssociationsFiltered = pheWASAssociations.filter(d => {
-              return phewasTraitFilterUrl
-                ? phewasTraitFilterUrl.indexOf(d.traitReported) >= 0
-                : true;
-              //&&
-              //(authorFilterUrl
-              //? authorFilterUrl.indexOf(d.pubAuthor) >= 0
-              //: true)
+              return (
+                (phewasTraitFilterUrl
+                  ? phewasTraitFilterUrl.indexOf(d.traitReported) >= 0
+                  : true) &&
+                (phewasCategoryFilterUrl
+                  ? phewasCategoryFilterUrl.indexOf(d.traitCategory) >= 0
+                  : true)
+              );
             });
             // phewas - filters
             const phewasTraitFilterOptions = _.sortBy(
@@ -352,6 +378,21 @@ class VariantPage extends React.Component {
               [d => !d.selected, 'value']
             );
             const phewasTraitFilterValue = phewasTraitFilterOptions.filter(
+              d => d.selected
+            );
+            const phewasCategoryFilterOptions = _.sortBy(
+              _.uniq(pheWASAssociationsFiltered.map(d => d.traitCategory)).map(
+                d => ({
+                  label: d,
+                  value: d,
+                  selected: phewasCategoryFilterUrl
+                    ? phewasCategoryFilterUrl.indexOf(d) >= 0
+                    : false,
+                })
+              ),
+              [d => !d.selected, 'value']
+            );
+            const phewasCategoryFilterValue = phewasCategoryFilterOptions.filter(
               d => d.selected
             );
 
@@ -489,6 +530,9 @@ class VariantPage extends React.Component {
                   traitFilterValue={phewasTraitFilterValue}
                   traitFilterOptions={phewasTraitFilterOptions}
                   traitFilterHandler={this.handlePhewasTraitFilter}
+                  categoryFilterValue={phewasCategoryFilterValue}
+                  categoryFilterOptions={phewasCategoryFilterOptions}
+                  categoryFilterHandler={this.handlePhewasCategoryFilter}
                 />
                 <SectionHeading
                   heading="GWAS lead variants"
