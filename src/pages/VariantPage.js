@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
 import _ from 'lodash';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 import {
   PageTitle,
@@ -12,7 +15,6 @@ import {
   DownloadSVGPlot,
   SectionHeading,
   ListTooltip,
-  Typography,
 } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
@@ -397,59 +399,61 @@ class VariantPage extends React.Component {
             );
 
             return (
-              <React.Fragment>
-                <PageTitle>
-                  {variantId}{' '}
-                  <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                    {variantInfo.rsId}
-                  </span>
-                </PageTitle>
-                <SubHeading
-                  left={
-                    isIndexVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedIndexVariants={[variantId]}
-                      >
-                        View locus
-                      </LocusLink>
-                    ) : isTagVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedTagVariants={[variantId]}
-                      >
-                        View locus
-                      </LocusLink>
-                    ) : null
-                  }
-                  right={
-                    <div>
+              <Fragment>
+                <Paper>
+                  <Grid container>
+                    <Grid item>
+                      <Typography variant="display1">{variantId}</Typography>
+                      <Typography variant="title" color="textSecondary">
+                        {variantInfo.rsId}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {isIndexVariant ? (
+                        <LocusLink
+                          chromosome={chromosome}
+                          position={position}
+                          selectedIndexVariants={[variantId]}
+                        >
+                          View locus
+                        </LocusLink>
+                      ) : isTagVariant ? (
+                        <LocusLink
+                          chromosome={chromosome}
+                          position={position}
+                          selectedTagVariants={[variantId]}
+                        >
+                          View locus
+                        </LocusLink>
+                      ) : null}
+                    </Grid>
+                    <Grid item>
                       {variantInfo.nearestGene ? (
-                        <React.Fragment>
+                        <Fragment>
                           Nearest Gene:{' '}
                           <Link to={`/gene/${variantInfo.nearestGene.id}`}>
                             {variantInfo.nearestGene.symbol}
                           </Link>
-                        </React.Fragment>
+                        </Fragment>
                       ) : null}
                       {variantInfo.nearestGene && variantInfo.nearestCodingGene
                         ? ', '
                         : null}
                       {variantInfo.nearestCodingGene ? (
-                        <React.Fragment>
+                        <Fragment>
                           Nearest Protein-Coding Gene:{' '}
                           <Link
                             to={`/gene/${variantInfo.nearestCodingGene.id}`}
                           >
                             {variantInfo.nearestCodingGene.symbol}
                           </Link>
-                        </React.Fragment>
+                        </Fragment>
                       ) : null}
-                    </div>
-                  }
-                />
+                    </Grid>
+                  </Grid>
+                </Paper>
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"
@@ -584,7 +588,7 @@ class VariantPage extends React.Component {
                   variantId={variantId}
                   filenameStem={`${variantId}-tag-variants`}
                 />
-              </React.Fragment>
+              </Fragment>
             );
           }}
         </Query>
