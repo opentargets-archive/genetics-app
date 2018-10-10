@@ -1,3 +1,7 @@
+import 'core-js/fn/array/find';
+import 'core-js/fn/math/log10';
+import 'core-js/fn/object/values';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloClient } from 'apollo-client';
