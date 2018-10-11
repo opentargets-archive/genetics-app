@@ -445,7 +445,7 @@ class VariantPage extends React.Component {
                             isIndexVariant ? [variantId] : null
                           }
                           selectedTagVariants={
-                            isTagVariant ? [variantId] : null
+                            isTagVariant && !isIndexVariant ? [variantId] : null
                           }
                         >
                           View locus
