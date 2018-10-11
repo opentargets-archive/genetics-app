@@ -325,6 +325,7 @@ const styles = theme => {
   return {
     section: {
       padding: theme.sectionPadding,
+      textDecoration: 'none',
     },
   };
 };

@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import { DownloadSVGPlot, SectionHeading, ListTooltip } from 'ot-ui';
+import { DownloadSVGPlot, SectionHeading, ListTooltip, Button } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -254,6 +254,12 @@ const styles = theme => {
     headerSection: {
       padding: theme.sectionPadding,
     },
+    ensemblLink: {
+      marginLeft: '5px',
+      position: 'relative',
+      bottom: '8px',
+      textDecoration: 'none',
+    },
   };
 };
 
@@ -419,6 +425,14 @@ class VariantPage extends React.Component {
                       >
                         {variantInfo.rsId}
                       </Typography>
+                      <a
+                        className={classes.ensemblLink}
+                        href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+                          variantInfo.rsId
+                        }`}
+                      >
+                        <Button variant="outlined">Ensembl</Button>
+                      </a>
                     </Grid>
                   </Grid>
                   <Grid container justify="space-between">
@@ -464,9 +478,6 @@ class VariantPage extends React.Component {
                         ) : null}
                       </Typography>
                     </Grid>
-                  </Grid>
-                  <Grid>
-                    <a href={`https://www.ensembl.org`}>Ensembl</a>
                   </Grid>
                 </Paper>
                 <SectionHeading
