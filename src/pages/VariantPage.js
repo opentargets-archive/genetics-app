@@ -10,13 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-  PageTitle,
-  SubHeading,
-  DownloadSVGPlot,
-  SectionHeading,
-  ListTooltip,
-} from 'ot-ui';
+import { DownloadSVGPlot, SectionHeading, ListTooltip } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -445,7 +439,7 @@ class VariantPage extends React.Component {
                       ) : null}
                     </Grid>
                     <Grid item>
-                      <Typography>
+                      <Typography variant="subheading">
                         {variantInfo.nearestGene ? (
                           <Fragment>
                             Nearest Gene:{' '}
