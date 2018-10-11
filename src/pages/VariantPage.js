@@ -252,13 +252,13 @@ const variantPageQuery = gql`
   }
 `;
 
-const styles = () => {
+const styles = theme => {
   return {
     header: {
       display: 'inline-block',
     },
     headerSection: {
-      padding: '5px',
+      padding: theme.sectionPadding,
     },
   };
 };
