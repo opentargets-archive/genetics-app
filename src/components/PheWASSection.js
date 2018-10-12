@@ -68,7 +68,6 @@ class PheWASSection extends React.Component {
     return (
       <Query query={phewasQuery} variables={{ variantId }}>
         {({ loading, error, data }) => {
-          console.log(data);
           const isPheWASVariant = hasAssociations(data);
           const PheWASWithTooltip = withTooltip(
             PheWAS,
