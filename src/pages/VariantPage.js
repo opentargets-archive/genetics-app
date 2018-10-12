@@ -430,6 +430,7 @@ class VariantPage extends React.Component {
                         href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
                           variantInfo.rsId
                         }`}
+                        target="_blank"
                       >
                         <Button variant="outlined">Ensembl</Button>
                       </a>
