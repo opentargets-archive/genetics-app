@@ -4,11 +4,12 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
 import { findDOMNode } from 'react-dom';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 import { Gecko } from 'ot-charts';
 import {
-  PageTitle,
-  Typography,
   SectionHeading,
   BrowserControls,
   PlotContainer,
@@ -87,6 +88,14 @@ const geckoQuery = gql`
 const ZOOM_LIMIT = 2000000;
 const ZOOM_FACTOR = 1.25;
 const PAN_FACTOR = 0.1;
+
+const styles = theme => {
+  return {
+    section: {
+      padding: theme.sectionPadding,
+    },
+  };
+};
 
 class LocusPage extends React.Component {
   handleZoomIn = () => {
@@ -339,6 +348,7 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   render() {
+    const { classes } = this.props;
     const {
       start,
       end,
@@ -363,7 +373,9 @@ class LocusPage extends React.Component {
         <Helmet>
           <title>{locationString}</title>
         </Helmet>
-        <PageTitle>Locus {locationString}</PageTitle>
+        <Paper className={classes.section}>
+          <Typography variant="display1">Locus {locationString}</Typography>
+        </Paper>
         <SectionHeading
           heading="Associations"
           subheading={subheading}
@@ -629,4 +641,4 @@ class LocusPage extends React.Component {
   }
 }
 
-export default LocusPage;
+export default withStyles(styles)(LocusPage);

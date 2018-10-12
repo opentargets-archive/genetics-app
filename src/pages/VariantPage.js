@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
 
-import { PageTitle, SubHeading, SectionHeading, Typography } from 'ot-ui';
+import { SectionHeading, Typography, Button } from 'ot-ui';
+
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 
 import BasePage from './BasePage';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
@@ -205,6 +209,23 @@ const variantPageQuery = gql`
   }
 `;
 
+const styles = theme => {
+  return {
+    header: {
+      display: 'inline-block',
+    },
+    headerSection: {
+      padding: theme.sectionPadding,
+    },
+    ensemblLink: {
+      marginLeft: '5px',
+      position: 'relative',
+      bottom: '8px',
+      textDecoration: 'none',
+    },
+  };
+};
+
 class VariantPage extends React.Component {
   handlePhewasTraitFilter = newPhewasTraitFilterValue => {
     const { phewasTraitFilter, ...rest } = this._parseQueryProps();
@@ -260,7 +281,7 @@ class VariantPage extends React.Component {
     });
   }
   render() {
-    const { match } = this.props;
+    const { match, classes } = this.props;
     const { variantId } = match.params;
     const [chromosome, positionString] = variantId.split('_');
     const position = parseInt(positionString, 10);
@@ -292,59 +313,76 @@ class VariantPage extends React.Component {
               : [];
 
             return (
-              <React.Fragment>
-                <PageTitle>
-                  {variantId}{' '}
-                  <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                    {variantInfo.rsId}
-                  </span>
-                </PageTitle>
-                <SubHeading
-                  left={
-                    isIndexVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedIndexVariants={[variantId]}
+              <Fragment>
+                <Paper className={classes.headerSection}>
+                  <Grid container>
+                    <Grid item>
+                      <Typography className={classes.header} variant="display1">
+                        {variantId}
+                      </Typography>{' '}
+                      <Typography
+                        className={classes.header}
+                        variant="title"
+                        color="textSecondary"
                       >
-                        View locus
-                      </LocusLink>
-                    ) : isTagVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedTagVariants={[variantId]}
+                        {variantInfo.rsId}
+                      </Typography>
+                      <a
+                        className={classes.ensemblLink}
+                        href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+                          variantInfo.rsId
+                        }`}
+                        target="_blank"
                       >
-                        View locus
-                      </LocusLink>
-                    ) : null
-                  }
-                  right={
-                    <div>
-                      {variantInfo.nearestGene ? (
-                        <React.Fragment>
-                          Nearest Gene:{' '}
-                          <Link to={`/gene/${variantInfo.nearestGene.id}`}>
-                            {variantInfo.nearestGene.symbol}
-                          </Link>
-                        </React.Fragment>
+                        <Button variant="outlined">Ensembl</Button>
+                      </a>
+                    </Grid>
+                  </Grid>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {isIndexVariant || isTagVariant ? (
+                        <LocusLink
+                          chromosome={chromosome}
+                          position={position}
+                          selectedIndexVariants={
+                            isIndexVariant ? [variantId] : null
+                          }
+                          selectedTagVariants={
+                            isTagVariant && !isIndexVariant ? [variantId] : null
+                          }
+                        >
+                          View locus
+                        </LocusLink>
                       ) : null}
-                      {variantInfo.nearestGene && variantInfo.nearestCodingGene
-                        ? ', '
-                        : null}
-                      {variantInfo.nearestCodingGene ? (
-                        <React.Fragment>
-                          Nearest Protein-Coding Gene:{' '}
-                          <Link
-                            to={`/gene/${variantInfo.nearestCodingGene.id}`}
-                          >
-                            {variantInfo.nearestCodingGene.symbol}
-                          </Link>
-                        </React.Fragment>
-                      ) : null}
-                    </div>
-                  }
-                />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="subheading">
+                        {variantInfo.nearestGene ? (
+                          <Fragment>
+                            Nearest Gene:{' '}
+                            <Link to={`/gene/${variantInfo.nearestGene.id}`}>
+                              {variantInfo.nearestGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                        {variantInfo.nearestGene &&
+                        variantInfo.nearestCodingGene
+                          ? ', '
+                          : null}
+                        {variantInfo.nearestCodingGene ? (
+                          <Fragment>
+                            Nearest Protein-Coding Gene:{' '}
+                            <Link
+                              to={`/gene/${variantInfo.nearestCodingGene.id}`}
+                            >
+                              {variantInfo.nearestCodingGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"
@@ -437,7 +475,7 @@ class VariantPage extends React.Component {
                   variantId={variantId}
                   filenameStem={`${variantId}-tag-variants`}
                 />
-              </React.Fragment>
+              </Fragment>
             );
           }}
         </Query>
@@ -446,4 +484,4 @@ class VariantPage extends React.Component {
   }
 }
 
-export default VariantPage;
+export default withStyles(styles)(VariantPage);
