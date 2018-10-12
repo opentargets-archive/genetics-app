@@ -56,9 +56,7 @@ const Option = ({ classes, data }) => (
     })}
   >
     <div className={classes.subContainer}>
-      <span className={classes.heading}>{data.study.traitReported}</span>
-      <br />
-
+      <div className={classes.heading}>{data.study.traitReported}</div>
       <span className={classes.small}>
         {data.study.pubAuthor} {new Date(data.study.pubDate).getFullYear()}
       </span>
