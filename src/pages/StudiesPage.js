@@ -367,7 +367,7 @@ class StudiesPage extends React.Component {
     const { studyIds } = this._parseQueryProps();
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>Compare studies</title>
         </Helmet>

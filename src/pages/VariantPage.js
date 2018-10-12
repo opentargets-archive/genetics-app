@@ -315,7 +315,7 @@ class VariantPage extends React.Component {
     } = this._parseQueryProps();
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>{variantId}</title>
         </Helmet>

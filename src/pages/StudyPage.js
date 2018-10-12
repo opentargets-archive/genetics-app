@@ -113,7 +113,7 @@ class StudyPage extends React.Component {
     );
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>{studyId}</title>
         </Helmet>
