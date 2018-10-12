@@ -223,7 +223,7 @@ class GenePage extends React.Component {
                   <title>{symbol}</title>
                 </Helmet>
                 <Grid container style={{ marginBottom: '10px' }}>
-                  <Grid item md={12}>
+                  <Grid item xs={12} sm={12} md={12}>
                     <Paper className={classes.section}>
                       <Grid container justify="space-between">
                         <Grid item>
@@ -248,14 +248,14 @@ class GenePage extends React.Component {
                   </Grid>
                 </Grid>
                 <Grid container justify="space-between" spacing={8}>
-                  <Grid item md={8}>
+                  <Grid item sm={12} md={8}>
                     <Paper className={classes.section}>
                       <Typography variant="subheading">
                         Information about {symbol} from the Open Targets
                         Platform
                       </Typography>
                       <Grid container justify="space-around">
-                        <Grid item>
+                        <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
@@ -264,7 +264,7 @@ class GenePage extends React.Component {
                             <Typography>Target profile overview</Typography>
                           </a>
                         </Grid>
-                        <Grid item>
+                        <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:known_drug`}
@@ -273,7 +273,7 @@ class GenePage extends React.Component {
                             <Typography>Is there known drug data?</Typography>
                           </a>
                         </Grid>
-                        <Grid item>
+                        <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:mouse_phenotypes`}
@@ -284,7 +284,7 @@ class GenePage extends React.Component {
                             </Typography>
                           </a>
                         </Grid>
-                        <Grid item>
+                        <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:affected_pathway`}
@@ -293,7 +293,7 @@ class GenePage extends React.Component {
                             <Typography>Is there pathway data?</Typography>
                           </a>
                         </Grid>
-                        <Grid item>
+                        <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:expression`}
@@ -305,7 +305,7 @@ class GenePage extends React.Component {
                       </Grid>
                     </Paper>
                   </Grid>
-                  <Grid item md={4}>
+                  <Grid item sm={12} md={4}>
                     <Paper className={classes.section}>
                       <Grid container>
                         <Grid item>
