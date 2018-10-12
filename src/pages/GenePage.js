@@ -259,6 +259,7 @@ class GenePage extends React.Component {
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}`}
+                            target="_blank"
                           >
                             <OverviewIcon className={classes.iconLink} />
                             <Typography>Target profile overview</Typography>
@@ -268,6 +269,7 @@ class GenePage extends React.Component {
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:known_drug`}
+                            target="_blank"
                           >
                             <DrugsIcon className={classes.iconLink} />
                             <Typography>Is there known drug data?</Typography>
@@ -277,6 +279,7 @@ class GenePage extends React.Component {
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:mouse_phenotypes`}
+                            target="_blank"
                           >
                             <MouseIcon className={classes.iconLink} />
                             <Typography>
@@ -288,6 +291,7 @@ class GenePage extends React.Component {
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:affected_pathway`}
+                            target="_blank"
                           >
                             <PathwaysIcon className={classes.iconLink} />
                             <Typography>Is there pathway data?</Typography>
@@ -297,6 +301,7 @@ class GenePage extends React.Component {
                           <a
                             className={classes.platformLink}
                             href={`https://www.targetvalidation.org/target/${geneId}?view=sec:expression`}
+                            target="_blank"
                           >
                             <ExpressionIcon className={classes.iconLink} />
                             <Typography>Is there expression data?</Typography>
