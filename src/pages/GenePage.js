@@ -88,7 +88,11 @@ const styles = theme => {
     link: {
       textDecoration: 'none',
     },
+    geneInfoItem: {
+      width: '20%',
+    },
     platformLink: {
+      textAlign: 'center',
       textDecoration: 'none',
       '&:hover': {
         textDecoration: 'underline',
@@ -219,7 +223,7 @@ class GenePage extends React.Component {
                   <title>{symbol}</title>
                 </Helmet>
                 <Grid container style={{ marginBottom: '10px' }}>
-                  <Grid item md={12}>
+                  <Grid item sm={12} md={12}>
                     <Card>
                       <CardContent>
                         <Grid container justify="space-between">
@@ -246,7 +250,7 @@ class GenePage extends React.Component {
                   </Grid>
                 </Grid>
                 <Grid container justify="space-between" spacing={8}>
-                  <Grid item md={8}>
+                  <Grid item sm={12} md={8}>
                     <Card className={classes.card}>
                       <CardContent>
                         <Typography variant="subheading">
@@ -254,7 +258,7 @@ class GenePage extends React.Component {
                           Platform
                         </Typography>
                         <Grid container justify="space-around">
-                          <Grid item>
+                          <Grid item className={classes.geneInfoItem}>
                             <a
                               className={classes.platformLink}
                               href={`https://www.targetvalidation.org/target/${geneId}`}
@@ -264,7 +268,7 @@ class GenePage extends React.Component {
                               <Typography>Target profile overview</Typography>
                             </a>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.geneInfoItem}>
                             <a
                               className={classes.platformLink}
                               href={`https://www.targetvalidation.org/target/${geneId}?view=sec:known_drug`}
@@ -274,7 +278,7 @@ class GenePage extends React.Component {
                               <Typography>Is there known drug data?</Typography>
                             </a>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.geneInfoItem}>
                             <a
                               className={classes.platformLink}
                               href={`https://www.targetvalidation.org/target/${geneId}?view=sec:mouse_phenotypes`}
@@ -286,7 +290,7 @@ class GenePage extends React.Component {
                               </Typography>
                             </a>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.geneInfoItem}>
                             <a
                               className={classes.platformLink}
                               href={`https://www.targetvalidation.org/target/${geneId}?view=sec:affected_pathway`}
@@ -296,7 +300,7 @@ class GenePage extends React.Component {
                               <Typography>Is there pathway data?</Typography>
                             </a>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.geneInfoItem}>
                             <a
                               className={classes.platformLink}
                               href={`https://www.targetvalidation.org/target/${geneId}?view=sec:expression`}
@@ -310,7 +314,7 @@ class GenePage extends React.Component {
                       </CardContent>
                     </Card>
                   </Grid>
-                  <Grid item md={4}>
+                  <Grid item sm={12} md={4}>
                     <Card className={classes.card}>
                       <CardContent>
                         <Grid container>
