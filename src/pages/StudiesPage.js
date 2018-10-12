@@ -4,15 +4,15 @@ import { Query } from 'react-apollo';
 import queryString from 'query-string';
 import gql from 'graphql-tag';
 
-import { PageTitle, SectionHeading, SubHeading, MultiSelect } from 'ot-ui';
+import { PageTitle, SectionHeading, SubHeading, Autocomplete } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
 import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
-import SearchOption from '../components/SearchOption';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
+import StudyComparisonOption from '../components/StudyComparisonOption';
 
 const topOverlappedStudiesQuery = gql`
   query TopOverlappedStudiesQuery($studyId: String!, $studyIds: [String!]!) {
@@ -200,14 +200,10 @@ function getStudiesTableData(data, studyId, studyIds) {
       return a.study.studyId >= b.study.studyId;
     })
     .map(d => ({
-      label: (
-        <StudyOptionLabel
-          study={d.study}
-          overlappingLociCount={d.numOverlapLoci}
-          rootOverlapProportion={d.numOverlapLoci / rootLociCount}
-        />
-      ),
-      value: d.study.studyId,
+      ...d,
+      selected: studyIds.indexOf(d.study.studyId) >= 0,
+      count: d.numOverlapLoci,
+      proportion: d.numOverlapLoci / rootLociCount,
     }));
 
   const variantIntersectionSet = overlappingStudies
@@ -302,21 +298,6 @@ function getOverlappingVariants(
     });
 }
 
-const StudyOptionLabel = ({
-  study,
-  overlappingLociCount,
-  rootOverlapProportion,
-}) => (
-  <SearchOption
-    data={{
-      ...study,
-      overlappingLociCount,
-      rootOverlapProportion,
-      groupType: 'study-overlap',
-    }}
-  />
-);
-
 class StudiesPage extends React.Component {
   handleAddStudy = studyId => {
     const { studyIds, ...rest } = this._parseQueryProps();
@@ -338,11 +319,11 @@ class StudiesPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
-  handleChange = event => {
+  handleChange = newStudies => {
     const { studyIds, ...rest } = this._parseQueryProps();
     const newQueryParams = { ...rest };
-    if (event.target.value && event.target.value.length > 0) {
-      newQueryParams.studyIds = event.target.value;
+    if (newStudies && newStudies.length > 0) {
+      newQueryParams.studyIds = newStudies.map(d => d.study.studyId);
     }
     this._stringifyQueryProps(newQueryParams);
   };
@@ -379,7 +360,6 @@ class StudiesPage extends React.Component {
         >
           {({ loading, error, data }) => {
             const isStudyWithInfo = hasStudyInfo(data);
-            const { studyIds: studySelectValue } = this._parseQueryProps();
             const studyInfo = isStudyWithInfo ? getStudyInfo(data) : {};
             const {
               studySelectOptions,
@@ -388,6 +368,9 @@ class StudiesPage extends React.Component {
               rootStudy,
               studies,
             } = getStudiesTableData(data, studyId, studyIds);
+            const studySelectValue = studySelectOptions.filter(
+              d => studyIds.indexOf(d.study.studyId) >= 0
+            );
             const overlappingVariants = getOverlappingVariants(
               data,
               variantIntersectionSet,
@@ -438,18 +421,20 @@ class StudiesPage extends React.Component {
                   loading={loading}
                   error={error}
                   select={
-                    <MultiSelect
-                      value={studySelectValue}
+                    <Autocomplete
                       options={studySelectOptions}
-                      handleChange={this.handleChange}
+                      value={studySelectValue}
+                      getOptionLabel={d =>
+                        `${d.study.traitReported} (${
+                          d.study.pubAuthor
+                        } ${new Date(d.study.pubDate).getFullYear()})`
+                      }
+                      getOptionValue={d => d.study.studyId}
+                      handleSelectOption={this.handleChange}
+                      placeholder="Add a study to compare..."
                       multiple
-                      renderValue={() => {
-                        return studySelectValue && studySelectValue.length > 0
-                          ? `${studySelectValue.length} stud${
-                              studySelectValue.length === 1 ? 'y' : 'ies'
-                            } selected`
-                          : 'Add a study to compare...';
-                      }}
+                      wide
+                      OptionComponent={StudyComparisonOption}
                     />
                   }
                   studies={studies}
