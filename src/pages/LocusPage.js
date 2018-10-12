@@ -26,6 +26,7 @@ import locusScheme, {
   LOCUS_FINEMAPPING,
 } from '../logic/locusScheme';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import ScrollToTop from '../components/ScrollToTop';
 
 function hasData(data) {
   return data && data.gecko;
@@ -358,6 +359,7 @@ class LocusPage extends React.Component {
     const geckoPlot = React.createRef();
     return (
       <BasePage>
+        <ScrollToTop />
         <Helmet>
           <title>{locationString}</title>
         </Helmet>
