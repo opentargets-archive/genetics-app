@@ -3,10 +3,12 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  PageTitle,
-  SubHeading,
   DownloadSVGPlot,
   SectionHeading,
   Button,
@@ -98,12 +100,21 @@ const manhattanQuery = gql`
   }
 `;
 
+const styles = theme => {
+  return {
+    section: {
+      padding: theme.sectionPadding,
+    },
+  };
+};
+
 class StudyPage extends React.Component {
   state = {
     focusChromosome: '',
   };
   render() {
-    const { studyId } = this.props.match.params;
+    const { classes, match } = this.props;
+    const { studyId } = match.params;
     let manhattanPlot = React.createRef();
     const ManhattanWithTooltip = withTooltip(
       Manhattan,
@@ -113,7 +124,7 @@ class StudyPage extends React.Component {
     );
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>{studyId}</title>
         </Helmet>
@@ -134,27 +145,33 @@ class StudyPage extends React.Component {
               : { associations: [] };
             return (
               <Fragment>
-                <PageTitle>
-                  {isStudyWithInfo ? data.studyInfo.traitReported : null}
-                </PageTitle>
-                <SubHeading
-                  left={
-                    isStudyWithInfo ? (
-                      <StudyInfo studyInfo={data.studyInfo} />
-                    ) : null
-                  }
-                  right={
-                    isStudyWithInfo ? (
-                      <StudySize studyInfo={data.studyInfo} />
-                    ) : null
-                  }
-                />
-                <Link
-                  to={`/study-comparison/${studyId}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Button gradient>Compare to related studies</Button>
-                </Link>
+                <Paper className={classes.section}>
+                  <Typography variant="display1">
+                    {isStudyWithInfo ? data.studyInfo.traitReported : null}
+                  </Typography>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {isStudyWithInfo ? (
+                        <Typography variant="subheading">
+                          <StudyInfo studyInfo={data.studyInfo} />
+                        </Typography>
+                      ) : null}
+                    </Grid>
+                    <Grid item>
+                      {isStudyWithInfo ? (
+                        <Typography variant="subheading">
+                          <StudySize studyInfo={data.studyInfo} />
+                        </Typography>
+                      ) : null}
+                    </Grid>
+                  </Grid>
+                  <Link
+                    to={`/study-comparison/${studyId}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Button gradient>Compare to related studies</Button>
+                  </Link>
+                </Paper>
 
                 <SectionHeading
                   heading="Independently-associated loci"
@@ -253,4 +270,4 @@ class StudyPage extends React.Component {
   };
 }
 
-export default StudyPage;
+export default withStyles(styles)(StudyPage);

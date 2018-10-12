@@ -1,23 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
-import _ from 'lodash';
 
-import {
-  PageTitle,
-  SubHeading,
-  DownloadSVGPlot,
-  SectionHeading,
-  ListTooltip,
-  Typography,
-} from 'ot-ui';
-import { PheWAS, withTooltip } from 'ot-charts';
+import { SectionHeading, Typography, Button } from 'ot-ui';
+
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 
 import BasePage from './BasePage';
-import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
 import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsTable';
 import AssociatedGenes from '../components/AssociatedGenes';
@@ -25,7 +19,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PlotContainer from 'ot-ui/build/components/PlotContainer';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import PheWASSection from '../components/PheWASSection';
 
 function hasInfo(data) {
   return data && data.variantInfo;
@@ -33,14 +27,7 @@ function hasInfo(data) {
 function hasAssociatedGenes(data) {
   return data && data.genesForVariantSchema;
 }
-function hasAssociations(data) {
-  return (
-    data &&
-    data.pheWAS &&
-    data.pheWAS.associations &&
-    data.pheWAS.associations.length > 0
-  );
-}
+
 function hasAssociatedIndexVariants(data) {
   return (
     data &&
@@ -60,18 +47,6 @@ function hasAssociatedTagVariants(data) {
 
 function transformVariantInfo(data) {
   return data.variantInfo;
-}
-function transformPheWAS(data) {
-  return data.pheWAS.associations.map(d => {
-    const { study, ...rest } = d;
-    const { studyId, traitReported, traitCategory } = study;
-    return {
-      studyId,
-      traitReported,
-      traitCategory,
-      ...rest,
-    };
-  });
 }
 function transformAssociatedIndexVariants(data) {
   const associationsFlattened = data.indexVariantsAndStudiesForTagVariant.associations.map(
@@ -193,21 +168,6 @@ const variantPageQuery = gql`
         }
       }
     }
-    pheWAS(variantId: $variantId) {
-      associations {
-        study {
-          studyId
-          traitReported
-          traitCode
-          traitCategory
-        }
-        pval
-        beta
-        oddsRatio
-        nTotal
-        nCases: nCasesStudy
-      }
-    }
     indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
       associations {
         indexVariant {
@@ -248,6 +208,23 @@ const variantPageQuery = gql`
     }
   }
 `;
+
+const styles = theme => {
+  return {
+    header: {
+      display: 'inline-block',
+    },
+    headerSection: {
+      padding: theme.sectionPadding,
+    },
+    ensemblLink: {
+      marginLeft: '5px',
+      position: 'relative',
+      bottom: '8px',
+      textDecoration: 'none',
+    },
+  };
+};
 
 class VariantPage extends React.Component {
   handlePhewasTraitFilter = newPhewasTraitFilterValue => {
@@ -304,8 +281,7 @@ class VariantPage extends React.Component {
     });
   }
   render() {
-    const { match } = this.props;
-    let pheWASPlot = React.createRef();
+    const { match, classes } = this.props;
     const { variantId } = match.params;
     const [chromosome, positionString] = variantId.split('_');
     const position = parseInt(positionString, 10);
@@ -315,7 +291,7 @@ class VariantPage extends React.Component {
     } = this._parseQueryProps();
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>{variantId}</title>
         </Helmet>
@@ -323,29 +299,12 @@ class VariantPage extends React.Component {
           {({ loading, error, data }) => {
             const isVariantWithInfo = hasInfo(data);
             const isGeneVariant = hasAssociatedGenes(data);
-            const isPheWASVariant = hasAssociations(data);
             const isTagVariant = hasAssociatedIndexVariants(data);
             const isIndexVariant = hasAssociatedTagVariants(data);
-
-            const PheWASWithTooltip = withTooltip(
-              PheWAS,
-              ListTooltip,
-              tableColumns({
-                variantId,
-                chromosome,
-                position,
-                isIndexVariant,
-                isTagVariant,
-              }),
-              'phewas'
-            );
 
             const variantInfo = isVariantWithInfo
               ? transformVariantInfo(data)
               : {};
-            const pheWASAssociations = isPheWASVariant
-              ? transformPheWAS(data)
-              : [];
             const associatedIndexVariants = isTagVariant
               ? transformAssociatedIndexVariants(data)
               : [];
@@ -353,103 +312,77 @@ class VariantPage extends React.Component {
               ? transformAssociatedTagVariants(data)
               : [];
 
-            // phewas - filtered
-            const pheWASAssociationsFiltered = pheWASAssociations.filter(d => {
-              return (
-                (phewasTraitFilterUrl
-                  ? phewasTraitFilterUrl.indexOf(d.traitReported) >= 0
-                  : true) &&
-                (phewasCategoryFilterUrl
-                  ? phewasCategoryFilterUrl.indexOf(d.traitCategory) >= 0
-                  : true)
-              );
-            });
-            // phewas - filters
-            const phewasTraitFilterOptions = _.sortBy(
-              _.uniq(pheWASAssociationsFiltered.map(d => d.traitReported)).map(
-                d => ({
-                  label: d,
-                  value: d,
-                  selected: phewasTraitFilterUrl
-                    ? phewasTraitFilterUrl.indexOf(d) >= 0
-                    : false,
-                })
-              ),
-              [d => !d.selected, 'value']
-            );
-            const phewasTraitFilterValue = phewasTraitFilterOptions.filter(
-              d => d.selected
-            );
-            const phewasCategoryFilterOptions = _.sortBy(
-              _.uniq(pheWASAssociationsFiltered.map(d => d.traitCategory)).map(
-                d => ({
-                  label: d,
-                  value: d,
-                  selected: phewasCategoryFilterUrl
-                    ? phewasCategoryFilterUrl.indexOf(d) >= 0
-                    : false,
-                })
-              ),
-              [d => !d.selected, 'value']
-            );
-            const phewasCategoryFilterValue = phewasCategoryFilterOptions.filter(
-              d => d.selected
-            );
-
             return (
-              <React.Fragment>
-                <PageTitle>
-                  {variantId}{' '}
-                  <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                    {variantInfo.rsId}
-                  </span>
-                </PageTitle>
-                <SubHeading
-                  left={
-                    isIndexVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedIndexVariants={[variantId]}
+              <Fragment>
+                <Paper className={classes.headerSection}>
+                  <Grid container>
+                    <Grid item>
+                      <Typography className={classes.header} variant="display1">
+                        {variantId}
+                      </Typography>{' '}
+                      <Typography
+                        className={classes.header}
+                        variant="title"
+                        color="textSecondary"
                       >
-                        View locus
-                      </LocusLink>
-                    ) : isTagVariant ? (
-                      <LocusLink
-                        chromosome={chromosome}
-                        position={position}
-                        selectedTagVariants={[variantId]}
+                        {variantInfo.rsId}
+                      </Typography>
+                      <a
+                        className={classes.ensemblLink}
+                        href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+                          variantInfo.rsId
+                        }`}
+                        target="_blank"
                       >
-                        View locus
-                      </LocusLink>
-                    ) : null
-                  }
-                  right={
-                    <div>
-                      {variantInfo.nearestGene ? (
-                        <React.Fragment>
-                          Nearest Gene:{' '}
-                          <Link to={`/gene/${variantInfo.nearestGene.id}`}>
-                            {variantInfo.nearestGene.symbol}
-                          </Link>
-                        </React.Fragment>
+                        <Button variant="outlined">Ensembl</Button>
+                      </a>
+                    </Grid>
+                  </Grid>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {isIndexVariant || isTagVariant ? (
+                        <LocusLink
+                          chromosome={chromosome}
+                          position={position}
+                          selectedIndexVariants={
+                            isIndexVariant ? [variantId] : null
+                          }
+                          selectedTagVariants={
+                            isTagVariant && !isIndexVariant ? [variantId] : null
+                          }
+                        >
+                          View locus
+                        </LocusLink>
                       ) : null}
-                      {variantInfo.nearestGene && variantInfo.nearestCodingGene
-                        ? ', '
-                        : null}
-                      {variantInfo.nearestCodingGene ? (
-                        <React.Fragment>
-                          Nearest Protein-Coding Gene:{' '}
-                          <Link
-                            to={`/gene/${variantInfo.nearestCodingGene.id}`}
-                          >
-                            {variantInfo.nearestCodingGene.symbol}
-                          </Link>
-                        </React.Fragment>
-                      ) : null}
-                    </div>
-                  }
-                />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="subheading">
+                        {variantInfo.nearestGene ? (
+                          <Fragment>
+                            Nearest Gene:{' '}
+                            <Link to={`/gene/${variantInfo.nearestGene.id}`}>
+                              {variantInfo.nearestGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                        {variantInfo.nearestGene &&
+                        variantInfo.nearestCodingGene
+                          ? ', '
+                          : null}
+                        {variantInfo.nearestCodingGene ? (
+                          <Fragment>
+                            Nearest Protein-Coding Gene:{' '}
+                            <Link
+                              to={`/gene/${variantInfo.nearestCodingGene.id}`}
+                            >
+                              {variantInfo.nearestCodingGene.symbol}
+                            </Link>
+                          </Fragment>
+                        ) : null}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Paper>
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"
@@ -482,58 +415,16 @@ class VariantPage extends React.Component {
                     }
                   />
                 )}
-                <SectionHeading
-                  heading="PheWAS"
-                  subheading="Which traits are associated with this variant in UK Biobank?"
-                  entities={[
-                    {
-                      type: 'study',
-                      fixed: false,
-                    },
-                    {
-                      type: 'variant',
-                      fixed: true,
-                    },
-                  ]}
+                <PheWASSection
+                  variantId={variantId}
+                  phewasTraitFilterUrl={phewasTraitFilterUrl}
+                  phewasCategoryFilterUrl={phewasCategoryFilterUrl}
+                  handlePhewasTraitFilter={this.handlePhewasTraitFilter}
+                  handlePhewasCategoryFilter={this.handlePhewasCategoryFilter}
+                  isIndexVariant={isIndexVariant}
+                  isTagVariant={isTagVariant}
                 />
-                {isPheWASVariant ? (
-                  <DownloadSVGPlot
-                    loading={loading}
-                    error={error}
-                    svgContainer={pheWASPlot}
-                    filenameStem={`${variantId}-traits`}
-                    reportDownloadEvent={() => {
-                      reportAnalyticsEvent({
-                        category: 'visualisation',
-                        action: 'download',
-                        label: `variant:phewas:svg`,
-                      });
-                    }}
-                  >
-                    <PheWASWithTooltip
-                      associations={pheWASAssociationsFiltered}
-                      ref={pheWASPlot}
-                    />
-                  </DownloadSVGPlot>
-                ) : null}
-                <PheWASTable
-                  associations={pheWASAssociationsFiltered}
-                  {...{
-                    loading,
-                    error,
-                    variantId,
-                    chromosome,
-                    position,
-                    isIndexVariant,
-                    isTagVariant,
-                  }}
-                  traitFilterValue={phewasTraitFilterValue}
-                  traitFilterOptions={phewasTraitFilterOptions}
-                  traitFilterHandler={this.handlePhewasTraitFilter}
-                  categoryFilterValue={phewasCategoryFilterValue}
-                  categoryFilterOptions={phewasCategoryFilterOptions}
-                  categoryFilterHandler={this.handlePhewasCategoryFilter}
-                />
+
                 <SectionHeading
                   heading="GWAS lead variants"
                   subheading="Which GWAS lead variants are linked with this variant?"
@@ -584,7 +475,7 @@ class VariantPage extends React.Component {
                   variantId={variantId}
                   filenameStem={`${variantId}-tag-variants`}
                 />
-              </React.Fragment>
+              </Fragment>
             );
           }}
         </Query>
@@ -593,4 +484,4 @@ class VariantPage extends React.Component {
   }
 }
 
-export default VariantPage;
+export default withStyles(styles)(VariantPage);

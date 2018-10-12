@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
 import gql from 'graphql-tag';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
 
-import { PageTitle, SectionHeading, SubHeading, Autocomplete } from 'ot-ui';
+import { SectionHeading, Autocomplete } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
@@ -298,6 +302,15 @@ function getOverlappingVariants(
     });
 }
 
+const styles = theme => {
+  return {
+    section: {
+      padding: theme.sectionPadding,
+      textDecoration: 'none',
+    },
+  };
+};
+
 class StudiesPage extends React.Component {
   handleAddStudy = studyId => {
     const { studyIds, ...rest } = this._parseQueryProps();
@@ -344,11 +357,12 @@ class StudiesPage extends React.Component {
     );
   };
   render() {
-    const { studyId } = this.props.match.params;
+    const { classes, match } = this.props;
+    const { studyId } = match.params;
     const { studyIds } = this._parseQueryProps();
     return (
       <BasePage>
-        <ScrollToTop onRouteChange />
+        <ScrollToTop />
         <Helmet>
           <title>Compare studies</title>
         </Helmet>
@@ -377,33 +391,40 @@ class StudiesPage extends React.Component {
               studies.length > 0
             );
             return (
-              <React.Fragment>
-                <PageTitle>{studyInfo.traitReported}</PageTitle>
-                <SubHeading
-                  left={
-                    isStudyWithInfo ? (
-                      <StudyInfo studyInfo={data.studyInfo} />
-                    ) : null
-                  }
-                  right={
-                    isStudyWithInfo ? (
-                      <StudySize studyInfo={data.studyInfo} />
-                    ) : null
-                  }
-                />
-
+              <Fragment>
+                <Paper className={classes.section}>
+                  <Typography variant="display1">
+                    {studyInfo.traitReported}
+                  </Typography>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {isStudyWithInfo ? (
+                        <Typography variant="subheading">
+                          <StudyInfo studyInfo={data.studyInfo} />
+                        </Typography>
+                      ) : null}
+                    </Grid>
+                    <Grid item>
+                      {isStudyWithInfo ? (
+                        <Typography variant="subheading">
+                          <StudySize studyInfo={data.studyInfo} />
+                        </Typography>
+                      ) : null}
+                    </Grid>
+                  </Grid>
+                </Paper>
                 <SectionHeading
                   heading={`Compare overlapping studies`}
                   subheading={
                     isStudyWithInfo ? (
-                      <React.Fragment>
+                      <Fragment>
                         Which independently-associated loci are shared between{' '}
                         <b>
                           {studyInfo.pubAuthor} (
                           {new Date(studyInfo.pubDate).getFullYear()})
                         </b>{' '}
                         and other studies?
-                      </React.Fragment>
+                      </Fragment>
                     ) : null
                   }
                   entities={[
@@ -450,7 +471,7 @@ class StudiesPage extends React.Component {
                   studyIds={[studyId, ...studyIds]}
                   filenameStem={`intersecting-independently-associated-loci`}
                 />
-              </React.Fragment>
+              </Fragment>
             );
           }}
         </Query>
@@ -480,4 +501,4 @@ class StudiesPage extends React.Component {
   }
 }
 
-export default StudiesPage;
+export default withStyles(styles)(StudiesPage);
