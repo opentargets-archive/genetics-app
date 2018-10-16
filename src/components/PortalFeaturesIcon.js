@@ -7,8 +7,8 @@ const styles = theme => {
   return {
     root: {
       display: 'block',
-      width: '400px',
-      height: '400px',
+      width: '450px',
+      height: '450px',
       fill: theme.palette.primary.main,
     },
   };

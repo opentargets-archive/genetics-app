@@ -37,6 +37,7 @@ const clickExample = type => () => {
 };
 
 const styles = theme => {
+  console.log('theme', theme);
   return {
     highlight: {
       color: theme.palette.primary.main,
@@ -50,6 +51,24 @@ const styles = theme => {
     exampleLink: {
       textDecoration: 'none',
       marginRight: '15px',
+    },
+    introText: {
+      fontFamily: 'Roboto',
+      color: theme.palette.grey[800],
+    },
+    description: {
+      paddingTop: '44px',
+    },
+    welcomeTitle: {
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      fontSize: '22px',
+      color: theme.palette.grey[700],
+    },
+    welcomeText: {
+      fontFamily: 'Roboto',
+      fontSize: '18px',
+      color: theme.palette.grey[800],
     },
   };
 };
@@ -96,43 +115,45 @@ const HomePage = ({ classes }) => (
       <Grid item md={8}>
         <Grid container>
           <Grid item md={12}>
-            <Typography variant="headline">
+            <p className={classes.welcomeTitle}>
               Welcome to Open Targets Genetics
-            </Typography>
-            <Typography paragraph>
+            </p>
+            <p className={classes.introText}>
               Open Targets Genetics is the latest release from Open Targets, an
               innovative, large-scale, multi-year, public-private partnership
               that uses human genetics and genmics data for systematic drug
               target identification and prioritisation.
-            </Typography>
-            <Typography paragraph>
+            </p>
+            <p className={classes.introText}>
               The Portal offers three unique features to help you discover
               associations between genes, variants, and traits:
-            </Typography>
+            </p>
           </Grid>
-          <Grid item md={6}>
-            <Typography paragraph>
+          <Grid className={classes.description} item md={6}>
+            <p className={classes.welcomeText}>
               + Browse and rank gene and variant associations identified by our{' '}
               <span className={classes.highlight}>
                 Gene2Variant (g2v) scoring
               </span>{' '}
               pipeline
-            </Typography>
-            <Typography paragraph>
+            </p>
+            <p className={classes.welcomeText}>
               + Uncover credible sets for variant and trait associations based
               on our{' '}
               <span className={classes.highlight}>fine mapping analyses</span>{' '}
               pipeline
-            </Typography>
-            <Typography paragraph>
+            </p>
+            <p className={classes.welcomeText}>
               + Explore and compare studies from both UK Biobank and GWAS
               Catalog using our{' '}
               <span className={classes.highlight}>multi-trait comparison</span>{' '}
               tool
-            </Typography>
+            </p>
           </Grid>
           <Grid item md={6}>
-            <PortalFeaturesIcon />
+            <Grid container justify="center">
+              <PortalFeaturesIcon />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
