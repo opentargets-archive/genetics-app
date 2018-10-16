@@ -62,7 +62,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           Variant-to-Gene{' '}
@@ -71,7 +72,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="5.3"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           (V2G) analysis
@@ -80,7 +82,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="21.9"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           pipeline
@@ -91,7 +94,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           Fine mapping/
@@ -100,7 +104,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="6.2"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           credible set
@@ -109,7 +114,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="15.2"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           analysis
@@ -120,7 +126,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           UK Biobank +
@@ -129,7 +136,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="-2.7"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           GWAS Catalog
@@ -138,7 +146,8 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="5.8"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto-Bold"
+          fontFamily="Roboto"
+          fontWeight="bold"
           fontSize="10px"
         >
           integration
