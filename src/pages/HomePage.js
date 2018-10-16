@@ -5,11 +5,13 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { Splash, HomeBox, Footer } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+
+import pkg from '../../package.json';
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -43,6 +45,11 @@ const styles = theme => {
     searchSection: {
       position: 'relative',
       height: '100vh',
+      overflow: 'visible',
+    },
+    exampleLink: {
+      textDecoration: 'none',
+      marginRight: '15px',
     },
   };
 };
@@ -52,9 +59,38 @@ const HomePage = ({ classes }) => (
     <Helmet>
       <title>Open Targets Genetics</title>
     </Helmet>
-    <Grid className={classes.searchSection} container justify="center">
+    <Grid
+      className={classes.searchSection}
+      container
+      justify="center"
+      alignItems="center"
+    >
       <Splash />
-      <Grid item>hello</Grid>
+      <HomeBox name="Genetics">
+        <Search />
+        <Typography style={{ marginTop: '25px' }}>Examples:</Typography>
+        <div>
+          {EXAMPLES.map((d, i) => (
+            <a
+              className={classes.exampleLink}
+              key={i}
+              href={d.url}
+              onClick={clickExample(d.type)}
+            >
+              <Button variant="outlined">{d.label}</Button>
+            </a>
+          ))}
+        </div>
+        <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
+          <a
+            href="http://eepurl.com/dHnchn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Subscribe to our newsletter
+          </a>
+        </Typography>
+      </HomeBox>
     </Grid>
     <Grid container justify="center">
       <Grid item md={8}>
@@ -101,6 +137,15 @@ const HomePage = ({ classes }) => (
         </Grid>
       </Grid>
     </Grid>
+    <Footer
+      version={pkg.version}
+      commitHash={
+        process.env.REACT_APP_REVISION
+          ? process.env.REACT_APP_REVISION
+          : '2222ccc'
+      }
+      githubUrl="https://github.com/opentargets/genetics-app"
+    />
   </Fragment>
 );
 
