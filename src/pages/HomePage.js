@@ -9,6 +9,7 @@ import { Splash, HomeBox, Footer, Button } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
+import ScrollDownButton from '../components/ScrollDownButton';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 import pkg from '../../package.json';
@@ -51,6 +52,10 @@ const styles = theme => {
     exampleLink: {
       textDecoration: 'none',
       marginRight: '15px',
+    },
+    scrollDown: {
+      position: 'absolute',
+      bottom: '10px',
     },
     introText: {
       fontFamily: 'Roboto',
@@ -110,6 +115,7 @@ const HomePage = ({ classes }) => (
           </a>
         </Typography>
       </HomeBox>
+      <ScrollDownButton className={classes.scrollDown} />
     </Grid>
     <Grid container justify="center">
       <Grid item md={8}>
