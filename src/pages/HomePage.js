@@ -49,6 +49,16 @@ const styles = theme => {
       height: '100vh',
       overflow: 'visible',
     },
+    slogan: {
+      color: theme.palette.grey[700],
+      fontFamily: 'Roboto',
+      fontSize: '18px',
+      marginBottom: '15px',
+      textAlign: 'center',
+    },
+    examples: {
+      marginTop: '25px',
+    },
     exampleLink: {
       textDecoration: 'none',
       marginRight: '15px',
@@ -106,9 +116,13 @@ class HomePage extends Component {
           >
             <Splash />
             <HomeBox name="Genetics">
+              <div className={classes.slogan}>
+                Explore{' '}
+                <span className={classes.highlight}>gene-variant-trait</span>{' '}
+                associations from UK Biobank and GWAS Catalog
+              </div>
               <Search />
-              <Typography style={{ marginTop: '25px' }}>Examples:</Typography>
-              <div>
+              <Grid container justify="center" className={classes.examples}>
                 {EXAMPLES.map((d, i) => (
                   <a
                     className={classes.exampleLink}
@@ -119,7 +133,7 @@ class HomePage extends Component {
                     <Button variant="outlined">{d.label}</Button>
                   </a>
                 ))}
-              </div>
+              </Grid>
               <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
                 <a
                   href="http://eepurl.com/dHnchn"
