@@ -118,7 +118,7 @@ class HomePage extends Component {
             <HomeBox name="Genetics">
               <div className={classes.slogan}>
                 Explore{' '}
-                <span className={classes.highlight}>gene-variant-trait</span>{' '}
+                <span className={classes.highlight}>variant-gene-trait</span>{' '}
                 associations from UK Biobank and GWAS Catalog
               </div>
               <Search />
