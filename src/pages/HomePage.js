@@ -172,7 +172,7 @@ class HomePage extends Component {
             <p className={classes.listText}>
               + Browse and rank gene and variant associations identified by our{' '}
               <span className={classes.highlight}>
-                Gene2Variant (g2v) scoring
+                Variant-to-Gene (V2G) scoring
               </span>{' '}
               pipeline
             </p>
