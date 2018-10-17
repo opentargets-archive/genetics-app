@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { Splash, HomeBox, Typography } from 'ot-ui';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import RootRef from '@material-ui/core/RootRef';
+
+import { Splash, HomeBox, Footer, Button } from 'ot-ui';
 
 import Search from '../components/Search';
+import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
+import ScrollDownButton from '../components/ScrollDownButton';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+
+import pkg from '../../package.json';
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -29,39 +38,162 @@ const clickExample = type => () => {
   });
 };
 
-const HomePage = () => (
-  <div>
-    <Helmet>
-      <title>Open Targets Genetics</title>
-    </Helmet>
-    <Splash />
-    <HomeBox name="Genetics">
-      <Search />
-      <Typography style={{ marginTop: '25px' }}>
-        Examples:
-        <br />
-        {EXAMPLES.map((d, i) => (
-          <a
-            key={i}
-            href={d.url}
-            style={{ marginRight: '15px' }}
-            onClick={clickExample(d.type)}
-          >
-            {d.label}
-          </a>
-        ))}
-      </Typography>
-      <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
-        <a
-          href="http://eepurl.com/dHnchn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Subscribe to our newsletter
-        </a>
-      </Typography>
-    </HomeBox>
-  </div>
-);
+const styles = theme => {
+  return {
+    highlight: {
+      color: theme.palette.primary.main,
+      fontWeight: 'bold',
+    },
+    searchSection: {
+      position: 'relative',
+      height: '100vh',
+      overflow: 'visible',
+    },
+    exampleLink: {
+      textDecoration: 'none',
+      marginRight: '15px',
+    },
+    scrollDown: {
+      position: 'absolute',
+      bottom: '10px',
+    },
+    introText: {
+      fontFamily: 'Roboto',
+      color: theme.palette.grey[800],
+    },
+    description: {
+      paddingTop: '44px',
+    },
+    welcomeTitle: {
+      fontFamily: 'Roboto',
+      fontWeight: 'bold',
+      fontSize: '22px',
+      color: theme.palette.grey[700],
+    },
+    welcomeText: {
+      fontFamily: 'Roboto',
+      fontSize: '18px',
+      color: theme.palette.grey[800],
+    },
+  };
+};
 
-export default HomePage;
+class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.searchSectionRef = React.createRef();
+  }
+
+  handleScrollDown = () => {
+    const node = this.searchSectionRef.current;
+    const rect = node.getBoundingClientRect();
+    window.scrollTo({ top: rect.height, left: 0, behavior: 'smooth' });
+  };
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <Fragment>
+        <Helmet>
+          <title>Open Targets Genetics</title>
+        </Helmet>
+        <RootRef rootRef={this.searchSectionRef}>
+          <Grid
+            className={classes.searchSection}
+            container
+            justify="center"
+            alignItems="center"
+          >
+            <Splash />
+            <HomeBox name="Genetics">
+              <Search />
+              <Typography style={{ marginTop: '25px' }}>Examples:</Typography>
+              <div>
+                {EXAMPLES.map((d, i) => (
+                  <a
+                    className={classes.exampleLink}
+                    key={i}
+                    href={d.url}
+                    onClick={clickExample(d.type)}
+                  >
+                    <Button variant="outlined">{d.label}</Button>
+                  </a>
+                ))}
+              </div>
+              <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
+                <a
+                  href="http://eepurl.com/dHnchn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Subscribe to our newsletter
+                </a>
+              </Typography>
+            </HomeBox>
+            <ScrollDownButton
+              className={classes.scrollDown}
+              onClick={this.handleScrollDown}
+            />
+          </Grid>
+        </RootRef>
+        <Grid container justify="center">
+          <Grid container item md={8}>
+            <Grid item md={12}>
+              <p className={classes.welcomeTitle}>
+                Welcome to Open Targets Genetics
+              </p>
+              <p className={classes.introText}>
+                Open Targets Genetics is the latest release from Open Targets,
+                an innovative, large-scale, multi-year, public-private
+                partnership that uses human genetics and genmics data for
+                systematic drug target identification and prioritisation.
+              </p>
+              <p className={classes.introText}>
+                The Portal offers three unique features to help you discover
+                associations between genes, variants, and traits:
+              </p>
+            </Grid>
+            <Grid className={classes.description} item md={6}>
+              <p className={classes.welcomeText}>
+                + Browse and rank gene and variant associations identified by
+                our{' '}
+                <span className={classes.highlight}>
+                  Gene2Variant (g2v) scoring
+                </span>{' '}
+                pipeline
+              </p>
+              <p className={classes.welcomeText}>
+                + Uncover credible sets for variant and trait associations based
+                on our{' '}
+                <span className={classes.highlight}>fine mapping analyses</span>{' '}
+                pipeline
+              </p>
+              <p className={classes.welcomeText}>
+                + Explore and compare studies from both UK Biobank and GWAS
+                Catalog using our{' '}
+                <span className={classes.highlight}>
+                  multi-trait comparison
+                </span>{' '}
+                tool
+              </p>
+            </Grid>
+            <Grid container item md={6} justify="center">
+              <PortalFeaturesIcon />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Footer
+          version={pkg.version}
+          commitHash={
+            process.env.REACT_APP_REVISION
+              ? process.env.REACT_APP_REVISION
+              : '2222ccc'
+          }
+          githubUrl="https://github.com/opentargets/genetics-app"
+        />
+      </Fragment>
+    );
+  }
+}
+
+export default withStyles(styles)(HomePage);
