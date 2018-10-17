@@ -21,10 +21,10 @@ const styles = theme => {
   };
 };
 
-const ScrollDownButton = ({ classes, className }) => {
+const ScrollDownButton = ({ classes, className, onClick }) => {
   const iconClasses = classNames(classes.root, className);
   return (
-    <div className={iconClasses}>
+    <div className={iconClasses} onClick={onClick}>
       <DownArrowIcon className={classes.icon} />
     </div>
   );
