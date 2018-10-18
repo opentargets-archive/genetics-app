@@ -31,7 +31,7 @@
     "graphql-tools": "^3.0.5",
     "lodash": "^4.17.10",
     "ot-charts": "^0.0.34",
-    "ot-ui": "^0.0.52",
+    "ot-ui": "^0.0.53",
     "polished": "^2.1.1",
     "query-string": "5",
     "react": "^16.4.2",
