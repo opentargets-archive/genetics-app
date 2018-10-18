@@ -69,6 +69,7 @@
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
     "prettier": "1.14.0",
+    "react-app-rewire-graphql-tag": "^1.1.0",
     "react-app-rewire-inline-import-graphql-ast": "^1.1.1",
     "react-app-rewired": "^1.5.2",
     "react-test-renderer": "^16.4.2"

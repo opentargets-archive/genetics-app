@@ -6838,6 +6838,12 @@ react-apollo@^2.1.9:
     lodash "^4.17.10"
     prop-types "^15.6.0"
 
+react-app-rewire-graphql-tag@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-app-rewire-graphql-tag/-/react-app-rewire-graphql-tag-1.1.0.tgz#1ba658b7cc375401aae42de926b742d8f6cca2ef"
+  dependencies:
+    graphql-tag "^2.4.2"
+
 react-app-rewire-inline-import-graphql-ast@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-app-rewire-inline-import-graphql-ast/-/react-app-rewire-inline-import-graphql-ast-1.1.1.tgz#d81856a6a4d96a05ae3f9b27a3334d69260863dd"
