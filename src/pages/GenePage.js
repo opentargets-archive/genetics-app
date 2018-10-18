@@ -19,6 +19,7 @@ import {
   MouseIcon,
   PathwaysIcon,
   ExpressionIcon,
+  commaSeparate,
 } from 'ot-ui';
 
 import BasePage from './BasePage';
@@ -228,6 +229,10 @@ class GenePage extends React.Component {
                       <Grid container justify="space-between">
                         <Grid item>
                           <Typography variant="display1">{symbol}</Typography>
+                          <Typography variant="subheading">
+                            {chromosome}:{commaSeparate(start)}-
+                            {commaSeparate(end)}
+                          </Typography>
                         </Grid>
                         {isValidGene ? (
                           <Grid item>
