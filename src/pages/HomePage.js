@@ -119,7 +119,7 @@ class HomePage extends Component {
               name={null}
               search={null}
               homepage
-              docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
+              docs="https://genetics-docs.opentargets.org"
               contact="mailto:geneticsportal@opentargets.org"
             />
             <HomeBox name="Genetics">
