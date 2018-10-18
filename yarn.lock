@@ -6072,9 +6072,9 @@ ot-charts@^0.0.34:
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.52:
-  version "0.0.52"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.52.tgz#d60cf31e1691f591a9c713b38623206907293600"
+ot-ui@^0.0.53:
+  version "0.0.53"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.53.tgz#9807a32c56ad4e8b7d437dfec0951c0f6834e213"
 
 p-finally@^1.0.0:
   version "1.0.0"
