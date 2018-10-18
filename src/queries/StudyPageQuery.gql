@@ -1,0 +1,33 @@
+query StudyPageQuery($studyId: String!) {
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+    nInitial
+    nReplication
+    nCases
+  }
+  manhattan(studyId: $studyId) {
+    associations {
+      variant {
+        id
+        rsId
+        chromosome
+        position
+      }
+      pval
+      credibleSetSize
+      ldSetSize
+      bestGenes {
+        score
+        gene {
+          id
+          symbol
+        }
+      }
+    }
+  }
+}

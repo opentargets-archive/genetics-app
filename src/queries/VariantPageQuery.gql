@@ -1,0 +1,121 @@
+query VariantPageQuery($variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    rsId
+    nearestGene {
+      id
+      symbol
+    }
+    nearestCodingGene {
+      id
+      symbol
+    }
+  }
+  genesForVariantSchema {
+    qtls {
+      id
+      sourceId
+      tissues {
+        id
+        name
+      }
+    }
+    intervals {
+      id
+      sourceId
+      tissues {
+        id
+        name
+      }
+    }
+    functionalPredictions {
+      id
+      sourceId
+      tissues {
+        id
+        name
+      }
+    }
+  }
+  genesForVariant(variantId: $variantId) {
+    gene {
+      id
+      symbol
+    }
+    overallScore
+    qtls {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        quantile
+        beta
+        pval
+      }
+    }
+    intervals {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        quantile
+        score
+      }
+    }
+    functionalPredictions {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        maxEffectLabel
+        maxEffectScore
+      }
+    }
+  }
+  indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
+    associations {
+      indexVariant {
+        id
+        rsId
+      }
+      study {
+        studyId
+        traitReported
+        pmid
+        pubDate
+        pubAuthor
+      }
+      pval
+      nTotal
+      overallR2
+      posteriorProbability
+    }
+  }
+  tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
+    associations {
+      tagVariant {
+        id
+        rsId
+      }
+      study {
+        studyId
+        traitReported
+        pmid
+        pubDate
+        pubAuthor
+      }
+      pval
+      nTotal
+      overallR2
+      posteriorProbability
+    }
+  }
+}

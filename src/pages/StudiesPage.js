@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
-import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -17,103 +16,7 @@ import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
 import StudyComparisonOption from '../components/StudyComparisonOption';
-
-const topOverlappedStudiesQuery = gql`
-  query TopOverlappedStudiesQuery($studyId: String!, $studyIds: [String!]!) {
-    studyInfo(studyId: $studyId) {
-      studyId
-      traitReported
-      pubAuthor
-      pubDate
-      pubJournal
-      pmid
-      nInitial
-      nReplication
-      nCases
-    }
-    manhattan(studyId: $studyId) {
-      associations {
-        variant {
-          id
-          rsId
-          chromosome
-          position
-        }
-        pval
-        credibleSetSize
-        ldSetSize
-        bestGenes {
-          score
-          gene {
-            id
-            symbol
-          }
-        }
-      }
-    }
-    topOverlappedStudies(studyId: $studyId) {
-      study {
-        studyId
-        traitReported
-        pubAuthor
-        pubDate
-        pubJournal
-        pmid
-        nInitial
-        nReplication
-        nCases
-      }
-      topStudiesByLociOverlap {
-        study {
-          studyId
-          traitReported
-          pubAuthor
-          pubDate
-          pubJournal
-          pmid
-          nInitial
-          nReplication
-          nCases
-        }
-        numOverlapLoci
-      }
-    }
-    overlapInfoForStudy(studyId: $studyId, studyIds: $studyIds) {
-      study {
-        studyId
-        traitReported
-        pubAuthor
-        pubDate
-        pubJournal
-        pmid
-        nInitial
-        nReplication
-        nCases
-      }
-      overlappedVariantsForStudies {
-        study {
-          studyId
-          traitReported
-          pubAuthor
-          pubDate
-          pubJournal
-          pmid
-          nInitial
-          nReplication
-          nCases
-        }
-        overlaps {
-          variantIdA
-          variantIdB
-          overlapAB
-          distinctA
-          distinctB
-        }
-      }
-      variantIntersectionSet
-    }
-  }
-`;
+import STUDIES_PAGE_QUERY from '../queries/StudiesPageQuery.gql';
 
 function hasStudyInfo(data) {
   return data && data.studyInfo;
@@ -368,7 +271,7 @@ class StudiesPage extends React.Component {
         </Helmet>
 
         <Query
-          query={topOverlappedStudiesQuery}
+          query={STUDIES_PAGE_QUERY}
           variables={{ studyId, studyIds: [studyId, ...studyIds] }}
           fetchPolicy="network-only"
         >

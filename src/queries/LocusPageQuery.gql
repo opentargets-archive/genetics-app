@@ -1,0 +1,43 @@
+query LocusPageQuery($chromosome: String!, $start: Long!, $end: Long!) {
+  gecko(chromosome: $chromosome, start: $start, end: $end) {
+    genes {
+      id
+      symbol
+      tss
+      start
+      end
+      exons
+    }
+    tagVariants {
+      id
+      rsId
+      position
+    }
+    indexVariants {
+      id
+      rsId
+      position
+    }
+    studies {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+    }
+    geneTagVariants {
+      geneId
+      tagVariantId
+      overallScore
+    }
+    tagVariantIndexVariantStudies {
+      tagVariantId
+      indexVariantId
+      studyId
+      r2
+      pval
+      posteriorProbability
+    }
+  }
+}

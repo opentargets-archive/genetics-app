@@ -1,6 +1,5 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import _ from 'lodash';
 import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
 
@@ -8,26 +7,7 @@ import { PheWAS, withTooltip } from 'ot-charts';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-
-const phewasQuery = gql`
-  query PheWASQuery($variantId: String!) {
-    pheWAS(variantId: $variantId) {
-      associations {
-        study {
-          studyId
-          traitReported
-          traitCode
-          traitCategory
-        }
-        pval
-        beta
-        oddsRatio
-        nTotal
-        nCases: nCasesStudy
-      }
-    }
-  }
-`;
+import PHEWAS_QUERY from '../queries/PheWASQuery.gql';
 
 function hasAssociations(data) {
   return (
@@ -66,7 +46,7 @@ class PheWASSection extends React.Component {
     const [chromosome, positionString] = variantId.split('_');
     const position = parseInt(positionString, 10);
     return (
-      <Query query={phewasQuery} variables={{ variantId }}>
+      <Query query={PHEWAS_QUERY} variables={{ variantId }}>
         {({ loading, error, data }) => {
           const isPheWASVariant = hasAssociations(data);
           const PheWASWithTooltip = withTooltip(
