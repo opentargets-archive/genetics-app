@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 
-import { Splash, HomeBox, Footer, Button } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button, NavBar } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
@@ -115,6 +115,13 @@ class HomePage extends Component {
             alignItems="center"
           >
             <Splash />
+            <NavBar
+              name={null}
+              search={null}
+              homepage
+              docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
+              contact="mailto:geneticsportal@opentargets.org"
+            />
             <HomeBox name="Genetics">
               <div className={classes.slogan}>
                 Explore{' '}
