@@ -13,13 +13,9 @@
   "dependencies": {
     "@material-ui/core": "^1.4.3",
     "@material-ui/icons": "^2.0.2",
-    "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
-    "apollo-link": "^1.2.2",
     "apollo-link-http": "^1.5.4",
-    "apollo-link-schema": "^1.1.0",
-    "casual-browserify": "^1.5.19-2",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
     "d3": "^5.5.0",
@@ -41,7 +37,6 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-select": "^2.0.0",
-    "react-virtualized": "^9.20.1",
     "source-map-explorer": "^1.5.0",
     "typeface-roboto": "^0.0.54"
   },
