@@ -1,7 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import queryString from 'query-string';
 import _ from 'lodash';
 import { Grid } from '@material-ui/core';
@@ -25,33 +24,7 @@ import {
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
-
-const SEARCH_QUERY = gql`
-  query GenePageQuery($geneId: String!) {
-    search(queryString: $geneId) {
-      genes {
-        id
-        symbol
-        chromosome
-        start
-        end
-        bioType
-      }
-    }
-    studiesForGene(geneId: $geneId) {
-      study {
-        studyId
-        traitReported
-        pubAuthor
-        pubDate
-        pmid
-        nInitial
-        nReplication
-        nCases
-      }
-    }
-  }
-`;
+import GENE_PAGE_QUERY from '../queries/GenePageQuery.gql';
 
 function hasGeneData(data, geneId) {
   return (
@@ -164,7 +137,7 @@ class GenePage extends React.Component {
     };
     return (
       <BasePage>
-        <Query query={SEARCH_QUERY} variables={{ geneId }}>
+        <Query query={GENE_PAGE_QUERY} variables={{ geneId }}>
           {({ loading, error, data }) => {
             const isValidGene = hasGeneData(data, geneId);
             const gene = isValidGene ? geneData(data) : {};

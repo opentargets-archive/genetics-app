@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +22,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 
 const SIGNIFICANCE = 5e-8;
 
@@ -64,42 +64,6 @@ function loci(data) {
   return hasAssociations(data) ? data.manhattan.associations.length : 0;
 }
 
-const manhattanQuery = gql`
-  query StudyPageQuery($studyId: String!) {
-    studyInfo(studyId: $studyId) {
-      studyId
-      traitReported
-      pubAuthor
-      pubDate
-      pubJournal
-      pmid
-      nInitial
-      nReplication
-      nCases
-    }
-    manhattan(studyId: $studyId) {
-      associations {
-        variant {
-          id
-          rsId
-          chromosome
-          position
-        }
-        pval
-        credibleSetSize
-        ldSetSize
-        bestGenes {
-          score
-          gene {
-            id
-            symbol
-          }
-        }
-      }
-    }
-  }
-`;
-
 const styles = theme => {
   return {
     section: {
@@ -130,7 +94,7 @@ class StudyPage extends React.Component {
         </Helmet>
 
         <Query
-          query={manhattanQuery}
+          query={STUDY_PAGE_QUERY}
           variables={{ studyId }}
           fetchPolicy="network-only"
         >

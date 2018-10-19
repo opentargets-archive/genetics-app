@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import queryString from 'query-string';
 
 import { SectionHeading, Typography, Button } from 'ot-ui';
@@ -20,6 +19,8 @@ import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PlotContainer from 'ot-ui/build/components/PlotContainer';
 import PheWASSection from '../components/PheWASSection';
+
+import VARIANT_PAGE_QUERY from '../queries/VariantPageQuery.gql';
 
 function hasInfo(data) {
   return data && data.variantInfo;
@@ -84,130 +85,6 @@ function transformAssociatedTagVariants(data) {
   );
   return associationsFlattened;
 }
-
-const variantPageQuery = gql`
-  query VariantPageQuery($variantId: String!) {
-    variantInfo(variantId: $variantId) {
-      rsId
-      nearestGene {
-        id
-        symbol
-      }
-      nearestCodingGene {
-        id
-        symbol
-      }
-    }
-    genesForVariantSchema {
-      qtls {
-        id
-        sourceId
-        tissues {
-          id
-          name
-        }
-      }
-      intervals {
-        id
-        sourceId
-        tissues {
-          id
-          name
-        }
-      }
-      functionalPredictions {
-        id
-        sourceId
-        tissues {
-          id
-          name
-        }
-      }
-    }
-    genesForVariant(variantId: $variantId) {
-      gene {
-        id
-        symbol
-      }
-      overallScore
-      qtls {
-        sourceId
-        aggregatedScore
-        tissues {
-          tissue {
-            id
-            name
-          }
-          quantile
-          beta
-          pval
-        }
-      }
-      intervals {
-        sourceId
-        aggregatedScore
-        tissues {
-          tissue {
-            id
-            name
-          }
-          quantile
-          score
-        }
-      }
-      functionalPredictions {
-        sourceId
-        aggregatedScore
-        tissues {
-          tissue {
-            id
-            name
-          }
-          maxEffectLabel
-          maxEffectScore
-        }
-      }
-    }
-    indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
-      associations {
-        indexVariant {
-          id
-          rsId
-        }
-        study {
-          studyId
-          traitReported
-          pmid
-          pubDate
-          pubAuthor
-        }
-        pval
-        nTotal
-        overallR2
-        posteriorProbability
-      }
-    }
-    tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
-      associations {
-        tagVariant {
-          id
-          rsId
-        }
-        study {
-          studyId
-          traitReported
-          pmid
-          pubDate
-          pubAuthor
-        }
-        pval
-        nTotal
-        overallR2
-        posteriorProbability
-      }
-    }
-  }
-`;
 
 const styles = theme => {
   return {
@@ -295,7 +172,7 @@ class VariantPage extends React.Component {
         <Helmet>
           <title>{variantId}</title>
         </Helmet>
-        <Query query={variantPageQuery} variables={{ variantId }}>
+        <Query query={VARIANT_PAGE_QUERY} variables={{ variantId }}>
           {({ loading, error, data }) => {
             const isVariantWithInfo = hasInfo(data);
             const isGeneVariant = hasAssociatedGenes(data);

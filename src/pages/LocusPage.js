@@ -1,7 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import queryString from 'query-string';
 import { findDOMNode } from 'react-dom';
 import Paper from '@material-ui/core/Paper';
@@ -28,6 +27,7 @@ import locusScheme, {
 } from '../logic/locusScheme';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import ScrollToTop from '../components/ScrollToTop';
+import LOCUS_PAGE_QUERY from '../queries/LocusPageQuery.gql';
 
 function hasData(data) {
   return data && data.gecko;
@@ -38,52 +38,6 @@ const FullWidthText = ({ children }) => (
     <Typography variant="subheading">{children}</Typography>
   </div>
 );
-
-const geckoQuery = gql`
-  query GeckoQuery($chromosome: String!, $start: Long!, $end: Long!) {
-    gecko(chromosome: $chromosome, start: $start, end: $end) {
-      genes {
-        id
-        symbol
-        tss
-        start
-        end
-        exons
-      }
-      tagVariants {
-        id
-        rsId
-        position
-      }
-      indexVariants {
-        id
-        rsId
-        position
-      }
-      studies {
-        studyId
-        traitReported
-        pubAuthor
-        pubDate
-        pubJournal
-        pmid
-      }
-      geneTagVariants {
-        geneId
-        tagVariantId
-        overallScore
-      }
-      tagVariantIndexVariantStudies {
-        tagVariantId
-        indexVariantId
-        studyId
-        r2
-        pval
-        posteriorProbability
-      }
-    }
-  }
-`;
 
 const ZOOM_LIMIT = 2000000;
 const ZOOM_FACTOR = 1.25;
@@ -399,7 +353,7 @@ class LocusPage extends React.Component {
           ]}
         />
         <Query
-          query={geckoQuery}
+          query={LOCUS_PAGE_QUERY}
           variables={{ chromosome, start, end }}
           fetchPolicy="network-only"
         >

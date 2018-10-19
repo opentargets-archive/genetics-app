@@ -1,48 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import { Search as OtSearch } from 'ot-ui';
 
 import SearchOption from './SearchOption';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-
-const SEARCH_QUERY = gql`
-  query SearchQuery($queryString: String!) {
-    search(queryString: $queryString) {
-      totalGenes
-      totalVariants
-      totalStudies
-      genes {
-        id
-        symbol
-        chromosome
-        start
-        end
-      }
-      variants {
-        variant {
-          id
-          rsId
-          chromosome
-          position
-          refAllele
-          altAllele
-        }
-      }
-      studies {
-        studyId
-        traitReported
-        pmid
-        pubAuthor
-        pubDate
-        pubJournal
-        nInitial
-      }
-    }
-  }
-`;
+import SEARCH_QUERY from '../queries/SearchQuery.gql';
 
 const asGroupedOptions = data => {
   return [
