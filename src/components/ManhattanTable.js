@@ -8,6 +8,7 @@ import LocusLink from './LocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import cytobandComparator from '../logic/cytobandComparator';
 
 export const tableColumns = studyId => [
   {
@@ -27,10 +28,7 @@ export const tableColumns = studyId => [
   {
     id: 'cytoband',
     label: 'Cytoband',
-    renderCell: rowData => {
-      const [chromosome, position] = rowData.indexVariantId.split('_');
-      return getCytoband(chromosome, position);
-    },
+    comparator: cytobandComparator,
   },
   {
     id: 'pval',
@@ -87,12 +85,19 @@ export const tableColumns = studyId => [
 ];
 
 function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
+  const dataWithCytoband = data.map(d => {
+    const { chromosome, position } = d;
+    return {
+      ...d,
+      cytoband: getCytoband(chromosome, position),
+    };
+  });
   return (
     <OtTable
       loading={loading}
       error={error}
       columns={tableColumns(studyId)}
-      data={data}
+      data={dataWithCytoband}
       sortBy="pval"
       order="asc"
       downloadFileStem={filenameStem}
