@@ -6,6 +6,7 @@ import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
 import variantIdComparator from '../logic/variantIdComparator';
+import cytobandComparator from '../logic/cytobandComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const tableColumns = studyIds => [
@@ -28,10 +29,7 @@ const tableColumns = studyIds => [
   {
     id: 'cytoband',
     label: 'Cytoband',
-    renderCell: rowData => {
-      const [chromosome, position] = rowData.indexVariantId.split('_');
-      return getCytoband(chromosome, position);
-    },
+    comparator: cytobandComparator,
   },
   {
     id: 'bestGenes',
@@ -70,12 +68,29 @@ function ManhattansVariantsTable({
   studyIds,
   filenameStem,
 }) {
+  const dataWithCytoband = data.map(d => {
+    const {
+      indexVariantId,
+      indexVariantRsId,
+      bestGenes,
+      chromosome,
+      position,
+    } = d;
+    return {
+      indexVariantId,
+      indexVariantRsId,
+      bestGenes,
+      chromosome,
+      position,
+      cytoband: getCytoband(chromosome, position),
+    };
+  });
   return (
     <OtTable
       loading={loading}
       error={error}
       columns={tableColumns(studyIds)}
-      data={data}
+      data={dataWithCytoband}
       sortBy="indexVariantId"
       order="asc"
       downloadFileStem={filenameStem}
