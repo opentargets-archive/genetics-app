@@ -43,17 +43,15 @@ const createIntervalCellRenderer = schema => {
   };
 };
 
-const createFPCellRenderer = genesForVariant => {
+const createFPCellRenderer = () => {
   return rowData => {
-    const gene = genesForVariant.find(
-      geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
-    );
+    const { functionalPredictions } = rowData;
 
-    if (gene.functionalPredictions.length === 1) {
+    if (functionalPredictions.length === 1) {
       const {
         maxEffectLabel,
         maxEffectScore,
-      } = gene.functionalPredictions[0].tissues[0];
+      } = functionalPredictions[0].tissues[0];
       const level =
         0 <= maxEffectScore && maxEffectScore <= 1 / 3
           ? 'L'
@@ -105,7 +103,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       id: schema.sourceId,
       label: schema.sourceLabel,
       tooltip: schema.sourceDescriptionOverview,
-      renderCell: createFPCellRenderer(genesForVariant),
+      renderCell: createFPCellRenderer(),
     })),
   ];
 
@@ -126,9 +124,7 @@ const getDataAll = genesForVariant => {
     item.intervals.forEach(interval => {
       row[interval.sourceId] = interval.aggregatedScore;
     });
-    item.functionalPredictions.forEach(fp => {
-      row[fp.sourceId] = fp.aggregatedScore;
-    });
+    row.functionalPredictions = item.functionalPredictions;
     data.push(row);
   });
   return data;
