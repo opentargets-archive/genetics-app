@@ -151,10 +151,12 @@ class HomePage extends Component {
                 </a>
               </Typography>
             </HomeBox>
-            <ScrollDownButton
-              className={classes.scrollDown}
-              onClick={this.handleScrollDown}
-            />
+            <Grid container item justify="center">
+              <ScrollDownButton
+                className={classes.scrollDown}
+                onClick={this.handleScrollDown}
+              />
+            </Grid>
           </Grid>
         </RootRef>
         <Grid container justify="center">
