@@ -126,7 +126,6 @@ const getDataAll = genesForVariant => {
     item.functionalPredictions.forEach(fp => {
       row[fp.sourceId] = item.functionalPredictions[0];
     });
-    //row.functionalPredictions = item.functionalPredictions;
     data.push(row);
   });
   return data;
@@ -146,13 +145,7 @@ const getTissueColumns = (schema, genesForVariant) => {
             renderCell: rowData => {
               if (rowData[tissue.id]) {
                 const qtlRadius = radiusScale(rowData[tissue.id]);
-                // add beta and pval to the rowData when qtl
-                const { beta, pval } = findValues(
-                  genesForVariant,
-                  rowData.geneSymbol,
-                  schema.sourceId,
-                  tissue.id
-                );
+                const { beta, pval } = rowData;
                 const qtlColor = beta > 0 ? 'red' : 'blue';
                 return (
                   <Tooltip
@@ -229,18 +222,6 @@ const getTissueColumns = (schema, genesForVariant) => {
   return columns;
 };
 
-const findValues = (genesForVariant, geneSymbol, sourceId, tissueId) => {
-  const gene = genesForVariant.find(
-    geneForVariant => geneForVariant.gene.symbol === geneSymbol
-  );
-  const qtl = gene.qtls.find(qtl => qtl.sourceId === sourceId);
-  const tissue = qtl.tissues.find(tissue => tissue.tissue.id === tissueId);
-  return {
-    beta: tissue.beta,
-    pval: tissue.pval,
-  };
-};
-
 const getTissueData = (schema, genesForVariant) => {
   const data = [];
 
@@ -255,6 +236,11 @@ const getTissueData = (schema, genesForVariant) => {
 
     if (element) {
       element.tissues.forEach(elementTissue => {
+        // add beta and pval when qtl for rendering
+        if (elementTissue.__typename === 'QTLTissue') {
+          row.beta = elementTissue.beta;
+          row.pval = elementTissue.pval;
+        }
         row[elementTissue.tissue.id] =
           elementTissue.__typename === 'FPredTissue'
             ? elementTissue.maxEffectLabel
