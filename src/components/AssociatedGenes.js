@@ -319,21 +319,15 @@ class AssociatedGenes extends Component {
       />
     );
 
-    const schemaWithColsAndRows = schemas.map(schema => ({
-      ...schema,
-      columns: getTissueColumns(schema, genesForVariant),
-      rows: getTissueData(schema, genesForVariant),
-    }));
-
-    const tabsTissues = schemaWithColsAndRows.map(schema => {
+    const tabsTissues = schemas.map(schema => {
       return (
         value === schema.sourceId && (
           <OtTable
             message={schema.sourceDescriptionBreakdown}
             verticalHeaders
             key={schema.sourceId}
-            columns={schema.columns}
-            data={schema.rows}
+            columns={getTissueColumns(schema, genesForVariant)}
+            data={getTissueData(schema, genesForVariant)}
             reportTableDownloadEvent={format => {
               reportAnalyticsEvent({
                 category: 'table',
@@ -358,7 +352,7 @@ class AssociatedGenes extends Component {
     const tabs = (
       <Tabs scrollable value={value} onChange={this.handleChange}>
         <Tab label="Summary" value={OVERVIEW} />
-        {schemaWithColsAndRows.map(schema => {
+        {schemas.map(schema => {
           return (
             <Tab
               key={schema.sourceId}
