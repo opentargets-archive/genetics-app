@@ -43,15 +43,12 @@ const createIntervalCellRenderer = schema => {
   };
 };
 
-const createFPCellRenderer = () => {
+const createFPCellRenderer = schema => {
   return rowData => {
-    const { functionalPredictions } = rowData;
+    const fpData = rowData[schema.sourceId];
 
-    if (functionalPredictions.length === 1) {
-      const {
-        maxEffectLabel,
-        maxEffectScore,
-      } = functionalPredictions[0].tissues[0];
+    if (fpData !== undefined) {
+      const { maxEffectLabel, maxEffectScore } = fpData.tissues[0];
       const level =
         0 <= maxEffectScore && maxEffectScore <= 1 / 3
           ? 'L'
@@ -103,7 +100,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       id: schema.sourceId,
       label: schema.sourceLabel,
       tooltip: schema.sourceDescriptionOverview,
-      renderCell: createFPCellRenderer(),
+      renderCell: createFPCellRenderer(schema),
     })),
   ];
 
@@ -124,25 +121,18 @@ const getDataAll = genesForVariant => {
     item.intervals.forEach(interval => {
       row[interval.sourceId] = interval.aggregatedScore;
     });
-    row.functionalPredictions = item.functionalPredictions;
+    // for functionalPredictions we want to use the first element of
+    // the functionalPredictions array
+    item.functionalPredictions.forEach(fp => {
+      row[fp.sourceId] = item.functionalPredictions[0];
+    });
+    //row.functionalPredictions = item.functionalPredictions;
     data.push(row);
   });
   return data;
 };
 
-const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
-  const schema = [
-    ...genesForVariantSchema.qtls.map(qtl => ({ ...qtl, type: 'qtls' })),
-    ...genesForVariantSchema.intervals.map(interval => ({
-      ...interval,
-      type: 'intervals',
-    })),
-    ...genesForVariantSchema.functionalPredictions.map(fp => ({
-      ...fp,
-      type: 'functionalPredictions',
-    })),
-  ].find(schema => schema.sourceId === sourceId);
-
+const getTissueColumns = (schema, genesForVariant) => {
   let tissueColumns;
 
   switch (schema.type) {
@@ -156,6 +146,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
             renderCell: rowData => {
               if (rowData[tissue.id]) {
                 const qtlRadius = radiusScale(rowData[tissue.id]);
+                // add beta and pval to the rowData when qtl
                 const { beta, pval } = findValues(
                   genesForVariant,
                   rowData.geneSymbol,
@@ -250,37 +241,16 @@ const findValues = (genesForVariant, geneSymbol, sourceId, tissueId) => {
   };
 };
 
-const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
+const getTissueData = (schema, genesForVariant) => {
   const data = [];
-  let searchField;
-
-  genesForVariantSchema.qtls.forEach(qtl => {
-    if (qtl.sourceId === sourceId) {
-      searchField = 'qtls';
-    }
-  });
-
-  !searchField &&
-    genesForVariantSchema.intervals.forEach(interval => {
-      if (interval.sourceId === sourceId) {
-        searchField = 'intervals';
-      }
-    });
-
-  !searchField &&
-    genesForVariantSchema.functionalPredictions.forEach(fp => {
-      if (fp.sourceId === sourceId) {
-        searchField = 'functionalPredictions';
-      }
-    });
 
   genesForVariant.forEach(geneForVariant => {
     const row = {
       geneId: geneForVariant.gene.id,
       geneSymbol: geneForVariant.gene.symbol,
     };
-    const element = geneForVariant[searchField].find(
-      item => item.sourceId === sourceId
+    const element = geneForVariant[schema.type].find(
+      item => item.sourceId === schema.sourceId
     );
 
     if (element) {
@@ -322,9 +292,18 @@ class AssociatedGenes extends Component {
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
     const schemas = [
-      ...genesForVariantSchema.qtls,
-      ...genesForVariantSchema.intervals,
-      ...genesForVariantSchema.functionalPredictions,
+      ...genesForVariantSchema.qtls.map(qtlSchema => ({
+        ...qtlSchema,
+        type: 'qtls',
+      })),
+      ...genesForVariantSchema.intervals.map(intervalSchema => ({
+        ...intervalSchema,
+        type: 'intervals',
+      })),
+      ...genesForVariantSchema.functionalPredictions.map(fpSchema => ({
+        ...fpSchema,
+        type: 'functionalPredictions',
+      })),
     ];
 
     const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
@@ -356,16 +335,8 @@ class AssociatedGenes extends Component {
 
     const schemaWithColsAndRows = schemas.map(schema => ({
       ...schema,
-      columns: getTissueColumns(
-        genesForVariantSchema,
-        genesForVariant,
-        schema.sourceId
-      ),
-      rows: getTissueData(
-        genesForVariantSchema,
-        genesForVariant,
-        schema.sourceId
-      ),
+      columns: getTissueColumns(schema, genesForVariant),
+      rows: getTissueData(schema, genesForVariant),
     }));
 
     const tabsTissues = schemaWithColsAndRows.map(schema => {
