@@ -43,17 +43,12 @@ const createIntervalCellRenderer = schema => {
   };
 };
 
-const createFPCellRenderer = genesForVariant => {
+const createFPCellRenderer = schema => {
   return rowData => {
-    const gene = genesForVariant.find(
-      geneForVariant => geneForVariant.gene.symbol === rowData.geneSymbol
-    );
+    const fpData = rowData[schema.sourceId];
 
-    if (gene.functionalPredictions.length === 1) {
-      const {
-        maxEffectLabel,
-        maxEffectScore,
-      } = gene.functionalPredictions[0].tissues[0];
+    if (fpData !== undefined) {
+      const { maxEffectLabel, maxEffectScore } = fpData.tissues[0];
       const level =
         0 <= maxEffectScore && maxEffectScore <= 1 / 3
           ? 'L'
@@ -105,7 +100,7 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       id: schema.sourceId,
       label: schema.sourceLabel,
       tooltip: schema.sourceDescriptionOverview,
-      renderCell: createFPCellRenderer(genesForVariant),
+      renderCell: createFPCellRenderer(schema),
     })),
   ];
 
@@ -126,27 +121,17 @@ const getDataAll = genesForVariant => {
     item.intervals.forEach(interval => {
       row[interval.sourceId] = interval.aggregatedScore;
     });
+    // for functionalPredictions we want to use the first element of
+    // the functionalPredictions array
     item.functionalPredictions.forEach(fp => {
-      row[fp.sourceId] = fp.aggregatedScore;
+      row[fp.sourceId] = item.functionalPredictions[0];
     });
     data.push(row);
   });
   return data;
 };
 
-const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
-  const schema = [
-    ...genesForVariantSchema.qtls.map(qtl => ({ ...qtl, type: 'qtls' })),
-    ...genesForVariantSchema.intervals.map(interval => ({
-      ...interval,
-      type: 'intervals',
-    })),
-    ...genesForVariantSchema.functionalPredictions.map(fp => ({
-      ...fp,
-      type: 'functionalPredictions',
-    })),
-  ].find(schema => schema.sourceId === sourceId);
-
+const getTissueColumns = (schema, genesForVariant) => {
   let tissueColumns;
 
   switch (schema.type) {
@@ -160,12 +145,7 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
             renderCell: rowData => {
               if (rowData[tissue.id]) {
                 const qtlRadius = radiusScale(rowData[tissue.id]);
-                const { beta, pval } = findValues(
-                  genesForVariant,
-                  rowData.geneSymbol,
-                  schema.sourceId,
-                  tissue.id
-                );
+                const { beta, pval } = rowData;
                 const qtlColor = beta > 0 ? 'red' : 'blue';
                 return (
                   <Tooltip
@@ -242,53 +222,25 @@ const getTissueColumns = (genesForVariantSchema, genesForVariant, sourceId) => {
   return columns;
 };
 
-const findValues = (genesForVariant, geneSymbol, sourceId, tissueId) => {
-  const gene = genesForVariant.find(
-    geneForVariant => geneForVariant.gene.symbol === geneSymbol
-  );
-  const qtl = gene.qtls.find(qtl => qtl.sourceId === sourceId);
-  const tissue = qtl.tissues.find(tissue => tissue.tissue.id === tissueId);
-  return {
-    beta: tissue.beta,
-    pval: tissue.pval,
-  };
-};
-
-const getTissueData = (genesForVariantSchema, genesForVariant, sourceId) => {
+const getTissueData = (schema, genesForVariant) => {
   const data = [];
-  let searchField;
-
-  genesForVariantSchema.qtls.forEach(qtl => {
-    if (qtl.sourceId === sourceId) {
-      searchField = 'qtls';
-    }
-  });
-
-  !searchField &&
-    genesForVariantSchema.intervals.forEach(interval => {
-      if (interval.sourceId === sourceId) {
-        searchField = 'intervals';
-      }
-    });
-
-  !searchField &&
-    genesForVariantSchema.functionalPredictions.forEach(fp => {
-      if (fp.sourceId === sourceId) {
-        searchField = 'functionalPredictions';
-      }
-    });
 
   genesForVariant.forEach(geneForVariant => {
     const row = {
       geneId: geneForVariant.gene.id,
       geneSymbol: geneForVariant.gene.symbol,
     };
-    const element = geneForVariant[searchField].find(
-      item => item.sourceId === sourceId
+    const element = geneForVariant[schema.type].find(
+      item => item.sourceId === schema.sourceId
     );
 
     if (element) {
       element.tissues.forEach(elementTissue => {
+        // add beta and pval when qtl for rendering
+        if (elementTissue.__typename === 'QTLTissue') {
+          row.beta = elementTissue.beta;
+          row.pval = elementTissue.pval;
+        }
         row[elementTissue.tissue.id] =
           elementTissue.__typename === 'FPredTissue'
             ? elementTissue.maxEffectLabel
@@ -326,9 +278,18 @@ class AssociatedGenes extends Component {
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
     const schemas = [
-      ...genesForVariantSchema.qtls,
-      ...genesForVariantSchema.intervals,
-      ...genesForVariantSchema.functionalPredictions,
+      ...genesForVariantSchema.qtls.map(qtlSchema => ({
+        ...qtlSchema,
+        type: 'qtls',
+      })),
+      ...genesForVariantSchema.intervals.map(intervalSchema => ({
+        ...intervalSchema,
+        type: 'intervals',
+      })),
+      ...genesForVariantSchema.functionalPredictions.map(fpSchema => ({
+        ...fpSchema,
+        type: 'functionalPredictions',
+      })),
     ];
 
     const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
@@ -358,29 +319,15 @@ class AssociatedGenes extends Component {
       />
     );
 
-    const schemaWithColsAndRows = schemas.map(schema => ({
-      ...schema,
-      columns: getTissueColumns(
-        genesForVariantSchema,
-        genesForVariant,
-        schema.sourceId
-      ),
-      rows: getTissueData(
-        genesForVariantSchema,
-        genesForVariant,
-        schema.sourceId
-      ),
-    }));
-
-    const tabsTissues = schemaWithColsAndRows.map(schema => {
+    const tabsTissues = schemas.map(schema => {
       return (
         value === schema.sourceId && (
           <OtTable
             message={schema.sourceDescriptionBreakdown}
             verticalHeaders
             key={schema.sourceId}
-            columns={schema.columns}
-            data={schema.rows}
+            columns={getTissueColumns(schema, genesForVariant)}
+            data={getTissueData(schema, genesForVariant)}
             reportTableDownloadEvent={format => {
               reportAnalyticsEvent({
                 category: 'table',
@@ -405,7 +352,7 @@ class AssociatedGenes extends Component {
     const tabs = (
       <Tabs scrollable value={value} onChange={this.handleChange}>
         <Tab label="Summary" value={OVERVIEW} />
-        {schemaWithColsAndRows.map(schema => {
+        {schemas.map(schema => {
           return (
             <Tab
               key={schema.sourceId}
