@@ -75,7 +75,7 @@ const tableColumns = variantId => [
     id: 'posteriorProbability',
     label: 'Posterior Probability',
     tooltip:
-      'Posterior probability from finemapping that this tag variant is causal',
+      'Posterior probability from fine-mapping that this tag variant is causal',
     renderCell: rowData =>
       rowData.posteriorProbability !== null
         ? rowData.posteriorProbability.toPrecision(3)

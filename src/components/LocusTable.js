@@ -120,7 +120,7 @@ export const tableColumns = ({
     id: 'method',
     label: 'Expansion',
     renderCell: rowData =>
-      rowData.posteriorProbability ? 'Finemapping' : 'LD Expansion',
+      rowData.posteriorProbability ? 'Fine-mapping' : 'LD Expansion',
   },
   {
     id: 'r2',
@@ -133,7 +133,7 @@ export const tableColumns = ({
     id: 'posteriorProbability',
     label: 'Posterior Probability',
     tooltip:
-      'Posterior probability from finemapping that this tag variant is causal',
+      'Posterior probability from fine-mapping that this tag variant is causal',
     renderCell: rowData =>
       rowData.posteriorProbability !== null
         ? rowData.posteriorProbability.toPrecision(3)

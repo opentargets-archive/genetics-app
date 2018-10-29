@@ -35,7 +35,7 @@ const geneTagVariantComparator = (a, b) => {
 };
 
 const tagVariantIndexVariantStudyComparator = (a, b) => {
-  // render by ordering (chained, finemapping, r2)
+  // render by ordering (chained, fine-mapping, r2)
   const scoreA =
     (a.chained ? 8 : 4) +
     (a.posteriorProbability ? 1 + a.posteriorProbability : 0) +

@@ -59,7 +59,7 @@ function getStudiesTableData(data, studyId, studyIds) {
     d => d.study.id !== studyId
   );
   if (!rootStudyTop) {
-    // handle case of manhattan data but no ld/finemapping (eg. GCST004132)
+    // handle case of manhattan data but no ld/fine-mapping (eg. GCST004132)
     if (
       topStudiesExcludingRoot.length === 0 &&
       hasManhattan(data) &&
