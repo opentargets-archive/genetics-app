@@ -167,7 +167,7 @@ class HomePage extends Component {
             <p className={classes.introText}>
               Open Targets Genetics is the latest release from Open Targets, an
               innovative, large-scale, multi-year, public-private partnership
-              that uses human genetics and genmics data for systematic drug
+              that uses human genetics and genomics data for systematic drug
               target identification and prioritisation.
             </p>
             <p className={classes.introText}>
