@@ -410,11 +410,11 @@ class LocusPage extends React.Component {
                       displayFinemappingOptions={[
                         {
                           value: LOCUS_FINEMAPPING.ALL,
-                          label: 'Show expansion by LD and finemapping',
+                          label: 'Show expansion by LD and fine-mapping',
                         },
                         {
                           value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-                          label: 'Show expansion by finemapping only',
+                          label: 'Show expansion by fine-mapping only',
                         },
                       ]}
                       disabledZoomOut={end - start >= ZOOM_LIMIT}

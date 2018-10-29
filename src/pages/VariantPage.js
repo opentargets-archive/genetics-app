@@ -329,7 +329,7 @@ class VariantPage extends React.Component {
                 />
                 <SectionHeading
                   heading="Tag variants"
-                  subheading="Which variants tag (through LD or finemapping) this lead variant?"
+                  subheading="Which variants tag (through LD or fine-mapping) this lead variant?"
                   entities={[
                     {
                       type: 'study',
