@@ -50,6 +50,15 @@ const styles = theme => {
       height: '100%',
       padding: theme.sectionPadding,
     },
+    geneSymbol: {
+      display: 'inline-block',
+    },
+    gnomadLink: {
+      position: 'relative',
+      marginLeft: '5px',
+      bottom: '8px',
+      textDecoration: 'none',
+    },
     locusLinkButton: {
       width: '240px',
       height: '60px',
@@ -201,7 +210,19 @@ class GenePage extends React.Component {
                     <Paper className={classes.section}>
                       <Grid container justify="space-between">
                         <Grid item>
-                          <Typography variant="display1">{symbol}</Typography>
+                          <Typography
+                            className={classes.geneSymbol}
+                            variant="display1"
+                          >
+                            {symbol}
+                          </Typography>
+                          <a
+                            className={classes.gnomadLink}
+                            href={`http://gnomad.broadinstitute.org/gene/${geneId}`}
+                            target="_blank"
+                          >
+                            <Button variant="outlined">gnomAD</Button>
+                          </a>
                           <Typography variant="subheading">
                             {chromosome}:{commaSeparate(start)}-
                             {commaSeparate(end)}
@@ -305,18 +326,6 @@ class GenePage extends React.Component {
                           >
                             <Button variant="outlined">
                               Ensembl <LinkIcon />
-                            </Button>
-                          </a>
-                        </Grid>
-                        <Grid item>
-                          <a
-                            className={classes.link}
-                            href={`http://exac.broadinstitute.org/gene/${geneId}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Button variant="outlined">
-                              ExAC <LinkIcon />
                             </Button>
                           </a>
                         </Grid>
