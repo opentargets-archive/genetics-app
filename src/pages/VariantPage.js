@@ -94,7 +94,7 @@ const styles = theme => {
     headerSection: {
       padding: theme.sectionPadding,
     },
-    ensemblLink: {
+    link: {
       marginLeft: '5px',
       position: 'relative',
       bottom: '8px',
@@ -205,13 +205,23 @@ class VariantPage extends React.Component {
                         {variantInfo.rsId}
                       </Typography>
                       <a
-                        className={classes.ensemblLink}
+                        className={classes.link}
                         href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
                           variantInfo.rsId
                         }`}
                         target="_blank"
                       >
                         <Button variant="outlined">Ensembl</Button>
+                      </a>
+                      <a
+                        className={classes.link}
+                        href={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
+                          /_/g,
+                          '-'
+                        )}`}
+                        target="_blank"
+                      >
+                        <Button variant="outlined">gnomAD</Button>
                       </a>
                     </Grid>
                   </Grid>
