@@ -60,7 +60,7 @@ const styles = theme => {
       textDecoration: 'none',
     },
     locusLinkButton: {
-      width: '240px',
+      width: '248px',
       height: '60px',
     },
     locusIcon: {
@@ -212,7 +212,8 @@ class GenePage extends React.Component {
                         <Grid item>
                           <Typography
                             className={classes.geneSymbol}
-                            variant="display1"
+                            variant="h4"
+                            color="textSecondary"
                           >
                             {symbol}
                           </Typography>
@@ -223,7 +224,7 @@ class GenePage extends React.Component {
                           >
                             <Button variant="outlined">gnomAD</Button>
                           </a>
-                          <Typography variant="subheading">
+                          <Typography variant="subtitle1">
                             {chromosome}:{commaSeparate(start)}-
                             {commaSeparate(end)}
                           </Typography>
@@ -249,7 +250,7 @@ class GenePage extends React.Component {
                 <Grid container justify="space-between" spacing={8}>
                   <Grid item sm={12} md={8}>
                     <Paper className={classes.section}>
-                      <Typography variant="subheading">
+                      <Typography variant="subtitle1">
                         Information about {symbol} from the Open Targets
                         Platform
                       </Typography>

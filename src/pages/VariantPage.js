@@ -194,12 +194,16 @@ class VariantPage extends React.Component {
                 <Paper className={classes.headerSection}>
                   <Grid container>
                     <Grid item>
-                      <Typography className={classes.header} variant="display1">
+                      <Typography
+                        className={classes.header}
+                        variant="h4"
+                        color="textSecondary"
+                      >
                         {variantId}
                       </Typography>{' '}
                       <Typography
                         className={classes.header}
-                        variant="title"
+                        variant="h6"
                         color="textSecondary"
                       >
                         {variantInfo.rsId}
@@ -243,7 +247,7 @@ class VariantPage extends React.Component {
                       ) : null}
                     </Grid>
                     <Grid item>
-                      <Typography variant="subheading">
+                      <Typography variant="subtitle1">
                         {variantInfo.nearestGene ? (
                           <Fragment>
                             Nearest Gene:{' '}
@@ -296,7 +300,7 @@ class VariantPage extends React.Component {
                     loading={loading}
                     error={error}
                     center={
-                      <Typography variant="subheading">
+                      <Typography variant="subtitle1">
                         {loading ? '...' : '(no data)'}
                       </Typography>
                     }

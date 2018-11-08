@@ -35,7 +35,7 @@ function hasData(data) {
 
 const FullWidthText = ({ children }) => (
   <div style={{ width: '100%', textAlign: 'center' }}>
-    <Typography variant="subheading">{children}</Typography>
+    <Typography variant="subtitle1">{children}</Typography>
   </div>
 );
 
@@ -328,7 +328,9 @@ class LocusPage extends React.Component {
           <title>{locationString}</title>
         </Helmet>
         <Paper className={classes.section}>
-          <Typography variant="display1">Locus {locationString}</Typography>
+          <Typography variant="h4" color="textSecondary">
+            Locus {locationString}
+          </Typography>
         </Paper>
         <SectionHeading
           heading="Associations"

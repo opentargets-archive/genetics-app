@@ -27,7 +27,7 @@ const LocusSelection = ({
     <div>
       {noSelection ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
-          <Typography variant="subheading">No filters applied</Typography>
+          <Typography variant="subtitle1">No filters applied</Typography>
         </div>
       ) : null}
       {selectedStudies
