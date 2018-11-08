@@ -11,8 +11,8 @@
     "email": "support@targetvalidation.org"
   },
   "dependencies": {
-    "@material-ui/core": "^1.4.3",
-    "@material-ui/icons": "^2.0.2",
+    "@material-ui/core": "^3.4.0",
+    "@material-ui/icons": "^3.0.1",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
     "apollo-link-http": "^1.5.4",
