@@ -21,7 +21,7 @@ export const externalLinks = {
       url: 'https://github.com/opentargets/genetics-app',
     },
     {
-      label: 'Privacy noticeLOL',
+      label: 'Privacy notice',
       url: 'https://www.ebi.ac.uk/data-protection/privacy-notice/open-targets',
     },
     {
