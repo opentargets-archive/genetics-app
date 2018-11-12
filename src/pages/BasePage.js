@@ -2,8 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Page, NavBar, Footer } from 'ot-ui';
 
-import pkg from '../../package.json';
 import Search from '../components/Search';
+import { externalLinks } from '../constants';
 
 const BasePage = ({ children }) => (
   <Page
@@ -15,17 +15,7 @@ const BasePage = ({ children }) => (
         contact="mailto:geneticsportal@opentargets.org"
       />
     }
-    footer={
-      <Footer
-        version={pkg.version}
-        commitHash={
-          process.env.REACT_APP_REVISION
-            ? process.env.REACT_APP_REVISION
-            : '2222ccc'
-        }
-        githubUrl="https://github.com/opentargets/genetics-app"
-      />
-    }
+    footer={<Footer externalLinks={externalLinks} />}
   >
     <Helmet
       defaultTitle="Open Targets Genetics"
