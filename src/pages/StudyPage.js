@@ -110,20 +110,20 @@ class StudyPage extends React.Component {
             return (
               <Fragment>
                 <Paper className={classes.section}>
-                  <Typography variant="display1">
+                  <Typography variant="h4" color="textSecondary">
                     {isStudyWithInfo ? data.studyInfo.traitReported : null}
                   </Typography>
                   <Grid container justify="space-between">
                     <Grid item>
                       {isStudyWithInfo ? (
-                        <Typography variant="subheading">
+                        <Typography variant="subtitle1">
                           <StudyInfo studyInfo={data.studyInfo} />
                         </Typography>
                       ) : null}
                     </Grid>
                     <Grid item>
                       {isStudyWithInfo ? (
-                        <Typography variant="subheading">
+                        <Typography variant="subtitle1">
                           <StudySize studyInfo={data.studyInfo} />
                         </Typography>
                       ) : null}
