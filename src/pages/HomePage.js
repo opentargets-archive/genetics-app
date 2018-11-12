@@ -13,7 +13,7 @@ import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import ScrollDownButton from '../components/ScrollDownButton';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-import pkg from '../../package.json';
+import { externalLinks } from '../constants';
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -202,15 +202,7 @@ class HomePage extends Component {
             <PortalFeaturesIcon />
           </Grid>
         </Grid>
-        <Footer
-          version={pkg.version}
-          commitHash={
-            process.env.REACT_APP_REVISION
-              ? process.env.REACT_APP_REVISION
-              : '2222ccc'
-          }
-          githubUrl="https://github.com/opentargets/genetics-app"
-        />
+        <Footer externalLinks={externalLinks} />
       </Fragment>
     );
   }
