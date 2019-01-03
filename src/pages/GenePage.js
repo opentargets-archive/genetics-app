@@ -53,12 +53,6 @@ const styles = theme => {
     geneSymbol: {
       display: 'inline-block',
     },
-    gnomadLink: {
-      position: 'relative',
-      marginLeft: '5px',
-      bottom: '8px',
-      textDecoration: 'none',
-    },
     locusLinkButton: {
       width: '248px',
       height: '60px',
@@ -217,13 +211,6 @@ class GenePage extends React.Component {
                           >
                             {symbol}
                           </Typography>
-                          <a
-                            className={classes.gnomadLink}
-                            href={`http://gnomad.broadinstitute.org/gene/${geneId}`}
-                            target="_blank"
-                          >
-                            <Button variant="outlined">gnomAD</Button>
-                          </a>
                           <Typography variant="subtitle1">
                             {chromosome}:{commaSeparate(start)}-
                             {commaSeparate(end)}
@@ -375,6 +362,18 @@ class GenePage extends React.Component {
                           >
                             <Button variant="outlined">
                               UniProt <LinkIcon />
+                            </Button>
+                          </a>
+                        </Grid>
+                        <Grid item>
+                          <a
+                            className={classes.link}
+                            href={`http://gnomad.broadinstitute.org/gene/${geneId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Button variant="outlined">
+                              gnomAD <LinkIcon />
                             </Button>
                           </a>
                         </Grid>
