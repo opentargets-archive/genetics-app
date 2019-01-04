@@ -144,8 +144,8 @@ const getTissueColumns = (schema, genesForVariant) => {
             verticalHeader: true,
             renderCell: rowData => {
               if (rowData[tissue.id]) {
-                const qtlRadius = radiusScale(rowData[tissue.id]);
-                const { beta, pval } = rowData;
+                const { quantile, beta, pval } = rowData[tissue.id];
+                const qtlRadius = radiusScale(quantile);
                 const qtlColor = beta > 0 ? 'red' : 'blue';
                 return (
                   <Tooltip
@@ -236,15 +236,17 @@ const getTissueData = (schema, genesForVariant) => {
 
     if (element) {
       element.tissues.forEach(elementTissue => {
-        // add beta and pval when qtl for rendering
-        if (elementTissue.__typename === 'QTLTissue') {
-          row.beta = elementTissue.beta;
-          row.pval = elementTissue.pval;
+        if (elementTissue.__typename === 'FPredTissue') {
+          row[elementTissue.tissue.id] = elementTissue.maxEffectLabel;
+        } else if (elementTissue.__typename === 'IntervalTissue') {
+          row[elementTissue.tissue.id] = elementTissue.quantile;
+        } else if (elementTissue.__typename === 'QTLTissue') {
+          row[elementTissue.tissue.id] = {
+            quantile: elementTissue.quantile,
+            beta: elementTissue.beta,
+            pval: elementTissue.pval,
+          };
         }
-        row[elementTissue.tissue.id] =
-          elementTissue.__typename === 'FPredTissue'
-            ? elementTissue.maxEffectLabel
-            : elementTissue.quantile;
       });
     }
 
