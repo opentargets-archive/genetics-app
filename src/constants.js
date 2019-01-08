@@ -52,34 +52,36 @@ export const externalLinks = {
   help: [
     {
       label: 'Documentation',
+      iconClasses: 'fa fa-question-circle',
       url: 'https://genetics-docs.opentargets.org',
     },
     {
-      label: 'Email us',
+      label: 'geneticsportal@opentargets.org',
+      iconClasses: 'fa fa-envelope',
       url: 'mailto:geneticsportal@opentargets.org',
     },
   ],
   social: [
     {
-      classes: 'fab fa-facebook',
+      iconClasses: 'fab fa-facebook',
       url: 'https://www.facebook.com/OpenTargets',
     },
     {
-      classes: 'fab fa-twitter-square',
+      iconClasses: 'fab fa-twitter-square',
       url: 'http://twitter.com/targetvalidate',
     },
     {
-      classes: 'fab fa-linkedin',
+      iconClasses: 'fab fa-linkedin',
       url:
         'https://www.linkedin.com/company/centre-for-therapeutic-target-validation',
     },
     {
-      classes: 'fab fa-youtube-square',
+      iconClasses: 'fab fa-youtube-square',
       url: 'https://www.youtube.com/channel/UCLMrondxbT0DIGx5nGOSYOQ',
     },
-    { classes: 'fab fa-medium', url: 'https://medium.com/opentargets' },
+    { iconClasses: 'fab fa-medium', url: 'https://medium.com/opentargets' },
     {
-      classes: 'fab fa-github-square',
+      iconClasses: 'fab fa-github-square',
       url: 'https://github.com/opentargets',
     },
   ],
