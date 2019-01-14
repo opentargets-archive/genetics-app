@@ -49,11 +49,10 @@ const tagVariantIndexVariantStudyComparator = (a, b) => {
 
 const EMPTY_PLOT = {
   genes: [],
-  tagVariants: [],
+  tagVariantBlocks: [],
   indexVariants: [],
   studies: [],
-  geneTagVariants: [],
-  tagVariantIndexVariantStudies: [],
+  geneIndexVariantStudies: [],
 };
 const EMPTY_LOOKUPS = {
   geneDict: {},
@@ -63,7 +62,7 @@ const EMPTY_LOOKUPS = {
 };
 const EMPTY_ENTITIES = {
   genes: [],
-  tagVariants: [],
+  tagVariantBlocks: [],
   indexVariants: [],
   studies: [],
 };
@@ -76,9 +75,32 @@ const newApiTransform = ({
   geneTagVariants,
   tagVariantIndexVariantStudies,
 }) => {
+  // gene exons come as flat list, rendering expects list of pairs
+  const genesWithExonPairs = genes.map(d => ({
+    ...d,
+    exons: d.exons.reduce((result, value, index, array) => {
+      if (index % 2 === 0) {
+        result.push(array.slice(index, index + 2));
+      }
+      return result;
+    }, []),
+  }));
+
   // lookups
+  const genesLookupById = genes.reduce((acc, d) => {
+    acc[d.id] = d;
+    return acc;
+  }, {});
   const tagVariantsLookupById = tagVariants.reduce((acc, d) => {
     acc[d.id] = d;
+    return acc;
+  }, {});
+  const indexVariantsLookupById = indexVariants.reduce((acc, d) => {
+    acc[d.id] = d;
+    return acc;
+  }, {});
+  const studiesLookupById = studies.reduce((acc, d) => {
+    acc[d.studyId] = d;
     return acc;
   }, {});
 
@@ -134,12 +156,17 @@ const newApiTransform = ({
     tagVariants.forEach(t => {
       // get linked genes
       geneTagVariantsLookupByTagVariantId[t].forEach(tg => {
+        const { tss } = genesLookupById[tg.geneId];
         geneIndexVariantStudiesObject[
           `${tg.geneId}-${indexVariantId}-${studyId}`
         ] = {
           geneId: tg.geneId,
+          geneTss: tss,
           indexVariantId,
+          indexVariantPosition:
+            indexVariantsLookupById[indexVariantId].position,
           studyId,
+          traitReported: studiesLookupById[studyId].traitReported,
           pval,
           tagVariantsStart,
           tagVariantsEnd,
@@ -148,13 +175,20 @@ const newApiTransform = ({
     });
   });
 
-  return {
-    genes,
+  const lookups = {
+    geneDict: genesLookupById,
+    tagVariantDict: tagVariantsLookupById,
+    indexVariantDict: indexVariantsLookupById,
+    studyDict: studiesLookupById,
+  };
+  const plot = {
+    genes: genesWithExonPairs,
     tagVariantBlocks,
     indexVariants,
     studies,
     geneIndexVariantStudies: Object.values(geneIndexVariantStudiesObject),
   };
+  return { lookups, plot };
 };
 
 const locusScheme = ({
@@ -177,7 +211,8 @@ const locusScheme = ({
     };
   }
 
-  const newApiData = newApiTransform(data);
+  const { lookups, plot } = newApiTransform(data);
+  console.log(plot);
 
   console.info(
     `
@@ -187,9 +222,9 @@ entities:
     } |S|=${data.studies.length}
 
 new (aggregate) scheme:
-|(G, aggTV, IV, S)|=${
-      newApiData.geneIndexVariantStudies.length
-    }, |aggTV blocks|=${newApiData.tagVariantBlocks.length}
+|(G, aggTV, IV, S)|=${plot.geneIndexVariantStudies.length}, |aggTV blocks|=${
+      plot.tagVariantBlocks.length
+    }
 
 old scheme:
 |(G, TV)|=${data.geneTagVariants.length}, |(TV, IV, S)|=${
@@ -198,40 +233,11 @@ old scheme:
     `
   );
 
-  const lookups = locusLookups(data);
-  const finemapping = locusFinemapping({ data, finemappingOnly });
-  const selected = locusSelected({
-    data: finemapping,
-    selectedGenes,
-    selectedTagVariants,
-    selectedIndexVariants,
-    selectedStudies,
-  });
-  const transformed = locusTransform({ data: selected, lookups });
-
-  const filtered = locusFilter({
-    data: transformed,
-    selectedGenes,
-    selectedTagVariants,
-    selectedIndexVariants,
-    selectedStudies,
-  });
-  const chained = locusChained({
-    data: transformed,
-    dataFiltered: filtered,
-  });
-  const {
-    genes,
-    tagVariants,
-    indexVariants,
-    studies,
-    geneTagVariants,
-    tagVariantIndexVariantStudies,
-  } = chained;
-
+  // TODO: this needs to handle filtering
+  const { genes, tagVariantBlocks, indexVariants, studies } = plot;
   const entities = {
     genes: _.sortBy(genes, [d => !d.selected, d => !d.chained, 'symbol']),
-    tagVariants: tagVariants,
+    tagVariantBlocks,
     indexVariants: _.sortBy(indexVariants, [
       d => !d.selected,
       d => !d.chained,
@@ -246,88 +252,149 @@ old scheme:
     ]),
   };
 
-  const genesFiltered = genes.filter(d => d.chained);
-  const tagVariantsFiltered = tagVariants
-    .filter(d => d.chained)
-    .sort(variantComparator);
-  const indexVariantsFiltered = indexVariants
-    .filter(d => d.chained)
-    .sort(variantComparator);
-  const studiesFiltered = studies.filter(d => d.chained);
-  const geneTagVariantsFiltered = geneTagVariants
-    .filter(d => d.chained)
-    .sort(geneTagVariantComparator);
-  const tagVariantIndexVariantStudiesFiltered = tagVariantIndexVariantStudies
-    .filter(d => d.chained)
-    .sort(tagVariantIndexVariantStudyComparator);
+  const isEmpty = plot.geneIndexVariantStudies.length === 0;
+  // TODO: update to use filtering
+  const isEmptyFiltered = isEmpty;
 
-  const isEmpty =
-    transformed.geneTagVariants.length === 0 &&
-    transformed.tagVariantIndexVariantStudies.length === 0;
-  const isEmptyFiltered =
-    filtered.geneTagVariants.length === 0 &&
-    filtered.tagVariantIndexVariantStudies.length === 0;
-
-  const rows = locusTable(
-    {
-      genes: genesFiltered,
-      tagVariants: tagVariantsFiltered,
-      indexVariants: indexVariantsFiltered,
-      studies: studiesFiltered,
-      geneTagVariants: geneTagVariantsFiltered,
-      tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
-    },
-    lookups
-  );
-  let plot;
-  switch (scheme) {
-    case LOCUS_SCHEME.CHAINED:
-      plot = {
-        genes: genesFiltered,
-        tagVariants: tagVariantsFiltered,
-        indexVariants: indexVariantsFiltered,
-        studies: studiesFiltered,
-        geneTagVariants: geneTagVariantsFiltered,
-        tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
-      };
-      break;
-    case LOCUS_SCHEME.ALL:
-      const tagVariantsSorted = tagVariants.sort(variantComparator);
-      const indexVariantsSorted = indexVariants.sort(variantComparator);
-      const geneTagVariantsSorted = geneTagVariants.sort(
-        geneTagVariantComparator
-      );
-      const tagVariantIndexVariantStudiesSorted = tagVariantIndexVariantStudies.sort(
-        tagVariantIndexVariantStudyComparator
-      );
-      plot = {
-        genes,
-        tagVariants: tagVariantsSorted,
-        indexVariants: indexVariantsSorted,
-        studies,
-        geneTagVariants: geneTagVariantsSorted,
-        tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesSorted,
-      };
-      break;
-    case LOCUS_SCHEME.ALL_GENES:
-    default:
-      plot = {
-        genes,
-        tagVariants: tagVariantsFiltered,
-        indexVariants: indexVariantsFiltered,
-        studies: studiesFiltered,
-        geneTagVariants: geneTagVariantsFiltered,
-        tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
-      };
-  }
   return {
     plot,
-    rows,
+    rows: [],
     entities,
     lookups,
     isEmpty,
     isEmptyFiltered,
   };
+
+  // const lookups = locusLookups(data);
+  // const finemapping = locusFinemapping({ data, finemappingOnly });
+  // const selected = locusSelected({
+  //   data: finemapping,
+  //   selectedGenes,
+  //   selectedTagVariants,
+  //   selectedIndexVariants,
+  //   selectedStudies,
+  // });
+  // const transformed = locusTransform({ data: selected, lookups });
+
+  // const filtered = locusFilter({
+  //   data: transformed,
+  //   selectedGenes,
+  //   selectedTagVariants,
+  //   selectedIndexVariants,
+  //   selectedStudies,
+  // });
+  // const chained = locusChained({
+  //   data: transformed,
+  //   dataFiltered: filtered,
+  // });
+  // const {
+  //   genes,
+  //   tagVariants,
+  //   indexVariants,
+  //   studies,
+  //   geneTagVariants,
+  //   tagVariantIndexVariantStudies,
+  // } = chained;
+
+  // const entities = {
+  //   genes: _.sortBy(genes, [d => !d.selected, d => !d.chained, 'symbol']),
+  //   tagVariants: tagVariants,
+  //   indexVariants: _.sortBy(indexVariants, [
+  //     d => !d.selected,
+  //     d => !d.chained,
+
+  //     'id',
+  //   ]),
+  //   studies: _.sortBy(studies, [
+  //     d => !d.selected,
+  //     d => !d.chained,
+  //     'traitReported',
+  //     'pubAuthor',
+  //   ]),
+  // };
+
+  // const genesFiltered = genes.filter(d => d.chained);
+  // const tagVariantsFiltered = tagVariants
+  //   .filter(d => d.chained)
+  //   .sort(variantComparator);
+  // const indexVariantsFiltered = indexVariants
+  //   .filter(d => d.chained)
+  //   .sort(variantComparator);
+  // const studiesFiltered = studies.filter(d => d.chained);
+  // const geneTagVariantsFiltered = geneTagVariants
+  //   .filter(d => d.chained)
+  //   .sort(geneTagVariantComparator);
+  // const tagVariantIndexVariantStudiesFiltered = tagVariantIndexVariantStudies
+  //   .filter(d => d.chained)
+  //   .sort(tagVariantIndexVariantStudyComparator);
+
+  // const isEmpty =
+  //   transformed.geneTagVariants.length === 0 &&
+  //   transformed.tagVariantIndexVariantStudies.length === 0;
+  // const isEmptyFiltered =
+  //   filtered.geneTagVariants.length === 0 &&
+  //   filtered.tagVariantIndexVariantStudies.length === 0;
+
+  // const rows = locusTable(
+  //   {
+  //     genes: genesFiltered,
+  //     tagVariants: tagVariantsFiltered,
+  //     indexVariants: indexVariantsFiltered,
+  //     studies: studiesFiltered,
+  //     geneTagVariants: geneTagVariantsFiltered,
+  //     tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
+  //   },
+  //   lookups
+  // );
+  // let plot;
+  // switch (scheme) {
+  //   case LOCUS_SCHEME.CHAINED:
+  //     plot = {
+  //       genes: genesFiltered,
+  //       tagVariants: tagVariantsFiltered,
+  //       indexVariants: indexVariantsFiltered,
+  //       studies: studiesFiltered,
+  //       geneTagVariants: geneTagVariantsFiltered,
+  //       tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
+  //     };
+  //     break;
+  //   case LOCUS_SCHEME.ALL:
+  //     const tagVariantsSorted = tagVariants.sort(variantComparator);
+  //     const indexVariantsSorted = indexVariants.sort(variantComparator);
+  //     const geneTagVariantsSorted = geneTagVariants.sort(
+  //       geneTagVariantComparator
+  //     );
+  //     const tagVariantIndexVariantStudiesSorted = tagVariantIndexVariantStudies.sort(
+  //       tagVariantIndexVariantStudyComparator
+  //     );
+  //     plot = {
+  //       genes,
+  //       tagVariants: tagVariantsSorted,
+  //       indexVariants: indexVariantsSorted,
+  //       studies,
+  //       geneTagVariants: geneTagVariantsSorted,
+  //       tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesSorted,
+  //     };
+  //     break;
+  //   case LOCUS_SCHEME.ALL_GENES:
+  //   default:
+  //     plot = {
+  //       genes,
+  //       tagVariants: tagVariantsFiltered,
+  //       indexVariants: indexVariantsFiltered,
+  //       studies: studiesFiltered,
+  //       geneTagVariants: geneTagVariantsFiltered,
+  //       tagVariantIndexVariantStudies: tagVariantIndexVariantStudiesFiltered,
+  //     };
+  // }
+  // return {
+  //   plot,
+  //   rows,
+  //   entities,
+  //   lookups,
+  //   isEmpty,
+  //   isEmptyFiltered,
+  // };
 };
 
 export default locusScheme;
