@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { Gecko } from 'ot-charts';
+import { GeckoAgg } from 'ot-charts';
 import {
   SectionHeading,
   BrowserControls,
@@ -475,7 +475,7 @@ class LocusPage extends React.Component {
                     />
                   </PlotContainerSection>
 
-                  <Gecko
+                  <GeckoAgg
                     ref={geckoPlot}
                     data={plot}
                     start={start}
