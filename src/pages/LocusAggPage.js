@@ -24,7 +24,7 @@ import LocusTable from '../components/LocusTable';
 import locusScheme, {
   LOCUS_SCHEME,
   LOCUS_FINEMAPPING,
-} from '../logic/locusScheme';
+} from '../logic/locusAggScheme';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import ScrollToTop from '../components/ScrollToTop';
 import LOCUS_PAGE_QUERY from '../queries/LocusPageQuery.gql';

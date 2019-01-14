@@ -35,12 +35,6 @@ function locusTransform({ data, lookups }) {
     })
   );
 
-  console.info(
-    `Rendering ${geneTagVariants.length} (G, TV)s and ${
-      tagVariantIndexVariantStudies.length
-    } (TV, IV, S)s`
-  );
-
   return {
     genes: genesWithExonPairs,
     geneTagVariants: geneTagVariantsWithPosition,
