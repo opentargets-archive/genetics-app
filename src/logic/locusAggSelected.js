@@ -21,8 +21,7 @@ const locusSelected = ({
   let tagVariantBlocksWithSelected = tagVariantBlocks.map(d => ({
     ...d,
     selected:
-      selectedTagVariantBlocks &&
-      selectedTagVariantBlocks.indexOf(`${d.indexVariantId}-${d.studyId}`) >= 0,
+      selectedTagVariantBlocks && selectedTagVariantBlocks.indexOf(d.id) >= 0,
   }));
   let indexVariantsWithSelected = indexVariants.map(d => ({
     ...d,

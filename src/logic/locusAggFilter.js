@@ -56,7 +56,7 @@ const locusFilter = ({
       {}
     );
     tagVariantBlocksFiltered = tagVariantBlocksFiltered.filter(
-      d => tagVariantBlocksLeft[`${d.indexVariantId}-${d.studyId}`]
+      d => tagVariantBlocksLeft[d.id]
     );
     const indexVariantsLeft = geneIndexVariantStudiesFiltered.reduce(
       (acc, d) => {
@@ -123,7 +123,7 @@ const locusFilter = ({
       {}
     );
     tagVariantBlocksFiltered = tagVariantBlocksFiltered.filter(
-      d => tagVariantBlocksLeft[`${d.indexVariantId}-${d.studyId}`]
+      d => tagVariantBlocksLeft[d.id]
     );
     const studiesLeft = geneIndexVariantStudiesFiltered.reduce((acc, d) => {
       acc[d.studyId] = true;
@@ -153,7 +153,7 @@ const locusFilter = ({
       {}
     );
     tagVariantBlocksFiltered = tagVariantBlocksFiltered.filter(
-      d => tagVariantBlocksLeft[`${d.indexVariantId}-${d.studyId}`]
+      d => tagVariantBlocksLeft[d.id]
     );
     const indexVariantsLeft = geneIndexVariantStudiesFiltered.reduce(
       (acc, d) => {
