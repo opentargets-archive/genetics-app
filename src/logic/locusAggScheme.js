@@ -7,6 +7,7 @@ import locusChained from './locusAggChained';
 import locusFinemapping from './locusFinemapping';
 import locusLookups from './locusLookups';
 import locusTable from './locusTable';
+import stringHash from './stringHash';
 
 export const LOCUS_SCHEME = {
   CHAINED: 1,
@@ -104,6 +105,7 @@ const newApiTransform = ({
           indexVariantId,
           studyId,
           pval,
+          traitReported: studiesLookupById[studyId].traitReported,
           tagVariants: [],
           id: `${indexVariantId}-${studyId}`,
         };
@@ -114,12 +116,33 @@ const newApiTransform = ({
     {}
   );
   const tagVariantBlocks = Object.values(tagVariantBlocksObject);
+  console.log(
+    'tagVariantBlocks with id by (indexVariantId, studyId)',
+    tagVariantBlocks.length
+  );
   // add start/end/score of tagVariantBlock
   tagVariantBlocks.forEach(d => {
     const positions = d.tagVariants.map(t => tagVariantsLookupById[t].position);
     d.tagVariantsStart = _.min(positions);
     d.tagVariantsEnd = _.max(positions);
+    d.id = stringHash(_.uniq(d.tagVariants.sort()).join(''));
   });
+  console.log(
+    'tagVariantBlocks with id by hash(tagVariants[])',
+    _.uniqBy(tagVariantBlocks, 'id').length
+  );
+
+  // now reduce groups by hashed id
+  const uniqueTagVariantBlocks = _.uniqBy(tagVariantBlocks, 'id').map(d => ({
+    id: d.id,
+    tagVariantsStart: d.tagVariantsStart,
+    tagVariantsEnd: d.tagVariantsEnd,
+  }));
+  const uniqueTagVariantBlocksDict = uniqueTagVariantBlocks.reduce((acc, d) => {
+    acc[d.id] = d;
+    return acc;
+  }, {});
+  // const tagVariantBlocksGroupedById = _.groupBy(tagVariantBlocks, d => d.id);
 
   const geneTagVariantsLookupByTagVariantId = geneTagVariants.reduce(
     (acc, d) => {
@@ -170,13 +193,13 @@ const newApiTransform = ({
 
   const lookups = {
     geneDict: genesLookupById,
-    tagVariantBlockDict: tagVariantBlocksObject,
+    tagVariantBlockDict: uniqueTagVariantBlocksDict, // tagVariantBlocksObject,
     indexVariantDict: indexVariantsLookupById,
     studyDict: studiesLookupById,
   };
   const plot = {
     genes: genesWithExonPairs,
-    tagVariantBlocks,
+    tagVariantBlocks: uniqueTagVariantBlocks,
     indexVariants,
     studies,
     geneIndexVariantStudies: Object.values(geneIndexVariantStudiesObject),
