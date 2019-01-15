@@ -142,6 +142,7 @@ const newApiTransform = ({
       tagVariantsStart,
       tagVariantsEnd,
       tagVariants,
+      id: tagVariantsBlockId,
     } = b;
 
     tagVariants.forEach(t => {
@@ -161,7 +162,7 @@ const newApiTransform = ({
           pval,
           tagVariantsStart,
           tagVariantsEnd,
-          tagVariantsBlockId: `${indexVariantId}-${studyId}`,
+          tagVariantsBlockId,
         };
       });
     });
