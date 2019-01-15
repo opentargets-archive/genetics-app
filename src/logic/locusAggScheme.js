@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
-import locusFilter from './locusFilter';
-import locusSelected from './locusSelected';
+import locusFilter from './locusAggFilter';
+import locusSelected from './locusAggSelected';
 import locusTransform from './locusTransform';
-import locusChained from './locusChained';
+import locusChained from './locusAggChained';
 import locusFinemapping from './locusFinemapping';
 import locusLookups from './locusLookups';
 import locusTable from './locusTable';
@@ -27,24 +27,14 @@ const variantComparator = (a, b) => {
   return scoreA - scoreB;
 };
 
-const geneTagVariantComparator = (a, b) => {
-  // render by ordering (chained, overallScore)
-  const scoreA = (a.chained ? 2 : 0) + a.overallScore;
-  const scoreB = (b.chained ? 2 : 0) + b.overallScore;
-  return scoreA - scoreB;
+const tagVariantBlocksComparator = (a, b) => {
+  // TODO: may need to update
+  return a.chained > b.chained;
 };
 
-const tagVariantIndexVariantStudyComparator = (a, b) => {
-  // render by ordering (chained, fine-mapping, r2)
-  const scoreA =
-    (a.chained ? 8 : 4) +
-    (a.posteriorProbability ? 1 + a.posteriorProbability : 0) +
-    a.r2;
-  const scoreB =
-    (b.chained ? 8 : 4) +
-    (b.posteriorProbability ? 1 + b.posteriorProbability : 0) +
-    b.r2;
-  return scoreA - scoreB;
+const geneIndexVariantStudiesComparator = (a, b) => {
+  // TODO: may need to update
+  return a.chained > b.chained;
 };
 
 const EMPTY_PLOT = {
@@ -196,7 +186,7 @@ const locusScheme = ({
   finemappingOnly,
   data,
   selectedGenes,
-  selectedTagVariants,
+  selectedTagVariantBlocks,
   selectedIndexVariants,
   selectedStudies,
 }) => {
@@ -211,7 +201,7 @@ const locusScheme = ({
     };
   }
 
-  const { lookups, plot } = newApiTransform(data);
+  const { lookups, plot: transformed } = newApiTransform(data);
 
   console.info(
     `
@@ -221,9 +211,9 @@ entities:
     } |S|=${data.studies.length}
 
 new (aggregate) scheme:
-|(G, aggTV, IV, S)|=${plot.geneIndexVariantStudies.length}, |aggTV blocks|=${
-      plot.tagVariantBlocks.length
-    }
+|(G, aggTV, IV, S)|=${
+      transformed.geneIndexVariantStudies.length
+    }, |aggTV blocks|=${transformed.tagVariantBlocks.length}
 
 old scheme:
 |(G, TV)|=${data.geneTagVariants.length}, |(TV, IV, S)|=${
@@ -232,11 +222,35 @@ old scheme:
     `
   );
 
-  // TODO: this needs to handle filtering
-  const { genes, tagVariantBlocks, indexVariants, studies } = plot;
+  const selected = locusSelected({
+    data: transformed,
+    selectedGenes,
+    selectedTagVariantBlocks: [],
+    selectedIndexVariants,
+    selectedStudies,
+  });
+  const filtered = locusFilter({
+    data: selected,
+    selectedGenes,
+    selectedTagVariantBlocks: [],
+    selectedIndexVariants,
+    selectedStudies,
+  });
+  const chained = locusChained({
+    data: selected,
+    dataFiltered: filtered,
+  });
+  const {
+    genes,
+    tagVariantBlocks,
+    indexVariants,
+    studies,
+    geneIndexVariantStudies,
+  } = chained;
+
   const entities = {
     genes: _.sortBy(genes, [d => !d.selected, d => !d.chained, 'symbol']),
-    tagVariantBlocks,
+    tagVariantBlocks: tagVariantBlocks,
     indexVariants: _.sortBy(indexVariants, [
       d => !d.selected,
       d => !d.chained,
@@ -251,9 +265,29 @@ old scheme:
     ]),
   };
 
-  const isEmpty = plot.geneIndexVariantStudies.length === 0;
-  // TODO: update to use filtering
-  const isEmptyFiltered = isEmpty;
+  const genesFiltered = genes.filter(d => d.chained);
+  const tagVariantBlocksFiltered = tagVariantBlocks
+    .filter(d => d.chained)
+    .sort(tagVariantBlocksComparator);
+  const indexVariantsFiltered = indexVariants
+    .filter(d => d.chained)
+    .sort(variantComparator);
+  const studiesFiltered = studies.filter(d => d.chained);
+  const geneIndexVariantStudiesFiltered = geneIndexVariantStudies
+    .filter(d => d.chained)
+    .sort(geneIndexVariantStudiesComparator);
+
+  const isEmpty = transformed.geneIndexVariantStudies.length === 0;
+  const isEmptyFiltered = filtered.geneIndexVariantStudies.length === 0;
+
+  // TODO: update to use filtering; isEmpty
+  const plot = {
+    genes: genesFiltered,
+    tagVariantBlocks: tagVariantBlocksFiltered,
+    indexVariants: indexVariantsFiltered,
+    studies: studiesFiltered,
+    geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
+  };
 
   return {
     plot,
