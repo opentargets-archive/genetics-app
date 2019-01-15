@@ -4,7 +4,7 @@ import locusFilter from './locusAggFilter';
 import locusSelected from './locusAggSelected';
 import locusTransform from './locusTransform';
 import locusChained from './locusAggChained';
-import locusFinemapping from './locusFinemapping';
+import locusFinemapping from './locusAggFinemapping';
 import locusLookups from './locusLookups';
 import locusTable from './locusTable';
 import stringHash from './stringHash';
@@ -98,8 +98,15 @@ const newApiTransform = ({
   // group by (indexVariant, study)
   const tagVariantBlocksObject = tagVariantIndexVariantStudies.reduce(
     (acc, d) => {
-      const { tagVariantId, indexVariantId, studyId, pval } = d;
-      const key = `${indexVariantId}-${studyId}`;
+      const {
+        tagVariantId,
+        indexVariantId,
+        studyId,
+        pval,
+        posteriorProbability,
+      } = d;
+      const expansionType = posteriorProbability ? 'fm' : 'ld';
+      const key = `${expansionType}-${indexVariantId}-${studyId}`;
       if (!acc[key]) {
         acc[key] = {
           indexVariantId,
@@ -107,7 +114,8 @@ const newApiTransform = ({
           pval,
           traitReported: studiesLookupById[studyId].traitReported,
           tagVariants: [],
-          id: `${indexVariantId}-${studyId}`,
+          id: key,
+          expansionType,
         };
       }
       acc[key].tagVariants.push(tagVariantId);
@@ -125,7 +133,8 @@ const newApiTransform = ({
     const positions = d.tagVariants.map(t => tagVariantsLookupById[t].position);
     d.tagVariantsStart = _.min(positions);
     d.tagVariantsEnd = _.max(positions);
-    d.id = stringHash(_.uniq(d.tagVariants.sort()).join(''));
+    d.id =
+      d.expansionType + '-' + stringHash(_.uniq(d.tagVariants.sort()).join(''));
   });
   console.log(
     'tagVariantBlocks with id by hash(tagVariants[])',
@@ -137,6 +146,7 @@ const newApiTransform = ({
     id: d.id,
     tagVariantsStart: d.tagVariantsStart,
     tagVariantsEnd: d.tagVariantsEnd,
+    expansionType: d.expansionType,
   }));
   const uniqueTagVariantBlocksDict = uniqueTagVariantBlocks.reduce((acc, d) => {
     acc[d.id] = d;
@@ -166,6 +176,7 @@ const newApiTransform = ({
       tagVariantsEnd,
       tagVariants,
       id: tagVariantsBlockId,
+      expansionType,
     } = b;
 
     tagVariants.forEach(t => {
@@ -173,7 +184,7 @@ const newApiTransform = ({
       geneTagVariantsLookupByTagVariantId[t].forEach(tg => {
         const { tss } = genesLookupById[tg.geneId];
         geneIndexVariantStudiesObject[
-          `${tg.geneId}-${indexVariantId}-${studyId}`
+          `${expansionType}-${tg.geneId}-${indexVariantId}-${studyId}`
         ] = {
           geneId: tg.geneId,
           geneTss: tss,
@@ -186,6 +197,7 @@ const newApiTransform = ({
           tagVariantsStart,
           tagVariantsEnd,
           tagVariantsBlockId,
+          expansionType,
         };
       });
     });
@@ -248,8 +260,12 @@ old scheme:
     `
   );
 
-  const selected = locusSelected({
+  const finemapping = locusFinemapping({
     data: transformed,
+    finemappingOnly,
+  });
+  const selected = locusSelected({
+    data: finemapping,
     selectedGenes,
     selectedTagVariantBlocks,
     selectedIndexVariants,
