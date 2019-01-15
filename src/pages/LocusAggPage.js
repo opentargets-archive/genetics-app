@@ -20,7 +20,7 @@ import {
 
 import BasePage from './BasePage';
 import LocusSelection from '../components/LocusAggSelection';
-import LocusTable from '../components/LocusTable';
+import LocusTable from '../components/LocusAggTable';
 import locusScheme, {
   LOCUS_SCHEME,
   LOCUS_FINEMAPPING,

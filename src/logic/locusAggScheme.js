@@ -2,11 +2,9 @@ import _ from 'lodash';
 
 import locusFilter from './locusAggFilter';
 import locusSelected from './locusAggSelected';
-import locusTransform from './locusTransform';
 import locusChained from './locusAggChained';
 import locusFinemapping from './locusAggFinemapping';
-import locusLookups from './locusLookups';
-import locusTable from './locusTable';
+import locusTable from './locusAggTable';
 import stringHash from './stringHash';
 
 export const LOCUS_SCHEME = {
@@ -331,9 +329,20 @@ old scheme:
     geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
   };
 
+  const rows = locusTable(
+    {
+      genes: genesFiltered,
+      tagVariantBlocks: tagVariantBlocksFiltered,
+      indexVariants: indexVariantsFiltered,
+      studies: studiesFiltered,
+      geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
+    },
+    lookups
+  );
+
   return {
     plot,
-    rows: [],
+    rows,
     entities,
     lookups,
     isEmpty,
