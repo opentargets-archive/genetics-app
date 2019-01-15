@@ -161,6 +161,7 @@ const newApiTransform = ({
           pval,
           tagVariantsStart,
           tagVariantsEnd,
+          tagVariantsBlockId: `${indexVariantId}-${studyId}`,
         };
       });
     });
