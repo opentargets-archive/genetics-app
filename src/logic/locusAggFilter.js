@@ -75,41 +75,37 @@ const locusFilter = ({
     studiesFiltered = studiesFiltered.filter(d => studiesLeft[d.studyId]);
   }
 
-  // // tag variants
-  // if (selectedTagVariants) {
-  //   tagVariantsFiltered = tagVariantsFiltered.filter(
-  //     d => selectedTagVariants.indexOf(d.id) >= 0
-  //   );
-  //   geneTagVariantsFiltered = geneTagVariantsFiltered.filter(
-  //     d => selectedTagVariants.indexOf(d.tagVariantId) >= 0
-  //   );
-  //   const genesLeft = geneTagVariantsFiltered.reduce((acc, d) => {
-  //     acc[d.geneId] = true;
-  //     return acc;
-  //   }, {});
-  //   genesFiltered = genesFiltered.filter(d => genesLeft[d.id]);
-  //   tagVariantIndexVariantStudiesFiltered = tagVariantIndexVariantStudiesFiltered.filter(
-  //     d => selectedTagVariants.indexOf(d.tagVariantId) >= 0
-  //   );
-  //   const indexVariantsLeft = tagVariantIndexVariantStudiesFiltered.reduce(
-  //     (acc, d) => {
-  //       acc[d.indexVariantId] = true;
-  //       return acc;
-  //     },
-  //     {}
-  //   );
-  //   indexVariantsFiltered = indexVariantsFiltered.filter(
-  //     d => indexVariantsLeft[d.id]
-  //   );
-  //   const studiesLeft = tagVariantIndexVariantStudiesFiltered.reduce(
-  //     (acc, d) => {
-  //       acc[d.studyId] = true;
-  //       return acc;
-  //     },
-  //     {}
-  //   );
-  //   studiesFiltered = studiesFiltered.filter(d => studiesLeft[d.studyId]);
-  // }
+  // tag variants blocks
+  if (selectedTagVariantBlocks) {
+    tagVariantBlocksFiltered = tagVariantBlocksFiltered.filter(
+      d => selectedTagVariantBlocks.indexOf(d.id) >= 0
+    );
+    geneIndexVariantStudiesFiltered = geneIndexVariantStudiesFiltered.filter(
+      d =>
+        selectedTagVariantBlocks.indexOf(`${d.indexVariantId}-${d.studyId}`) >=
+        0
+    );
+    const genesLeft = geneIndexVariantStudiesFiltered.reduce((acc, d) => {
+      acc[d.geneId] = true;
+      return acc;
+    }, {});
+    genesFiltered = genesFiltered.filter(d => genesLeft[d.id]);
+    const indexVariantsLeft = geneIndexVariantStudiesFiltered.reduce(
+      (acc, d) => {
+        acc[d.indexVariantId] = true;
+        return acc;
+      },
+      {}
+    );
+    indexVariantsFiltered = indexVariantsFiltered.filter(
+      d => indexVariantsLeft[d.id]
+    );
+    const studiesLeft = geneIndexVariantStudiesFiltered.reduce((acc, d) => {
+      acc[d.studyId] = true;
+      return acc;
+    }, {});
+    studiesFiltered = studiesFiltered.filter(d => studiesLeft[d.studyId]);
+  }
 
   // index variants
   if (selectedIndexVariants) {

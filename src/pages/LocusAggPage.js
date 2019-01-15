@@ -19,7 +19,7 @@ import {
 } from 'ot-ui';
 
 import BasePage from './BasePage';
-import LocusSelection from '../components/LocusSelection';
+import LocusSelection from '../components/LocusAggSelection';
 import LocusTable from '../components/LocusTable';
 import locusScheme, {
   LOCUS_SCHEME,
@@ -111,7 +111,7 @@ class LocusPage extends React.Component {
   handleClick = (d, type, point) => {
     let {
       selectedGenes,
-      selectedTagVariants,
+      selectedTagVariantBlocks,
       selectedIndexVariants,
       selectedStudies,
       ...rest
@@ -127,17 +127,20 @@ class LocusPage extends React.Component {
           selectedGenes = [d.id, ...(selectedGenes || [])];
         }
         break;
-      case 'tagVariant':
+      case 'tagVariantBlock':
         reportAnalyticsEvent({
           category: 'visualisation',
           action: 'click',
-          label: `locus:tag-variant`,
+          label: `locus:tag-variant-block`,
         });
         if (
-          !selectedTagVariants ||
-          !selectedTagVariants.find(d2 => d2 === d.id)
+          !selectedTagVariantBlocks ||
+          !selectedTagVariantBlocks.find(d2 => d2 === d.id)
         ) {
-          selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
+          selectedTagVariantBlocks = [
+            d.id,
+            ...(selectedTagVariantBlocks || []),
+          ];
         }
         break;
       case 'indexVariant':
@@ -167,7 +170,7 @@ class LocusPage extends React.Component {
     }
     const newQueryParams = {
       selectedGenes,
-      selectedTagVariants,
+      selectedTagVariantBlocks,
       selectedIndexVariants,
       selectedStudies,
       ...rest,
@@ -185,13 +188,13 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
-  handleAddTagVariant = newSelectedTagVariants => {
-    const { selectedTagVariants, ...rest } = this._parseQueryProps();
+  handleAddTagVariant = newSelectedTagVariantBlocks => {
+    const { selectedTagVariantBlocks, ...rest } = this._parseQueryProps();
     const newQueryParams = {
       ...rest,
     };
-    if (newSelectedTagVariants && newSelectedTagVariants.length > 0) {
-      newQueryParams.selectedTagVariants = newSelectedTagVariants.map(
+    if (newSelectedTagVariantBlocks && newSelectedTagVariantBlocks.length > 0) {
+      newQueryParams.selectedTagVariantBlocks = newSelectedTagVariantBlocks.map(
         d => d.id
       );
     }
@@ -232,16 +235,16 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
-  handleDeleteTagVariant = id => () => {
-    const { selectedTagVariants, ...rest } = this._parseQueryProps();
-    const newSelected = selectedTagVariants
-      ? selectedTagVariants.filter(d => d !== id)
+  handleDeleteTagVariantBlock = id => () => {
+    const { selectedTagVariantBlocks, ...rest } = this._parseQueryProps();
+    const newSelected = selectedTagVariantBlocks
+      ? selectedTagVariantBlocks.filter(d => d !== id)
       : [];
     const newQueryParams = {
       ...rest,
     };
     if (newSelected.length > 0) {
-      newQueryParams.selectedTagVariants = newSelected;
+      newQueryParams.selectedTagVariantBlocks = newSelected;
     }
     this._stringifyQueryProps(newQueryParams);
   };
@@ -310,7 +313,7 @@ class LocusPage extends React.Component {
       displayType,
       displayFinemapping,
       selectedGenes,
-      selectedTagVariants,
+      selectedTagVariantBlocks,
       selectedIndexVariants,
       selectedStudies,
     } = this._parseQueryProps();
@@ -346,7 +349,7 @@ class LocusPage extends React.Component {
             },
             {
               type: 'tagVariant',
-              fixed: selectedTagVariants,
+              fixed: selectedTagVariantBlocks,
             },
             {
               type: 'gene',
@@ -374,7 +377,7 @@ class LocusPage extends React.Component {
                 displayFinemappingValue === LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
               data: isValidLocus ? data.gecko : null,
               selectedGenes,
-              selectedTagVariants,
+              selectedTagVariantBlocks,
               selectedIndexVariants,
               selectedStudies,
             });
@@ -463,13 +466,15 @@ class LocusPage extends React.Component {
                     <LocusSelection
                       {...{
                         selectedGenes,
-                        selectedTagVariants,
+                        selectedTagVariantBlocks,
                         selectedIndexVariants,
                         selectedStudies,
                       }}
                       lookups={lookups}
                       handleDeleteGene={this.handleDeleteGene}
-                      handleDeleteTagVariant={this.handleDeleteTagVariant}
+                      handleDeleteTagVariantBlock={
+                        this.handleDeleteTagVariantBlock
+                      }
                       handleDeleteIndexVariant={this.handleDeleteIndexVariant}
                       handleDeleteStudy={this.handleDeleteStudy}
                     />
@@ -482,7 +487,7 @@ class LocusPage extends React.Component {
                     end={end}
                     showGeneVerticals={displayTypeValue === LOCUS_SCHEME.ALL}
                     selectedGenes={selectedGenes}
-                    selectedTagVariants={selectedTagVariants}
+                    selectedTagVariantBlocks={selectedTagVariantBlocks}
                     selectedIndexVariants={selectedIndexVariants}
                     selectedStudies={selectedStudies}
                     handleClick={this.handleClick}
@@ -503,15 +508,15 @@ class LocusPage extends React.Component {
                   }
                   geneFilterOptions={entities.genes}
                   geneFilterHandler={this.handleAddGene}
-                  tagVariantFilterValue={
-                    selectedTagVariants
-                      ? entities.tagVariants.filter(
-                          d => selectedTagVariants.indexOf(d.id) >= 0
+                  tagVariantBlockFilterValue={
+                    selectedTagVariantBlocks
+                      ? entities.tagVariantBlocks.filter(
+                          d => selectedTagVariantBlocks.indexOf(d.id) >= 0
                         )
                       : []
                   }
-                  tagVariantFilterOptions={entities.tagVariants}
-                  tagVariantFilterHandler={this.handleAddTagVariant}
+                  tagVariantBlockFilterOptions={entities.tagVariantBlocks}
+                  tagVariantBlockFilterHandler={this.handleAddTagVariantBlock}
                   indexVariantFilterValue={
                     selectedIndexVariants
                       ? entities.indexVariants.filter(
@@ -554,12 +559,12 @@ class LocusPage extends React.Component {
         ? queryProps.selectedGenes
         : [queryProps.selectedGenes];
     }
-    if (queryProps.selectedTagVariants) {
-      queryProps.selectedTagVariants = Array.isArray(
-        queryProps.selectedTagVariants
+    if (queryProps.selectedTagVariantBlocks) {
+      queryProps.selectedTagVariantBlocks = Array.isArray(
+        queryProps.selectedTagVariantBlocks
       )
-        ? queryProps.selectedTagVariants
-        : [queryProps.selectedTagVariants];
+        ? queryProps.selectedTagVariantBlocks
+        : [queryProps.selectedTagVariantBlocks];
     }
     if (queryProps.selectedIndexVariants) {
       queryProps.selectedIndexVariants = Array.isArray(

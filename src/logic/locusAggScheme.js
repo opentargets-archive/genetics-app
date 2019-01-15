@@ -46,7 +46,7 @@ const EMPTY_PLOT = {
 };
 const EMPTY_LOOKUPS = {
   geneDict: {},
-  tagVariantDict: {},
+  tagVariantBlockDict: {},
   indexVariantDict: {},
   studyDict: {},
 };
@@ -98,13 +98,14 @@ const newApiTransform = ({
   const tagVariantBlocksObject = tagVariantIndexVariantStudies.reduce(
     (acc, d) => {
       const { tagVariantId, indexVariantId, studyId, pval } = d;
-      const key = `${studyId}-${indexVariantId}`;
+      const key = `${indexVariantId}-${studyId}`;
       if (!acc[key]) {
         acc[key] = {
           indexVariantId,
           studyId,
           pval,
           tagVariants: [],
+          id: `${indexVariantId}-${studyId}`,
         };
       }
       acc[key].tagVariants.push(tagVariantId);
@@ -167,7 +168,7 @@ const newApiTransform = ({
 
   const lookups = {
     geneDict: genesLookupById,
-    tagVariantDict: tagVariantsLookupById,
+    tagVariantBlockDict: tagVariantBlocksObject,
     indexVariantDict: indexVariantsLookupById,
     studyDict: studiesLookupById,
   };
@@ -225,14 +226,14 @@ old scheme:
   const selected = locusSelected({
     data: transformed,
     selectedGenes,
-    selectedTagVariantBlocks: [],
+    selectedTagVariantBlocks,
     selectedIndexVariants,
     selectedStudies,
   });
   const filtered = locusFilter({
     data: selected,
     selectedGenes,
-    selectedTagVariantBlocks: [],
+    selectedTagVariantBlocks,
     selectedIndexVariants,
     selectedStudies,
   });
