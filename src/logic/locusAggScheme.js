@@ -212,7 +212,6 @@ const locusScheme = ({
   }
 
   const { lookups, plot } = newApiTransform(data);
-  console.log(plot);
 
   console.info(
     `
