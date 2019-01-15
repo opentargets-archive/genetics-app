@@ -321,13 +321,49 @@ old scheme:
   const isEmptyFiltered = filtered.geneIndexVariantStudies.length === 0;
 
   // TODO: update to use filtering; isEmpty
-  const plot = {
-    genes: genesFiltered,
-    tagVariantBlocks: tagVariantBlocksFiltered,
-    indexVariants: indexVariantsFiltered,
-    studies: studiesFiltered,
-    geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
-  };
+  // const plot = {
+  //   genes: genesFiltered,
+  //   tagVariantBlocks: tagVariantBlocksFiltered,
+  //   indexVariants: indexVariantsFiltered,
+  //   studies: studiesFiltered,
+  //   geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
+  // };
+
+  let plot;
+  switch (scheme) {
+    case LOCUS_SCHEME.CHAINED:
+      plot = {
+        genes: genesFiltered,
+        tagVariantBlocks: tagVariantBlocksFiltered,
+        indexVariants: indexVariantsFiltered,
+        studies: studiesFiltered,
+        geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
+      };
+      break;
+    case LOCUS_SCHEME.ALL:
+      const tagVariantBlocksSorted = tagVariantBlocks.sort(variantComparator);
+      const indexVariantsSorted = indexVariants.sort(variantComparator);
+      const geneIndexVariantStudiesSorted = geneIndexVariantStudies.sort(
+        geneIndexVariantStudiesComparator
+      );
+      plot = {
+        genes,
+        tagVariantBlocks: tagVariantBlocksSorted,
+        indexVariants: indexVariantsSorted,
+        studies,
+        geneIndexVariantStudies: geneIndexVariantStudiesSorted,
+      };
+      break;
+    case LOCUS_SCHEME.ALL_GENES:
+    default:
+      plot = {
+        genes,
+        tagVariantBlocks: tagVariantBlocksFiltered,
+        indexVariants: indexVariantsFiltered,
+        studies: studiesFiltered,
+        geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
+      };
+  }
 
   const rows = locusTable(
     {
