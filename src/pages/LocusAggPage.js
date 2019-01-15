@@ -188,7 +188,7 @@ class LocusPage extends React.Component {
     }
     this._stringifyQueryProps(newQueryParams);
   };
-  handleAddTagVariant = newSelectedTagVariantBlocks => {
+  handleAddTagVariantBlock = newSelectedTagVariantBlocks => {
     const { selectedTagVariantBlocks, ...rest } = this._parseQueryProps();
     const newQueryParams = {
       ...rest,

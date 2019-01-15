@@ -75,18 +75,14 @@ export const tableColumns = ({
       <Autocomplete
         options={tagVariantBlockFilterOptions}
         value={tagVariantBlockFilterValue}
-        getOptionLabel={d => `${d.id} (${d.rsId})`}
+        getOptionLabel={d => d.id}
         getOptionValue={d => d.id}
         handleSelectOption={tagVariantBlockFilterHandler}
         placeholder="None"
         multiple
       />
     ),
-    renderCell: rowData => (
-      <Link to={`/variant/${rowData.tagVariantId}`}>
-        {rowData.tagVariantId}
-      </Link>
-    ),
+    renderCell: rowData => rowData.tagVariantsBlockId,
   },
   {
     id: 'geneId',
