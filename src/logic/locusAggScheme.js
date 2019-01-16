@@ -106,11 +106,13 @@ const newApiTransform = ({
       const expansionType = posteriorProbability ? 'fm' : 'ld';
       const key = `${expansionType}-${indexVariantId}-${studyId}`;
       if (!acc[key]) {
+        const { traitReported, pubAuthor } = studiesLookupById[studyId];
         acc[key] = {
           indexVariantId,
           studyId,
           pval,
-          traitReported: studiesLookupById[studyId].traitReported,
+          traitReported,
+          pubAuthor,
           tagVariants: [],
           id: key,
           expansionType,
@@ -203,18 +205,34 @@ const newApiTransform = ({
     });
   });
 
+  const geneIndexVariantStudies = Object.values(geneIndexVariantStudiesObject);
+
+  // add average position of index variant linked to study
+  const studiesWithMeanIndexPosition = studies.map(s => ({
+    ...s,
+    meanIndexVariantPosition: _.meanBy(
+      geneIndexVariantStudies.filter(d => d.studyId === s.studyId),
+      'indexVariantPosition'
+    ),
+  }));
+  // recalculate study lookups to contain above field
+  const studiesLookupByIdWithMeanIndexPosition = studies.reduce((acc, d) => {
+    acc[d.studyId] = d;
+    return acc;
+  }, {});
+
   const lookups = {
     geneDict: genesLookupById,
     tagVariantBlockDict: uniqueTagVariantBlocksDict, // tagVariantBlocksObject,
     indexVariantDict: indexVariantsLookupById,
-    studyDict: studiesLookupById,
+    studyDict: studiesLookupByIdWithMeanIndexPosition, //studiesLookupById,
   };
   const plot = {
     genes: genesWithExonPairs,
     tagVariantBlocks: uniqueTagVariantBlocks,
     indexVariants,
-    studies,
-    geneIndexVariantStudies: Object.values(geneIndexVariantStudiesObject),
+    studies: studiesWithMeanIndexPosition,
+    geneIndexVariantStudies,
   };
   return { lookups, plot };
 };
