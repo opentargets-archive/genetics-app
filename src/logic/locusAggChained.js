@@ -41,7 +41,9 @@ const locusChained = ({ data, dataFiltered }) => {
 
   const genesWithChained = genes.map(d => ({
     ...d,
-    chained: geneDict[d.id],
+    // chained: geneDict[d.id],
+    chained:
+      geneIndexVariantStudiesFiltered.filter(c => c.geneId === d.id).length > 0,
   }));
   const tagVariantBlocksWithChained = tagVariantBlocks.map(d => ({
     ...d,
