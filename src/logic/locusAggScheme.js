@@ -131,6 +131,7 @@ const newApiTransform = ({
     const positions = d.tagVariants.map(t => tagVariantsLookupById[t].position);
     d.tagVariantsStart = _.min(positions);
     d.tagVariantsEnd = _.max(positions);
+    d.tagVariantsPositions = positions;
     d.id =
       d.expansionType + '-' + stringHash(_.uniq(d.tagVariants.sort()).join(''));
   });
@@ -144,6 +145,7 @@ const newApiTransform = ({
     id: d.id,
     tagVariantsStart: d.tagVariantsStart,
     tagVariantsEnd: d.tagVariantsEnd,
+    tagVariantsPositions: d.tagVariantsPositions,
     expansionType: d.expansionType,
   }));
   const uniqueTagVariantBlocksDict = uniqueTagVariantBlocks.reduce((acc, d) => {
