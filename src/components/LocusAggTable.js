@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import * as d3 from 'd3';
-import { OtTable, significantFigures, Autocomplete } from 'ot-ui';
+import { OtTable, Autocomplete } from 'ot-ui';
 
-import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import StudyDetailCell from './StudyDetailCell';
 
