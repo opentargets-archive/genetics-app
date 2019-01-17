@@ -55,7 +55,10 @@ const locusChained = ({ data, dataFiltered }) => {
   }));
   const studiesWithChained = studies.map(d => ({
     ...d,
-    chained: studyDict[d.studyId],
+    // chained: studyDict[d.studyId],
+    chained:
+      geneIndexVariantStudiesFiltered.filter(c => c.studyId === d.studyId)
+        .length > 0,
   }));
   const geneIndexVariantStudiesWithChained = geneIndexVariantStudies.map(d => ({
     ...d,
