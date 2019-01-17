@@ -47,11 +47,17 @@ const locusChained = ({ data, dataFiltered }) => {
   }));
   const tagVariantBlocksWithChained = tagVariantBlocks.map(d => ({
     ...d,
-    chained: tagVariantBlockDict[d.id],
+    // chained: tagVariantBlockDict[d.id],
+    chained:
+      geneIndexVariantStudiesFiltered.filter(c => c.tagVariantsBlockId === d.id)
+        .length > 0,
   }));
   const indexVariantsWithChained = indexVariants.map(d => ({
     ...d,
-    chained: indexVariantDict[d.id],
+    // chained: indexVariantDict[d.id],
+    chained:
+      geneIndexVariantStudiesFiltered.filter(c => c.indexVariantId === d.id)
+        .length > 0,
   }));
   const studiesWithChained = studies.map(d => ({
     ...d,
