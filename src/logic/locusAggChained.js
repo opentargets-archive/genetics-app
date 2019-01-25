@@ -1,5 +1,3 @@
-const idField = d => d.id;
-const studyIdField = d => d.studyId;
 const gIvSIdField = d => `${d.geneId}-${d.indexVariantId}-${d.studyId}`;
 const dictReducer = idFieldAccessor => (dict, d) => {
   dict[idFieldAccessor(d)] = true;
@@ -16,24 +14,10 @@ const locusChained = ({ data, dataFiltered }) => {
   } = data;
 
   const {
-    genes: genesFiltered,
-    tagVariantBlocks: tagVariantsFiltered,
-    indexVariants: indexVariantsFiltered,
-    studies: studiesFiltered,
     geneIndexVariantStudies: geneIndexVariantStudiesFiltered,
   } = dataFiltered;
 
   // build dicts
-  const geneDict = genesFiltered.reduce(dictReducer(idField), {});
-  const tagVariantBlockDict = tagVariantsFiltered.reduce(
-    dictReducer(idField),
-    {}
-  );
-  const indexVariantDict = indexVariantsFiltered.reduce(
-    dictReducer(idField),
-    {}
-  );
-  const studyDict = studiesFiltered.reduce(dictReducer(studyIdField), {});
   const geneIndexVariantStudiesDict = geneIndexVariantStudiesFiltered.reduce(
     dictReducer(gIvSIdField),
     {}
@@ -41,27 +25,23 @@ const locusChained = ({ data, dataFiltered }) => {
 
   const genesWithChained = genes.map(d => ({
     ...d,
-    // chained: geneDict[d.id],
     chained:
       geneIndexVariantStudiesFiltered.filter(c => c.geneId === d.id).length > 0,
   }));
   const tagVariantBlocksWithChained = tagVariantBlocks.map(d => ({
     ...d,
-    // chained: tagVariantBlockDict[d.id],
     chained:
       geneIndexVariantStudiesFiltered.filter(c => c.tagVariantsBlockId === d.id)
         .length > 0,
   }));
   const indexVariantsWithChained = indexVariants.map(d => ({
     ...d,
-    // chained: indexVariantDict[d.id],
     chained:
       geneIndexVariantStudiesFiltered.filter(c => c.indexVariantId === d.id)
         .length > 0,
   }));
   const studiesWithChained = studies.map(d => ({
     ...d,
-    // chained: studyDict[d.studyId],
     chained:
       geneIndexVariantStudiesFiltered.filter(c => c.studyId === d.studyId)
         .length > 0,
