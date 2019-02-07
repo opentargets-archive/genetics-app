@@ -7,21 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import {
-  DownloadSVGPlot,
-  SectionHeading,
-  Button,
-  ListTooltip,
-  MultiSelect,
-} from 'ot-ui';
-import { Manhattan, withTooltip, chromosomeNames } from 'ot-charts';
+import { SectionHeading, Button } from 'ot-ui';
 
 import BasePage from './BasePage';
-import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
+import ManhattanTable from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 
 const SIGNIFICANCE = 5e-8;
@@ -64,28 +56,17 @@ function loci(data) {
   return hasAssociations(data) ? data.manhattan.associations.length : 0;
 }
 
-const styles = theme => {
-  return {
-    section: {
-      padding: theme.sectionPadding,
-    },
-  };
-};
+const styles = theme => ({
+  section: {
+    padding: theme.sectionPadding,
+  },
+});
 
 class StudyPage extends React.Component {
-  state = {
-    focusChromosome: '',
-  };
   render() {
     const { classes, match } = this.props;
     const { studyId } = match.params;
-    let manhattanPlot = React.createRef();
-    const ManhattanWithTooltip = withTooltip(
-      Manhattan,
-      ListTooltip,
-      tableColumns(studyId),
-      'manhattan'
-    );
+
     return (
       <BasePage>
         <ScrollToTop />
@@ -107,6 +88,7 @@ class StudyPage extends React.Component {
             const manhattan = isAssociatedStudy
               ? transformAssociations(data)
               : { associations: [] };
+
             return (
               <Fragment>
                 <Paper className={classes.section}>
@@ -156,50 +138,10 @@ class StudyPage extends React.Component {
                     },
                   ]}
                 />
-
-                <DownloadSVGPlot
-                  left={
-                    <MultiSelect
-                      value={this.state.focusChromosome}
-                      options={[
-                        { label: 'All chromosomes', value: '' },
-                        ...chromosomeNames.map(d => ({
-                          label: `Chromosome ${d}`,
-                          value: d,
-                        })),
-                      ]}
-                      handleChange={this.handleChange}
-                    />
-                  }
-                  loading={loading}
-                  error={error}
-                  svgContainer={manhattanPlot}
-                  filenameStem={`${studyId}-independently-associated-loci`}
-                  reportDownloadEvent={() => {
-                    reportAnalyticsEvent({
-                      category: 'visualisation',
-                      action: 'download',
-                      label: `study:manhattan:svg`,
-                    });
-                  }}
-                >
-                  <ManhattanWithTooltip
-                    data={manhattan}
-                    focusChromosome={this.state.focusChromosome}
-                    handleChromosomeClick={this.handleChromosomeClick}
-                    ref={manhattanPlot}
-                  />
-                </DownloadSVGPlot>
                 <ManhattanTable
                   loading={loading}
                   error={error}
-                  data={
-                    this.state.focusChromosome
-                      ? manhattan.associations.filter(
-                          d => d.chromosome === this.state.focusChromosome
-                        )
-                      : manhattan.associations
-                  }
+                  data={manhattan.associations}
                   studyId={studyId}
                   filenameStem={`${studyId}-independently-associated-loci`}
                 />
@@ -210,28 +152,6 @@ class StudyPage extends React.Component {
       </BasePage>
     );
   }
-  handleChange = event => {
-    if (event.target.value) {
-      reportAnalyticsEvent({
-        category: 'visualisation',
-        action: 'filter',
-        label: `study:manhattan:chromosome`,
-      });
-    }
-    this.setState({ focusChromosome: event.target.value });
-  };
-  handleChromosomeClick = chromosome => {
-    if (chromosome) {
-      reportAnalyticsEvent({
-        category: 'visualisation',
-        action: 'filter',
-        label: `study:manhattan:chromosome`,
-      });
-      this.setState({ focusChromosome: chromosome });
-    } else {
-      this.setState({ focusChromosome: '' });
-    }
-  };
 }
 
 export default withStyles(styles)(StudyPage);
