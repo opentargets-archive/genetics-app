@@ -16,6 +16,8 @@ import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 
+import ManhattanPlot from '../components/ManhattanPlot';
+
 const SIGNIFICANCE = 5e-8;
 
 function hasAssociations(data) {
@@ -138,6 +140,7 @@ class StudyPage extends React.Component {
                     },
                   ]}
                 />
+                <ManhattanPlot associations={manhattan.associations} />
                 <ManhattanTable
                   loading={loading}
                   error={error}
