@@ -57,7 +57,7 @@ class ManhattanPlot extends Component {
   zoom = React.createRef();
 
   brushed = () => {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoomed') return;
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
     const { selection = x2.range() } = d3.event;
     x.domain(selection.map(x2.invert, x2));
@@ -78,7 +78,7 @@ class ManhattanPlot extends Component {
   };
 
   zoomed = () => {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type !== 'wheel') return;
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
 
     const { transform } = d3.event;
     x.domain(transform.rescaleX(x2).domain());
