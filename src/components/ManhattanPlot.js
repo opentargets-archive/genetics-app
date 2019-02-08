@@ -69,9 +69,11 @@ class ManhattanPlot extends Component {
   svg = React.createRef();
   brush = React.createRef();
   zoom = React.createRef();
+  xAxisRef = React.createRef();
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
 
+  xAxis = d3.axisBottom(x);
   yAxis = d3.axisLeft(y);
   x2Axis = d3.axisBottom();
 
@@ -87,6 +89,8 @@ class ManhattanPlot extends Component {
       .attr('x', d => x(d.position))
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+
+    d3.select(this.xAxisRef.current).call(this.xAxis);
 
     d3.select(this.zoom.current).call(
       zoom.transform,
@@ -109,6 +113,8 @@ class ManhattanPlot extends Component {
       .attr('x', d => x(d.position))
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+
+    d3.select(this.xAxisRef.current).call(this.xAxis);
 
     svg
       .select('.context')
@@ -138,6 +144,11 @@ class ManhattanPlot extends Component {
           className="focus"
           transform={`translate(${margin.left}, ${margin.top})`}
         >
+          <g
+            className="axis x--axis"
+            ref={this.xAxisRef}
+            transform={`translate(0, ${height})`}
+          />
           <g className="axis y--axis" ref={this.yAxisRef} />
         </g>
         <g
@@ -185,6 +196,7 @@ class ManhattanPlot extends Component {
     bars
       .enter()
       .append('rect')
+      .attr('class', 'bars')
       .attr('width', 1)
       .attr('x', d => x(d.position))
       .attr('y', d => y(-Math.log10(d.pval)))
@@ -192,6 +204,7 @@ class ManhattanPlot extends Component {
 
     bars.exit().remove();
 
+    d3.select(this.xAxisRef.current).call(this.xAxis);
     d3.select(this.yAxisRef.current).call(this.yAxis);
 
     bars2
