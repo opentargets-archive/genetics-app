@@ -32,7 +32,7 @@ const getX2Ticks = () => {
   return ticks;
 };
 
-const OUTER_WIDTH = 1200;
+const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 500;
 
 const margin = { top: 20, right: 20, bottom: 110, left: 40 };
@@ -69,8 +69,10 @@ class ManhattanPlot extends Component {
   svg = React.createRef();
   brush = React.createRef();
   zoom = React.createRef();
+  yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
 
+  yAxis = d3.axisLeft(y);
   x2Axis = d3.axisBottom();
 
   brushed = () => {
@@ -135,7 +137,9 @@ class ManhattanPlot extends Component {
         <g
           className="focus"
           transform={`translate(${margin.left}, ${margin.top})`}
-        />
+        >
+          <g className="axis y--axis" ref={this.yAxisRef} />
+        </g>
         <g
           className="context"
           transform={`translate(${margin2.left}, ${margin2.top})`}
@@ -187,6 +191,8 @@ class ManhattanPlot extends Component {
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
 
     bars.exit().remove();
+
+    d3.select(this.yAxisRef.current).call(this.yAxis);
 
     bars2
       .enter()
