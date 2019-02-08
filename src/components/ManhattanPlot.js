@@ -20,7 +20,19 @@ const calculateGlobalPosition = associations => {
   });
 };
 
-const OUTER_WIDTH = 1000;
+const getX2Ticks = () => {
+  const ticks = [];
+  chromosomesWithCumulativeLengths.forEach(ch => {
+    const chStart = ch.cumulativeLength - ch.length;
+    const chMiddle = chStart + ch.length / 2;
+    ticks.push(ch.cumulativeLength - ch.length);
+    ticks.push(chMiddle);
+  });
+
+  return ticks;
+};
+
+const OUTER_WIDTH = 1200;
 const OUTER_HEIGHT = 500;
 
 const margin = { top: 20, right: 20, bottom: 110, left: 40 };
@@ -40,6 +52,8 @@ const x2 = d3
   .domain([0, totalLength])
   .range([0, width]);
 
+const x2Ticks = getX2Ticks(x2);
+
 const y = d3.scaleLinear().range([height, 0]);
 const y2 = d3.scaleLinear().range([height2, 0]);
 
@@ -55,6 +69,9 @@ class ManhattanPlot extends Component {
   svg = React.createRef();
   brush = React.createRef();
   zoom = React.createRef();
+  x2AxisRef = React.createRef();
+
+  x2Axis = d3.axisBottom();
 
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
@@ -124,6 +141,11 @@ class ManhattanPlot extends Component {
           transform={`translate(${margin2.left}, ${margin2.top})`}
         >
           <g className="brush" ref={this.brush} />
+          <g
+            className="axis x--axis"
+            ref={this.x2AxisRef}
+            transform={`translate(0, ${height2})`}
+          />
         </g>
         <rect
           className="zoom"
@@ -135,6 +157,12 @@ class ManhattanPlot extends Component {
       </svg>
     );
   }
+
+  customX2Axis = g => {
+    g.call(this.x2Axis);
+    g.selectAll('.tick:nth-child(odd) line').remove();
+    g.selectAll('.tick:nth-child(even) text').remove();
+  };
 
   _render() {
     const { associations } = this.props;
@@ -169,6 +197,15 @@ class ManhattanPlot extends Component {
       .attr('height', d => y2(0) - y2(-Math.log10(d.pval)));
 
     bars2.exit().remove();
+
+    this.x2Axis
+      .scale(x2)
+      .tickValues(x2Ticks)
+      .tickFormat((d, i) => {
+        return chromosomeNames[Math.floor(i / 2)];
+      });
+
+    d3.select(this.x2AxisRef.current).call(this.customX2Axis);
 
     d3.select(this.brush.current)
       .call(brush)
