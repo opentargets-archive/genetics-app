@@ -32,6 +32,37 @@ const getX2Ticks = () => {
   return ticks;
 };
 
+const findChRange = range => {
+  const chStart = chromosomesWithCumulativeLengths.findIndex(ch => {
+    return (
+      ch.cumulativeLength - ch.length <= range[0] &&
+      range[0] < ch.cumulativeLength
+    );
+  });
+  const chEnd = chromosomesWithCumulativeLengths.findIndex(ch => {
+    return (
+      ch.cumulativeLength - ch.length < range[1] &&
+      range[1] <= ch.cumulativeLength
+    );
+  });
+
+  const chRange = [];
+  for (let i = chStart; i <= chEnd; i++) {
+    chRange.push(chromosomesWithCumulativeLengths[i]);
+  }
+  return chRange;
+};
+
+const getChromosomeName = position => {
+  const chromosome = chromosomesWithCumulativeLengths.find(ch => {
+    return (
+      ch.cumulativeLength - ch.length <= position &&
+      position < ch.cumulativeLength
+    );
+  });
+  return chromosome.name;
+};
+
 const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 500;
 
@@ -73,16 +104,39 @@ class ManhattanPlot extends Component {
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
 
-  xAxis = d3.axisBottom(x);
+  xAxis = d3.axisBottom(x).tickFormat(d => getChromosomeName(d));
   yAxis = d3.axisLeft(y);
-  x2Axis = d3.axisBottom();
+  x2Axis = d3.axisBottom(x2);
+
+  getXTicks = () => {
+    const [start, end] = x.domain();
+    const ticks = [];
+    const chRange = findChRange(x.domain());
+
+    if (chRange.length === 1) {
+      return [start, (start + end) / 2];
+    }
+
+    ticks.push(start);
+    ticks.push((start + chRange[0].cumulativeLength) / 2);
+
+    for (let i = 1; i < chRange.length - 1; i++) {
+      const chromosome = chRange[i];
+      ticks.push(chromosome.cumulativeLength - chromosome.length);
+      ticks.push(chromosome.cumulativeLength - chromosome.length / 2);
+    }
+
+    const lastCh = chRange[chRange.length - 1];
+    ticks.push(lastCh.cumulativeLength - lastCh.length);
+    ticks.push((lastCh.cumulativeLength - lastCh.length + end) / 2);
+
+    return ticks;
+  };
 
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
     const selection = d3.event.selection || x2.range();
-    console.log('selection', selection);
-    console.log('x2.range()', x2.range());
     x.domain(selection.map(x2.invert, x2));
 
     d3.select(this.svg.current)
@@ -92,7 +146,9 @@ class ManhattanPlot extends Component {
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
 
-    d3.select(this.xAxisRef.current).call(this.xAxis);
+    // update ticks of xAxis
+    this.xAxis.tickValues(this.getXTicks());
+    d3.select(this.xAxisRef.current).call(this.customXAxis);
 
     d3.select(this.zoom.current).call(
       zoom.transform,
@@ -175,6 +231,12 @@ class ManhattanPlot extends Component {
     );
   }
 
+  customXAxis = g => {
+    g.call(this.xAxis);
+    g.selectAll('.tick:nth-child(odd) line').remove();
+    g.selectAll('.tick:nth-child(even) text').remove();
+  };
+
   customX2Axis = g => {
     g.call(this.x2Axis);
     g.selectAll('.tick:nth-child(odd) line').remove();
@@ -206,7 +268,7 @@ class ManhattanPlot extends Component {
 
     bars.exit().remove();
 
-    d3.select(this.xAxisRef.current).call(this.xAxis);
+    // d3.select(this.xAxisRef.current).call(this.xAxis);
     d3.select(this.yAxisRef.current).call(this.yAxis);
 
     bars2
@@ -219,12 +281,9 @@ class ManhattanPlot extends Component {
 
     bars2.exit().remove();
 
-    this.x2Axis
-      .scale(x2)
-      .tickValues(x2Ticks)
-      .tickFormat((d, i) => {
-        return chromosomeNames[Math.floor(i / 2)];
-      });
+    this.x2Axis.tickValues(x2Ticks).tickFormat((d, i) => {
+      return chromosomeNames[Math.floor(i / 2)];
+    });
 
     d3.select(this.x2AxisRef.current).call(this.customX2Axis);
 
