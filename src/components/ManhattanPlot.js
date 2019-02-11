@@ -80,7 +80,9 @@ class ManhattanPlot extends Component {
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
-    const { selection = x2.range() } = d3.event;
+    const selection = d3.event.selection || x2.range();
+    console.log('selection', selection);
+    console.log('x2.range()', x2.range());
     x.domain(selection.map(x2.invert, x2));
 
     d3.select(this.svg.current)
