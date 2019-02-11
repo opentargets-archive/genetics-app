@@ -20,12 +20,37 @@ const calculateGlobalPosition = associations => {
   });
 };
 
+const getXTicks = () => {
+  const [start, end] = x.domain();
+  const ticks = [];
+  const chRange = findChRange(x.domain());
+
+  if (chRange.length === 1) {
+    return [start, (start + end) / 2];
+  }
+
+  ticks.push(start);
+  ticks.push((start + chRange[0].cumulativeLength) / 2);
+
+  for (let i = 1; i < chRange.length - 1; i++) {
+    const chromosome = chRange[i];
+    ticks.push(chromosome.cumulativeLength - chromosome.length);
+    ticks.push(chromosome.cumulativeLength - chromosome.length / 2);
+  }
+
+  const lastCh = chRange[chRange.length - 1];
+  ticks.push(lastCh.cumulativeLength - lastCh.length);
+  ticks.push((lastCh.cumulativeLength - lastCh.length + end) / 2);
+
+  return ticks;
+};
+
 const getX2Ticks = () => {
   const ticks = [];
   chromosomesWithCumulativeLengths.forEach(ch => {
     const chStart = ch.cumulativeLength - ch.length;
     const chMiddle = chStart + ch.length / 2;
-    ticks.push(ch.cumulativeLength - ch.length);
+    ticks.push(chStart);
     ticks.push(chMiddle);
   });
 
@@ -108,29 +133,16 @@ class ManhattanPlot extends Component {
   yAxis = d3.axisLeft(y);
   x2Axis = d3.axisBottom(x2);
 
-  getXTicks = () => {
-    const [start, end] = x.domain();
-    const ticks = [];
-    const chRange = findChRange(x.domain());
+  customXAxis = g => {
+    g.call(this.xAxis);
+    g.selectAll('.tick:nth-child(odd) line').remove();
+    g.selectAll('.tick:nth-child(even) text').remove();
+  };
 
-    if (chRange.length === 1) {
-      return [start, (start + end) / 2];
-    }
-
-    ticks.push(start);
-    ticks.push((start + chRange[0].cumulativeLength) / 2);
-
-    for (let i = 1; i < chRange.length - 1; i++) {
-      const chromosome = chRange[i];
-      ticks.push(chromosome.cumulativeLength - chromosome.length);
-      ticks.push(chromosome.cumulativeLength - chromosome.length / 2);
-    }
-
-    const lastCh = chRange[chRange.length - 1];
-    ticks.push(lastCh.cumulativeLength - lastCh.length);
-    ticks.push((lastCh.cumulativeLength - lastCh.length + end) / 2);
-
-    return ticks;
+  customX2Axis = g => {
+    g.call(this.x2Axis);
+    g.selectAll('.tick:nth-child(odd) line').remove();
+    g.selectAll('.tick:nth-child(even) text').remove();
   };
 
   brushed = () => {
@@ -147,7 +159,7 @@ class ManhattanPlot extends Component {
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
 
     // update ticks of xAxis
-    this.xAxis.tickValues(this.getXTicks());
+    this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(this.customXAxis);
 
     d3.select(this.zoom.current).call(
@@ -231,18 +243,6 @@ class ManhattanPlot extends Component {
     );
   }
 
-  customXAxis = g => {
-    g.call(this.xAxis);
-    g.selectAll('.tick:nth-child(odd) line').remove();
-    g.selectAll('.tick:nth-child(even) text').remove();
-  };
-
-  customX2Axis = g => {
-    g.call(this.x2Axis);
-    g.selectAll('.tick:nth-child(odd) line').remove();
-    g.selectAll('.tick:nth-child(even) text').remove();
-  };
-
   _render() {
     const { associations } = this.props;
     const assocs = calculateGlobalPosition(associations);
@@ -268,7 +268,6 @@ class ManhattanPlot extends Component {
 
     bars.exit().remove();
 
-    // d3.select(this.xAxisRef.current).call(this.xAxis);
     d3.select(this.yAxisRef.current).call(this.yAxis);
 
     bars2
