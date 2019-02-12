@@ -184,7 +184,8 @@ class ManhattanPlot extends Component {
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
 
-    d3.select(this.xAxisRef.current).call(this.xAxis);
+    this.xAxis.tickValues(getXTicks());
+    d3.select(this.xAxisRef.current).call(this.customXAxis);
 
     svg
       .select('.context')
