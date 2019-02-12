@@ -26,13 +26,13 @@ const calculateGlobalPosition = associations => {
 
 const getXTicks = () => {
   const [start, end] = x.domain();
-  const ticks = [];
   const chRange = findChRange(x.domain());
 
   if (chRange.length === 1) {
     return [start, (start + end) / 2];
   }
 
+  const ticks = [];
   ticks.push(start);
   ticks.push((start + chRange[0].cumulativeLength) / 2);
 
@@ -62,8 +62,7 @@ const getX2Ticks = () => {
 };
 
 const findChRange = range => {
-  const start = range[0] < 0 ? 0 : range[0];
-  const end = range[1] > maxPos ? maxPos : range[1];
+  const [start, end] = range;
 
   const chStart = chromosomesWithCumulativeLengths.findIndex(ch => {
     return (
@@ -78,18 +77,11 @@ const findChRange = range => {
   for (let i = chStart; i <= chEnd; i++) {
     chRange.push(chromosomesWithCumulativeLengths[i]);
   }
+
   return chRange;
 };
 
-const getChromosomeName = position => {
-  let pos;
-  if (position < 0) {
-    pos = 0;
-  } else if (position > maxPos) {
-    pos = maxPos;
-  } else {
-    pos = position;
-  }
+const getChromosomeName = pos => {
   const chromosome = chromosomesWithCumulativeLengths.find(ch => {
     return ch.cumulativeLength - ch.length <= pos && pos < ch.cumulativeLength;
   });
@@ -157,7 +149,10 @@ class ManhattanPlot extends Component {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
     const selection = d3.event.selection || x2.range();
-    x.domain(selection.map(x2.invert, x2));
+    let [start, end] = selection.map(x2.invert, x2);
+    start = start < 0 ? 0 : start;
+    end = end > maxPos ? maxPos : end;
+    x.domain([start, end]);
 
     d3.select(this.svg.current)
       .select('.focus')
@@ -182,7 +177,11 @@ class ManhattanPlot extends Component {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
 
     const { transform } = d3.event;
-    x.domain(transform.rescaleX(x2).domain());
+    let [start, end] = transform.rescaleX(x2).domain();
+    start = start < 0 ? 0 : start;
+    end = end > maxPos ? maxPos : end;
+    x.domain([start, end]);
+
     const svg = d3.select(this.svg.current);
 
     svg
