@@ -3,6 +3,10 @@ import * as d3 from 'd3';
 
 import { chromosomeNames, chromosomesWithCumulativeLengths } from 'ot-charts';
 
+const maxPos =
+  chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
+    .cumulativeLength;
+
 const totalLength = chromosomesWithCumulativeLengths.reduce((acc, ch) => {
   return acc + ch.length;
 }, 0);
@@ -58,17 +62,16 @@ const getX2Ticks = () => {
 };
 
 const findChRange = range => {
+  const start = range[0] < 0 ? 0 : range[0];
+  const end = range[1] > maxPos ? maxPos : range[1];
+
   const chStart = chromosomesWithCumulativeLengths.findIndex(ch => {
     return (
-      ch.cumulativeLength - ch.length <= range[0] &&
-      range[0] < ch.cumulativeLength
+      ch.cumulativeLength - ch.length <= start && start < ch.cumulativeLength
     );
   });
   const chEnd = chromosomesWithCumulativeLengths.findIndex(ch => {
-    return (
-      ch.cumulativeLength - ch.length < range[1] &&
-      range[1] <= ch.cumulativeLength
-    );
+    return ch.cumulativeLength - ch.length < end && end <= ch.cumulativeLength;
   });
 
   const chRange = [];
@@ -79,11 +82,16 @@ const findChRange = range => {
 };
 
 const getChromosomeName = position => {
+  let pos;
+  if (position < 0) {
+    pos = 0;
+  } else if (position > maxPos) {
+    pos = maxPos;
+  } else {
+    pos = position;
+  }
   const chromosome = chromosomesWithCumulativeLengths.find(ch => {
-    return (
-      ch.cumulativeLength - ch.length <= position &&
-      position < ch.cumulativeLength
-    );
+    return ch.cumulativeLength - ch.length <= pos && pos < ch.cumulativeLength;
   });
   return chromosome.name;
 };
