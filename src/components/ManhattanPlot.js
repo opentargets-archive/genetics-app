@@ -121,6 +121,12 @@ const zoom = d3
   .translateExtent([[0, 0], [width, height]])
   .extent([[0, 0], [width, height]]);
 
+const customXAxis = (g, axis) => {
+  g.call(axis);
+  g.selectAll('.tick:nth-child(odd) line').remove();
+  g.selectAll('.tick:nth-child(even) text').remove();
+};
+
 class ManhattanPlot extends Component {
   svg = React.createRef();
   brush = React.createRef();
@@ -132,18 +138,6 @@ class ManhattanPlot extends Component {
   xAxis = d3.axisBottom(x).tickFormat(d => getChromosomeName(d));
   yAxis = d3.axisLeft(y);
   x2Axis = d3.axisBottom(x2);
-
-  customXAxis = g => {
-    g.call(this.xAxis);
-    g.selectAll('.tick:nth-child(odd) line').remove();
-    g.selectAll('.tick:nth-child(even) text').remove();
-  };
-
-  customX2Axis = g => {
-    g.call(this.x2Axis);
-    g.selectAll('.tick:nth-child(odd) line').remove();
-    g.selectAll('.tick:nth-child(even) text').remove();
-  };
 
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
@@ -163,7 +157,7 @@ class ManhattanPlot extends Component {
 
     // update ticks of xAxis
     this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(this.customXAxis);
+    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     d3.select(this.zoom.current).call(
       zoom.transform,
@@ -192,7 +186,7 @@ class ManhattanPlot extends Component {
       .attr('height', d => y(0) - y(-Math.log10(d.pval)));
 
     this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(this.customXAxis);
+    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     svg
       .select('.context')
@@ -292,7 +286,7 @@ class ManhattanPlot extends Component {
       return chromosomeNames[Math.floor(i / 2)];
     });
 
-    d3.select(this.x2AxisRef.current).call(this.customX2Axis);
+    d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
 
     d3.select(this.brush.current)
       .call(brush)
