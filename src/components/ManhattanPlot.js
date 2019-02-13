@@ -127,7 +127,13 @@ const customXAxis = (g, axis) => {
   g.selectAll('.tick:nth-child(even) text').remove();
 };
 
+const Bar = ({ x, y, height }) => (
+  <rect className="bars" x={x} y={y} width="1" height={height} />
+);
+
 class ManhattanPlot extends Component {
+  state = {};
+
   svg = React.createRef();
   brush = React.createRef();
   zoom = React.createRef();
@@ -137,64 +143,45 @@ class ManhattanPlot extends Component {
 
   xAxis = d3.axisBottom(x).tickFormat(d => getChromosomeName(d));
   yAxis = d3.axisLeft(y);
-  x2Axis = d3.axisBottom(x2);
+  x2Axis = d3
+    .axisBottom(x2)
+    .tickValues(x2Ticks)
+    .tickFormat((d, i) => {
+      return chromosomeNames[Math.floor(i / 2)];
+    });
 
-  brushed = () => {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
+  static getDerivedStateFromProps(props, state) {
+    const { associations } = props;
+    const assocs = calculateGlobalPosition(associations);
 
-    const selection = d3.event.selection || x2.range();
-    let [start, end] = selection.map(x2.invert, x2);
-    start = start < 0 ? 0 : start;
-    end = end > maxPos ? maxPos : end;
-    x.domain([start, end]);
+    y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
+    y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
-    d3.select(this.svg.current)
-      .select('.focus')
-      .selectAll('rect')
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+    const bars = assocs.map(d => {
+      return {
+        x: x(d.position),
+        y: y(-Math.log10(d.pval)),
+        height: y(0) - y(-Math.log10(d.pval)),
+      };
+    });
 
-    // update ticks of xAxis
-    this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
+    const bars2 = assocs.map(d => {
+      return {
+        x: x2(d.position),
+        y: y2(-Math.log10(d.pval)),
+        height: y2(0) - y2(-Math.log10(d.pval)),
+      };
+    });
 
-    d3.select(this.zoom.current).call(
-      zoom.transform,
-      d3.zoomIdentity
-        .scale(width / (selection[1] - selection[0]))
-        .translate(-selection[0], 0)
-    );
-  };
-
-  zoomed = () => {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
-
-    const { transform } = d3.event;
-    let [start, end] = transform.rescaleX(x2).domain();
-    start = start < 0 ? 0 : start;
-    end = end > maxPos ? maxPos : end;
-    x.domain([start, end]);
-
-    const svg = d3.select(this.svg.current);
-
-    svg
-      .select('.focus')
-      .selectAll('rect')
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
-
-    this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
-
-    svg
-      .select('.context')
-      .select('.brush')
-      .call(brush.move, x.range().map(transform.invertX, transform));
-  };
+    return { assocs, bars, bars2 };
+  }
 
   componentDidMount() {
+    d3.select(this.zoom.current).call(zoom);
+    d3.select(this.brush.current)
+      .call(brush)
+      .call(brush.move, x.range());
+
     brush.on('brush end', this.brushed);
     zoom.on('zoom', this.zoomed);
     this._render();
@@ -205,6 +192,7 @@ class ManhattanPlot extends Component {
   }
 
   render() {
+    const { bars, bars2 } = this.state;
     return (
       <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
         <defs>
@@ -216,6 +204,9 @@ class ManhattanPlot extends Component {
           className="focus"
           transform={`translate(${margin.left}, ${margin.top})`}
         >
+          {bars.map((bar, i) => (
+            <Bar key={i} {...bar} />
+          ))}
           <g
             className="axis x--axis"
             ref={this.xAxisRef}
@@ -227,6 +218,9 @@ class ManhattanPlot extends Component {
           className="context"
           transform={`translate(${margin2.left}, ${margin2.top})`}
         >
+          {bars2.map((bar, i) => (
+            <Bar key={i} {...bar} />
+          ))}
           <g className="brush" ref={this.brush} />
           <g
             className="axis x--axis"
@@ -246,54 +240,73 @@ class ManhattanPlot extends Component {
   }
 
   _render() {
-    const { associations } = this.props;
-    const assocs = calculateGlobalPosition(associations);
-
-    y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
-    y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
-
-    const svg = d3.select(this.svg.current);
-    const focus = svg.select('.focus');
-    const context = svg.select('.context');
-
-    const bars = focus.selectAll('rect').data(assocs);
-    const bars2 = context.selectAll('rect').data(assocs);
-
-    bars
-      .enter()
-      .append('rect')
-      .attr('class', 'bars')
-      .attr('width', 1)
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
-
-    bars.exit().remove();
-
+    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
     d3.select(this.yAxisRef.current).call(this.yAxis);
+    d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
+  }
 
-    bars2
-      .enter()
-      .append('rect')
-      .attr('width', 1)
-      .attr('x', d => x2(d.position))
-      .attr('y', d => y2(-Math.log10(d.pval)))
-      .attr('height', d => y2(0) - y2(-Math.log10(d.pval)));
+  brushed = () => {
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
-    bars2.exit().remove();
+    const { assocs } = this.state;
+    const selection = d3.event.selection || x2.range();
+    let [start, end] = selection.map(x2.invert, x2);
+    start = start < 0 ? 0 : start;
+    end = end > maxPos ? maxPos : end;
+    x.domain([start, end]);
 
-    this.x2Axis.tickValues(x2Ticks).tickFormat((d, i) => {
-      return chromosomeNames[Math.floor(i / 2)];
+    const bars = assocs.map(d => {
+      return {
+        x: x(d.position),
+        y: y(-Math.log10(d.pval)),
+        height: y(0) - y(-Math.log10(d.pval)),
+      };
     });
 
-    d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
+    this.setState({ bars });
 
-    d3.select(this.brush.current)
-      .call(brush)
-      .call(brush.move, x.range());
+    // update ticks of xAxis
+    this.xAxis.tickValues(getXTicks());
+    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
-    d3.select(this.zoom.current).call(zoom);
-  }
+    d3.select(this.zoom.current).call(
+      zoom.transform,
+      d3.zoomIdentity
+        .scale(width / (selection[1] - selection[0]))
+        .translate(-selection[0], 0)
+    );
+  };
+
+  zoomed = () => {
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
+
+    const { assocs } = this.state;
+    const { transform } = d3.event;
+    let [start, end] = transform.rescaleX(x2).domain();
+    start = start < 0 ? 0 : start;
+    end = end > maxPos ? maxPos : end;
+    x.domain([start, end]);
+
+    const svg = d3.select(this.svg.current);
+
+    const bars = assocs.map(d => {
+      return {
+        x: x(d.position),
+        y: y(-Math.log10(d.pval)),
+        height: y(0) - y(-Math.log10(d.pval)),
+      };
+    });
+
+    this.setState({ bars });
+
+    this.xAxis.tickValues(getXTicks());
+    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
+
+    svg
+      .select('.context')
+      .select('.brush')
+      .call(brush.move, x.range().map(transform.invertX, transform));
+  };
 }
 
 export default ManhattanPlot;
