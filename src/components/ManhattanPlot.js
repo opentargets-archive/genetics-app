@@ -137,7 +137,12 @@ class ManhattanPlot extends Component {
 
   xAxis = d3.axisBottom(x).tickFormat(d => getChromosomeName(d));
   yAxis = d3.axisLeft(y);
-  x2Axis = d3.axisBottom(x2);
+  x2Axis = d3
+    .axisBottom(x2)
+    .tickValues(x2Ticks)
+    .tickFormat((d, i) => {
+      return chromosomeNames[Math.floor(i / 2)];
+    });
 
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
@@ -281,10 +286,6 @@ class ManhattanPlot extends Component {
       .attr('height', d => y2(0) - y2(-Math.log10(d.pval)));
 
     bars2.exit().remove();
-
-    this.x2Axis.tickValues(x2Ticks).tickFormat((d, i) => {
-      return chromosomeNames[Math.floor(i / 2)];
-    });
 
     d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
 
