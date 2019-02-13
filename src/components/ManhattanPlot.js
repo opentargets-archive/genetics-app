@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 
 import { chromosomeNames, chromosomesWithCumulativeLengths } from 'ot-charts';
-
+import { ListTooltip } from 'ot-ui';
 const maxPos =
   chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
     .cumulativeLength;
@@ -144,6 +144,12 @@ class ManhattanPlot extends Component {
       return chromosomeNames[Math.floor(i / 2)];
     });
 
+  state = {
+    open: false,
+    anchorEl: null,
+    dataList: [{ label: 'label1', value: 'value1' }],
+  };
+
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
@@ -152,6 +158,8 @@ class ManhattanPlot extends Component {
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
     x.domain([start, end]);
+
+    this.setState({ open: false });
 
     d3.select(this.svg.current)
       .select('.focus')
@@ -174,12 +182,13 @@ class ManhattanPlot extends Component {
 
   zoomed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
-
     const { transform } = d3.event;
     let [start, end] = transform.rescaleX(x2).domain();
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
     x.domain([start, end]);
+
+    this.setState({ open: false });
 
     const svg = d3.select(this.svg.current);
 
@@ -202,55 +211,72 @@ class ManhattanPlot extends Component {
   componentDidMount() {
     brush.on('brush end', this.brushed);
     zoom.on('zoom', this.zoomed);
-    this._render();
+    this._render(this.handleMouseOver);
   }
 
-  componentDidUpdate() {
-    this._render();
+  componentDidUpdate(prevProps) {
+    if (this.props.associations !== prevProps.associations) {
+      this._render(this.handleMouseOver);
+    }
   }
+
+  handleMouseLeave = () => {
+    this.setState({ open: false, anchorEl: null });
+  };
+
+  handleMouseOver = anchorEl => {
+    this.setState({ anchorEl, open: true });
+  };
 
   render() {
     return (
-      <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
-        <defs>
-          <clipPath id="clip">
-            <rect width={width} height={height} />
-          </clipPath>
-        </defs>
-        <g
-          className="focus"
-          transform={`translate(${margin.left}, ${margin.top})`}
-        >
-          <g
-            className="axis x--axis"
-            ref={this.xAxisRef}
-            transform={`translate(0, ${height})`}
+      <div onMouseLeave={this.handleMouseLeave}>
+        <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
+          <defs>
+            <clipPath id="clip">
+              <rect width={width} height={height} />
+            </clipPath>
+          </defs>
+          <rect
+            className="zoom"
+            ref={this.zoom}
+            width={width}
+            height={height}
+            transform={`translate(${margin.left},${margin.top})`}
           />
-          <g className="axis y--axis" ref={this.yAxisRef} />
-        </g>
-        <g
-          className="context"
-          transform={`translate(${margin2.left}, ${margin2.top})`}
-        >
-          <g className="brush" ref={this.brush} />
           <g
-            className="axis x--axis"
-            ref={this.x2AxisRef}
-            transform={`translate(0, ${height2})`}
+            className="focus"
+            transform={`translate(${margin.left}, ${margin.top})`}
+          >
+            <g
+              className="axis x--axis"
+              ref={this.xAxisRef}
+              transform={`translate(0, ${height})`}
+            />
+            <g className="axis y--axis" ref={this.yAxisRef} />
+          </g>
+          <g
+            className="context"
+            transform={`translate(${margin2.left}, ${margin2.top})`}
+          >
+            <g className="brush" ref={this.brush} />
+            <g
+              className="axis x--axis"
+              ref={this.x2AxisRef}
+              transform={`translate(0, ${height2})`}
+            />
+          </g>
+          <ListTooltip
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            dataList={this.state.dataList}
           />
-        </g>
-        <rect
-          className="zoom"
-          ref={this.zoom}
-          width={width}
-          height={height}
-          transform={`translate(${margin.left},${margin.top})`}
-        />
-      </svg>
+        </svg>
+      </div>
     );
   }
 
-  _render() {
+  _render(handleMouseOver) {
     const { associations } = this.props;
     const assocs = calculateGlobalPosition(associations);
 
@@ -268,10 +294,13 @@ class ManhattanPlot extends Component {
       .enter()
       .append('rect')
       .attr('class', 'bars')
-      .attr('width', 1)
+      .attr('width', 2)
       .attr('x', d => x(d.position))
       .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+      .attr('height', d => y(0) - y(-Math.log10(d.pval)))
+      .on('mouseover', function(d) {
+        handleMouseOver(this);
+      });
 
     bars.exit().remove();
 
@@ -280,7 +309,7 @@ class ManhattanPlot extends Component {
     bars2
       .enter()
       .append('rect')
-      .attr('width', 1)
+      .attr('width', 2)
       .attr('x', d => x2(d.position))
       .attr('y', d => y2(-Math.log10(d.pval)))
       .attr('height', d => y2(0) - y2(-Math.log10(d.pval)));
