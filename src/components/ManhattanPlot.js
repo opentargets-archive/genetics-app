@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 
 import { chromosomeNames, chromosomesWithCumulativeLengths } from 'ot-charts';
 import { ListTooltip } from 'ot-ui';
+
 const maxPos =
   chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
     .cumulativeLength;
@@ -18,8 +19,8 @@ const calculateGlobalPosition = associations => {
     );
 
     return {
+      ...assoc,
       position: ch.cumulativeLength - ch.length + assoc.position,
-      pval: assoc.pval,
     };
   });
 };
@@ -147,7 +148,7 @@ class ManhattanPlot extends Component {
   state = {
     open: false,
     anchorEl: null,
-    dataList: [{ label: 'label1', value: 'value1' }],
+    anchorData: [],
   };
 
   brushed = () => {
@@ -221,11 +222,19 @@ class ManhattanPlot extends Component {
   }
 
   handleMouseLeave = () => {
-    this.setState({ open: false, anchorEl: null });
+    this.setState({ open: false, anchorEl: null, anchorData: [] });
   };
 
-  handleMouseOver = anchorEl => {
-    this.setState({ anchorEl, open: true });
+  handleMouseOver = (anchorEl, data) => {
+    const anchorData = this.props.tableColumns.map(
+      ({ id, label, renderCell }) => {
+        return {
+          label,
+          value: renderCell ? renderCell(data) : data[id],
+        };
+      }
+    );
+    this.setState({ anchorEl, open: true, anchorData });
   };
 
   render() {
@@ -269,7 +278,7 @@ class ManhattanPlot extends Component {
           <ListTooltip
             open={this.state.open}
             anchorEl={this.state.anchorEl}
-            dataList={this.state.dataList}
+            dataList={this.state.anchorData}
           />
         </svg>
       </div>
@@ -299,7 +308,7 @@ class ManhattanPlot extends Component {
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)))
       .on('mouseover', function(d) {
-        handleMouseOver(this);
+        handleMouseOver(this, d);
       });
 
     bars.exit().remove();

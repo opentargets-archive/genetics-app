@@ -10,7 +10,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { SectionHeading, Button } from 'ot-ui';
 
 import BasePage from './BasePage';
-import ManhattanTable from '../components/ManhattanTable';
+import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
@@ -140,7 +140,10 @@ class StudyPage extends React.Component {
                     },
                   ]}
                 />
-                <ManhattanPlot associations={manhattan.associations} />
+                <ManhattanPlot
+                  associations={manhattan.associations}
+                  tableColumns={tableColumns(studyId)}
+                />
                 <ManhattanTable
                   loading={loading}
                   error={error}
