@@ -26,7 +26,7 @@ const calculateGlobalPosition = associations => {
   });
 };
 
-const getXTicks = () => {
+const getXTicks = x => {
   const [start, end] = x.domain();
   const chRange = findChRange(x.domain());
 
@@ -101,20 +101,7 @@ const width = OUTER_WIDTH - margin.left - margin.right;
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
 const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
 
-const x = d3
-  .scaleLinear()
-  .domain([0, totalLength])
-  .range([0, width]);
-
-const x2 = d3
-  .scaleLinear()
-  .domain([0, totalLength])
-  .range([0, width]);
-
-const y = d3.scaleLinear().range([height, 0]);
-const y2 = d3.scaleLinear().range([height2, 0]);
-
-const x2Ticks = getX2Ticks(x2);
+const x2Ticks = getX2Ticks();
 
 const customXAxis = (g, axis) => {
   g.call(axis);
@@ -130,10 +117,23 @@ class ManhattanPlot extends Component {
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
 
-  xAxis = d3.axisBottom(x).tickFormat(d => getChromosomeName(d));
-  yAxis = d3.axisLeft(y);
+  x = d3
+    .scaleLinear()
+    .domain([0, totalLength])
+    .range([0, width]);
+
+  x2 = d3
+    .scaleLinear()
+    .domain([0, totalLength])
+    .range([0, width]);
+
+  y = d3.scaleLinear().range([height, 0]);
+  y2 = d3.scaleLinear().range([height2, 0]);
+
+  xAxis = d3.axisBottom(this.x).tickFormat(d => getChromosomeName(d));
+  yAxis = d3.axisLeft(this.y);
   x2Axis = d3
-    .axisBottom(x2)
+    .axisBottom(this.x2)
     .tickValues(x2Ticks)
     .tickFormat((d, i) => {
       return chromosomeNames[Math.floor(i / 2)];
@@ -151,23 +151,23 @@ class ManhattanPlot extends Component {
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
-    const selection = d3.event.selection || x2.range();
-    let [start, end] = selection.map(x2.invert, x2);
+    const selection = d3.event.selection || this.x2.range();
+    let [start, end] = selection.map(this.x2.invert, this.x2);
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
-    x.domain([start, end]);
+    this.x.domain([start, end]);
 
     this.setState({ open: false });
 
     d3.select(this.svg.current)
       .select('.focus')
       .selectAll('rect')
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+      .attr('x', d => this.x(d.position))
+      .attr('y', d => this.y(-Math.log10(d.pval)))
+      .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)));
 
     // update ticks of xAxis
-    this.xAxis.tickValues(getXTicks());
+    this.xAxis.tickValues(getXTicks(this.x));
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     d3.select(this.svg.current).call(
@@ -182,10 +182,10 @@ class ManhattanPlot extends Component {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
 
     const { transform } = d3.event;
-    let [start, end] = transform.rescaleX(x2).domain();
+    let [start, end] = transform.rescaleX(this.x2).domain();
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
-    x.domain([start, end]);
+    this.x.domain([start, end]);
 
     this.setState({ open: false });
 
@@ -195,17 +195,17 @@ class ManhattanPlot extends Component {
     svg
       .select('.focus')
       .selectAll('rect')
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)));
+      .attr('x', d => this.x(d.position))
+      .attr('y', d => this.y(-Math.log10(d.pval)))
+      .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)));
 
-    this.xAxis.tickValues(getXTicks());
+    this.xAxis.tickValues(getXTicks(this.x));
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     svg2
       .select('.context')
       .select('.brush')
-      .call(this.brush.move, x.range().map(transform.invertX, transform));
+      .call(this.brush.move, this.x.range().map(transform.invertX, transform));
   };
 
   componentDidMount() {
@@ -291,8 +291,8 @@ class ManhattanPlot extends Component {
     const { associations } = this.props;
     const assocs = calculateGlobalPosition(associations);
 
-    y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
-    y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
+    this.y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
+    this.y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
     const svg = d3.select(this.svg.current);
     const svg2 = d3.select(this.svg2.current);
@@ -307,9 +307,9 @@ class ManhattanPlot extends Component {
       .append('rect')
       .attr('class', 'bars')
       .attr('width', 2)
-      .attr('x', d => x(d.position))
-      .attr('y', d => y(-Math.log10(d.pval)))
-      .attr('height', d => y(0) - y(-Math.log10(d.pval)))
+      .attr('x', d => this.x(d.position))
+      .attr('y', d => this.y(-Math.log10(d.pval)))
+      .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)))
       .style('cursor', 'auto')
       .on('mouseover', function(d) {
         handleMouseOver(this, d);
@@ -323,9 +323,9 @@ class ManhattanPlot extends Component {
       .enter()
       .append('rect')
       .attr('width', 2)
-      .attr('x', d => x2(d.position))
-      .attr('y', d => y2(-Math.log10(d.pval)))
-      .attr('height', d => y2(0) - y2(-Math.log10(d.pval)));
+      .attr('x', d => this.x2(d.position))
+      .attr('y', d => this.y2(-Math.log10(d.pval)))
+      .attr('height', d => this.y2(0) - this.y2(-Math.log10(d.pval)));
 
     bars2.exit().remove();
 
@@ -339,7 +339,7 @@ class ManhattanPlot extends Component {
 
     d3.select(this.brushRef.current)
       .call(this.brush)
-      .call(this.brush.move, x.range());
+      .call(this.brush.move, this.x.range());
 
     d3.select(this.svg.current).call(this.zoom);
   }
