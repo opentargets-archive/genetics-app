@@ -92,7 +92,7 @@ const getChromosomeName = pos => {
 
 const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 430;
-const OUTER_HEIGHT2 = 90;
+const OUTER_HEIGHT2 = 95;
 
 const margin = { top: 20, right: 20, bottom: 30, left: 40 };
 const margin2 = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -139,12 +139,8 @@ class ManhattanPlot extends Component {
       return chromosomeNames[Math.floor(i / 2)];
     });
 
-  brush = d3.brushX().extent([[0, 0], [width, height2]]);
-  zoom = d3
-    .zoom()
-    .scaleExtent([1, Infinity])
-    .translateExtent([[0, 0], [width, height]])
-    .extent([[0, 0], [width, height]]);
+  brush = d3.brushX();
+  zoom = d3.zoom().scaleExtent([1, Infinity]);
 
   state = {
     open: false,
@@ -184,6 +180,7 @@ class ManhattanPlot extends Component {
 
   zoomed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
+
     const { transform } = d3.event;
     let [start, end] = transform.rescaleX(x2).domain();
     start = start < 0 ? 0 : start;
@@ -333,6 +330,12 @@ class ManhattanPlot extends Component {
     bars2.exit().remove();
 
     d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
+
+    this.brush.extent([[0, 0], [width, height2]]);
+
+    this.zoom
+      .translateExtent([[0, 0], [width, height]])
+      .extent([[0, 0], [width, height]]);
 
     d3.select(this.brushRef.current)
       .call(this.brush)
