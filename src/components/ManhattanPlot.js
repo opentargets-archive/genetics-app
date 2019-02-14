@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import { withContentRect } from 'react-measure';
 
 import { chromosomeNames, chromosomesWithCumulativeLengths } from 'ot-charts';
 import { ListTooltip } from 'ot-ui';
@@ -90,14 +91,15 @@ const getChromosomeName = pos => {
 };
 
 const OUTER_WIDTH = 1100;
-const OUTER_HEIGHT = 500;
+const OUTER_HEIGHT = 430;
+const OUTER_HEIGHT2 = 90;
 
-const margin = { top: 20, right: 20, bottom: 110, left: 40 };
-const margin2 = { top: 430, right: 20, bottom: 30, left: 40 };
+const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+const margin2 = { top: 20, right: 20, bottom: 30, left: 40 };
 
 const width = OUTER_WIDTH - margin.left - margin.right;
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
-const height2 = OUTER_HEIGHT - margin2.top - margin2.bottom;
+const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
 
 const x = d3
   .scaleLinear()
@@ -130,6 +132,7 @@ const customXAxis = (g, axis) => {
 
 class ManhattanPlot extends Component {
   svg = React.createRef();
+  svg2 = React.createRef();
   brush = React.createRef();
   zoom = React.createRef();
   xAxisRef = React.createRef();
@@ -173,7 +176,7 @@ class ManhattanPlot extends Component {
     this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
-    d3.select(this.zoom.current).call(
+    d3.select(this.svg.current).call(
       zoom.transform,
       d3.zoomIdentity
         .scale(width / (selection[1] - selection[0]))
@@ -192,6 +195,7 @@ class ManhattanPlot extends Component {
     this.setState({ open: false });
 
     const svg = d3.select(this.svg.current);
+    const svg2 = d3.select(this.svg2.current);
 
     svg
       .select('.focus')
@@ -203,7 +207,7 @@ class ManhattanPlot extends Component {
     this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
-    svg
+    svg2
       .select('.context')
       .select('.brush')
       .call(brush.move, x.range().map(transform.invertX, transform));
@@ -238,21 +242,21 @@ class ManhattanPlot extends Component {
   };
 
   render() {
+    const { measureRef } = this.props;
+
     return (
-      <div onMouseLeave={this.handleMouseLeave}>
-        <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
+      <div ref={measureRef} onMouseLeave={this.handleMouseLeave}>
+        <svg
+          className="zoom"
+          ref={this.svg}
+          width={OUTER_WIDTH}
+          height={OUTER_HEIGHT}
+        >
           <defs>
             <clipPath id="clip">
               <rect width={width} height={height} />
             </clipPath>
           </defs>
-          <rect
-            className="zoom"
-            ref={this.zoom}
-            width={width}
-            height={height}
-            transform={`translate(${margin.left},${margin.top})`}
-          />
           <g
             className="focus"
             transform={`translate(${margin.left}, ${margin.top})`}
@@ -261,9 +265,17 @@ class ManhattanPlot extends Component {
               className="axis x--axis"
               ref={this.xAxisRef}
               transform={`translate(0, ${height})`}
+              fontSize="12"
             />
             <g className="axis y--axis" ref={this.yAxisRef} />
           </g>
+          <ListTooltip
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            dataList={this.state.anchorData}
+          />
+        </svg>
+        <svg ref={this.svg2} width={OUTER_WIDTH} height={OUTER_HEIGHT2}>
           <g
             className="context"
             transform={`translate(${margin2.left}, ${margin2.top})`}
@@ -275,11 +287,6 @@ class ManhattanPlot extends Component {
               transform={`translate(0, ${height2})`}
             />
           </g>
-          <ListTooltip
-            open={this.state.open}
-            anchorEl={this.state.anchorEl}
-            dataList={this.state.anchorData}
-          />
         </svg>
       </div>
     );
@@ -293,8 +300,9 @@ class ManhattanPlot extends Component {
     y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
     const svg = d3.select(this.svg.current);
+    const svg2 = d3.select(this.svg2.current);
     const focus = svg.select('.focus');
-    const context = svg.select('.context');
+    const context = svg2.select('.context');
 
     const bars = focus.selectAll('rect').data(assocs);
     const bars2 = context.selectAll('rect').data(assocs);
@@ -307,6 +315,7 @@ class ManhattanPlot extends Component {
       .attr('x', d => x(d.position))
       .attr('y', d => y(-Math.log10(d.pval)))
       .attr('height', d => y(0) - y(-Math.log10(d.pval)))
+      .style('cursor', 'auto')
       .on('mouseover', function(d) {
         handleMouseOver(this, d);
       });
@@ -331,8 +340,8 @@ class ManhattanPlot extends Component {
       .call(brush)
       .call(brush.move, x.range());
 
-    d3.select(this.zoom.current).call(zoom);
+    d3.select(this.svg.current).call(zoom);
   }
 }
 
-export default ManhattanPlot;
+export default withContentRect('bounds')(ManhattanPlot);
