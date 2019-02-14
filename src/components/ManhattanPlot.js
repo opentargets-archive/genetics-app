@@ -111,18 +111,10 @@ const x2 = d3
   .domain([0, totalLength])
   .range([0, width]);
 
-const x2Ticks = getX2Ticks(x2);
-
 const y = d3.scaleLinear().range([height, 0]);
 const y2 = d3.scaleLinear().range([height2, 0]);
 
-const brush = d3.brushX().extent([[0, 0], [width, height2]]);
-
-const zoom = d3
-  .zoom()
-  .scaleExtent([1, Infinity])
-  .translateExtent([[0, 0], [width, height]])
-  .extent([[0, 0], [width, height]]);
+const x2Ticks = getX2Ticks(x2);
 
 const customXAxis = (g, axis) => {
   g.call(axis);
@@ -133,8 +125,7 @@ const customXAxis = (g, axis) => {
 class ManhattanPlot extends Component {
   svg = React.createRef();
   svg2 = React.createRef();
-  brush = React.createRef();
-  zoom = React.createRef();
+  brushRef = React.createRef();
   xAxisRef = React.createRef();
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
@@ -147,6 +138,13 @@ class ManhattanPlot extends Component {
     .tickFormat((d, i) => {
       return chromosomeNames[Math.floor(i / 2)];
     });
+
+  brush = d3.brushX().extent([[0, 0], [width, height2]]);
+  zoom = d3
+    .zoom()
+    .scaleExtent([1, Infinity])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]]);
 
   state = {
     open: false,
@@ -177,7 +175,7 @@ class ManhattanPlot extends Component {
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     d3.select(this.svg.current).call(
-      zoom.transform,
+      this.zoom.transform,
       d3.zoomIdentity
         .scale(width / (selection[1] - selection[0]))
         .translate(-selection[0], 0)
@@ -210,12 +208,12 @@ class ManhattanPlot extends Component {
     svg2
       .select('.context')
       .select('.brush')
-      .call(brush.move, x.range().map(transform.invertX, transform));
+      .call(this.brush.move, x.range().map(transform.invertX, transform));
   };
 
   componentDidMount() {
-    brush.on('brush end', this.brushed);
-    zoom.on('zoom', this.zoomed);
+    this.brush.on('brush end', this.brushed);
+    this.zoom.on('zoom', this.zoomed);
     this._render(this.handleMouseOver);
   }
 
@@ -280,7 +278,7 @@ class ManhattanPlot extends Component {
             className="context"
             transform={`translate(${margin2.left}, ${margin2.top})`}
           >
-            <g className="brush" ref={this.brush} />
+            <g className="brush" ref={this.brushRef} />
             <g
               className="axis x--axis"
               ref={this.x2AxisRef}
@@ -336,11 +334,11 @@ class ManhattanPlot extends Component {
 
     d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
 
-    d3.select(this.brush.current)
-      .call(brush)
-      .call(brush.move, x.range());
+    d3.select(this.brushRef.current)
+      .call(this.brush)
+      .call(this.brush.move, x.range());
 
-    d3.select(this.svg.current).call(zoom);
+    d3.select(this.svg.current).call(this.zoom);
   }
 }
 
