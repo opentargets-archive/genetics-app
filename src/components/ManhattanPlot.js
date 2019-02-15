@@ -90,14 +90,14 @@ const getChromosomeName = pos => {
   return chromosome.name;
 };
 
-const OUTER_WIDTH = 1100;
+// const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 430;
 const OUTER_HEIGHT2 = 95;
 
 const margin = { top: 20, right: 20, bottom: 30, left: 40 };
 const margin2 = { top: 20, right: 20, bottom: 30, left: 40 };
 
-const width = OUTER_WIDTH - margin.left - margin.right;
+// const width = OUTER_WIDTH - margin.left - margin.right;
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
 const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
 
@@ -112,21 +112,14 @@ const customXAxis = (g, axis) => {
 class ManhattanPlot extends Component {
   svg = React.createRef();
   svg2 = React.createRef();
+  clip = React.createRef();
   brushRef = React.createRef();
   xAxisRef = React.createRef();
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
 
-  x = d3
-    .scaleLinear()
-    .domain([0, totalLength])
-    .range([0, width]);
-
-  x2 = d3
-    .scaleLinear()
-    .domain([0, totalLength])
-    .range([0, width]);
-
+  x = d3.scaleLinear().domain([0, totalLength]);
+  x2 = d3.scaleLinear().domain([0, totalLength]);
   y = d3.scaleLinear().range([height, 0]);
   y2 = d3.scaleLinear().range([height2, 0]);
 
@@ -151,12 +144,14 @@ class ManhattanPlot extends Component {
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
+    const width = this._outerWidth() - margin.left - margin.right;
     const selection = d3.event.selection || this.x2.range();
     let [start, end] = selection.map(this.x2.invert, this.x2);
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
     this.x.domain([start, end]);
 
+    // close tooltip when brushing
     this.setState({ open: false });
 
     d3.select(this.svg.current)
@@ -187,6 +182,7 @@ class ManhattanPlot extends Component {
     end = end > maxPos ? maxPos : end;
     this.x.domain([start, end]);
 
+    // close tooltip when zooming
     this.setState({ open: false });
 
     const svg = d3.select(this.svg.current);
@@ -215,7 +211,10 @@ class ManhattanPlot extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.associations !== prevProps.associations) {
+    if (
+      this.props.associations !== prevProps.associations ||
+      this.props.contentRect.bounds.width !== prevProps.contentRect.bounds.width
+    ) {
       this._render(this.handleMouseOver);
     }
   }
@@ -238,18 +237,19 @@ class ManhattanPlot extends Component {
 
   render() {
     const { measureRef } = this.props;
+    const outerWidth = this._outerWidth();
 
     return (
       <div ref={measureRef} onMouseLeave={this.handleMouseLeave}>
         <svg
           className="zoom"
           ref={this.svg}
-          width={OUTER_WIDTH}
+          width={outerWidth}
           height={OUTER_HEIGHT}
         >
           <defs>
             <clipPath id="clip">
-              <rect width={width} height={height} />
+              <rect ref={this.clip} height={height} />
             </clipPath>
           </defs>
           <g
@@ -270,7 +270,7 @@ class ManhattanPlot extends Component {
             dataList={this.state.anchorData}
           />
         </svg>
-        <svg ref={this.svg2} width={OUTER_WIDTH} height={OUTER_HEIGHT2}>
+        <svg ref={this.svg2} width={outerWidth} height={OUTER_HEIGHT2}>
           <g
             className="context"
             transform={`translate(${margin2.left}, ${margin2.top})`}
@@ -287,10 +287,22 @@ class ManhattanPlot extends Component {
     );
   }
 
+  _outerWidth() {
+    return this.props.contentRect.bounds.width;
+  }
+
   _render(handleMouseOver) {
     const { associations } = this.props;
     const assocs = calculateGlobalPosition(associations);
 
+    const outerWidth = this._outerWidth();
+
+    if (outerWidth === undefined) return;
+
+    const width = outerWidth - margin.left - margin.right;
+
+    this.x.range([0, width]);
+    this.x2.range([0, width]);
     this.y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
     this.y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
@@ -298,6 +310,7 @@ class ManhattanPlot extends Component {
     const svg2 = d3.select(this.svg2.current);
     const focus = svg.select('.focus');
     const context = svg2.select('.context');
+    d3.select(this.clip.current).attr('width', width);
 
     const bars = focus.selectAll('rect').data(assocs);
     const bars2 = context.selectAll('rect').data(assocs);
@@ -323,6 +336,7 @@ class ManhattanPlot extends Component {
       .enter()
       .append('rect')
       .attr('width', 2)
+      .merge(bars2)
       .attr('x', d => this.x2(d.position))
       .attr('y', d => this.y2(-Math.log10(d.pval)))
       .attr('height', d => this.y2(0) - this.y2(-Math.log10(d.pval)));
