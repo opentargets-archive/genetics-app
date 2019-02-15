@@ -5,6 +5,8 @@ import { withContentRect } from 'react-measure';
 import { chromosomeNames, chromosomesWithCumulativeLengths } from 'ot-charts';
 import { ListTooltip } from 'ot-ui';
 
+const SIGNIFICANCE = -Math.log10(5e-8);
+
 const maxPos =
   chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
     .cumulativeLength;
@@ -113,6 +115,7 @@ class ManhattanPlot extends Component {
   svg = React.createRef();
   svg2 = React.createRef();
   clip = React.createRef();
+  sigLine = React.createRef();
   brushRef = React.createRef();
   xAxisRef = React.createRef();
   yAxisRef = React.createRef();
@@ -256,6 +259,7 @@ class ManhattanPlot extends Component {
             className="focus"
             transform={`translate(${margin.left}, ${margin.top})`}
           >
+            <line ref={this.sigLine} x1="0" />
             <g
               className="axis x--axis"
               ref={this.xAxisRef}
@@ -311,6 +315,11 @@ class ManhattanPlot extends Component {
     const focus = svg.select('.focus');
     const context = svg2.select('.context');
     d3.select(this.clip.current).attr('width', width);
+    d3.select(this.sigLine.current)
+      .attr('y1', this.y(SIGNIFICANCE))
+      .attr('x2', width)
+      .attr('y2', this.y(SIGNIFICANCE))
+      .attr('stroke', 'red');
 
     const bars = focus.selectAll('rect').data(assocs);
     const bars2 = context.selectAll('rect').data(assocs);
