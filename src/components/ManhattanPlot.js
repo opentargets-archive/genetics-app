@@ -90,13 +90,14 @@ const getChromosomeName = pos => {
 
 const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 500;
+const OUTER_HEIGHT2 = 95;
 
-const margin = { top: 20, right: 20, bottom: 110, left: 40 };
-const margin2 = { top: 430, right: 20, bottom: 30, left: 40 };
+const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+const margin2 = { top: 20, right: 20, bottom: 30, left: 40 };
 
 const width = OUTER_WIDTH - margin.left - margin.right;
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
-const height2 = OUTER_HEIGHT - margin2.top - margin2.bottom;
+const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
 
 const x = d3
   .scaleLinear()
@@ -135,8 +136,8 @@ class ManhattanPlot extends Component {
   state = {};
 
   svg = React.createRef();
+  svg2 = React.createRef();
   brush = React.createRef();
-  zoom = React.createRef();
   xAxisRef = React.createRef();
   yAxisRef = React.createRef();
   x2AxisRef = React.createRef();
@@ -177,7 +178,7 @@ class ManhattanPlot extends Component {
   }
 
   componentDidMount() {
-    d3.select(this.zoom.current).call(zoom);
+    d3.select(this.svg.current).call(zoom);
     d3.select(this.brush.current)
       .call(brush)
       .call(brush.move, x.range());
@@ -194,48 +195,45 @@ class ManhattanPlot extends Component {
   render() {
     const { bars, bars2 } = this.state;
     return (
-      <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
-        <defs>
-          <clipPath id="clip">
-            <rect width={width} height={height} />
-          </clipPath>
-        </defs>
-        <g
-          className="focus"
-          transform={`translate(${margin.left}, ${margin.top})`}
-        >
-          {bars.map((bar, i) => (
-            <Bar key={i} {...bar} />
-          ))}
+      <div>
+        <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
+          <defs>
+            <clipPath id="clip">
+              <rect width={width} height={height} />
+            </clipPath>
+          </defs>
           <g
-            className="axis x--axis"
-            ref={this.xAxisRef}
-            transform={`translate(0, ${height})`}
-          />
-          <g className="axis y--axis" ref={this.yAxisRef} />
-        </g>
-        <g
-          className="context"
-          transform={`translate(${margin2.left}, ${margin2.top})`}
-        >
-          {bars2.map((bar, i) => (
-            <Bar key={i} {...bar} />
-          ))}
-          <g className="brush" ref={this.brush} />
+            className="focus"
+            transform={`translate(${margin.left}, ${margin.top})`}
+          >
+            {bars.map((bar, i) => (
+              <Bar key={i} {...bar} />
+            ))}
+            <g
+              className="axis x--axis"
+              ref={this.xAxisRef}
+              transform={`translate(0, ${height})`}
+            />
+            <g className="axis y--axis" ref={this.yAxisRef} />
+          </g>
+        </svg>
+        <svg ref={this.svg2} width={OUTER_WIDTH} height={OUTER_HEIGHT2}>
           <g
-            className="axis x--axis"
-            ref={this.x2AxisRef}
-            transform={`translate(0, ${height2})`}
-          />
-        </g>
-        <rect
-          className="zoom"
-          ref={this.zoom}
-          width={width}
-          height={height}
-          transform={`translate(${margin.left},${margin.top})`}
-        />
-      </svg>
+            className="context"
+            transform={`translate(${margin2.left}, ${margin2.top})`}
+          >
+            {bars2.map((bar, i) => (
+              <Bar key={i} {...bar} />
+            ))}
+            <g className="brush" ref={this.brush} />
+            <g
+              className="axis x--axis"
+              ref={this.x2AxisRef}
+              transform={`translate(0, ${height2})`}
+            />
+          </g>
+        </svg>
+      </div>
     );
   }
 
@@ -269,7 +267,7 @@ class ManhattanPlot extends Component {
     this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
-    d3.select(this.zoom.current).call(
+    d3.select(this.svg.current).call(
       zoom.transform,
       d3.zoomIdentity
         .scale(width / (selection[1] - selection[0]))
@@ -287,8 +285,6 @@ class ManhattanPlot extends Component {
     end = end > maxPos ? maxPos : end;
     x.domain([start, end]);
 
-    const svg = d3.select(this.svg.current);
-
     const bars = assocs.map(d => {
       return {
         x: x(d.position),
@@ -302,7 +298,7 @@ class ManhattanPlot extends Component {
     this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
-    svg
+    d3.select(this.svg2.current)
       .select('.context')
       .select('.brush')
       .call(brush.move, x.range().map(transform.invertX, transform));
