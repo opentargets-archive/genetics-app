@@ -238,6 +238,7 @@ class ManhattanPlot extends Component {
   }
 
   _render() {
+    this.xAxis.tickValues(getXTicks());
     d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
     d3.select(this.yAxisRef.current).call(this.yAxis);
     d3.select(this.x2AxisRef.current).call(customXAxis, this.x2Axis);
@@ -262,10 +263,6 @@ class ManhattanPlot extends Component {
     });
 
     this.setState({ bars });
-
-    // update ticks of xAxis
-    this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     d3.select(this.svg.current).call(
       zoom.transform,
@@ -294,9 +291,6 @@ class ManhattanPlot extends Component {
     });
 
     this.setState({ bars });
-
-    this.xAxis.tickValues(getXTicks());
-    d3.select(this.xAxisRef.current).call(customXAxis, this.xAxis);
 
     d3.select(this.svg2.current)
       .select('.context')
