@@ -11,19 +11,6 @@ const totalLength = chromosomesWithCumulativeLengths.reduce((acc, ch) => {
   return acc + ch.length;
 }, 0);
 
-const calculateGlobalPosition = associations => {
-  return associations.map(assoc => {
-    const ch = chromosomesWithCumulativeLengths.find(
-      ch => ch.name === assoc.chromosome
-    );
-
-    return {
-      position: ch.cumulativeLength - ch.length + assoc.position,
-      pval: assoc.pval,
-    };
-  });
-};
-
 const getXTicks = () => {
   const [start, end] = x.domain();
   const chRange = findChRange(x.domain());
@@ -153,14 +140,14 @@ class ManhattanPlot extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const { associations } = props;
-    const assocs = calculateGlobalPosition(associations);
+    const assocs = associations;
 
     y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
     y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
     const bars = assocs.map(d => {
       return {
-        x: x(d.position),
+        x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
       };
@@ -168,13 +155,17 @@ class ManhattanPlot extends Component {
 
     const bars2 = assocs.map(d => {
       return {
-        x: x2(d.position),
+        x: x2(d.globalPosition),
         y: y2(-Math.log10(d.pval)),
         height: y2(0) - y2(-Math.log10(d.pval)),
       };
     });
 
     return { assocs, bars, bars2 };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.associations !== nextProps.associations;
   }
 
   componentDidMount() {
@@ -194,6 +185,7 @@ class ManhattanPlot extends Component {
 
   render() {
     const { bars, bars2 } = this.state;
+
     return (
       <div>
         <svg ref={this.svg} width={OUTER_WIDTH} height={OUTER_HEIGHT}>
@@ -252,11 +244,12 @@ class ManhattanPlot extends Component {
     let [start, end] = selection.map(x2.invert, x2);
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
+    this.props.onZoom(start, end);
     x.domain([start, end]);
 
     const bars = assocs.map(d => {
       return {
-        x: x(d.position),
+        x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
       };
@@ -280,11 +273,12 @@ class ManhattanPlot extends Component {
     let [start, end] = transform.rescaleX(x2).domain();
     start = start < 0 ? 0 : start;
     end = end > maxPos ? maxPos : end;
+    this.props.onZoom(start, end);
     x.domain([start, end]);
 
     const bars = assocs.map(d => {
       return {
-        x: x(d.position),
+        x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
       };

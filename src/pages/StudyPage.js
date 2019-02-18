@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { chromosomesWithCumulativeLengths } from 'ot-charts';
 import { SectionHeading, Button } from 'ot-ui';
 
 import BasePage from './BasePage';
@@ -19,6 +20,10 @@ import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 import ManhattanPlot from '../components/ManhattanPlot';
 
 const SIGNIFICANCE = 5e-8;
+
+const maxPos =
+  chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
+    .cumulativeLength;
 
 function hasAssociations(data) {
   return (
@@ -33,12 +38,18 @@ function transformAssociations(data) {
   return {
     associations: data.manhattan.associations.map(d => {
       const { variant, ...rest } = d;
+
+      const ch = chromosomesWithCumulativeLengths.find(
+        ch => ch.name === variant.chromosome
+      );
+
       return {
         ...rest,
         indexVariantId: variant.id,
         indexVariantRsId: variant.rsId,
         chromosome: variant.chromosome,
         position: variant.position,
+        globalPosition: ch.cumulativeLength - ch.length + variant.position,
       };
     }),
   };
@@ -65,6 +76,15 @@ const styles = theme => ({
 });
 
 class StudyPage extends React.Component {
+  state = {
+    start: 0,
+    end: maxPos,
+  };
+
+  handleZoom = (start, end) => {
+    this.setState({ start, end });
+  };
+
   render() {
     const { classes, match } = this.props;
     const { studyId } = match.params;
@@ -140,7 +160,10 @@ class StudyPage extends React.Component {
                     },
                   ]}
                 />
-                <ManhattanPlot associations={manhattan.associations} />
+                <ManhattanPlot
+                  associations={manhattan.associations}
+                  onZoom={this.handleZoom}
+                />
                 <ManhattanTable
                   loading={loading}
                   error={error}
