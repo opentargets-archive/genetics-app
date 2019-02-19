@@ -15,20 +15,6 @@ const totalLength = chromosomesWithCumulativeLengths.reduce((acc, ch) => {
   return acc + ch.length;
 }, 0);
 
-/* const calculateGlobalPosition = associations => {
-  return associations.map(assoc => {
-    const ch = chromosomesWithCumulativeLengths.find(
-      ch => ch.name === assoc.chromosome
-    );
-
-    return {
-      ...assoc,
-      position: ch.cumulativeLength - ch.length + assoc.position,
-    };
-  });
-};
-*/
-
 const getXTicks = x => {
   const [start, end] = x.domain();
   const chRange = findChRange(x.domain());
