@@ -118,67 +118,63 @@ class StudyPage extends React.Component {
         <Helmet>
           <title>{studyId}</title>
         </Helmet>
-
-        <Fragment>
-          <Paper className={classes.section}>
-            <Typography variant="h4" color="textSecondary">
-              {isStudyWithInfo ? data.studyInfo.traitReported : null}
-            </Typography>
-            <Grid container justify="space-between">
-              <Grid item>
-                {isStudyWithInfo ? (
-                  <Typography variant="subtitle1">
-                    <StudyInfo studyInfo={data.studyInfo} />
-                  </Typography>
-                ) : null}
-              </Grid>
-              <Grid item>
-                {isStudyWithInfo ? (
-                  <Typography variant="subtitle1">
-                    <StudySize studyInfo={data.studyInfo} />
-                  </Typography>
-                ) : null}
-              </Grid>
+        <Paper className={classes.section}>
+          <Typography variant="h4" color="textSecondary">
+            {isStudyWithInfo ? data.studyInfo.traitReported : null}
+          </Typography>
+          <Grid container justify="space-between">
+            <Grid item>
+              {isStudyWithInfo ? (
+                <Typography variant="subtitle1">
+                  <StudyInfo studyInfo={data.studyInfo} />
+                </Typography>
+              ) : null}
             </Grid>
-            <Link
-              to={`/study-comparison/${studyId}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Button gradient>Compare to related studies</Button>
-            </Link>
-          </Paper>
-
-          <SectionHeading
-            heading="Independently-associated loci"
-            subheading={
-              !loading
-                ? `Found ${significantLociCount} loci with genome-wide
+            <Grid item>
+              {isStudyWithInfo ? (
+                <Typography variant="subtitle1">
+                  <StudySize studyInfo={data.studyInfo} />
+                </Typography>
+              ) : null}
+            </Grid>
+          </Grid>
+          <Link
+            to={`/study-comparison/${studyId}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Button gradient>Compare to related studies</Button>
+          </Link>
+        </Paper>
+        <SectionHeading
+          heading="Independently-associated loci"
+          subheading={
+            !loading
+              ? `Found ${significantLociCount} loci with genome-wide
                     significance (p-value < 5e-8) out of ${lociCount}`
-                : null
-            }
-            entities={[
-              {
-                type: 'study',
-                fixed: true,
-              },
-              {
-                type: 'indexVariant',
-                fixed: false,
-              },
-            ]}
-          />
-          <ManhattanPlot
-            associations={associations}
-            tableColumns={tableColumns(studyId)}
-          />
-          <ManhattanTable
-            loading={loading}
-            error={error}
-            data={associations}
-            studyId={studyId}
-            filenameStem={`${studyId}-independently-associated-loci`}
-          />
-        </Fragment>
+              : null
+          }
+          entities={[
+            {
+              type: 'study',
+              fixed: true,
+            },
+            {
+              type: 'indexVariant',
+              fixed: false,
+            },
+          ]}
+        />
+        <ManhattanPlot
+          associations={associations}
+          tableColumns={tableColumns(studyId)}
+        />
+        <ManhattanTable
+          loading={loading}
+          error={error}
+          data={associations}
+          studyId={studyId}
+          filenameStem={`${studyId}-independently-associated-loci`}
+        />
       </BasePage>
     );
   }
