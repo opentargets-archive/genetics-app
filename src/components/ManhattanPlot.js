@@ -140,12 +140,11 @@ class ManhattanPlot extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const { associations } = props;
-    const assocs = associations;
 
-    y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
-    y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
+    y.domain([0, d3.max(associations, d => -Math.log10(d.pval))]);
+    y2.domain([0, d3.max(associations, d => -Math.log10(d.pval))]);
 
-    const bars = assocs.map(d => {
+    const bars = associations.map(d => {
       return {
         indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
@@ -154,7 +153,7 @@ class ManhattanPlot extends Component {
       };
     });
 
-    const bars2 = assocs.map(d => {
+    const bars2 = associations.map(d => {
       return {
         indexVariantId: d.indexVariantId,
         x: x2(d.globalPosition),
@@ -163,7 +162,7 @@ class ManhattanPlot extends Component {
       };
     });
 
-    return { assocs, bars, bars2 };
+    return { associations, bars, bars2 };
   }
 
   shouldComponentUpdate(nextProps) {
@@ -241,7 +240,7 @@ class ManhattanPlot extends Component {
   brushed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'zoom') return;
 
-    const { assocs } = this.state;
+    const { associations } = this.state;
     const selection = d3.event.selection || x2.range();
     let [start, end] = selection.map(x2.invert, x2);
     start = start < 0 ? 0 : start;
@@ -249,7 +248,7 @@ class ManhattanPlot extends Component {
     this.props.onZoom(start, end);
     x.domain([start, end]);
 
-    const bars = assocs.map(d => {
+    const bars = associations.map(d => {
       return {
         indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
@@ -271,7 +270,7 @@ class ManhattanPlot extends Component {
   zoomed = () => {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === 'brush') return;
 
-    const { assocs } = this.state;
+    const { associations } = this.state;
     const { transform } = d3.event;
     let [start, end] = transform.rescaleX(x2).domain();
     start = start < 0 ? 0 : start;
@@ -279,7 +278,7 @@ class ManhattanPlot extends Component {
     this.props.onZoom(start, end);
     x.domain([start, end]);
 
-    const bars = assocs.map(d => {
+    const bars = associations.map(d => {
       return {
         indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
