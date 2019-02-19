@@ -307,7 +307,7 @@ class ManhattanPlot extends Component {
 
     this.x.range([0, width]);
     this.x2.range([0, width]);
-    this.y.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
+    this.y.domain([0, d3.max(assocs, d => -Math.log10(d.pval)) || 0]);
     this.y2.domain([0, d3.max(assocs, d => -Math.log10(d.pval))]);
 
     const svg = d3.select(this.svg.current);
