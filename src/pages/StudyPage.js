@@ -87,6 +87,7 @@ class StudyPage extends React.Component {
 
   render() {
     const { classes, match } = this.props;
+    const { start, end } = this.state;
     const { studyId } = match.params;
 
     return (
@@ -167,7 +168,11 @@ class StudyPage extends React.Component {
                 <ManhattanTable
                   loading={loading}
                   error={error}
-                  data={manhattan.associations}
+                  data={manhattan.associations.filter(
+                    assoc =>
+                      start <= assoc.globalPosition &&
+                      assoc.globalPosition <= end
+                  )}
                   studyId={studyId}
                   filenameStem={`${studyId}-independently-associated-loci`}
                 />
