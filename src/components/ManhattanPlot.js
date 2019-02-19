@@ -200,6 +200,11 @@ class ManhattanPlot extends Component {
     this._render(this.handleMouseOver);
   }
 
+  componentWillUnmount() {
+    this.brush.on('brush end', null);
+    this.zoom.on('zoom', null);
+  }
+
   componentDidUpdate(prevProps) {
     if (
       this.props.associations !== prevProps.associations ||
