@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import { chromosomesWithCumulativeLengths } from 'ot-charts';
 import { SectionHeading, Button } from 'ot-ui';
 
 import BasePage from './BasePage';
@@ -33,12 +34,17 @@ function transformAssociations(data) {
   return {
     associations: data.manhattan.associations.map(d => {
       const { variant, ...rest } = d;
+      const ch = chromosomesWithCumulativeLengths.find(
+        ch => ch.name === variant.chromosome
+      );
+
       return {
         ...rest,
         indexVariantId: variant.id,
         indexVariantRsId: variant.rsId,
         chromosome: variant.chromosome,
         position: variant.position,
+        globalPosition: ch.cumulativeLength - ch.length + variant.position,
       };
     }),
   };

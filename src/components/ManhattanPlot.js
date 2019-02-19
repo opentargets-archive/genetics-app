@@ -15,7 +15,7 @@ const totalLength = chromosomesWithCumulativeLengths.reduce((acc, ch) => {
   return acc + ch.length;
 }, 0);
 
-const calculateGlobalPosition = associations => {
+/* const calculateGlobalPosition = associations => {
   return associations.map(assoc => {
     const ch = chromosomesWithCumulativeLengths.find(
       ch => ch.name === assoc.chromosome
@@ -27,6 +27,7 @@ const calculateGlobalPosition = associations => {
     };
   });
 };
+*/
 
 const getXTicks = x => {
   const [start, end] = x.domain();
@@ -160,7 +161,7 @@ class ManhattanPlot extends Component {
     d3.select(this.svg.current)
       .select('.focus')
       .selectAll('rect')
-      .attr('x', d => this.x(d.position))
+      .attr('x', d => this.x(d.globalPosition))
       .attr('y', d => this.y(-Math.log10(d.pval)))
       .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)));
 
@@ -194,7 +195,7 @@ class ManhattanPlot extends Component {
     svg
       .select('.focus')
       .selectAll('rect')
-      .attr('x', d => this.x(d.position))
+      .attr('x', d => this.x(d.globalPosition))
       .attr('y', d => this.y(-Math.log10(d.pval)))
       .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)));
 
@@ -297,7 +298,7 @@ class ManhattanPlot extends Component {
 
   _render(handleMouseOver) {
     const { associations } = this.props;
-    const assocs = calculateGlobalPosition(associations);
+    const assocs = associations;
 
     const outerWidth = this._outerWidth();
 
@@ -329,7 +330,7 @@ class ManhattanPlot extends Component {
       .append('rect')
       .attr('class', 'bars')
       .attr('width', 2)
-      .attr('x', d => this.x(d.position))
+      .attr('x', d => this.x(d.globalPosition))
       .attr('y', d => this.y(-Math.log10(d.pval)))
       .attr('height', d => this.y(0) - this.y(-Math.log10(d.pval)))
       .style('cursor', 'auto')
@@ -346,7 +347,7 @@ class ManhattanPlot extends Component {
       .append('rect')
       .attr('width', 2)
       .merge(bars2)
-      .attr('x', d => this.x2(d.position))
+      .attr('x', d => this.x2(d.globalPosition))
       .attr('y', d => this.y2(-Math.log10(d.pval)))
       .attr('height', d => this.y2(0) - this.y2(-Math.log10(d.pval)));
 
