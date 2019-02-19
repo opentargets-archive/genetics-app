@@ -79,7 +79,6 @@ const getChromosomeName = pos => {
   return chromosome.name;
 };
 
-// const OUTER_WIDTH = 1100;
 const OUTER_HEIGHT = 430;
 const OUTER_HEIGHT2 = 95;
 
@@ -161,6 +160,8 @@ class ManhattanPlot extends Component {
         .scale(width / (selection[1] - selection[0]))
         .translate(-selection[0], 0)
     );
+
+    this.props.onZoom(start, end);
   };
 
   zoomed = () => {
@@ -192,6 +193,8 @@ class ManhattanPlot extends Component {
       .select('.context')
       .select('.brush')
       .call(this.brush.move, this.x.range().map(transform.invertX, transform));
+
+    this.props.onZoom(start, end);
   };
 
   componentDidMount() {
@@ -219,7 +222,8 @@ class ManhattanPlot extends Component {
   };
 
   handleMouseOver = (anchorEl, data) => {
-    const anchorData = this.props.tableColumns.map(
+    const { tableColumns, studyId } = this.props;
+    const anchorData = tableColumns(studyId).map(
       ({ id, label, renderCell }) => {
         return {
           label,

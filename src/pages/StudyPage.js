@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { withApollo } from 'react-apollo';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
@@ -20,6 +20,9 @@ import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 import ManhattanPlot from '../components/ManhattanPlot';
 
 const SIGNIFICANCE = 5e-8;
+const maxPos =
+  chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
+    .cumulativeLength;
 
 function hasAssociations(data) {
   return (
@@ -72,6 +75,8 @@ class StudyPage extends React.Component {
   state = {
     loading: true,
     associations: [],
+    start: 0,
+    end: maxPos,
   };
 
   componentDidMount() {
@@ -99,6 +104,10 @@ class StudyPage extends React.Component {
       });
   }
 
+  handleZoom = (start, end) => {
+    this.setState({ start, end });
+  };
+
   render() {
     const { classes, match } = this.props;
     const { studyId } = match.params;
@@ -110,6 +119,8 @@ class StudyPage extends React.Component {
       data,
       significantLociCount,
       lociCount,
+      start,
+      end,
     } = this.state;
 
     return (
@@ -166,12 +177,16 @@ class StudyPage extends React.Component {
         />
         <ManhattanPlot
           associations={associations}
-          tableColumns={tableColumns(studyId)}
+          tableColumns={tableColumns}
+          studyId={studyId}
+          onZoom={this.handleZoom}
         />
         <ManhattanTable
           loading={loading}
           error={error}
-          data={associations}
+          data={associations.filter(assoc => {
+            return start <= assoc.globalPosition && assoc.globalPosition <= end;
+          })}
           studyId={studyId}
           filenameStem={`${studyId}-independently-associated-loci`}
         />
