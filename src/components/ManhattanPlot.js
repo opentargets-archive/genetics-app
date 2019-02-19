@@ -82,10 +82,9 @@ const getChromosomeName = pos => {
 const OUTER_HEIGHT = 430;
 const OUTER_HEIGHT2 = 95;
 
-const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-const margin2 = { top: 20, right: 20, bottom: 30, left: 40 };
+const margin = { top: 20, right: 20, bottom: 30, left: 45 };
+const margin2 = { top: 20, right: 20, bottom: 30, left: 45 };
 
-// const width = OUTER_WIDTH - margin.left - margin.right;
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
 const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
 
@@ -263,6 +262,15 @@ class ManhattanPlot extends Component {
               fontSize="12"
             />
             <g className="axis y--axis" ref={this.yAxisRef} />
+            <text
+              x="-35"
+              y="200"
+              transform="rotate(-90 -35,200)"
+              fontFamily="sans-serif"
+              fontSize="12"
+            >
+              -log₁₀(p-value)
+            </text>
           </g>
           <ListTooltip
             open={this.state.open}
