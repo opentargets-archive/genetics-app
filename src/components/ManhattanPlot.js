@@ -147,6 +147,7 @@ class ManhattanPlot extends Component {
 
     const bars = assocs.map(d => {
       return {
+        indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
@@ -155,6 +156,7 @@ class ManhattanPlot extends Component {
 
     const bars2 = assocs.map(d => {
       return {
+        indexVariantId: d.indexVariantId,
         x: x2(d.globalPosition),
         y: y2(-Math.log10(d.pval)),
         height: y2(0) - y2(-Math.log10(d.pval)),
@@ -198,8 +200,8 @@ class ManhattanPlot extends Component {
             className="focus"
             transform={`translate(${margin.left}, ${margin.top})`}
           >
-            {bars.map((bar, i) => (
-              <Bar key={i} {...bar} />
+            {bars.map(bar => (
+              <Bar key={bar.indexVariantId} {...bar} />
             ))}
             <g
               className="axis x--axis"
@@ -214,8 +216,8 @@ class ManhattanPlot extends Component {
             className="context"
             transform={`translate(${margin2.left}, ${margin2.top})`}
           >
-            {bars2.map((bar, i) => (
-              <Bar key={i} {...bar} />
+            {bars2.map(bar => (
+              <Bar key={bar.indexVariantId} {...bar} />
             ))}
             <g className="brush" ref={this.brush} />
             <g
@@ -249,6 +251,7 @@ class ManhattanPlot extends Component {
 
     const bars = assocs.map(d => {
       return {
+        indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
@@ -278,6 +281,7 @@ class ManhattanPlot extends Component {
 
     const bars = assocs.map(d => {
       return {
+        indexVariantId: d.indexVariantId,
         x: x(d.globalPosition),
         y: y(-Math.log10(d.pval)),
         height: y(0) - y(-Math.log10(d.pval)),
