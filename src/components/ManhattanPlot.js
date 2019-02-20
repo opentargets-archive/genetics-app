@@ -332,7 +332,7 @@ class ManhattanPlot extends Component {
     bars
       .enter()
       .append('rect')
-      .attr('class', 'bars')
+      .attr('clip-path', 'url(#clip)')
       .attr('width', 2)
       .attr('x', d => this.x(d.globalPosition))
       .attr('y', d => this.y(-Math.log10(d.pval)))
