@@ -240,6 +240,7 @@ class ManhattanPlot extends Component {
     return (
       <div ref={measureRef} onMouseLeave={this.handleMouseLeave}>
         <svg
+          xmlns="http://www.w3.org/2000/svg"
           className="zoom"
           ref={this.svg}
           width={outerWidth}

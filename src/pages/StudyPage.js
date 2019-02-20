@@ -8,13 +8,14 @@ import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import { chromosomesWithCumulativeLengths } from 'ot-charts';
-import { SectionHeading, Button } from 'ot-ui';
+import { SectionHeading, Button, DownloadSVGPlot } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
+import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 
 import ManhattanPlot from '../components/ManhattanPlot';
@@ -78,6 +79,8 @@ class StudyPage extends React.Component {
     start: 0,
     end: maxPos,
   };
+
+  manhattanPlot = React.createRef();
 
   componentDidMount() {
     const { client, match } = this.props;
@@ -175,12 +178,27 @@ class StudyPage extends React.Component {
             },
           ]}
         />
-        <ManhattanPlot
-          associations={associations}
-          tableColumns={tableColumns}
-          studyId={studyId}
-          onZoom={this.handleZoom}
-        />
+        <DownloadSVGPlot
+          svgContainer={this.manhattanPlot}
+          loading={loading}
+          error={error}
+          filenameStem={`${studyId}-independently-associated-loci`}
+          reportDownloadEvent={() =>
+            reportAnalyticsEvent({
+              category: 'visualisation',
+              action: 'download',
+              label: `study:manhattan:svg`,
+            })
+          }
+        >
+          <ManhattanPlot
+            ref={this.manhattanPlot}
+            associations={associations}
+            tableColumns={tableColumns}
+            studyId={studyId}
+            onZoom={this.handleZoom}
+          />
+        </DownloadSVGPlot>
         <ManhattanTable
           loading={loading}
           error={error}
