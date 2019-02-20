@@ -254,25 +254,31 @@ class ManhattanPlot extends Component {
           <g
             className="focus"
             transform={`translate(${margin.left}, ${margin.top})`}
+            clipPath="url(#clip)"
           >
             <line ref={this.sigLine} x1="0" />
-            <g
-              className="axis x--axis"
-              ref={this.xAxisRef}
-              transform={`translate(0, ${height})`}
-              fontSize="12"
-            />
-            <g className="axis y--axis" ref={this.yAxisRef} />
-            <text
-              x="-35"
-              y="200"
-              transform="rotate(-90 -35,200)"
-              fontFamily="sans-serif"
-              fontSize="12"
-            >
-              -log₁₀(p-value)
-            </text>
           </g>
+          <g
+            className="axis x--axis"
+            ref={this.xAxisRef}
+            transform={`translate(${margin.left}, ${OUTER_HEIGHT -
+              margin.bottom})`}
+            fontSize="12"
+          />
+          <g
+            className="axis y--axis"
+            ref={this.yAxisRef}
+            transform={`translate(${margin.left}, ${margin.top})`}
+          />
+          <text
+            x="-35"
+            y="200"
+            transform="rotate(-90 -35,200)"
+            fontFamily="sans-serif"
+            fontSize="12"
+          >
+            -log₁₀(p-value)
+          </text>
           <ListTooltip
             open={this.state.open}
             anchorEl={this.state.anchorEl}
@@ -332,7 +338,6 @@ class ManhattanPlot extends Component {
     bars
       .enter()
       .append('rect')
-      .attr('clip-path', 'url(#clip)')
       .attr('width', 2)
       .attr('x', d => this.x(d.globalPosition))
       .attr('y', d => this.y(-Math.log10(d.pval)))
