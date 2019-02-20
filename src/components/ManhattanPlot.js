@@ -82,8 +82,8 @@ const getChromosomeName = pos => {
 const OUTER_HEIGHT = 430;
 const OUTER_HEIGHT2 = 95;
 
-const margin = { top: 20, right: 20, bottom: 30, left: 45 };
-const margin2 = { top: 20, right: 20, bottom: 30, left: 45 };
+const margin = { top: 20, right: 20, bottom: 30, left: 80 };
+const margin2 = { top: 20, right: 20, bottom: 30, left: 80 };
 
 const height = OUTER_HEIGHT - margin.top - margin.bottom;
 const height2 = OUTER_HEIGHT2 - margin2.top - margin2.bottom;
@@ -271,9 +271,9 @@ class ManhattanPlot extends Component {
             transform={`translate(${margin.left}, ${margin.top})`}
           />
           <text
-            x="-35"
+            x="40"
             y="200"
-            transform="rotate(-90 -35,200)"
+            transform="rotate(-90 40,200)"
             fontFamily="sans-serif"
             fontSize="12"
           >
