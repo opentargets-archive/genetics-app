@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { chromosomesWithCumulativeLengths } from 'ot-charts';
-import { SectionHeading, Button, DownloadSVGPlot } from 'ot-ui';
+import { Manhattan, chromosomesWithCumulativeLengths } from 'ot-charts';
+import { SectionHeading, Button, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
@@ -17,8 +17,6 @@ import StudyInfo from '../components/StudyInfo';
 import StudySize from '../components/StudySize';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
-
-import ManhattanPlot from '../components/ManhattanPlot';
 
 const SIGNIFICANCE = 5e-8;
 const maxPos =
@@ -191,12 +189,13 @@ class StudyPage extends React.Component {
             })
           }
         >
-          <ManhattanPlot
+          <Manhattan
             ref={this.manhattanPlot}
             associations={associations}
             tableColumns={tableColumns}
             studyId={studyId}
             onZoom={this.handleZoom}
+            listTooltip={ListTooltip}
           />
         </DownloadSVGPlot>
         <ManhattanTable
