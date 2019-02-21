@@ -12,8 +12,6 @@ import { HttpLink } from 'apollo-link-http';
 import App from './App';
 import { unregister } from './registerServiceWorker';
 
-import './index.css';
-
 const client = new ApolloClient({
   link: new HttpLink({
     uri: 'https://genetics-api.opentargets.io/graphql',
