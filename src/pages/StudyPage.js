@@ -1,20 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { withApollo } from 'react-apollo';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Query } from 'react-apollo';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import {
-  DownloadSVGPlot,
-  SectionHeading,
-  Button,
-  ListTooltip,
-  MultiSelect,
-} from 'ot-ui';
-import { Manhattan, withTooltip, chromosomeNames } from 'ot-charts';
+import { Manhattan, chromosomesWithCumulativeLengths } from 'ot-charts';
+import { SectionHeading, Button, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
@@ -25,6 +19,9 @@ import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
 
 const SIGNIFICANCE = 5e-8;
+const maxPos =
+  chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
+    .cumulativeLength;
 
 function hasAssociations(data) {
   return (
@@ -36,18 +33,21 @@ function hasAssociations(data) {
 }
 
 function transformAssociations(data) {
-  return {
-    associations: data.manhattan.associations.map(d => {
-      const { variant, ...rest } = d;
-      return {
-        ...rest,
-        indexVariantId: variant.id,
-        indexVariantRsId: variant.rsId,
-        chromosome: variant.chromosome,
-        position: variant.position,
-      };
-    }),
-  };
+  return data.manhattan.associations.map(d => {
+    const { variant, ...rest } = d;
+    const ch = chromosomesWithCumulativeLengths.find(
+      ch => ch.name === variant.chromosome
+    );
+
+    return {
+      ...rest,
+      indexVariantId: variant.id,
+      indexVariantRsId: variant.rsId,
+      chromosome: variant.chromosome,
+      position: variant.position,
+      globalPosition: ch.cumulativeLength - ch.length + variant.position,
+    };
+  });
 }
 
 function hasStudyInfo(data) {
@@ -64,174 +64,152 @@ function loci(data) {
   return hasAssociations(data) ? data.manhattan.associations.length : 0;
 }
 
-const styles = theme => {
-  return {
-    section: {
-      padding: theme.sectionPadding,
-    },
-  };
-};
+const styles = theme => ({
+  section: {
+    padding: theme.sectionPadding,
+  },
+});
 
 class StudyPage extends React.Component {
   state = {
-    focusChromosome: '',
+    loading: true,
+    associations: [],
+    start: 0,
+    end: maxPos,
   };
+
+  manhattanPlot = React.createRef();
+
+  componentDidMount() {
+    const { client, match } = this.props;
+    const { studyId } = match.params;
+    client
+      .query({
+        query: STUDY_PAGE_QUERY,
+        variables: { studyId },
+        fetchPolicy: 'network-only',
+      })
+      .then(({ data, error }) => {
+        const isAssociatedStudy = hasAssociations(data);
+
+        this.setState({
+          loading: false,
+          error,
+          data,
+          isStudyWithInfo: hasStudyInfo(data),
+          isAssociatedStudy,
+          significantLociCount: significantLoci(data),
+          lociCount: loci(data),
+          associations: isAssociatedStudy ? transformAssociations(data) : [],
+        });
+      });
+  }
+
+  handleZoom = (start, end) => {
+    this.setState({ start, end });
+  };
+
   render() {
     const { classes, match } = this.props;
     const { studyId } = match.params;
-    let manhattanPlot = React.createRef();
-    const ManhattanWithTooltip = withTooltip(
-      Manhattan,
-      ListTooltip,
-      tableColumns(studyId),
-      'manhattan'
-    );
+    const {
+      loading,
+      error,
+      associations,
+      isStudyWithInfo,
+      data,
+      significantLociCount,
+      lociCount,
+      start,
+      end,
+    } = this.state;
+
     return (
       <BasePage>
         <ScrollToTop />
         <Helmet>
           <title>{studyId}</title>
         </Helmet>
-
-        <Query
-          query={STUDY_PAGE_QUERY}
-          variables={{ studyId }}
-          fetchPolicy="network-only"
-        >
-          {({ loading, error, data }) => {
-            const isStudyWithInfo = hasStudyInfo(data);
-            const isAssociatedStudy = hasAssociations(data);
-            const significantLociCount = significantLoci(data);
-            const lociCount = loci(data);
-
-            const manhattan = isAssociatedStudy
-              ? transformAssociations(data)
-              : { associations: [] };
-            return (
-              <Fragment>
-                <Paper className={classes.section}>
-                  <Typography variant="h4" color="textSecondary">
-                    {isStudyWithInfo ? data.studyInfo.traitReported : null}
-                  </Typography>
-                  <Grid container justify="space-between">
-                    <Grid item>
-                      {isStudyWithInfo ? (
-                        <Typography variant="subtitle1">
-                          <StudyInfo studyInfo={data.studyInfo} />
-                        </Typography>
-                      ) : null}
-                    </Grid>
-                    <Grid item>
-                      {isStudyWithInfo ? (
-                        <Typography variant="subtitle1">
-                          <StudySize studyInfo={data.studyInfo} />
-                        </Typography>
-                      ) : null}
-                    </Grid>
-                  </Grid>
-                  <Link
-                    to={`/study-comparison/${studyId}`}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button gradient>Compare to related studies</Button>
-                  </Link>
-                </Paper>
-
-                <SectionHeading
-                  heading="Independently-associated loci"
-                  subheading={
-                    !loading
-                      ? `Found ${significantLociCount} loci with genome-wide
+        <Paper className={classes.section}>
+          <Typography variant="h4" color="textSecondary">
+            {isStudyWithInfo ? data.studyInfo.traitReported : null}
+          </Typography>
+          <Grid container justify="space-between">
+            <Grid item>
+              {isStudyWithInfo ? (
+                <Typography variant="subtitle1">
+                  <StudyInfo studyInfo={data.studyInfo} />
+                </Typography>
+              ) : null}
+            </Grid>
+            <Grid item>
+              {isStudyWithInfo ? (
+                <Typography variant="subtitle1">
+                  <StudySize studyInfo={data.studyInfo} />
+                </Typography>
+              ) : null}
+            </Grid>
+          </Grid>
+          <Link
+            to={`/study-comparison/${studyId}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Button gradient>Compare to related studies</Button>
+          </Link>
+        </Paper>
+        <SectionHeading
+          heading="Independently-associated loci"
+          subheading={
+            !loading
+              ? `Found ${significantLociCount} loci with genome-wide
                     significance (p-value < 5e-8) out of ${lociCount}`
-                      : null
-                  }
-                  entities={[
-                    {
-                      type: 'study',
-                      fixed: true,
-                    },
-                    {
-                      type: 'indexVariant',
-                      fixed: false,
-                    },
-                  ]}
-                />
-
-                <DownloadSVGPlot
-                  left={
-                    <MultiSelect
-                      value={this.state.focusChromosome}
-                      options={[
-                        { label: 'All chromosomes', value: '' },
-                        ...chromosomeNames.map(d => ({
-                          label: `Chromosome ${d}`,
-                          value: d,
-                        })),
-                      ]}
-                      handleChange={this.handleChange}
-                    />
-                  }
-                  loading={loading}
-                  error={error}
-                  svgContainer={manhattanPlot}
-                  filenameStem={`${studyId}-independently-associated-loci`}
-                  reportDownloadEvent={() => {
-                    reportAnalyticsEvent({
-                      category: 'visualisation',
-                      action: 'download',
-                      label: `study:manhattan:svg`,
-                    });
-                  }}
-                >
-                  <ManhattanWithTooltip
-                    data={manhattan}
-                    focusChromosome={this.state.focusChromosome}
-                    handleChromosomeClick={this.handleChromosomeClick}
-                    ref={manhattanPlot}
-                  />
-                </DownloadSVGPlot>
-                <ManhattanTable
-                  loading={loading}
-                  error={error}
-                  data={
-                    this.state.focusChromosome
-                      ? manhattan.associations.filter(
-                          d => d.chromosome === this.state.focusChromosome
-                        )
-                      : manhattan.associations
-                  }
-                  studyId={studyId}
-                  filenameStem={`${studyId}-independently-associated-loci`}
-                />
-              </Fragment>
-            );
-          }}
-        </Query>
+              : null
+          }
+          entities={[
+            {
+              type: 'study',
+              fixed: true,
+            },
+            {
+              type: 'indexVariant',
+              fixed: false,
+            },
+          ]}
+        />
+        <DownloadSVGPlot
+          svgContainer={this.manhattanPlot}
+          loading={loading}
+          error={error}
+          filenameStem={`${studyId}-independently-associated-loci`}
+          reportDownloadEvent={() =>
+            reportAnalyticsEvent({
+              category: 'visualisation',
+              action: 'download',
+              label: `study:manhattan:svg`,
+            })
+          }
+        >
+          <Manhattan
+            ref={this.manhattanPlot}
+            associations={associations}
+            tableColumns={tableColumns}
+            studyId={studyId}
+            onZoom={this.handleZoom}
+            listTooltip={ListTooltip}
+          />
+        </DownloadSVGPlot>
+        <ManhattanTable
+          loading={loading}
+          error={error}
+          data={associations.filter(assoc => {
+            return start <= assoc.globalPosition && assoc.globalPosition <= end;
+          })}
+          studyId={studyId}
+          filenameStem={`${studyId}-independently-associated-loci`}
+        />
       </BasePage>
     );
   }
-  handleChange = event => {
-    if (event.target.value) {
-      reportAnalyticsEvent({
-        category: 'visualisation',
-        action: 'filter',
-        label: `study:manhattan:chromosome`,
-      });
-    }
-    this.setState({ focusChromosome: event.target.value });
-  };
-  handleChromosomeClick = chromosome => {
-    if (chromosome) {
-      reportAnalyticsEvent({
-        category: 'visualisation',
-        action: 'filter',
-        label: `study:manhattan:chromosome`,
-      });
-      this.setState({ focusChromosome: chromosome });
-    } else {
-      this.setState({ focusChromosome: '' });
-    }
-  };
 }
 
-export default withStyles(styles)(StudyPage);
+export default withApollo(withStyles(styles)(StudyPage));
