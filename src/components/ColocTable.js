@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable } from 'ot-ui';
+import { OtTable, Button } from 'ot-ui';
 
 const tableColumns = [
   {
@@ -10,10 +10,12 @@ const tableColumns = [
   {
     id: 'gene',
     label: 'Gene',
+    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   },
   {
     id: 'tissue',
     label: 'Tissue',
+    renderCell: d => d.tissue.name,
   },
   {
     id: 'source',
@@ -22,6 +24,11 @@ const tableColumns = [
   {
     id: 'h4',
     label: 'H4',
+  },
+  {
+    id: 'show',
+    label: 'Regional Plot',
+    renderCell: d => <Button gradient>Add track</Button>,
   },
 ];
 

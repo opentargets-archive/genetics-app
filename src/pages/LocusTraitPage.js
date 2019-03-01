@@ -5,8 +5,7 @@ import { SectionHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ColocTable from '../components/ColocTable';
-
-const MOCK_COLOC_DATA = [];
+import { MOCK_COLOC_DATA } from '../mock-data/locusTraitPage';
 
 class LocusTraitPage extends React.Component {
   render() {
@@ -20,18 +19,17 @@ class LocusTraitPage extends React.Component {
           </title>
         </Helmet>
         <SectionHeading
+          heading={`Causality`}
+          subheading={`Which variants at this locus are most likely causal?`}
+        />
+        <SectionHeading
           heading={`Colocalisation`}
           subheading={`Which molecular traits colocalise with ${studyId}?`}
-          entities={[
-            {
-              type: 'study',
-              fixed: false,
-            },
-            {
-              type: 'indexVariant',
-              fixed: true,
-            },
-          ]}
+        />
+        <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
+        <SectionHeading
+          heading={`Gene`}
+          subheading={`Which genes colocalise with ${studyId} at this locus (and in which tissues)?`}
         />
         <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
       </BasePage>
