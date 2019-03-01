@@ -5969,9 +5969,9 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-charts@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.39.tgz#430d157e096367e5be67a70c2d0b57841b8fc35d"
+ot-charts@^0.0.40:
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/ot-charts/-/ot-charts-0.0.40.tgz#53d9755931f3cf87c9462d16989ef4cdee336649"
   dependencies:
     lodash.sortby "^4.7.0"
 
