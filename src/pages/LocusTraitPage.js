@@ -5,7 +5,11 @@ import { SectionHeading } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ColocTable from '../components/ColocTable';
-import { MOCK_COLOC_DATA } from '../mock-data/locusTraitPage';
+import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
+import {
+  MOCK_COLOC_DATA,
+  MOCK_CREDIBLE_SET_TRACK_PLOT,
+} from '../mock-data/locusTraitPage';
 
 class LocusTraitPage extends React.Component {
   render() {
@@ -22,6 +26,7 @@ class LocusTraitPage extends React.Component {
           heading={`Causality`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
+        <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} />
         <SectionHeading
           heading={`Colocalisation`}
           subheading={`Which molecular traits colocalise with ${studyId}?`}
