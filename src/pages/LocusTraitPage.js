@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
 import { SectionHeading } from 'ot-ui';
-import { GeneTrack } from 'ot-charts';
+import { Regional, GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
 import StudyInfo from '../components/StudyInfo';
@@ -17,6 +17,7 @@ import {
   MOCK_REGIONAL_DATA_GENES,
   MOCK_REGIONAL_START,
   MOCK_REGIONAL_END,
+  MOCK_REGIONAL_DATA_STUDY,
 } from '../mock-data/locusTraitPage';
 
 // gene exons come as flat list, rendering expects list of pairs
@@ -64,6 +65,11 @@ class LocusTraitPage extends React.Component {
           subheading={`Which studies/molecular traits colocalise with ${studyId} at this locus?`}
         />
         <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
+        <Regional
+          data={MOCK_REGIONAL_DATA_STUDY}
+          start={MOCK_REGIONAL_START}
+          end={MOCK_REGIONAL_END}
+        />
         <GeneTrack
           data={flatExonsToPairedExons(MOCK_REGIONAL_DATA_GENES)}
           start={MOCK_REGIONAL_START}

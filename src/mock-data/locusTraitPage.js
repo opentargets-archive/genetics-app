@@ -1,3 +1,4 @@
+import distributionGenerator from './distribution-generator';
 import GENE_SET from './ccdc71l-genes.json';
 
 const study = {
@@ -178,11 +179,16 @@ export const MOCK_CREDIBLE_SET_TRACK_PLOT = {
   ],
 };
 
-export const MOCK_REGIONAL_DATA_STUDY = [];
+export const MOCK_REGIONAL_START = 105301442;
+export const MOCK_REGIONAL_END = 107301442;
+
+export const MOCK_REGIONAL_DATA_STUDY = distributionGenerator({
+  chromosome: '7',
+  start: MOCK_REGIONAL_START,
+  end: MOCK_REGIONAL_END,
+  peaks: [],
+});
 
 export const MOCK_REGIONAL_DATA_GENES = {
   genes: GENE_SET,
 };
-
-export const MOCK_REGIONAL_START = 105301442;
-export const MOCK_REGIONAL_END = 107301442;
