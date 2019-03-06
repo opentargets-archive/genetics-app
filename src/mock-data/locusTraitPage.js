@@ -1,3 +1,5 @@
+import GENE_SET from './ccdc71l-genes.json';
+
 const study = {
   studyId: 'GCST001231',
   traitReported: 'Carotid intima media thickness',
@@ -175,3 +177,12 @@ export const MOCK_CREDIBLE_SET_TRACK_PLOT = {
     },
   ],
 };
+
+export const MOCK_REGIONAL_DATA_STUDY = [];
+
+export const MOCK_REGIONAL_DATA_GENES = {
+  genes: GENE_SET,
+};
+
+export const MOCK_REGIONAL_START = 105301442;
+export const MOCK_REGIONAL_END = 107301442;

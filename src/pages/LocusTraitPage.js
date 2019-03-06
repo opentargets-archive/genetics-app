@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
 import { SectionHeading } from 'ot-ui';
+import { GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
 import StudyInfo from '../components/StudyInfo';
@@ -13,7 +14,24 @@ import {
   MOCK_INDEX_VARIANT_INFO,
   MOCK_COLOC_DATA,
   MOCK_CREDIBLE_SET_TRACK_PLOT,
+  MOCK_REGIONAL_DATA_GENES,
+  MOCK_REGIONAL_START,
+  MOCK_REGIONAL_END,
 } from '../mock-data/locusTraitPage';
+
+// gene exons come as flat list, rendering expects list of pairs
+const flatExonsToPairedExons = ({ genes }) => {
+  const paired = genes.map(d => ({
+    ...d,
+    exons: d.exons.reduce((result, value, index, array) => {
+      if (index % 2 === 0) {
+        result.push(array.slice(index, index + 2));
+      }
+      return result;
+    }, []),
+  }));
+  return { genes: paired };
+};
 
 class LocusTraitPage extends React.Component {
   render() {
@@ -37,18 +55,27 @@ class LocusTraitPage extends React.Component {
         </Typography>
 
         <SectionHeading
-          heading={`Causality`}
+          heading={`Credible set overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
         <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} />
         <SectionHeading
           heading={`Colocalisation`}
-          subheading={`Which molecular traits colocalise with ${studyId}?`}
+          subheading={`Which studies/molecular traits colocalise with ${studyId} at this locus?`}
         />
         <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
+        <GeneTrack
+          data={flatExonsToPairedExons(MOCK_REGIONAL_DATA_GENES)}
+          start={MOCK_REGIONAL_START}
+          end={MOCK_REGIONAL_END}
+        />
+        <SectionHeading
+          heading={``}
+          subheading={`Which genes colocalise with ${studyId} at this locus (and in which tissues)?`}
+        />
         <SectionHeading
           heading={`Gene`}
-          subheading={`Which genes colocalise with ${studyId} at this locus (and in which tissues)?`}
+          subheading={`Which genes are functionally implicated at this locus?`}
         />
       </BasePage>
     );
