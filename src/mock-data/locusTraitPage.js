@@ -10,6 +10,10 @@ const indexVariant = {
   rsId: 'rs17398575',
 };
 
+export const MOCK_STUDY_INFO = study;
+
+export const MOCK_INDEX_VARIANT_INFO = indexVariant;
+
 export const MOCK_COLOC_DATA = [
   {
     molecularTrait: 'eqtl',
@@ -23,6 +27,19 @@ export const MOCK_COLOC_DATA = [
     },
     source: 'gtex',
     h4: 0.993,
+  },
+  {
+    molecularTrait: 'eqtl',
+    gene: {
+      id: 'ENSG00000228742',
+      symbol: 'RP5-884M6.1',
+    },
+    tissue: {
+      id: 'testis',
+      name: 'Testis',
+    },
+    source: 'gtex',
+    h4: 0.78,
   },
 ];
 
