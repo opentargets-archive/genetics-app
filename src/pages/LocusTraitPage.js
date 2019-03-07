@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
 import { SectionHeading } from 'ot-ui';
-import { Regional, GeneTrack } from 'ot-charts';
+import { Regional, GeneTrack, SigSig } from 'ot-charts';
 
 import BasePage from './BasePage';
 import StudyInfo from '../components/StudyInfo';
@@ -20,7 +20,10 @@ import {
   MOCK_REGIONAL_DATA_1,
   MOCK_REGIONAL_DATA_2,
   MOCK_REGIONAL_DATA_3,
+  MOCK_SIG_SIG_DATA,
 } from '../mock-data/locusTraitPage';
+
+const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
 // gene exons come as flat list, rendering expects list of pairs
 const flatExonsToPairedExons = ({ genes }) => {
@@ -67,21 +70,22 @@ class LocusTraitPage extends React.Component {
           subheading={`Which studies/molecular traits colocalise with ${studyId} at this locus?`}
         />
         <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
+        <SigSig data={MOCK_SIG_SIG_DATA} />
         <Regional
           data={MOCK_REGIONAL_DATA_1}
-          title={MOCK_STUDY_INFO.traitReported}
+          title={titles[0]}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
         />
         <Regional
           data={MOCK_REGIONAL_DATA_2}
-          title={'eQTL 1'}
+          title={titles[1]}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
         />
         <Regional
           data={MOCK_REGIONAL_DATA_3}
-          title={'eQTL 2'}
+          title={titles[2]}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
         />

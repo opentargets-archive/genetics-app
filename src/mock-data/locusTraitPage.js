@@ -214,6 +214,28 @@ export const MOCK_REGIONAL_DATA_3 = distributionGenerator({
   peaks: [PEAKS[0], PEAKS[3], PEAKS[4]],
 });
 
+const sigSigFromRegionals = regionals =>
+  regionals.map(di =>
+    regionals.map(dj => {
+      // currently distributionGenerator gives same exact set of variants
+      // so zip two distributions together
+      const zipped = di.map((d, k) => {
+        const { pval: pvali, ...variant } = d;
+        const pvalj = dj[k].pval;
+        return { ...variant, x: pvali, y: pvalj };
+      });
+      return zipped;
+    })
+  );
+
+export const MOCK_SIG_SIG_DATA = sigSigFromRegionals([
+  MOCK_REGIONAL_DATA_1,
+  MOCK_REGIONAL_DATA_2,
+  MOCK_REGIONAL_DATA_3,
+]);
+
+// console.log(MOCK_SIG_SIG_DATA);
+
 export const MOCK_REGIONAL_DATA_GENES = {
   genes: GENE_SET,
 };
