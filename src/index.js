@@ -14,7 +14,7 @@ import { unregister } from './registerServiceWorker';
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://genetics-api.opentargets.io/graphql',
+    uri: 'https://open-targets-genetics.appspot.com/graphql',
   }),
   cache: new InMemoryCache(),
 });
