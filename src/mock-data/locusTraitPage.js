@@ -206,6 +206,14 @@ export const MOCK_REGIONAL_DATA_2 = distributionGenerator({
   peaks: [PEAKS[2], PEAKS[3]],
 });
 
+export const MOCK_REGIONAL_DATA_3 = distributionGenerator({
+  seed: 17,
+  chromosome: '7',
+  start: MOCK_REGIONAL_START,
+  end: MOCK_REGIONAL_END,
+  peaks: [PEAKS[0], PEAKS[3], PEAKS[4]],
+});
+
 export const MOCK_REGIONAL_DATA_GENES = {
   genes: GENE_SET,
 };
