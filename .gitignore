@@ -22,3 +22,5 @@ yarn-error.log*
 
 # for vim users
 *.swp
+
+src/mock-data/ccdc71l-locus.json
