@@ -182,11 +182,28 @@ export const MOCK_CREDIBLE_SET_TRACK_PLOT = {
 export const MOCK_REGIONAL_START = 105301442;
 export const MOCK_REGIONAL_END = 107301442;
 
-export const MOCK_REGIONAL_DATA_STUDY = distributionGenerator({
+const PEAKS = [
+  { position: 105946964, value: 3e-11, dispersion: 10000000 },
+  { position: 106551898, value: 3e-17, dispersion: 10000000 },
+  { position: 106551891, value: 3e-58, dispersion: 10000000 },
+  { position: 107260801, value: 5e-22, dispersion: 10000000 },
+  { position: 107272252, value: 1e-15, dispersion: 10000000 },
+];
+
+export const MOCK_REGIONAL_DATA_1 = distributionGenerator({
+  seed: 1,
   chromosome: '7',
   start: MOCK_REGIONAL_START,
   end: MOCK_REGIONAL_END,
-  peaks: [],
+  peaks: [PEAKS[0], PEAKS[1]],
+});
+
+export const MOCK_REGIONAL_DATA_2 = distributionGenerator({
+  seed: 200,
+  chromosome: '7',
+  start: MOCK_REGIONAL_START,
+  end: MOCK_REGIONAL_END,
+  peaks: [PEAKS[2], PEAKS[3]],
 });
 
 export const MOCK_REGIONAL_DATA_GENES = {

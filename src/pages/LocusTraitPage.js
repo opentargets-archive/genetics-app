@@ -17,7 +17,8 @@ import {
   MOCK_REGIONAL_DATA_GENES,
   MOCK_REGIONAL_START,
   MOCK_REGIONAL_END,
-  MOCK_REGIONAL_DATA_STUDY,
+  MOCK_REGIONAL_DATA_1,
+  MOCK_REGIONAL_DATA_2,
 } from '../mock-data/locusTraitPage';
 
 // gene exons come as flat list, rendering expects list of pairs
@@ -66,7 +67,12 @@ class LocusTraitPage extends React.Component {
         />
         <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
         <Regional
-          data={MOCK_REGIONAL_DATA_STUDY}
+          data={MOCK_REGIONAL_DATA_1}
+          start={MOCK_REGIONAL_START}
+          end={MOCK_REGIONAL_END}
+        />
+        <Regional
+          data={MOCK_REGIONAL_DATA_2}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
         />

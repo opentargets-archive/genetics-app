@@ -14,13 +14,29 @@ const variantAtPosition = ({ chromosome, position }) => {
   };
 };
 
-const distributionGenerator = ({ chromosome, start, end, peaks }) => {
+const peakEffect = position => peak => {
+  const distance = Math.abs(position - peak.position);
+  if (distance > 10000) {
+    return 1;
+  } else {
+    const exponent = -Math.pow(distance / peak.dispersion, 2);
+    const factor = 1 - Math.exp(exponent);
+    const value = peak.value + (1 - peak.value) * factor;
+    return value;
+  }
+};
+
+const distributionGenerator = ({ seed, chromosome, start, end, peaks }) => {
   let position = start + 77;
   const associations = [];
+
   while (position < end) {
-    // create pval based on relative position to peaks
-    const pseudoRandom = Math.abs(Math.sin(position));
-    const pval = pseudoRandom;
+    // create pval based on relative position to peaks (with fallback to pseudorandom)
+    const pseudoRandom = Math.abs(Math.sin(position * seed));
+    const peakEffectAtPosition = peakEffect(position);
+    const peakEffects = peaks.map(peakEffectAtPosition);
+    const peakEffectMin = Math.min(...peakEffects);
+    const pval = Math.min(pseudoRandom, peakEffectMin);
 
     // create association
     const association = {
