@@ -78,9 +78,9 @@ const GnomADTable = ({ classes, data }) => (
       </Typography>
       <Typography variant="subtitle2">
         <strong>raw: </strong>
-        <span className={classes.value}>{data.caddRaw}</span>
+        <span className={classes.value}>{data.caddRaw.toPrecision(3)}</span>
         <strong>scaled: </strong>
-        <span className={classes.value}>{data.caddPhred}</span>
+        <span className={classes.value}>{data.caddPhred.toPrecision(3)}</span>
       </Typography>
       <br />
       <Typography variant="subtitle1">
