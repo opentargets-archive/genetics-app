@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
@@ -9,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
+import Icon from '@material-ui/core/Icon';
 import HelpIcon from '@material-ui/icons/Help';
 
 import { Typography, PlotContainer, PlotContainerSection } from 'ot-ui';
@@ -47,13 +49,32 @@ const styles = () => ({
   cardContent: {
     padding: '8px !important',
   },
+  externalLinkIcon: {
+    fontSize: '0.7rem',
+    verticalAlign: 'middle',
+    marginLeft: '3px',
+
+    width: '1rem',
+    height: '1rem',
+  },
 });
 
 const GnomADTable = ({ classes, data }) => (
   <Card>
     <CardContent className={classes.cardContent}>
       <Typography variant="subtitle1">
-        CADD (Combined Annotation Dependent Depletion)
+        Combined Annotation Dependent Depletion (
+        <a href="https://cadd.gs.washington.edu/" target="_blank">
+          CADD
+          <Icon
+            className={classNames(
+              'fa',
+              'fa-external-link-alt',
+              classes.externalLinkIcon
+            )}
+          />
+        </a>
+        )
       </Typography>
       <Typography variant="subtitle2">
         <strong>raw: </strong>
@@ -62,7 +83,20 @@ const GnomADTable = ({ classes, data }) => (
         <span className={classes.value}>{data.caddPhred}</span>
       </Typography>
       <br />
-      <Typography variant="subtitle1">Population allele frequencies</Typography>
+      <Typography variant="subtitle1">
+        Population allele frequencies (
+        <a href="https://gnomad.broadinstitute.org/" target="_blank">
+          gnomAD
+          <Icon
+            className={classNames(
+              'fa',
+              'fa-external-link-alt',
+              classes.externalLinkIcon
+            )}
+          />
+        </a>
+        )
+      </Typography>
       <Typography variant="subtitle2">
         {populations.map(p => (
           <React.Fragment key={p.code}>

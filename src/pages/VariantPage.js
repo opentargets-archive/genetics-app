@@ -297,18 +297,7 @@ class VariantPage extends React.Component {
                     </Grid>
                   </Grid>
                 </Paper>
-                <SectionHeading
-                  heading="gnomAD summary"
-                  subheading={
-                    <React.Fragment>
-                      Statistics about this variant from{' '}
-                      <a href="https://gnomad.broadinstitute.org/">
-                        the gnomAD project
-                      </a>
-                      .
-                    </React.Fragment>
-                  }
-                />
+                <SectionHeading heading="Variant summary" />
                 {isVariantWithInfo ? <GnomADTable data={variantInfo} /> : null}
                 <SectionHeading
                   heading="Assigned genes"
