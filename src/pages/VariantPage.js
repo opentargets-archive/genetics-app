@@ -21,6 +21,7 @@ import PlotContainer from 'ot-ui/build/components/PlotContainer';
 import PheWASSection from '../components/PheWASSection';
 
 import VARIANT_PAGE_QUERY from '../queries/VariantPageQuery.gql';
+import GnomADTable from '../components/GnomADTable';
 
 function hasInfo(data) {
   return data && data.variantInfo;
@@ -280,6 +281,19 @@ class VariantPage extends React.Component {
                     </Grid>
                   </Grid>
                 </Paper>
+                <SectionHeading
+                  heading="gnomAD summary"
+                  subheading={
+                    <React.Fragment>
+                      Statistics about this variant from{' '}
+                      <a href="https://gnomad.broadinstitute.org/">
+                        the gnomAD project
+                      </a>
+                      .
+                    </React.Fragment>
+                  }
+                />
+                {isVariantWithInfo ? <GnomADTable data={variantInfo} /> : null}
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"

@@ -11,6 +11,16 @@ query VariantPageQuery($variantId: String!) {
       symbol
     }
     nearestCodingGeneDistance
+    gnomadAFR
+    gnomadAMR
+    gnomadASJ
+    gnomadEAS
+    gnomadFIN
+    gnomadNFE
+    gnomadNFEEST
+    gnomadNFENWE
+    gnomadNFESEU
+    gnomadOTH
   }
   genesForVariantSchema {
     qtls {
