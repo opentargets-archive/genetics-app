@@ -68,7 +68,7 @@ const styles = () => ({
 
 const GnomADTable = ({ classes, data }) => (
   <Grid container justify="space-between">
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} sm={6} md={8}>
       <Typography variant="subtitle1">Neighbourhood</Typography>
       <Typography variant="subtitle2">
         <strong>
@@ -118,7 +118,7 @@ const GnomADTable = ({ classes, data }) => (
         <span className={classes.value}>{data.caddPhred.toPrecision(3)}</span>
       </Typography>
     </Grid>
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} sm={6} md={4}>
       <Typography variant="subtitle1">
         Population allele frequencies (
         <a href="https://gnomad.broadinstitute.org/" target="_blank">
@@ -135,7 +135,7 @@ const GnomADTable = ({ classes, data }) => (
       </Typography>
       <Grid container>
         {populations.map(p => (
-          <React.Fragment>
+          <React.Fragment key={p.code}>
             <Grid item xs={6}>
               <Typography variant="subtitle2">{p.description}</Typography>
             </Grid>
