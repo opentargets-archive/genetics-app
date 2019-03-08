@@ -247,7 +247,7 @@ class VariantPage extends React.Component {
                         </LocusLink>
                       ) : null}
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                       <Typography variant="subtitle1">
                         {variantInfo.nearestGene ? (
                           <Fragment>
@@ -294,11 +294,11 @@ class VariantPage extends React.Component {
                           </Fragment>
                         ) : null}
                       </Typography>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </Paper>
                 <SectionHeading
-                  heading="Variant summary"
+                  heading="Summary"
                   entities={[
                     {
                       type: 'variant',

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -13,7 +14,12 @@ import Badge from '@material-ui/core/Badge';
 import Icon from '@material-ui/core/Icon';
 import HelpIcon from '@material-ui/icons/Help';
 
-import { Typography, PlotContainer, PlotContainerSection } from 'ot-ui';
+import {
+  Typography,
+  PlotContainer,
+  PlotContainerSection,
+  commaSeparate,
+} from 'ot-ui';
 import { CardContent } from '@material-ui/core';
 
 const populations = [
@@ -62,6 +68,34 @@ const styles = () => ({
 const GnomADTable = ({ classes, data }) => (
   <Card>
     <CardContent className={classes.cardContent}>
+      <Typography variant="subtitle1">Neighbourhood</Typography>
+      <Typography variant="subtitle2">
+        <strong>
+          Nearest gene ({commaSeparate(data.nearestGeneDistance)} bp to
+          canonical TSS):
+        </strong>{' '}
+        <Link to={`/gene/${data.nearestGene.id}`}>
+          {data.nearestGene.symbol}
+        </Link>
+      </Typography>
+      <Typography variant="subtitle2">
+        <strong>
+          Nearest coding gene ({commaSeparate(data.nearestCodingGeneDistance)}{' '}
+          bp to canonical TSS):
+        </strong>{' '}
+        <Link to={`/gene/${data.nearestCodingGene.id}`}>
+          {data.nearestCodingGene.symbol}
+        </Link>
+      </Typography>
+      <br />
+
+      <Typography variant="subtitle1">VEP</Typography>
+      <Typography variant="subtitle2">
+        <strong>Most severe consequence:</strong>{' '}
+        {data.mostSevereConsequence.replace(/_/g, ' ')}
+      </Typography>
+      <br />
+
       <Typography variant="subtitle1">
         Combined Annotation Dependent Depletion (
         <a href="https://cadd.gs.washington.edu/" target="_blank">
