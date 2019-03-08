@@ -50,6 +50,14 @@ query VariantPageQuery($variantId: String!) {
         name
       }
     }
+    distances {
+      id
+      sourceId
+      tissues {
+        id
+        name
+      }
+    }
   }
   genesForVariant(variantId: $variantId) {
     gene {
@@ -92,6 +100,19 @@ query VariantPageQuery($variantId: String!) {
         }
         maxEffectLabel
         maxEffectScore
+      }
+    }
+    distances {
+      typeId
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        score
+        quantile
       }
     }
   }

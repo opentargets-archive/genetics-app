@@ -22,6 +22,15 @@ const radiusScale = d3
   .domain([0, 1])
   .range([0, 6]);
 
+const createDistanceCellRenderer = schema => {
+  return rowData => {
+    if (rowData[schema.sourceId] !== undefined) {
+      const circleRadius = radiusScale(rowData[schema.sourceId]);
+      return <DataCircle radius={circleRadius} colorScheme="default" />;
+    }
+  };
+};
+
 const createQtlCellRenderer = schema => {
   return rowData => {
     if (rowData[schema.sourceId] !== undefined) {
@@ -84,6 +93,12 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
         return <DataCircle radius={circleRadius} colorScheme="bold" />;
       },
     },
+    ...genesForVariantSchema.distances.map(schema => ({
+      id: schema.sourceId,
+      label: schema.sourceLabel,
+      tooltip: schema.sourceDescriptionOverview,
+      renderCell: createDistanceCellRenderer(schema),
+    })),
     ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
       label: schema.sourceLabel,
@@ -115,6 +130,9 @@ const getDataAll = genesForVariant => {
       geneSymbol: item.gene.symbol,
       overallScore: item.overallScore,
     };
+    item.distances.forEach(qtl => {
+      row[qtl.sourceId] = qtl.aggregatedScore;
+    });
     item.qtls.forEach(qtl => {
       row[qtl.sourceId] = qtl.aggregatedScore;
     });
@@ -135,6 +153,32 @@ const getTissueColumns = (schema, genesForVariant) => {
   let tissueColumns;
 
   switch (schema.type) {
+    case 'distances':
+      tissueColumns = schema.tissues
+        .map(tissue => {
+          return {
+            id: tissue.id,
+            label: tissue.name,
+            verticalHeader: true,
+            renderCell: rowData => {
+              if (rowData[tissue.id]) {
+                const distanceRadius = radiusScale(rowData[tissue.id]);
+                return (
+                  <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
+                    <span>
+                      <DataCircle
+                        radius={distanceRadius}
+                        colorScheme="default"
+                      />
+                    </span>
+                  </Tooltip>
+                );
+              }
+            },
+          };
+        })
+        .sort(tissueComparator);
+      break;
     case 'qtls':
       tissueColumns = schema.tissues
         .map(tissue => {
@@ -236,7 +280,9 @@ const getTissueData = (schema, genesForVariant) => {
 
     if (element) {
       element.tissues.forEach(elementTissue => {
-        if (elementTissue.__typename === 'FPredTissue') {
+        if (elementTissue.__typename === 'DistanceTissue') {
+          row[elementTissue.tissue.id] = elementTissue.quantile;
+        } else if (elementTissue.__typename === 'FPredTissue') {
           row[elementTissue.tissue.id] = elementTissue.maxEffectLabel;
         } else if (elementTissue.__typename === 'IntervalTissue') {
           row[elementTissue.tissue.id] = elementTissue.quantile;
@@ -280,6 +326,10 @@ class AssociatedGenes extends Component {
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
     const schemas = [
+      ...genesForVariantSchema.distances.map(distanceSchema => ({
+        ...distanceSchema,
+        type: 'distances',
+      })),
       ...genesForVariantSchema.qtls.map(qtlSchema => ({
         ...qtlSchema,
         type: 'qtls',
