@@ -5,10 +5,12 @@ query VariantPageQuery($variantId: String!) {
       id
       symbol
     }
+    nearestGeneDistance
     nearestCodingGene {
       id
       symbol
     }
+    nearestCodingGeneDistance
   }
   genesForVariantSchema {
     qtls {

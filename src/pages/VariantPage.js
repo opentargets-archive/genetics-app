@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
 
-import { SectionHeading, Typography, Button } from 'ot-ui';
+import { SectionHeading, Typography, Button, commaSeparate } from 'ot-ui';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -250,19 +250,25 @@ class VariantPage extends React.Component {
                       <Typography variant="subtitle1">
                         {variantInfo.nearestGene ? (
                           <Fragment>
-                            Nearest Gene:{' '}
+                            Nearest Gene (
+                            {commaSeparate(variantInfo.nearestGeneDistance)} bp
+                            away):{' '}
                             <Link to={`/gene/${variantInfo.nearestGene.id}`}>
                               {variantInfo.nearestGene.symbol}
                             </Link>
                           </Fragment>
                         ) : null}
                         {variantInfo.nearestGene &&
-                        variantInfo.nearestCodingGene
-                          ? ', '
-                          : null}
+                        variantInfo.nearestCodingGene ? (
+                          <br />
+                        ) : null}
                         {variantInfo.nearestCodingGene ? (
                           <Fragment>
-                            Nearest Protein-Coding Gene:{' '}
+                            Nearest Protein-Coding Gene (
+                            {commaSeparate(
+                              variantInfo.nearestCodingGeneDistance
+                            )}{' '}
+                            bp away):{' '}
                             <Link
                               to={`/gene/${variantInfo.nearestCodingGene.id}`}
                             >
