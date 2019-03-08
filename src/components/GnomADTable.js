@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import Table from '@material-ui/core/Table';
@@ -66,8 +67,8 @@ const styles = () => ({
 });
 
 const GnomADTable = ({ classes, data }) => (
-  <Card>
-    <CardContent className={classes.cardContent}>
+  <Grid container justify="space-between">
+    <Grid item xs={12} md={6}>
       <Typography variant="subtitle1">Neighbourhood</Typography>
       <Typography variant="subtitle2">
         <strong>
@@ -116,7 +117,8 @@ const GnomADTable = ({ classes, data }) => (
         <strong>scaled: </strong>
         <span className={classes.value}>{data.caddPhred.toPrecision(3)}</span>
       </Typography>
-      <br />
+    </Grid>
+    <Grid item xs={12} md={6}>
       <Typography variant="subtitle1">
         Population allele frequencies (
         <a href="https://gnomad.broadinstitute.org/" target="_blank">
@@ -131,7 +133,22 @@ const GnomADTable = ({ classes, data }) => (
         </a>
         )
       </Typography>
-      <Typography variant="subtitle2">
+      <Grid container>
+        {populations.map(p => (
+          <React.Fragment>
+            <Grid item xs={6}>
+              <Typography variant="subtitle2">{p.description}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="subtitle2" align="right">
+                {data[`gnomad${p.code}`].toPrecision(3)}
+              </Typography>
+            </Grid>
+          </React.Fragment>
+        ))}
+      </Grid>
+
+      {/* <Typography variant="subtitle2">
         {populations.map(p => (
           <React.Fragment key={p.code}>
             <Badge
@@ -148,9 +165,9 @@ const GnomADTable = ({ classes, data }) => (
             </span>
           </React.Fragment>
         ))}
-      </Typography>
-    </CardContent>
-  </Card>
+      </Typography> */}
+    </Grid>
+  </Grid>
 );
 
 export default withStyles(styles)(GnomADTable);
