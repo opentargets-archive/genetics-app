@@ -297,7 +297,15 @@ class VariantPage extends React.Component {
                     </Grid>
                   </Grid>
                 </Paper>
-                <SectionHeading heading="Variant summary" />
+                <SectionHeading
+                  heading="Variant summary"
+                  entities={[
+                    {
+                      type: 'variant',
+                      fixed: true,
+                    },
+                  ]}
+                />
                 {isVariantWithInfo ? <GnomADTable data={variantInfo} /> : null}
                 <SectionHeading
                   heading="Assigned genes"
