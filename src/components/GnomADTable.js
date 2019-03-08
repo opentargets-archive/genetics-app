@@ -1,10 +1,18 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+import Badge from '@material-ui/core/Badge';
+import HelpIcon from '@material-ui/icons/Help';
+
+import { Typography, PlotContainer, PlotContainerSection } from 'ot-ui';
+import { CardContent } from '@material-ui/core';
 
 const populations = [
   { code: 'AFR', description: 'African/African-American' },
@@ -22,27 +30,59 @@ const populations = [
   { code: 'OTH', description: 'Other (population not assigned)' },
 ];
 
-const GnomADTable = ({ data }) => (
-  <Paper>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Code</TableCell>
-          <TableCell>Population</TableCell>
-          <TableCell>Minor Allele Frequency</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
+const styles = () => ({
+  tooltipIcon: {
+    fontSize: '1.2rem',
+    paddingLeft: `0.6rem`,
+  },
+  valueWithBadgedLabel: {
+    verticalAlign: 'middle',
+    paddingLeft: '0.6rem',
+    paddingRight: '1rem',
+  },
+  value: {
+    paddingLeft: '0.6rem',
+    paddingRight: '1rem',
+  },
+  cardContent: {
+    padding: '8px !important',
+  },
+});
+
+const GnomADTable = ({ classes, data }) => (
+  <Card>
+    <CardContent className={classes.cardContent}>
+      <Typography variant="subtitle1">
+        CADD (Combined Annotation Dependent Depletion)
+      </Typography>
+      <Typography variant="subtitle2">
+        <strong>raw: </strong>
+        <span className={classes.value}>{data.caddRaw}</span>
+        <strong>scaled: </strong>
+        <span className={classes.value}>{data.caddPhred}</span>
+      </Typography>
+      <br />
+      <Typography variant="subtitle1">Population allele frequencies</Typography>
+      <Typography variant="subtitle2">
         {populations.map(p => (
-          <TableRow key={p.code}>
-            <TableCell>{p.code}</TableCell>
-            <TableCell>{p.description}</TableCell>
-            <TableCell>{data[`gnomad${p.code}`].toPrecision(3)}</TableCell>
-          </TableRow>
+          <React.Fragment key={p.code}>
+            <Badge
+              badgeContent={
+                <Tooltip title={p.description} placement="top">
+                  <HelpIcon className={classes.tooltipIcon} />
+                </Tooltip>
+              }
+            >
+              <strong>{p.code}: </strong>
+            </Badge>
+            <span className={classes.valueWithBadgedLabel}>
+              {data[`gnomad${p.code}`].toPrecision(3)}
+            </span>
+          </React.Fragment>
         ))}
-      </TableBody>
-    </Table>
-  </Paper>
+      </Typography>
+    </CardContent>
+  </Card>
 );
 
-export default GnomADTable;
+export default withStyles(styles)(GnomADTable);

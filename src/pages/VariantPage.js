@@ -277,6 +277,22 @@ class VariantPage extends React.Component {
                             </Link>
                           </Fragment>
                         ) : null}
+                        {(variantInfo.nearestGene ||
+                          variantInfo.nearestCodingGene) &&
+                        variantInfo.mostSevereConsequence ? (
+                          <br />
+                        ) : null}
+                        {variantInfo.mostSevereConsequence ? (
+                          <Fragment>
+                            Most Severe VEP Consequence:{' '}
+                            <strong>
+                              {variantInfo.mostSevereConsequence.replace(
+                                /_/g,
+                                ' '
+                              )}
+                            </strong>
+                          </Fragment>
+                        ) : null}
                       </Typography>
                     </Grid>
                   </Grid>

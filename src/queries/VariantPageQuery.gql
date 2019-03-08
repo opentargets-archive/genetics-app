@@ -11,6 +11,9 @@ query VariantPageQuery($variantId: String!) {
       symbol
     }
     nearestCodingGeneDistance
+    mostSevereConsequence
+    caddRaw
+    caddPhred
     gnomadAFR
     gnomadAMR
     gnomadASJ
