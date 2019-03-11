@@ -53,7 +53,7 @@ const styles = () => ({
 const GnomADTable = ({ classes, data, variantId }) => (
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
-      <Typography variant="subtitle1">External References</Typography>
+      <Typography variant="subtitle1">External references</Typography>
       <Typography variant="subtitle2">
         <strong>Ensembl:</strong>{' '}
         <a
