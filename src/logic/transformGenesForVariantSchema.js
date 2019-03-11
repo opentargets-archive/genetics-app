@@ -3,11 +3,11 @@ import React from 'react';
 // TODO: this data should be part of the API response
 const SOURCE_MAP = {
   canonical_tss: {
-    sourceLabel: 'Inverse distance',
+    sourceLabel: 'Distance (Canonical TSS)',
     sourceDescriptionOverview:
-      'Summary of evidence linking this variant to genes using inverse distance to canonical transcription start site.',
+      'Distance from the variant to canonical transcript TSS (kilobases).',
     sourceDescriptionBreakdown:
-      'Evidence linking this variant to genes using inverse distance to canonical transcription start site.',
+      'Distance from the variant to canonical transcript TSS (kilobases).',
     pmid: null,
   },
   gtex_v7: {

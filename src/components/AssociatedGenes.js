@@ -14,6 +14,7 @@ import {
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import generateComparator from '../utils/generateComparator';
 
 const OVERVIEW = 'overview';
 
@@ -24,9 +25,11 @@ const radiusScale = d3
 
 const createDistanceCellRenderer = schema => {
   return rowData => {
-    if (rowData[schema.sourceId] !== undefined) {
-      const circleRadius = radiusScale(rowData[schema.sourceId]);
-      return <DataCircle radius={circleRadius} colorScheme="default" />;
+    const distanceData = rowData[schema.sourceId];
+    if (distanceData !== undefined) {
+      const { distance, quantile } = distanceData.tissues[0];
+      const circleRadius = radiusScale(quantile);
+      return <React.Fragment>{Math.round(distance / 1000)}</React.Fragment>;
     }
   };
 };
@@ -41,6 +44,9 @@ const createQtlCellRenderer = schema => {
 };
 
 const tissueComparator = (a, b) =>
+  a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
+
+const distanceComparator = (a, b) =>
   a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
 
 const createIntervalCellRenderer = schema => {
@@ -98,6 +104,12 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       label: schema.sourceLabel,
       tooltip: schema.sourceDescriptionOverview,
       renderCell: createDistanceCellRenderer(schema),
+      comparator: generateComparator(
+        d =>
+          d[schema.sourceId] && d[schema.sourceId].tissues[0].distance
+            ? d[schema.sourceId].tissues[0].distance
+            : null
+      ),
     })),
     ...genesForVariantSchema.qtls.map(schema => ({
       id: schema.sourceId,
@@ -130,8 +142,10 @@ const getDataAll = genesForVariant => {
       geneSymbol: item.gene.symbol,
       overallScore: item.overallScore,
     };
-    item.distances.forEach(qtl => {
-      row[qtl.sourceId] = qtl.aggregatedScore;
+    // for distances we want to use the first element of
+    // the distances array
+    item.distances.forEach(distance => {
+      row[distance.sourceId] = item.distances[0];
     });
     item.qtls.forEach(qtl => {
       row[qtl.sourceId] = qtl.aggregatedScore;
@@ -160,21 +174,13 @@ const getTissueColumns = (schema, genesForVariant) => {
             id: tissue.id,
             label: tissue.name,
             verticalHeader: true,
-            renderCell: rowData => {
-              if (rowData[tissue.id]) {
-                const distanceRadius = radiusScale(rowData[tissue.id]);
-                return (
-                  <Tooltip title={`quantile: ${rowData[tissue.id]}`}>
-                    <span>
-                      <DataCircle
-                        radius={distanceRadius}
-                        colorScheme="default"
-                      />
-                    </span>
-                  </Tooltip>
-                );
-              }
-            },
+            renderCell: rowData =>
+              rowData[tissue.id]
+                ? Math.round(rowData[tissue.id].distance / 1000)
+                : null,
+            comparator: generateComparator(
+              d => (d[tissue.id] ? d[tissue.id].distance : null)
+            ),
           };
         })
         .sort(tissueComparator);
@@ -281,7 +287,10 @@ const getTissueData = (schema, genesForVariant) => {
     if (element) {
       element.tissues.forEach(elementTissue => {
         if (elementTissue.__typename === 'DistanceTissue') {
-          row[elementTissue.tissue.id] = elementTissue.quantile;
+          row[elementTissue.tissue.id] = {
+            quantile: elementTissue.quantile,
+            distance: elementTissue.distance,
+          };
         } else if (elementTissue.__typename === 'FPredTissue') {
           row[elementTissue.tissue.id] = elementTissue.maxEffectLabel;
         } else if (elementTissue.__typename === 'IntervalTissue') {
