@@ -3,25 +3,9 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
-import Badge from '@material-ui/core/Badge';
 import Icon from '@material-ui/core/Icon';
-import HelpIcon from '@material-ui/icons/Help';
 
-import {
-  Typography,
-  PlotContainer,
-  PlotContainerSection,
-  commaSeparate,
-} from 'ot-ui';
-import { CardContent } from '@material-ui/core';
+import { Typography, commaSeparate } from 'ot-ui';
 
 const populations = [
   { code: 'AFR', description: 'African/African-American' },
@@ -66,9 +50,51 @@ const styles = () => ({
   },
 });
 
-const GnomADTable = ({ classes, data }) => (
+const GnomADTable = ({ classes, data, variantId }) => (
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
+      <Typography variant="subtitle1">External References</Typography>
+      <Typography variant="subtitle2">
+        <strong>Ensembl:</strong>{' '}
+        <a
+          href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+            data.rsId
+          }`}
+          target="_blank"
+        >
+          {data.rsId}
+          <Icon
+            className={classNames(
+              'fa',
+              'fa-external-link-alt',
+              classes.externalLinkIcon
+            )}
+          />
+        </a>
+      </Typography>
+      <Typography variant="subtitle2">
+        <strong>gnomAD:</strong>{' '}
+        {variantId ? (
+          <a
+            href={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
+              /_/g,
+              '-'
+            )}`}
+            target="_blank"
+          >
+            {variantId.replace(/_/g, '-')}
+            <Icon
+              className={classNames(
+                'fa',
+                'fa-external-link-alt',
+                classes.externalLinkIcon
+              )}
+            />
+          </a>
+        ) : null}
+      </Typography>
+      <br />
+
       <Typography variant="subtitle1">Neighbourhood</Typography>
       <Typography variant="subtitle2">
         <strong>
@@ -90,7 +116,23 @@ const GnomADTable = ({ classes, data }) => (
       </Typography>
       <br />
 
-      <Typography variant="subtitle1">VEP</Typography>
+      <Typography variant="subtitle1">
+        Variant Effect Predictor (
+        <a
+          href="https://www.ensembl.org/info/docs/tools/vep/index.html"
+          target="_blank"
+        >
+          VEP
+          <Icon
+            className={classNames(
+              'fa',
+              'fa-external-link-alt',
+              classes.externalLinkIcon
+            )}
+          />
+        </a>
+        )
+      </Typography>
       <Typography variant="subtitle2">
         <strong>Most severe consequence:</strong>{' '}
         {data.mostSevereConsequence.replace(/_/g, ' ')}
@@ -147,25 +189,6 @@ const GnomADTable = ({ classes, data }) => (
           </React.Fragment>
         ))}
       </Grid>
-
-      {/* <Typography variant="subtitle2">
-        {populations.map(p => (
-          <React.Fragment key={p.code}>
-            <Badge
-              badgeContent={
-                <Tooltip title={p.description} placement="top">
-                  <HelpIcon className={classes.tooltipIcon} />
-                </Tooltip>
-              }
-            >
-              <strong>{p.code}: </strong>
-            </Badge>
-            <span className={classes.valueWithBadgedLabel}>
-              {data[`gnomad${p.code}`].toPrecision(3)}
-            </span>
-          </React.Fragment>
-        ))}
-      </Typography> */}
     </Grid>
   </Grid>
 );

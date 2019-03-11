@@ -209,25 +209,6 @@ class VariantPage extends React.Component {
                       >
                         {variantInfo.rsId}
                       </Typography>
-                      <a
-                        className={classes.link}
-                        href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
-                          variantInfo.rsId
-                        }`}
-                        target="_blank"
-                      >
-                        <Button variant="outlined">Ensembl</Button>
-                      </a>
-                      <a
-                        className={classes.link}
-                        href={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
-                          /_/g,
-                          '-'
-                        )}`}
-                        target="_blank"
-                      >
-                        <Button variant="outlined">gnomAD</Button>
-                      </a>
                     </Grid>
                   </Grid>
                   <Grid container justify="space-between">
@@ -247,54 +228,6 @@ class VariantPage extends React.Component {
                         </LocusLink>
                       ) : null}
                     </Grid>
-                    {/* <Grid item>
-                      <Typography variant="subtitle1">
-                        {variantInfo.nearestGene ? (
-                          <Fragment>
-                            Nearest Gene (
-                            {commaSeparate(variantInfo.nearestGeneDistance)} bp
-                            away):{' '}
-                            <Link to={`/gene/${variantInfo.nearestGene.id}`}>
-                              {variantInfo.nearestGene.symbol}
-                            </Link>
-                          </Fragment>
-                        ) : null}
-                        {variantInfo.nearestGene &&
-                        variantInfo.nearestCodingGene ? (
-                          <br />
-                        ) : null}
-                        {variantInfo.nearestCodingGene ? (
-                          <Fragment>
-                            Nearest Protein-Coding Gene (
-                            {commaSeparate(
-                              variantInfo.nearestCodingGeneDistance
-                            )}{' '}
-                            bp away):{' '}
-                            <Link
-                              to={`/gene/${variantInfo.nearestCodingGene.id}`}
-                            >
-                              {variantInfo.nearestCodingGene.symbol}
-                            </Link>
-                          </Fragment>
-                        ) : null}
-                        {(variantInfo.nearestGene ||
-                          variantInfo.nearestCodingGene) &&
-                        variantInfo.mostSevereConsequence ? (
-                          <br />
-                        ) : null}
-                        {variantInfo.mostSevereConsequence ? (
-                          <Fragment>
-                            Most Severe VEP Consequence:{' '}
-                            <strong>
-                              {variantInfo.mostSevereConsequence.replace(
-                                /_/g,
-                                ' '
-                              )}
-                            </strong>
-                          </Fragment>
-                        ) : null}
-                      </Typography>
-                    </Grid> */}
                   </Grid>
                 </Paper>
                 <SectionHeading
@@ -306,7 +239,9 @@ class VariantPage extends React.Component {
                     },
                   ]}
                 />
-                {isVariantWithInfo ? <GnomADTable data={variantInfo} /> : null}
+                {isVariantWithInfo ? (
+                  <GnomADTable variantId={variantId} data={variantInfo} />
+                ) : null}
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"
