@@ -136,10 +136,10 @@ const GnomADTable = ({ classes, data }) => (
       <Grid container>
         {populations.map(p => (
           <React.Fragment key={p.code}>
-            <Grid item xs={6}>
+            <Grid item xs={9}>
               <Typography variant="subtitle2">{p.description}</Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={3}>
               <Typography variant="subtitle2" align="right">
                 {data[`gnomad${p.code}`].toPrecision(3)}
               </Typography>
