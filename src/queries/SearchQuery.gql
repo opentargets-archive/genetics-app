@@ -11,14 +11,12 @@ query SearchQuery($queryString: String!) {
       end
     }
     variants {
-      variant {
-        id
-        rsId
-        chromosome
-        position
-        refAllele
-        altAllele
-      }
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
     }
     studies {
       studyId

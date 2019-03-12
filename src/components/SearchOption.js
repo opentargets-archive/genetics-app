@@ -14,12 +14,7 @@ const Option = ({ data }) => {
         />
       );
     case 'variant':
-      return (
-        <SearchOption
-          heading={data.variant.id}
-          subheading={data.variant.rsId}
-        />
-      );
+      return <SearchOption heading={data.id} subheading={data.rsId} />;
     case 'study':
       const pubYear = new Date(data.pubDate).getFullYear();
       return (
