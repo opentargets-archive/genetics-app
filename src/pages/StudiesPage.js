@@ -278,6 +278,7 @@ class StudiesPage extends React.Component {
           {({ loading, error, data }) => {
             const isStudyWithInfo = hasStudyInfo(data);
             const studyInfo = isStudyWithInfo ? getStudyInfo(data) : {};
+            const { pubAuthor, pubDate, pubJournal } = studyInfo;
             const {
               studySelectOptions,
               pileupPseudoStudy,
@@ -295,27 +296,15 @@ class StudiesPage extends React.Component {
             );
             return (
               <Fragment>
-                <Paper className={classes.section}>
-                  <Typography variant="h4" color="textSecondary">
-                    {studyInfo.traitReported}
-                  </Typography>
-                  <Grid container justify="space-between">
-                    <Grid item>
-                      {isStudyWithInfo ? (
-                        <Typography variant="subtitle1">
-                          <StudyInfo studyInfo={data.studyInfo} />
-                        </Typography>
-                      ) : null}
-                    </Grid>
-                    <Grid item>
-                      {isStudyWithInfo ? (
-                        <Typography variant="subtitle1">
-                          <StudySize studyInfo={data.studyInfo} />
-                        </Typography>
-                      ) : null}
-                    </Grid>
-                  </Grid>
-                </Paper>
+                <Typography variant="h4" color="textSecondary">
+                  {studyInfo.traitReported}
+                </Typography>
+                <Typography variant="subtitle1">
+                  {pubAuthor}{' '}
+                  {pubDate ? `(${new Date(pubDate).getFullYear()})` : null}{' '}
+                  {pubJournal ? <em>{pubJournal}</em> : null}
+                </Typography>
+
                 <SectionHeading
                   heading={`Compare overlapping studies`}
                   subheading={
