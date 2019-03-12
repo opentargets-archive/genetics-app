@@ -5,9 +5,9 @@ const SOURCE_MAP = {
   canonical_tss: {
     sourceLabel: 'Distance (Canonical TSS)',
     sourceDescriptionOverview:
-      'Distance from the variant to canonical transcript TSS (kilobases).',
+      'Distance from the variant to canonical transcript TSS (base pairs).',
     sourceDescriptionBreakdown:
-      'Distance from the variant to canonical transcript TSS (kilobases).',
+      'Distance from the variant to canonical transcript TSS (base pairs).',
     pmid: null,
   },
   gtex_v7: {

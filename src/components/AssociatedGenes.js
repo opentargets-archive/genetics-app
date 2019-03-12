@@ -10,6 +10,7 @@ import {
   LabelHML,
   Tooltip,
   significantFigures,
+  commaSeparate,
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
@@ -29,7 +30,7 @@ const createDistanceCellRenderer = schema => {
     if (distanceData !== undefined) {
       const { distance, quantile } = distanceData.tissues[0];
       const circleRadius = radiusScale(quantile);
-      return <React.Fragment>{Math.round(distance / 1000)}</React.Fragment>;
+      return <React.Fragment>{commaSeparate(distance)}</React.Fragment>;
     }
   };
 };
@@ -176,7 +177,7 @@ const getTissueColumns = (schema, genesForVariant) => {
             verticalHeader: true,
             renderCell: rowData =>
               rowData[tissue.id]
-                ? Math.round(rowData[tissue.id].distance / 1000)
+                ? commaSeparate(rowData[tissue.id].distance)
                 : null,
             comparator: generateComparator(
               d => (d[tissue.id] ? d[tissue.id].distance : null)
