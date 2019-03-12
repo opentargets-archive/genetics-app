@@ -1,7 +1,6 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -14,9 +13,10 @@ import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
 import StudyInfo from '../components/StudyInfo';
-import StudySize from '../components/StudySize';
+import OverlapLink from '../components/OverlapLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
+import StudySummary from '../components/StudySummary';
 
 const SIGNIFICANCE = 5e-8;
 const maxPos =
@@ -124,6 +124,10 @@ class StudyPage extends React.Component {
       end,
     } = this.state;
 
+    const { nInitial, nReplication, nCases } = isStudyWithInfo
+      ? data.studyInfo
+      : {};
+
     return (
       <BasePage>
         <ScrollToTop />
@@ -142,21 +146,23 @@ class StudyPage extends React.Component {
                 </Typography>
               ) : null}
             </Grid>
-            <Grid item>
-              {isStudyWithInfo ? (
-                <Typography variant="subtitle1">
-                  <StudySize studyInfo={data.studyInfo} />
-                </Typography>
-              ) : null}
-            </Grid>
           </Grid>
-          <Link
-            to={`/study-comparison/${studyId}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Button gradient>Compare to related studies</Button>
-          </Link>
+          <OverlapLink studyId={studyId} />
         </Paper>
+
+        <SectionHeading
+          heading="Study summary"
+          entities={[
+            {
+              type: 'study',
+              fixed: true,
+            },
+          ]}
+        />
+        {isStudyWithInfo ? (
+          <StudySummary {...{ studyId, nInitial, nReplication, nCases }} />
+        ) : null}
+
         <SectionHeading
           heading="Independently-associated loci"
           subheading={
