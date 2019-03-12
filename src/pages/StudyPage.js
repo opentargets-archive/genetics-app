@@ -1,7 +1,6 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
 import { Helmet } from 'react-helmet';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -12,7 +11,6 @@ import { SectionHeading, Button, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 import ScrollToTop from '../components/ScrollToTop';
-import StudyInfo from '../components/StudyInfo';
 import OverlapLink from '../components/OverlapLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
@@ -124,7 +122,7 @@ class StudyPage extends React.Component {
       end,
     } = this.state;
 
-    const { pubJournal, pmid, nInitial, nReplication, nCases } = isStudyWithInfo
+    const { pubAuthor, pubDate, pubJournal } = isStudyWithInfo
       ? data.studyInfo
       : {};
 
@@ -134,21 +132,25 @@ class StudyPage extends React.Component {
         <Helmet>
           <title>{studyId}</title>
         </Helmet>
-        <Paper className={classes.section}>
-          <Typography variant="h4" color="textSecondary">
-            {isStudyWithInfo ? data.studyInfo.traitReported : null}
-          </Typography>
-          <Grid container justify="space-between">
-            <Grid item>
-              {isStudyWithInfo ? (
-                <Typography variant="subtitle1">
-                  <StudyInfo studyInfo={data.studyInfo} />
-                </Typography>
-              ) : null}
-            </Grid>
+        <Grid container justify="space-between">
+          <Grid item>
+            <Typography
+              className={classes.header}
+              variant="h4"
+              color="textSecondary"
+            >
+              {isStudyWithInfo ? data.studyInfo.traitReported : null}
+            </Typography>
+            <Typography variant="subtitle1">
+              {pubAuthor}{' '}
+              {pubDate ? `(${new Date(pubDate).getFullYear()})` : null}{' '}
+              {pubJournal ? <em>{pubJournal}</em> : null}
+            </Typography>
           </Grid>
-          <OverlapLink studyId={studyId} />
-        </Paper>
+          <Grid item>
+            <OverlapLink big studyId={studyId} />
+          </Grid>
+        </Grid>
 
         <SectionHeading
           heading="Study summary"
@@ -159,11 +161,7 @@ class StudyPage extends React.Component {
             },
           ]}
         />
-        {isStudyWithInfo ? (
-          <StudySummary
-            {...{ pubJournal, pmid, studyId, nInitial, nReplication, nCases }}
-          />
-        ) : null}
+        {isStudyWithInfo ? <StudySummary {...data.studyInfo} /> : null}
 
         <SectionHeading
           heading="Independently-associated loci"

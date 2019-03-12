@@ -12,7 +12,6 @@ import {
   SectionHeading,
   Button,
   Typography,
-  LocusIcon,
   OverviewIcon,
   DrugsIcon,
   MouseIcon,
@@ -219,15 +218,11 @@ class GenePage extends React.Component {
                         {isValidGene ? (
                           <Grid item>
                             <LocusLink
+                              big
                               chromosome={chromosome}
                               position={Math.round((start + end) / 2)}
                               selectedGenes={[geneId]}
-                              classes={locusLinkClasses}
-                            >
-                              View associated variants and traits within Locus
-                              View plot
-                              <LocusIcon className={classes.locusIcon} />
-                            </LocusLink>
+                            />
                           </Grid>
                         ) : null}
                       </Grid>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -36,6 +35,9 @@ const styles = () => ({
 
 const StudySummary = ({
   classes,
+  pubAuthor,
+  pubDate,
+  pubJournal,
   pmid,
   nInitial,
   nReplication,

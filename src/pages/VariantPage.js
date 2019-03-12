@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
 
-import { SectionHeading, Typography, Button, commaSeparate } from 'ot-ui';
+import { SectionHeading, Typography } from 'ot-ui';
 
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+
+import { PlotContainer } from 'ot-ui';
 
 import BasePage from './BasePage';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
@@ -17,9 +17,7 @@ import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
-import PlotContainer from 'ot-ui/build/components/PlotContainer';
 import PheWASSection from '../components/PheWASSection';
-
 import VARIANT_PAGE_QUERY from '../queries/VariantPageQuery.gql';
 import GnomADTable from '../components/GnomADTable';
 
@@ -192,46 +190,36 @@ class VariantPage extends React.Component {
 
             return (
               <Fragment>
-                <Paper className={classes.headerSection}>
-                  <Grid container>
-                    <Grid item>
-                      <Typography
-                        className={classes.header}
-                        variant="h4"
-                        color="textSecondary"
-                      >
-                        {variantId}
-                      </Typography>{' '}
-                      <Typography
-                        className={classes.header}
-                        variant="h6"
-                        color="textSecondary"
-                      >
-                        {variantInfo.rsId}
-                      </Typography>
-                    </Grid>
+                <Grid container justify="space-between">
+                  <Grid item>
+                    <Typography
+                      className={classes.header}
+                      variant="h4"
+                      color="textSecondary"
+                    >
+                      {variantId}
+                    </Typography>
                   </Grid>
-                  <Grid container justify="space-between">
-                    <Grid item>
-                      {isIndexVariant || isTagVariant ? (
-                        <LocusLink
-                          chromosome={chromosome}
-                          position={position}
-                          selectedIndexVariants={
-                            isIndexVariant ? [variantId] : null
-                          }
-                          selectedTagVariants={
-                            isTagVariant && !isIndexVariant ? [variantId] : null
-                          }
-                        >
-                          View locus
-                        </LocusLink>
-                      ) : null}
-                    </Grid>
+                  <Grid item>
+                    {isIndexVariant || isTagVariant ? (
+                      <LocusLink
+                        big
+                        chromosome={chromosome}
+                        position={position}
+                        selectedIndexVariants={
+                          isIndexVariant ? [variantId] : null
+                        }
+                        selectedTagVariants={
+                          isTagVariant && !isIndexVariant ? [variantId] : null
+                        }
+                      >
+                        View locus
+                      </LocusLink>
+                    ) : null}
                   </Grid>
-                </Paper>
+                </Grid>
                 <SectionHeading
-                  heading="Summary"
+                  heading="Variant summary"
                   entities={[
                     {
                       type: 'variant',
