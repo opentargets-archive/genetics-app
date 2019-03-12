@@ -111,6 +111,7 @@ query VariantPageQuery($variantId: String!) {
           id
           name
         }
+        distance
         score
         quantile
       }
