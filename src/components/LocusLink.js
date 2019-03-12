@@ -76,7 +76,7 @@ const LocusLink = ({
       className={classes.link}
     >
       <Button gradient className={big ? classes.buttonBig : classes.button}>
-        LocusPlot
+        Locus Plot
         <LocusIcon className={big ? classes.iconBig : classes.icon} />
       </Button>
     </Link>
