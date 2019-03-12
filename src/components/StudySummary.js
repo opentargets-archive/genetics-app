@@ -34,7 +34,14 @@ const styles = () => ({
   },
 });
 
-const StudySummary = ({ classes, nInitial, nReplication, nCases, studyId }) => (
+const StudySummary = ({
+  classes,
+  pmid,
+  nInitial,
+  nReplication,
+  nCases,
+  studyId,
+}) => (
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
       <Typography variant="subtitle1">External references</Typography>
@@ -57,10 +64,28 @@ const StudySummary = ({ classes, nInitial, nReplication, nCases, studyId }) => (
         <Typography variant="subtitle2">
           <strong>GWAS Catalog:</strong>{' '}
           <a
-            href={`https://www.ebi.ac.uk/gwas/studies/${studyId}`}
+            href={`https://www.ebi.ac.uk/gwas/studies/${studyId.replace(
+              /_\d+/,
+              ''
+            )}`}
             target="_blank"
           >
-            {studyId}
+            {studyId.replace(/_\d+/, '')}
+            <Icon
+              className={classNames(
+                'fa',
+                'fa-external-link-alt',
+                classes.externalLinkIcon
+              )}
+            />
+          </a>
+        </Typography>
+      ) : null}
+      {pmid ? (
+        <Typography variant="subtitle2">
+          <strong>PubMed ID:</strong>{' '}
+          <a href={`http://europepmc.org/abstract/med/${pmid}`} target="_blank">
+            {pmid}
             <Icon
               className={classNames(
                 'fa',

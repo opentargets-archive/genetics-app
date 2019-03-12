@@ -124,7 +124,7 @@ class StudyPage extends React.Component {
       end,
     } = this.state;
 
-    const { nInitial, nReplication, nCases } = isStudyWithInfo
+    const { pubJournal, pmid, nInitial, nReplication, nCases } = isStudyWithInfo
       ? data.studyInfo
       : {};
 
@@ -160,7 +160,9 @@ class StudyPage extends React.Component {
           ]}
         />
         {isStudyWithInfo ? (
-          <StudySummary {...{ studyId, nInitial, nReplication, nCases }} />
+          <StudySummary
+            {...{ pubJournal, pmid, studyId, nInitial, nReplication, nCases }}
+          />
         ) : null}
 
         <SectionHeading
