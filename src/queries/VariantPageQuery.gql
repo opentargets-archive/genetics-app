@@ -134,6 +134,13 @@ query VariantPageQuery($variantId: String!) {
       nTotal
       overallR2
       posteriorProbability
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
     }
   }
   tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
