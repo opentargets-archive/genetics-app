@@ -38,6 +38,13 @@ query LocusPageQuery($chromosome: String!, $start: Long!, $end: Long!) {
       r2
       pval
       posteriorProbability
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
     }
   }
 }
