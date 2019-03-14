@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import { Manhattan, chromosomesWithCumulativeLengths } from 'ot-charts';
-import { SectionHeading, Button, DownloadSVGPlot, ListTooltip } from 'ot-ui';
+import { SectionHeading, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
 import BasePage from './BasePage';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
