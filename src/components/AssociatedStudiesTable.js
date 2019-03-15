@@ -4,6 +4,7 @@ import { OtTable, commaSeparate, Autocomplete } from 'ot-ui';
 
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import PmidOrBiobankLink from './PmidOrBiobankLink';
 
 const tableColumns = ({
   geneId,
@@ -40,13 +41,7 @@ const tableColumns = ({
     id: 'pmid',
     label: 'PMID',
     renderCell: rowData => (
-      <a
-        href={`http://europepmc.org/abstract/med/${rowData.pmid}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {rowData.pmid}
-      </a>
+      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
     ),
   },
   {
