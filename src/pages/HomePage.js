@@ -25,7 +25,7 @@ const EXAMPLES = [
   { label: 'rs4129267', url: '/variant/1_154426264_C_T', type: 'variant-rsid' },
   {
     label: "Crohn's disease (de Lange KM et al. 2017)",
-    url: '/study/GCST004132',
+    url: '/study/GCST004132_1',
     type: 'study',
   },
 ];
