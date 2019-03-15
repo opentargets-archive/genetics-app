@@ -14,12 +14,12 @@ const populations = [
   { code: 'EAS', description: 'East Asian' },
   { code: 'FIN', description: 'Finnish' },
   { code: 'NFE', description: 'Non-Finnish European' },
-  { code: 'NFEEST', description: 'Non-Finnish Eurpoean Estonian' },
+  { code: 'NFEEST', description: 'Non-Finnish European Estonian' },
   {
     code: 'NFENWE',
-    description: 'Non-Finnish Eurpoean North-Western European',
+    description: 'Non-Finnish European North-Western European',
   },
-  { code: 'NFESEU', description: 'Non-Finnish Eurpoean Southern European' },
+  { code: 'NFESEU', description: 'Non-Finnish European Southern European' },
   { code: 'OTH', description: 'Other (population not assigned)' },
 ];
 
