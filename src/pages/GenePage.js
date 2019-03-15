@@ -192,7 +192,7 @@ class GenePage extends React.Component {
               d => d.selected
             );
 
-            const { chromosome, start, end, symbol } = gene;
+            const { chromosome, start, end, symbol, bioType } = gene;
             return (
               <React.Fragment>
                 <Helmet>
@@ -348,18 +348,20 @@ class GenePage extends React.Component {
                             </Button>
                           </a>
                         </Grid>
-                        <Grid item>
-                          <a
-                            className={classes.link}
-                            href={`https://www.uniprot.org/uniprot/?query=${symbol}&sort=score`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Button variant="outlined">
-                              UniProt <LinkIcon />
-                            </Button>
-                          </a>
-                        </Grid>
+                        {bioType === 'protein_coding' ? (
+                          <Grid item>
+                            <a
+                              className={classes.link}
+                              href={`https://www.uniprot.org/uniprot/?query=${symbol}&sort=score`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button variant="outlined">
+                                UniProt <LinkIcon />
+                              </Button>
+                            </a>
+                          </Grid>
+                        ) : null}
                         <Grid item>
                           <a
                             className={classes.link}
