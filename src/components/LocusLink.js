@@ -16,9 +16,11 @@ const mb = 1000000;
 const styles = {
   button: {
     lineHeight: 1,
+    minWidth: '110px',
   },
   buttonBig: {
     fontSize: '1.1rem',
+    minWidth: '150px',
     width: '150px',
     height: '40px',
     paddingLeft: '15px',

@@ -1,18 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import queryString from 'query-string';
 import { withStyles } from '@material-ui/core';
 
 import { Button, OverlapIcon } from 'ot-ui';
 
-const mb = 1000000;
-
 const styles = {
   button: {
     lineHeight: 1,
+    minWidth: '110px',
   },
   buttonBig: {
     fontSize: '1.1rem',
+    minWidth: '200px',
     width: '200px',
     height: '40px',
     paddingLeft: '15px',
