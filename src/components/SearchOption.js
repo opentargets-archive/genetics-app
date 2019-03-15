@@ -21,9 +21,12 @@ const Option = ({ data }) => {
         <SearchOption
           heading={data.traitReported}
           subheading={`${data.pubAuthor} (${pubYear})`}
-          extra={`${
-            data.pubJournal ? data.pubJournal : ''
-          } N Study: ${commaSeparate(data.nInitial)}`}
+          extra={
+            <React.Fragment>
+              {data.pubJournal ? <em>{data.pubJournal} </em> : null}N Study:{' '}
+              {commaSeparate(data.nInitial)}
+            </React.Fragment>
+          }
         />
       );
     case 'study-overlap':
