@@ -25,6 +25,11 @@ const Option = ({ data }) => {
             <React.Fragment>
               {data.pubJournal ? <em>{data.pubJournal} </em> : null}N Study:{' '}
               {commaSeparate(data.nInitial)}
+              {data.numAssocLoci ? (
+                <span style={{ float: 'right' }}>
+                  <strong>{data.numAssocLoci} associated loci</strong>
+                </span>
+              ) : null}
             </React.Fragment>
           }
         />
