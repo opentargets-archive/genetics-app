@@ -408,6 +408,7 @@ class GenePage extends React.Component {
                   authorFilterValue={authorFilterValue}
                   authorFilterOptions={authorFilterOptions}
                   authorFilterHandler={this.handleAuthorFilter}
+                  filenameStem={`${symbol}_associated_studies`}
                 />
               </React.Fragment>
             );
