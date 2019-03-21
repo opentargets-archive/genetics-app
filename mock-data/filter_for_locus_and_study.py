@@ -19,6 +19,7 @@ COLOC_TABLE_COLS = [
     'right_pos',
     'right_ref',
     'right_alt',
+    'coloc_h3',
     'coloc_h4',
     'coloc_log_H4_H3'
 ]
@@ -30,6 +31,7 @@ COLOC_TABLE_COLS_MAPPING = {
     'right_pos': 'pos',
     'right_ref': 'ref',
     'right_alt': 'alt',
+    'coloc_h3': 'h3',
     'coloc_h4': 'h4',
     'coloc_log_H4_H3': 'logH4H3'
 }
@@ -84,6 +86,10 @@ def load_coloc():
     #     .drop(['right_chrom', 'right_pos', 'right_ref', 'right_alt'], axis=1)
     #     .drop_duplicates()
     # )
+
+    # df['coloc_h3'] = df['coloc_h3'].astype('float64')
+    # df['coloc_h4'] = df['coloc_h4'].astype('float64')
+    # df['coloc_log_H4_H3'] = df['coloc_log_H4_H3'].astype('float64')
 
     return df
 
