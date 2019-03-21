@@ -1,6 +1,13 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { OtTable, Button, significantFigures } from 'ot-ui';
+
+import GENE_MAPPING from '../mock-data/gene-mappings.json';
+
+const GENE_PHENOTYPE_LOOKUP = GENE_MAPPING.reduce((acc, d) => {
+  acc[d.phenotype] = d;
+  return acc;
+}, {});
 
 const tableColumns = [
   {
@@ -11,7 +18,14 @@ const tableColumns = [
   {
     id: 'phenotype',
     label: 'Gene',
-    // renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
+    renderCell: d => {
+      if (d.phenotype && d.phenotype.startsWith('ILMN_')) {
+        const { ensgId, symbol } = GENE_PHENOTYPE_LOOKUP[d.phenotype];
+        return <Link to={`/gene/${ensgId}`}>{symbol}</Link>;
+      } else {
+        return <Link to={`/gene/${d.phenotype}`}>{d.phenotype}</Link>;
+      }
+    },
   },
   {
     id: 'bioFeature',

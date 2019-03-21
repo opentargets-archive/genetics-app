@@ -25,10 +25,9 @@ import {
 } from '../mock-data/locusTraitPage';
 
 import STUDY_INFO from '../mock-data/study-info.json';
+
 import COLOC_QTL_TABLE_DATA from '../mock-data/coloc-qtl-table.json';
 import COLOC_GWAS_TABLE_DATA from '../mock-data/coloc-gwas-table.json';
-
-console.log(COLOC_QTL_TABLE_DATA);
 
 const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
