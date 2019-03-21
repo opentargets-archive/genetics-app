@@ -1,0 +1,14 @@
+[
+  {
+    "study": "GCST006288_hbmd",
+    "phenotype": null,
+    "bioFeature": null,
+    "chrom": 19,
+    "pos": 1170298,
+    "ref": "A",
+    "alt": "G",
+    "h3": 0.0770899505,
+    "h4": 0.9228917029,
+    "logH4H3": 2.4825389677
+  }
+]

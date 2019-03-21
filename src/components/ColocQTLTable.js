@@ -1,29 +1,40 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { OtTable, Button } from 'ot-ui';
+// import { Link } from 'react-router-dom';
+import { OtTable, Button, significantFigures } from 'ot-ui';
 
 const tableColumns = [
   {
-    id: 'molecularTrait',
+    id: 'type',
     label: 'Molecular Trait',
+    renderCell: d => 'eQTL',
   },
   {
-    id: 'gene',
+    id: 'phenotype',
     label: 'Gene',
-    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
+    // renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   },
   {
-    id: 'tissue',
+    id: 'bioFeature',
     label: 'Tissue',
-    renderCell: d => d.tissue.name,
   },
   {
-    id: 'source',
+    id: 'study',
     label: 'Source',
+  },
+  {
+    id: 'h3',
+    label: 'H3',
+    renderCell: d => significantFigures(d.h3),
   },
   {
     id: 'h4',
     label: 'H4',
+    renderCell: d => significantFigures(d.h4),
+  },
+  {
+    id: 'logH4H3',
+    label: 'log(H4/H3)',
+    renderCell: d => significantFigures(d.logH4H3),
   },
   {
     id: 'show',
@@ -38,7 +49,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => (
     error={error}
     columns={tableColumns}
     data={data}
-    sortBy="nInitial"
+    sortBy="logH4H3"
     order="desc"
     downloadFileStem={filenameStem}
   />

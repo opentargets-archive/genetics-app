@@ -7,7 +7,8 @@ import { Regional, GeneTrack, SigSig } from 'ot-charts';
 
 import BasePage from './BasePage';
 import StudyInfo from '../components/StudyInfo';
-import ColocTable from '../components/ColocTable';
+import ColocQTLTable from '../components/ColocQTLTable';
+import ColocGWASTable from '../components/ColocGWASTable';
 import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
 import {
   MOCK_STUDY_INFO,
@@ -22,6 +23,12 @@ import {
   MOCK_REGIONAL_DATA_3,
   MOCK_SIG_SIG_DATA,
 } from '../mock-data/locusTraitPage';
+
+import STUDY_INFO from '../mock-data/study-info.json';
+import COLOC_QTL_TABLE_DATA from '../mock-data/coloc-qtl-table.json';
+import COLOC_GWAS_TABLE_DATA from '../mock-data/coloc-gwas-table.json';
+
+console.log(COLOC_QTL_TABLE_DATA);
 
 const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
@@ -66,10 +73,25 @@ class LocusTraitPage extends React.Component {
         />
         <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} />
         <SectionHeading
-          heading={`Colocalisation`}
-          subheading={`Which studies/molecular traits colocalise with ${studyId} at this locus?`}
+          heading={`QTL Colocalisation`}
+          subheading={`Which molecular traits colocalise with ${studyId} at this locus?`}
         />
-        <ColocTable loading={false} error={false} data={MOCK_COLOC_DATA} />
+        <ColocQTLTable
+          loading={false}
+          error={false}
+          data={COLOC_QTL_TABLE_DATA}
+        />
+
+        <SectionHeading
+          heading={`GWAS Study Colocalisation`}
+          subheading={`Which GWAS studies colocalise with ${studyId} at this locus?`}
+        />
+        <ColocGWASTable
+          loading={false}
+          error={false}
+          data={COLOC_GWAS_TABLE_DATA}
+        />
+
         <SigSig data={MOCK_SIG_SIG_DATA} />
         <Regional
           data={MOCK_REGIONAL_DATA_1}
