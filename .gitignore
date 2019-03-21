@@ -24,3 +24,5 @@ yarn-error.log*
 *.swp
 
 src/mock-data/ccdc71l-locus.json
+mock-data/raw
+mock-data/processed
