@@ -11,7 +11,30 @@ PROCESSED_DIR = os.path.join(SCRIPT_DIR, 'processed')
 COLOC_DIR = os.path.join(SCRIPT_DIR, 'raw/genetics-portal-staging/coloc/190320')
 COLOC_FILE = os.path.join(COLOC_DIR, 'coloc.json.gz')
 COLOC_N_VARS_THRESHOLD = 200
-COLOC_FILE_OUT = 'coloc-table.json'
+COLOC_TABLE_COLS = [
+    'right_study',
+    'right_phenotype',
+    'right_bio_feature',
+    'right_chrom',
+    'right_pos',
+    'right_ref',
+    'right_alt',
+    'coloc_h4',
+    'coloc_log_H4_H3'
+]
+COLOC_TABLE_COLS_MAPPING = {
+    'right_study': 'study',
+    'right_phenotype': 'phenotype',
+    'right_bio_feature': 'bioFeature',
+    'right_chrom': 'chrom',
+    'right_pos': 'pos',
+    'right_ref': 'ref',
+    'right_alt': 'alt',
+    'coloc_h4': 'h4',
+    'coloc_log_H4_H3': 'logH4H3'
+}
+COLOC_QTL_FILE_OUT = 'coloc-qtl-table.json'
+COLOC_GWAS_FILE_OUT = 'coloc-gwas-table.json'
 
 
 def build_mock_data_for_locus_and_study(lt, df_coloc):
@@ -23,8 +46,7 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     lt_dir = os.path.join(PROCESSED_DIR, lt_dir_name)
     os.makedirs(lt_dir, exist_ok=True)
 
-    # get rows for coloc table
-    coloc_outfile = os.path.join(lt_dir, COLOC_FILE_OUT)
+    # coloc table
     df_coloc_lt = df_coloc[
         (df_coloc['left_study'] == study) &
         (df_coloc['left_chrom'].astype(str) == str(chrom)) &
@@ -32,7 +54,20 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
         (df_coloc['left_ref'] == ref) &
         (df_coloc['left_alt'] == alt)
     ]
-    df_coloc_lt.to_json(coloc_outfile, orient='records')
+
+    # coloc table (qtls)
+    coloc_qtl_outfile = os.path.join(lt_dir, COLOC_QTL_FILE_OUT)
+    df_coloc_qtl = df_coloc_lt[df_coloc_lt['right_type'] != 'gwas']
+    df_coloc_qtl = df_coloc_qtl[COLOC_TABLE_COLS]
+    df_coloc_qtl.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
+    df_coloc_qtl.to_json(coloc_qtl_outfile, orient='records')
+
+    # coloc table (gwas)
+    coloc_gwas_outfile = os.path.join(lt_dir, COLOC_GWAS_FILE_OUT)
+    df_coloc_gwas = df_coloc_lt[df_coloc_lt['right_type'] == 'gwas']
+    df_coloc_gwas = df_coloc_gwas[COLOC_TABLE_COLS]
+    df_coloc_gwas.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
+    df_coloc_gwas.to_json(coloc_gwas_outfile, orient='records')
 
 def load_coloc():
     df = pd.read_json(COLOC_FILE, orient='records', lines=True)
@@ -43,12 +78,12 @@ def load_coloc():
     # filter left on type
     df = df.loc[df['left_type'] == 'gwas', :]
 
-    # de duplicate right
-    df = (
-        df.sort_values('coloc_log_H4_H3', ascending=False)
-        .drop(['right_chrom', 'right_pos', 'right_ref', 'right_alt'], axis=1)
-        .drop_duplicates()
-    )
+    # # de duplicate right
+    # df = (
+    #     df.sort_values('coloc_log_H4_H3', ascending=False)
+    #     .drop(['right_chrom', 'right_pos', 'right_ref', 'right_alt'], axis=1)
+    #     .drop_duplicates()
+    # )
 
     return df
 
