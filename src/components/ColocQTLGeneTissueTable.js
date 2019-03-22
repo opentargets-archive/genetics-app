@@ -4,6 +4,22 @@ import * as d3 from 'd3';
 
 import { OtTable, DataCircle, Tooltip } from 'ot-ui';
 
+const tissueComparator = t => (a, b) => {
+  if (a[t] && b[t]) {
+    return a[t].logH4H3 > b[t].logH4H3
+      ? 1
+      : a[t].logH4H3 === b[t].logH4H3
+        ? 0
+        : -1;
+  } else if (a[t] && !b[t]) {
+    return 1;
+  } else if (!a[t] && b[t]) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 const ColocTable = ({ loading, error, filenameStem, data }) => {
   const uniqueGenes = Object.values(
     data.reduce((acc, d) => {
@@ -28,19 +44,14 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     id: t,
     label: t,
     verticalHeader: true,
+    comparator: tissueComparator(t),
     renderCell: row => {
-      const items = row[t] && row[t].length > 0 ? row[t] : [];
-      if (items.length === 0) {
+      if (!row[t]) {
+        // no comparison made for this gene-tissue pair
         return null;
       }
 
-      // there could be multiple loci for gene-tissue, so pick
-      // by highest logH4H3 value
-      const bestItem = items.sort((a, b) =>
-        d3.descending(a.logH4H3, b.logH4H3)
-      )[0];
-
-      const { h3, h4, logH4H3 } = bestItem;
+      const { h3, h4, logH4H3 } = row[t];
       const qtlRadius = radiusScale(Math.abs(logH4H3));
       const qtlColor = logH4H3 > 0 ? 'blue' : 'red';
       return (
@@ -59,12 +70,17 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
   const dataByGene = uniqueGenes.map(g => ({
     ...g,
     ...uniqueTissues.reduce((acc, t) => {
-      acc[t] = data
+      const items = data
         .filter(
           d =>
             d.phenotypeEnsemblId === g.phenotypeEnsemblId && d.bioFeature === t
         )
-        .map(d => ({ h3: d.h3, h4: d.h4, logH4H3: d.logH4H3 }));
+        .map(d => ({ h3: d.h3, h4: d.h4, logH4H3: d.logH4H3 }))
+        .sort((a, b) => d3.descending(a.logH4H3, b.logH4H3));
+
+      // there could be multiple loci for gene-tissue, so pick
+      // by highest logH4H3 value
+      acc[t] = items.length > 0 ? items[0] : null;
       return acc;
     }, {}),
   }));
