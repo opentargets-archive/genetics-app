@@ -29,16 +29,31 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     label: t,
     verticalHeader: true,
     renderCell: row => {
-      const logH4H3 = row[t] && row[t].length > 0 && row[t][0].logH4H3;
+      const items = row[t] && row[t].length > 0 ? row[t] : [];
+      if (items.length === 0) {
+        return null;
+      }
+
+      // there could be multiple loci for gene-tissue, so pick
+      // by highest logH4H3 value
+      const bestItem = items.sort((a, b) =>
+        d3.descending(a.logH4H3, b.logH4H3)
+      )[0];
+
+      const { h3, h4, logH4H3 } = bestItem;
       const qtlRadius = radiusScale(Math.abs(logH4H3));
       const qtlColor = logH4H3 > 0 ? 'blue' : 'red';
-      return logH4H3 ? (
-        <Tooltip title={`log(H4/H3): ${logH4H3.toPrecision(3)}`}>
+      return (
+        <Tooltip
+          title={`log(H4/H3): ${logH4H3.toPrecision(3)}, H3: ${h3.toPrecision(
+            3
+          )}, H4: ${h4.toPrecision(3)}`}
+        >
           <span>
             <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
           </span>
         </Tooltip>
-      ) : null;
+      );
     },
   }));
   const dataByGene = uniqueGenes.map(g => ({
@@ -49,7 +64,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
           d =>
             d.phenotypeEnsemblId === g.phenotypeEnsemblId && d.bioFeature === t
         )
-        .map(d => ({ logH4H3: d.logH4H3 }));
+        .map(d => ({ h3: d.h3, h4: d.h4, logH4H3: d.logH4H3 }));
       return acc;
     }, {}),
   }));
