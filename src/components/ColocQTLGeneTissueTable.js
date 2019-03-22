@@ -100,6 +100,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
       data={dataByGene}
       sortBy="phenotypeSymbol"
       order="asc"
+      verticalHeaders
       downloadFileStem={filenameStem}
     />
   );
