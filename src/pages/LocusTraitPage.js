@@ -8,12 +8,12 @@ import { Regional, GeneTrack, SigSig } from 'ot-charts';
 import BasePage from './BasePage';
 import StudyInfo from '../components/StudyInfo';
 import ColocQTLTable from '../components/ColocQTLTable';
+import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
 import {
   MOCK_STUDY_INFO,
   MOCK_INDEX_VARIANT_INFO,
-  MOCK_COLOC_DATA,
   MOCK_CREDIBLE_SET_TRACK_PLOT,
   MOCK_REGIONAL_DATA_GENES,
   MOCK_REGIONAL_START,
@@ -74,6 +74,11 @@ class LocusTraitPage extends React.Component {
         <SectionHeading
           heading={`QTL Colocalisation`}
           subheading={`Which molecular traits colocalise with ${studyId} at this locus?`}
+        />
+        <ColocQTLGeneTissueTable
+          loading={false}
+          error={false}
+          data={COLOC_QTL_TABLE_DATA}
         />
         <ColocQTLTable
           loading={false}
