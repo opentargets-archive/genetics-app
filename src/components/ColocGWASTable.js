@@ -8,6 +8,11 @@ const tableColumns = [
     label: 'Study',
   },
   {
+    id: 'beta',
+    label: 'Study beta',
+    renderCell: d => significantFigures(d.beta),
+  },
+  {
     id: 'h3',
     label: 'H3',
     renderCell: d => significantFigures(d.h3),

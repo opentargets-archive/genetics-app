@@ -51,14 +51,14 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
         return null;
       }
 
-      const { h3, h4, logH4H3 } = row[t];
+      const { h3, h4, logH4H3, beta } = row[t];
       const qtlRadius = radiusScale(Math.abs(logH4H3));
       const qtlColor = logH4H3 > 0 ? 'blue' : 'red';
       return (
         <Tooltip
           title={`log(H4/H3): ${logH4H3.toPrecision(3)}, H3: ${h3.toPrecision(
             3
-          )}, H4: ${h4.toPrecision(3)}`}
+          )}, H4: ${h4.toPrecision(3)}, QTL beta: ${beta.toPrecision(3)}`}
         >
           <span>
             <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
@@ -75,7 +75,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
           d =>
             d.phenotypeEnsemblId === g.phenotypeEnsemblId && d.bioFeature === t
         )
-        .map(d => ({ h3: d.h3, h4: d.h4, logH4H3: d.logH4H3 }))
+        .map(d => ({ h3: d.h3, h4: d.h4, logH4H3: d.logH4H3, beta: d.beta }))
         .sort((a, b) => d3.descending(a.logH4H3, b.logH4H3));
 
       // there could be multiple loci for gene-tissue, so pick

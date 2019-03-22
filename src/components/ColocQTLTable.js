@@ -24,6 +24,11 @@ const tableColumns = [
     label: 'Source',
   },
   {
+    id: 'beta',
+    label: 'QTL beta',
+    renderCell: d => significantFigures(d.beta),
+  },
+  {
     id: 'h3',
     label: 'H3',
     renderCell: d => significantFigures(d.h3),
