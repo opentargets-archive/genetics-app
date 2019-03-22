@@ -61,6 +61,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     label: 'Gene',
     renderCell: d => {
       if (d.phenotype && d.phenotype.startsWith('ILMN_')) {
+        // TODO: improve coverage of ensgId => symbol
         const { ensgId, symbol } = GENE_PHENOTYPE_LOOKUP[d.phenotype];
         return <Link to={`/gene/${ensgId}`}>{symbol}</Link>;
       } else {
