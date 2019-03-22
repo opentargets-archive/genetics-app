@@ -2,6 +2,8 @@
   {
     "study": "GCST006288_hbmd",
     "phenotype": null,
+    "phenotypeEnsemblId": null,
+    "phenotypeSymbol": null,
     "bioFeature": null,
     "chrom": 19,
     "pos": 1170298,

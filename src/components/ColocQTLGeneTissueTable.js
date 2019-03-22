@@ -4,17 +4,11 @@ import * as d3 from 'd3';
 
 import { OtTable, DataCircle, Tooltip } from 'ot-ui';
 
-import GENE_MAPPING from '../mock-data/gene-mappings.json';
-
-const GENE_PHENOTYPE_LOOKUP = GENE_MAPPING.reduce((acc, d) => {
-  acc[d.phenotype] = d;
-  return acc;
-}, {});
-
 const ColocTable = ({ loading, error, filenameStem, data }) => {
-  const uniqueGenes = Object.keys(
+  const uniqueGenes = Object.values(
     data.reduce((acc, d) => {
-      acc[d.phenotype] = true;
+      const { phenotypeEnsemblId, phenotypeSymbol } = d;
+      acc[phenotypeEnsemblId] = { phenotypeEnsemblId, phenotypeSymbol };
       return acc;
     }, {})
   );
@@ -48,26 +42,23 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     },
   }));
   const dataByGene = uniqueGenes.map(g => ({
-    phenotype: g,
+    ...g,
     ...uniqueTissues.reduce((acc, t) => {
       acc[t] = data
-        .filter(d => d.phenotype === g && d.bioFeature === t)
+        .filter(
+          d =>
+            d.phenotypeEnsemblId === g.phenotypeEnsemblId && d.bioFeature === t
+        )
         .map(d => ({ logH4H3: d.logH4H3 }));
       return acc;
     }, {}),
   }));
   const geneColumn = {
-    id: 'phenotype',
+    id: 'phenotypeEnsemblId',
     label: 'Gene',
-    renderCell: d => {
-      if (d.phenotype && d.phenotype.startsWith('ILMN_')) {
-        // TODO: improve coverage of ensgId => symbol
-        const { ensgId, symbol } = GENE_PHENOTYPE_LOOKUP[d.phenotype];
-        return <Link to={`/gene/${ensgId}`}>{symbol}</Link>;
-      } else {
-        return <Link to={`/gene/${d.phenotype}`}>{d.phenotype}</Link>;
-      }
-    },
+    renderCell: d => (
+      <Link to={`/gene/${d.phenotypeEnsemblId}`}>{d.phenotypeSymbol}</Link>
+    ),
   };
   const tableColumns = [geneColumn, ...tissueColumns];
   return (
@@ -76,8 +67,8 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
       error={error}
       columns={tableColumns}
       data={dataByGene}
-      sortBy="phenotype"
-      order="desc"
+      sortBy="phenotypeSymbol"
+      order="asc"
       downloadFileStem={filenameStem}
     />
   );

@@ -2,6 +2,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1655225",
+    "phenotypeEnsemblId": "ENSG00000119559",
+    "phenotypeSymbol": "C19orf25",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1461589,
@@ -14,6 +16,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1730670",
+    "phenotypeEnsemblId": "ENSG00000070404",
+    "phenotypeSymbol": "FSTL3",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1046424,
@@ -26,6 +30,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2219134",
+    "phenotypeEnsemblId": "ENSG00000115268",
+    "phenotypeSymbol": "RPS15",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 953475,
@@ -38,6 +44,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1674661",
+    "phenotypeEnsemblId": "ENSG00000099622",
+    "phenotypeSymbol": "CIRBP",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1021640,
@@ -50,6 +58,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1694479",
+    "phenotypeEnsemblId": "ENSG00000065268",
+    "phenotypeSymbol": "WDR18",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 996567,
@@ -62,6 +72,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185761",
+    "phenotypeEnsemblId": "ENSG00000185761",
+    "phenotypeSymbol": "ADAMTSL5",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1955905,
@@ -74,6 +86,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1764764",
+    "phenotypeEnsemblId": "ENSG00000160953",
+    "phenotypeSymbol": "PWWP3A",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1377174,
@@ -86,6 +100,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1787831",
+    "phenotypeEnsemblId": "ENSG00000181781",
+    "phenotypeSymbol": "ODF3L2",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 318988,
@@ -98,6 +114,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1868866",
+    "phenotypeEnsemblId": "ENSG00000267073",
+    "phenotypeSymbol": "ENSG00000267073",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 873832,
@@ -110,6 +128,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1730709",
+    "phenotypeEnsemblId": "ENSG00000172270",
+    "phenotypeSymbol": "BSG",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1347702,
@@ -122,6 +142,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000167468",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1098810,
@@ -134,6 +156,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1721344",
+    "phenotypeEnsemblId": "ENSG00000172081",
+    "phenotypeSymbol": "MOB3A",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 2294993,
@@ -146,6 +170,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1746257",
+    "phenotypeEnsemblId": "ENSG00000071626",
+    "phenotypeSymbol": "DAZAP1",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 1046424,
@@ -158,6 +184,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1769018",
+    "phenotypeEnsemblId": "ENSG00000115257",
+    "phenotypeSymbol": "PCSK4",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 558434,
@@ -170,6 +198,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1812031",
+    "phenotypeEnsemblId": "ENSG00000099864",
+    "phenotypeSymbol": "PALM",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 751195,
@@ -182,6 +212,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1719185",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 861328,
@@ -194,6 +226,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000064687",
+    "phenotypeEnsemblId": "ENSG00000064687",
+    "phenotypeSymbol": "ABCA7",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1596334,
@@ -206,6 +240,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000130005",
+    "phenotypeEnsemblId": "ENSG00000130005",
+    "phenotypeSymbol": "GAMT",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1216107,
@@ -218,6 +254,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 387791,
@@ -230,6 +268,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185761",
+    "phenotypeEnsemblId": "ENSG00000185761",
+    "phenotypeSymbol": "ADAMTSL5",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 2452023,
@@ -242,6 +282,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1653372",
+    "phenotypeEnsemblId": "ENSG00000130270",
+    "phenotypeSymbol": "ATP8B3",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 2183819,
@@ -254,6 +296,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706521",
+    "phenotypeEnsemblId": "ENSG00000133275",
+    "phenotypeSymbol": "CSNK1G2",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 1300537,
@@ -266,6 +310,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1778374",
+    "phenotypeEnsemblId": "ENSG00000172270",
+    "phenotypeSymbol": "BSG",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 583450,
@@ -278,6 +324,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000182087",
+    "phenotypeEnsemblId": "ENSG00000182087",
+    "phenotypeSymbol": "TMEM259",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1060638,
@@ -290,6 +338,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267092",
+    "phenotypeEnsemblId": "ENSG00000267092",
+    "phenotypeSymbol": "ENSG00000267092",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1256750,
@@ -302,6 +352,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000197561",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1013374,
@@ -314,6 +366,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 546993,
@@ -326,6 +380,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1679363",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 2427206,
@@ -338,6 +394,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 1038290,
@@ -350,6 +408,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2067444",
+    "phenotypeEnsemblId": "ENSG00000205922",
+    "phenotypeSymbol": "ONECUT3",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1860596,
@@ -362,6 +422,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1655225",
+    "phenotypeEnsemblId": "ENSG00000119559",
+    "phenotypeSymbol": "C19orf25",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1462331,
@@ -374,6 +436,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1719185",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 893183,
@@ -386,6 +450,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000275162",
+    "phenotypeEnsemblId": "ENSG00000275162",
+    "phenotypeSymbol": "ENSG00000275162",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 582462,
@@ -398,6 +464,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000070423",
+    "phenotypeEnsemblId": "ENSG00000070423",
+    "phenotypeSymbol": "RNF126",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 652238,
@@ -410,6 +478,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267283",
+    "phenotypeEnsemblId": "ENSG00000267283",
+    "phenotypeSymbol": "ENSG00000267283",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1981729,
@@ -422,6 +492,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000064687",
+    "phenotypeEnsemblId": "ENSG00000064687",
+    "phenotypeSymbol": "ABCA7",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 358010,
@@ -434,6 +506,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000071655",
+    "phenotypeEnsemblId": "ENSG00000071655",
+    "phenotypeSymbol": "MBD3",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 945703,
@@ -446,6 +520,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000175221",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 914777,
@@ -458,6 +534,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000227500",
+    "phenotypeEnsemblId": "ENSG00000227500",
+    "phenotypeSymbol": "SCAMP4",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1907016,
@@ -470,6 +548,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000167468",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 1103786,
@@ -482,6 +562,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000129946",
+    "phenotypeEnsemblId": "ENSG00000129946",
+    "phenotypeSymbol": "SHC2",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 1414893,
@@ -494,6 +576,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000129946",
+    "phenotypeEnsemblId": "ENSG00000129946",
+    "phenotypeSymbol": "SHC2",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 572860,
@@ -506,6 +590,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000065000",
+    "phenotypeEnsemblId": "ENSG00000065000",
+    "phenotypeSymbol": "AP3D1",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 2316232,
@@ -518,6 +604,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000133243",
+    "phenotypeEnsemblId": "ENSG00000133243",
+    "phenotypeSymbol": "BTBD2",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 2019759,
@@ -530,6 +618,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115255",
+    "phenotypeEnsemblId": "ENSG00000115255",
+    "phenotypeSymbol": "REEP6",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1520077,
@@ -542,6 +632,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000099864",
+    "phenotypeEnsemblId": "ENSG00000099864",
+    "phenotypeSymbol": "PALM",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1266675,
@@ -554,6 +646,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1679363",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 2170315,
@@ -566,6 +660,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2400546",
+    "phenotypeEnsemblId": "ENSG00000099840",
+    "phenotypeSymbol": "IZUMO4",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1989481,
@@ -578,6 +674,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1080926,
@@ -590,6 +688,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 1039992,
@@ -602,6 +702,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1777190",
+    "phenotypeEnsemblId": "ENSG00000197766",
+    "phenotypeSymbol": "CFD",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 867774,
@@ -614,6 +716,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2067444",
+    "phenotypeEnsemblId": "ENSG00000205922",
+    "phenotypeSymbol": "ONECUT3",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 1338478,
@@ -626,6 +730,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1734353",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 710692,
@@ -638,6 +744,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706635",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 889407,
@@ -650,6 +758,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1778374",
+    "phenotypeEnsemblId": "ENSG00000172270",
+    "phenotypeSymbol": "BSG",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 578208,
@@ -662,6 +772,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115268",
+    "phenotypeEnsemblId": "ENSG00000115268",
+    "phenotypeSymbol": "RPS15",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 2316232,
@@ -674,6 +786,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267317",
+    "phenotypeEnsemblId": "ENSG00000267317",
+    "phenotypeSymbol": "ENSG00000267317",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 2316232,
@@ -686,6 +800,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000099821",
+    "phenotypeEnsemblId": "ENSG00000099821",
+    "phenotypeSymbol": "POLRMT",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 614538,
@@ -698,6 +814,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000282393",
+    "phenotypeEnsemblId": "ENSG00000282393",
+    "phenotypeSymbol": "ENSG00000282393",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 618851,
@@ -710,6 +828,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000141933",
+    "phenotypeEnsemblId": "ENSG00000141933",
+    "phenotypeSymbol": "TPGS1",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 746712,
@@ -722,6 +842,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 789863,
@@ -734,6 +856,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1653372",
+    "phenotypeEnsemblId": "ENSG00000130270",
+    "phenotypeSymbol": "ATP8B3",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 1829584,
@@ -746,6 +870,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1790782",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "NEUTROPHIL_CD15",
     "chrom": 19,
     "pos": 872089,
@@ -758,6 +884,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1777190",
+    "phenotypeEnsemblId": "ENSG00000197766",
+    "phenotypeSymbol": "CFD",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 859368,
@@ -770,6 +898,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1793040",
+    "phenotypeEnsemblId": "ENSG00000185761",
+    "phenotypeSymbol": "ADAMTSL5",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 2018022,
@@ -782,6 +912,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1678052",
+    "phenotypeEnsemblId": "ENSG00000228300",
+    "phenotypeSymbol": "C19orf24",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 400939,
@@ -794,6 +926,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2347068",
+    "phenotypeEnsemblId": "ENSG00000099875",
+    "phenotypeSymbol": "MKNK2",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 2038820,
@@ -806,6 +940,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1669966",
+    "phenotypeEnsemblId": "ENSG00000115286",
+    "phenotypeSymbol": "NDUFS7",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 1067423,
@@ -818,6 +954,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115268",
+    "phenotypeEnsemblId": "ENSG00000115268",
+    "phenotypeSymbol": "RPS15",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 2404294,
@@ -830,6 +968,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000116014",
+    "phenotypeEnsemblId": "ENSG00000116014",
+    "phenotypeSymbol": "KISS1R",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 872255,
@@ -842,6 +982,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267232",
+    "phenotypeEnsemblId": "ENSG00000267232",
+    "phenotypeSymbol": "ENSG00000267232",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 2283385,
@@ -854,6 +996,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000071564",
+    "phenotypeEnsemblId": "ENSG00000071564",
+    "phenotypeSymbol": "TCF3",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1646222,
@@ -866,6 +1010,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000071564",
+    "phenotypeEnsemblId": "ENSG00000071564",
+    "phenotypeSymbol": "TCF3",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1943722,
@@ -878,6 +1024,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000205922",
+    "phenotypeEnsemblId": "ENSG00000205922",
+    "phenotypeSymbol": "ONECUT3",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 1451415,
@@ -890,6 +1038,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000197561",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 850733,
@@ -902,6 +1052,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1340818,
@@ -914,6 +1066,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185988",
+    "phenotypeEnsemblId": "ENSG00000185988",
+    "phenotypeSymbol": "PLK5",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1804481,
@@ -926,6 +1080,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185988",
+    "phenotypeEnsemblId": "ENSG00000185988",
+    "phenotypeSymbol": "PLK5",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 607152,
@@ -938,6 +1094,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1756469",
+    "phenotypeEnsemblId": "ENSG00000130005",
+    "phenotypeSymbol": "GAMT",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1386499,
@@ -950,6 +1108,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1788337",
+    "phenotypeEnsemblId": "ENSG00000099840",
+    "phenotypeSymbol": "IZUMO4",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1679257,
@@ -962,6 +1122,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1766159",
+    "phenotypeEnsemblId": "ENSG00000105556",
+    "phenotypeSymbol": "MIER2",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 378597,
@@ -974,6 +1136,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1734353",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1103786,
@@ -986,6 +1150,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706635",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 1442991,
@@ -998,6 +1164,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706635",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1553063,
@@ -1010,6 +1178,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1812031",
+    "phenotypeEnsemblId": "ENSG00000099864",
+    "phenotypeSymbol": "PALM",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 656381,
@@ -1022,6 +1192,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2602271,
@@ -1034,6 +1206,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1719185",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 440005,
@@ -1046,6 +1220,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267159",
+    "phenotypeEnsemblId": "ENSG00000267159",
+    "phenotypeSymbol": "ENSG00000267159",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 1214658,
@@ -1058,6 +1234,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267244",
+    "phenotypeEnsemblId": "ENSG00000267244",
+    "phenotypeSymbol": "ENSG00000267244",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1139910,
@@ -1070,6 +1248,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267666",
+    "phenotypeEnsemblId": "ENSG00000267666",
+    "phenotypeSymbol": "ENSG00000267666",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 943396,
@@ -1082,6 +1262,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185988",
+    "phenotypeEnsemblId": "ENSG00000185988",
+    "phenotypeSymbol": "PLK5",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 2409104,
@@ -1094,6 +1276,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000118046",
+    "phenotypeEnsemblId": "ENSG00000118046",
+    "phenotypeSymbol": "STK11",
     "bioFeature": "NEUTROPHIL",
     "chrom": 19,
     "pos": 1220322,
@@ -1106,6 +1290,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1679363",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 2031344,
@@ -1118,6 +1304,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1730549",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2497330,
@@ -1130,6 +1318,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1773163",
+    "phenotypeEnsemblId": "ENSG00000180846",
+    "phenotypeSymbol": "CSNK1G2-AS1",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 1533409,
@@ -1142,6 +1332,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 1038872,
@@ -1154,6 +1346,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1659950",
+    "phenotypeEnsemblId": "ENSG00000115266",
+    "phenotypeSymbol": "APC2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 897855,
@@ -1166,6 +1360,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1806275",
+    "phenotypeEnsemblId": "ENSG00000227500",
+    "phenotypeSymbol": "SCAMP4",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2038020,
@@ -1178,6 +1374,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1764764",
+    "phenotypeEnsemblId": "ENSG00000160953",
+    "phenotypeSymbol": "PWWP3A",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1379708,
@@ -1190,6 +1388,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1669966",
+    "phenotypeEnsemblId": "ENSG00000115286",
+    "phenotypeSymbol": "NDUFS7",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1708547,
@@ -1202,6 +1402,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706635",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1618983,
@@ -1214,6 +1416,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1868866",
+    "phenotypeEnsemblId": "ENSG00000267073",
+    "phenotypeSymbol": "ENSG00000267073",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 768429,
@@ -1226,6 +1430,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1701009",
+    "phenotypeEnsemblId": "ENSG00000099617",
+    "phenotypeSymbol": "EFNA2",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 400939,
@@ -1238,6 +1444,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2345822,
@@ -1250,6 +1458,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1236046,
@@ -1262,6 +1472,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267751",
+    "phenotypeEnsemblId": "ENSG00000267751",
+    "phenotypeSymbol": "ENSG00000267751",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 572004,
@@ -1274,6 +1486,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000065268",
+    "phenotypeEnsemblId": "ENSG00000065268",
+    "phenotypeSymbol": "WDR18",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 986657,
@@ -1286,6 +1500,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115257",
+    "phenotypeEnsemblId": "ENSG00000115257",
+    "phenotypeSymbol": "PCSK4",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 2011000,
@@ -1298,6 +1514,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000167468",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1104079,
@@ -1310,6 +1528,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000197561",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 855587,
@@ -1322,6 +1542,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115255",
+    "phenotypeEnsemblId": "ENSG00000115255",
+    "phenotypeSymbol": "REEP6",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1560533,
@@ -1334,6 +1556,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000185761",
+    "phenotypeEnsemblId": "ENSG00000185761",
+    "phenotypeSymbol": "ADAMTSL5",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1513104,
@@ -1346,6 +1570,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1790782",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 872089,
@@ -1358,6 +1584,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1033560,
@@ -1370,6 +1598,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1673605",
+    "phenotypeEnsemblId": "ENSG00000185198",
+    "phenotypeSymbol": "PRSS57",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 545637,
@@ -1382,6 +1612,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1808811",
+    "phenotypeEnsemblId": "ENSG00000064932",
+    "phenotypeSymbol": "SBNO2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 2013922,
@@ -1394,6 +1626,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3238274",
+    "phenotypeEnsemblId": "ENSG00000133243",
+    "phenotypeSymbol": "BTBD2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 2007196,
@@ -1406,6 +1640,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1800451",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 872089,
@@ -1418,6 +1654,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1800451",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "TRANSVERSE_COLON",
     "chrom": 19,
     "pos": 863892,
@@ -1430,6 +1668,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1706635",
+    "phenotypeEnsemblId": "ENSG00000197561",
+    "phenotypeSymbol": "ELANE",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1456820,
@@ -1442,6 +1682,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2358490,
@@ -1454,6 +1696,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1185374,
@@ -1466,6 +1710,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000115268",
+    "phenotypeEnsemblId": "ENSG00000115268",
+    "phenotypeSymbol": "RPS15",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1437515,
@@ -1478,6 +1724,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000267317",
+    "phenotypeEnsemblId": "ENSG00000267317",
+    "phenotypeSymbol": "ENSG00000267317",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 2316232,
@@ -1490,6 +1738,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000065268",
+    "phenotypeEnsemblId": "ENSG00000065268",
+    "phenotypeSymbol": "WDR18",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 990394,
@@ -1502,6 +1752,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000116032",
+    "phenotypeEnsemblId": "ENSG00000116032",
+    "phenotypeSymbol": "GRIN3B",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 986657,
@@ -1514,6 +1766,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1191668,
@@ -1526,6 +1780,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000160953",
+    "phenotypeEnsemblId": "ENSG00000160953",
+    "phenotypeSymbol": "PWWP3A",
     "bioFeature": "MONOCYTE",
     "chrom": 19,
     "pos": 1364856,
@@ -1538,6 +1794,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1683905",
+    "phenotypeEnsemblId": "ENSG00000099812",
+    "phenotypeSymbol": "MISP",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 1697367,
@@ -1550,6 +1808,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770290",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1033560,
@@ -1562,6 +1822,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1659950",
+    "phenotypeEnsemblId": "ENSG00000115266",
+    "phenotypeSymbol": "APC2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 826160,
@@ -1574,6 +1836,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1746408",
+    "phenotypeEnsemblId": "ENSG00000167470",
+    "phenotypeSymbol": "MIDN",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1256999,
@@ -1586,6 +1850,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1655225",
+    "phenotypeEnsemblId": "ENSG00000119559",
+    "phenotypeSymbol": "C19orf25",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1475392,
@@ -1598,6 +1864,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1790741",
+    "phenotypeEnsemblId": "ENSG00000070423",
+    "phenotypeSymbol": "RNF126",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 650931,
@@ -1610,6 +1878,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2378952",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 1095431,
@@ -1622,6 +1892,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2378952",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "MONOCYTE_CD14",
     "chrom": 19,
     "pos": 1103786,
@@ -1634,6 +1906,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1789086",
+    "phenotypeEnsemblId": "ENSG00000282508",
+    "phenotypeSymbol": "LINC01002",
     "bioFeature": "B_CELL_CD19",
     "chrom": 19,
     "pos": 477809,
@@ -1646,6 +1920,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1789086",
+    "phenotypeEnsemblId": "ENSG00000282508",
+    "phenotypeSymbol": "LINC01002",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 506679,
@@ -1658,6 +1934,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1868866",
+    "phenotypeEnsemblId": "ENSG00000267073",
+    "phenotypeSymbol": "ENSG00000267073",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1683883,
@@ -1670,6 +1948,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1778374",
+    "phenotypeEnsemblId": "ENSG00000172270",
+    "phenotypeSymbol": "BSG",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 584351,
@@ -1682,6 +1962,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1694479",
+    "phenotypeEnsemblId": "ENSG00000065268",
+    "phenotypeSymbol": "WDR18",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 982706,
@@ -1694,6 +1976,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 1533409,
@@ -1706,6 +1990,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000141934",
+    "phenotypeEnsemblId": "ENSG00000141934",
+    "phenotypeSymbol": "PLPP2",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 290090,
@@ -1718,6 +2004,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000099821",
+    "phenotypeEnsemblId": "ENSG00000099821",
+    "phenotypeSymbol": "POLRMT",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 632443,
@@ -1730,6 +2018,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000197540",
+    "phenotypeEnsemblId": "ENSG00000197540",
+    "phenotypeSymbol": "GZMM",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 543497,
@@ -1742,6 +2032,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000127540",
+    "phenotypeEnsemblId": "ENSG00000127540",
+    "phenotypeSymbol": "UQCR11",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1576933,
@@ -1754,6 +2046,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000071626",
+    "phenotypeEnsemblId": "ENSG00000071626",
+    "phenotypeSymbol": "DAZAP1",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1435772,
@@ -1766,6 +2060,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000272473",
+    "phenotypeEnsemblId": "ENSG00000272473",
+    "phenotypeSymbol": "ENSG00000272473",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 767575,
@@ -1778,6 +2074,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000118046",
+    "phenotypeEnsemblId": "ENSG00000118046",
+    "phenotypeSymbol": "STK11",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1207239,
@@ -1790,6 +2088,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1694878",
+    "phenotypeEnsemblId": "ENSG00000105556",
+    "phenotypeSymbol": "MIER2",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 297367,
@@ -1802,6 +2102,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1690561",
+    "phenotypeEnsemblId": "ENSG00000197540",
+    "phenotypeSymbol": "GZMM",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 547561,
@@ -1814,6 +2116,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1777190",
+    "phenotypeEnsemblId": "ENSG00000197766",
+    "phenotypeSymbol": "CFD",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 1686881,
@@ -1826,6 +2130,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1808202",
+    "phenotypeEnsemblId": "ENSG00000198858",
+    "phenotypeSymbol": "R3HDM4",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1226897,
@@ -1838,6 +2144,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1808202",
+    "phenotypeEnsemblId": "ENSG00000198858",
+    "phenotypeSymbol": "R3HDM4",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 281383,
@@ -1850,6 +2158,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3238274",
+    "phenotypeEnsemblId": "ENSG00000133243",
+    "phenotypeSymbol": "BTBD2",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 2016167,
@@ -1862,6 +2172,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1708486",
+    "phenotypeEnsemblId": "ENSG00000064666",
+    "phenotypeSymbol": "CNN2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 441111,
@@ -1874,6 +2186,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2239772",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 1079960,
@@ -1886,6 +2200,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1769018",
+    "phenotypeEnsemblId": "ENSG00000115257",
+    "phenotypeSymbol": "PCSK4",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 2252800,
@@ -1898,6 +2214,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3236321",
+    "phenotypeEnsemblId": "ENSG00000183186",
+    "phenotypeSymbol": "C2CD4C",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 422481,
@@ -1910,6 +2228,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2378952",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 737032,
@@ -1922,6 +2242,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1778374",
+    "phenotypeEnsemblId": "ENSG00000172270",
+    "phenotypeSymbol": "BSG",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 583450,
@@ -1934,6 +2256,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000099875",
+    "phenotypeEnsemblId": "ENSG00000099875",
+    "phenotypeSymbol": "MKNK2",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 2052627,
@@ -1946,6 +2270,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000130270",
+    "phenotypeEnsemblId": "ENSG00000130270",
+    "phenotypeSymbol": "ATP8B3",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1808684,
@@ -1958,6 +2284,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000065000",
+    "phenotypeEnsemblId": "ENSG00000065000",
+    "phenotypeSymbol": "AP3D1",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 2316232,
@@ -1970,6 +2298,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000133243",
+    "phenotypeEnsemblId": "ENSG00000133243",
+    "phenotypeSymbol": "BTBD2",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1976900,
@@ -1982,6 +2312,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3235896",
+    "phenotypeEnsemblId": "ENSG00000282051",
+    "phenotypeSymbol": "ENSG00000282051",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 271881,
@@ -1994,6 +2326,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1787469",
+    "phenotypeEnsemblId": "ENSG00000205922",
+    "phenotypeSymbol": "ONECUT3",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 2579308,
@@ -2006,6 +2340,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1653599",
+    "phenotypeEnsemblId": "ENSG00000099624",
+    "phenotypeSymbol": "ATP5F1D",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 742616,
@@ -2018,6 +2354,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3310151",
+    "phenotypeEnsemblId": "ENSG00000079313",
+    "phenotypeSymbol": "REXO1",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 2105695,
@@ -2030,6 +2368,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1812031",
+    "phenotypeEnsemblId": "ENSG00000099864",
+    "phenotypeSymbol": "PALM",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 1003163,
@@ -2042,6 +2382,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2140623",
+    "phenotypeEnsemblId": "ENSG00000129968",
+    "phenotypeSymbol": "ABHD17A",
     "bioFeature": "T_CELL_CD8",
     "chrom": 19,
     "pos": 882869,
@@ -2054,6 +2396,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1659950",
+    "phenotypeEnsemblId": "ENSG00000115266",
+    "phenotypeSymbol": "APC2",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 1200739,
@@ -2066,6 +2410,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1734667",
+    "phenotypeEnsemblId": "ENSG00000129946",
+    "phenotypeSymbol": "SHC2",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 882869,
@@ -2078,6 +2424,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1668460",
+    "phenotypeEnsemblId": "ENSG00000196415",
+    "phenotypeSymbol": "PRTN3",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 762630,
@@ -2090,6 +2438,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2347068",
+    "phenotypeEnsemblId": "ENSG00000099875",
+    "phenotypeSymbol": "MKNK2",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 2044176,
@@ -2102,6 +2452,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1790741",
+    "phenotypeEnsemblId": "ENSG00000070423",
+    "phenotypeSymbol": "RNF126",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 453782,
@@ -2114,6 +2466,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1701009",
+    "phenotypeEnsemblId": "ENSG00000099617",
+    "phenotypeSymbol": "EFNA2",
     "bioFeature": "PLATELET",
     "chrom": 19,
     "pos": 1190350,
@@ -2126,6 +2480,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000011304",
+    "phenotypeEnsemblId": "ENSG00000011304",
+    "phenotypeSymbol": "PTBP1",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 797032,
@@ -2138,6 +2494,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1777190",
+    "phenotypeEnsemblId": "ENSG00000197766",
+    "phenotypeSymbol": "CFD",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 872614,
@@ -2150,6 +2508,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1808811",
+    "phenotypeEnsemblId": "ENSG00000064932",
+    "phenotypeSymbol": "SBNO2",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 533519,
@@ -2162,6 +2522,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1808202",
+    "phenotypeEnsemblId": "ENSG00000198858",
+    "phenotypeSymbol": "R3HDM4",
     "bioFeature": "T_CELL_CD4",
     "chrom": 19,
     "pos": 908061,
@@ -2174,6 +2536,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1699854",
+    "phenotypeEnsemblId": "ENSG00000116032",
+    "phenotypeSymbol": "GRIN3B",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 789454,
@@ -2186,6 +2550,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_3293346",
+    "phenotypeEnsemblId": "ENSG00000267244",
+    "phenotypeSymbol": "ENSG00000267244",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 2404823,
@@ -2198,6 +2564,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1770356",
+    "phenotypeEnsemblId": "ENSG00000099821",
+    "phenotypeSymbol": "POLRMT",
     "bioFeature": "RECTUM",
     "chrom": 19,
     "pos": 756709,
@@ -2210,6 +2578,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1730307",
+    "phenotypeEnsemblId": "ENSG00000175221",
+    "phenotypeSymbol": "MED16",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 751195,
@@ -2222,6 +2592,8 @@
   {
     "study": "Blueprint",
     "phenotype": "ENSG00000099817",
+    "phenotypeEnsemblId": "ENSG00000099817",
+    "phenotypeSymbol": "POLR2E",
     "bioFeature": "T_CELL",
     "chrom": 19,
     "pos": 1095062,
@@ -2234,6 +2606,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_1730670",
+    "phenotypeEnsemblId": "ENSG00000070404",
+    "phenotypeSymbol": "FSTL3",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 1523129,
@@ -2246,6 +2620,8 @@
   {
     "study": "CEDAR",
     "phenotype": "ILMN_2378952",
+    "phenotypeEnsemblId": "ENSG00000167468",
+    "phenotypeSymbol": "GPX4",
     "bioFeature": "ILEUM",
     "chrom": 19,
     "pos": 1097374,

@@ -1,4 +1,5 @@
 import os
+import json
 import pandas as pd
 
 LOCUS_TRAITS = [
@@ -8,12 +9,17 @@ LOCUS_TRAITS = [
 SCRIPT_DIR = os.path.dirname(__file__)
 PROCESSED_DIR = os.path.join(SCRIPT_DIR, 'processed')
 
+MAPPING_FILE_ILMN_TO_ENSEMBL = 'raw/ilmn-to-ensembl.json'
+MAPPING_FILE_ENSEMBL_TO_SYMBOL = 'raw/ensembl-to-symbol.json'
+
 COLOC_DIR = os.path.join(SCRIPT_DIR, 'raw/genetics-portal-staging/coloc/190320')
 COLOC_FILE = os.path.join(COLOC_DIR, 'coloc.json.gz')
 COLOC_N_VARS_THRESHOLD = 200
 COLOC_TABLE_COLS = [
     'right_study',
     'right_phenotype',
+    'right_phenotype_ensembl_id',
+    'right_phenotype_symbol',
     'right_bio_feature',
     'right_chrom',
     'right_pos',
@@ -26,6 +32,8 @@ COLOC_TABLE_COLS = [
 COLOC_TABLE_COLS_MAPPING = {
     'right_study': 'study',
     'right_phenotype': 'phenotype',
+    'right_phenotype_ensembl_id': 'phenotypeEnsemblId',
+    'right_phenotype_symbol': 'phenotypeSymbol',
     'right_bio_feature': 'bioFeature',
     'right_chrom': 'chrom',
     'right_pos': 'pos',
@@ -71,7 +79,7 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     df_coloc_gwas.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
     df_coloc_gwas.to_json(coloc_gwas_outfile, orient='records')
 
-def load_coloc():
+def load_coloc(ilmn_to_ensembl, ensembl_to_symbol):
     df = pd.read_json(COLOC_FILE, orient='records', lines=True)
     
     # filter on coloc_n_vars
@@ -79,6 +87,12 @@ def load_coloc():
 
     # filter left on type
     df = df.loc[df['left_type'] == 'gwas', :]
+
+    # map phenotypes
+    to_ensembl = lambda p: p if str(p).startswith('ENSG') else (ilmn_to_ensembl[p] if p in ilmn_to_ensembl.keys() else p)
+    to_symbol = lambda g: ensembl_to_symbol[g] if g in ensembl_to_symbol.keys() else g
+    df['right_phenotype_ensembl_id'] = df['right_phenotype'].apply(to_ensembl)
+    df['right_phenotype_symbol'] = df['right_phenotype_ensembl_id'].apply(to_symbol)
 
     # # de duplicate right
     # df = (
@@ -93,9 +107,23 @@ def load_coloc():
 
     return df
 
+def load_gene_mappings():
+    with open(MAPPING_FILE_ILMN_TO_ENSEMBL, 'r') as f:
+        ilmn_to_ensembl_list = json.load(f)
+        ilmn_to_ensembl = {
+            o['phenotype']: o['ensgId']
+            for o in ilmn_to_ensembl_list
+        }
+
+    with open(MAPPING_FILE_ENSEMBL_TO_SYMBOL, 'r') as f:
+        ensembl_to_symbol = json.load(f)
+
+    return (ilmn_to_ensembl, ensembl_to_symbol)
+
 
 if __name__ == '__main__':
-    df_coloc = load_coloc()
+    (ilmn_to_ensembl, ensembl_to_symbol) = load_gene_mappings()
+    df_coloc = load_coloc(ilmn_to_ensembl, ensembl_to_symbol)
     
     for lt in LOCUS_TRAITS:
         lt_tuple = (lt['study'], lt['chrom'], lt['pos'], lt['ref'], lt['alt'])
