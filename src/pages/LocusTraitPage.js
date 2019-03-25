@@ -26,8 +26,24 @@ import {
 
 import STUDY_INFO from '../mock-data/study-info.json';
 
+import PAGE_SUMMARY_DATA from '../mock-data/page-summary.json';
 import COLOC_QTL_TABLE_DATA from '../mock-data/coloc-qtl-table.json';
 import COLOC_GWAS_TABLE_DATA from '../mock-data/coloc-gwas-table.json';
+import SUMSTATS_TABLE_DATA from '../mock-data/sum-stats-table.json';
+
+const CHROMOSOME = PAGE_SUMMARY_DATA['chromosome'];
+const VARIANT_POSITION = PAGE_SUMMARY_DATA['position'];
+const HALF_WINDOW = 500000;
+const START = VARIANT_POSITION - HALF_WINDOW;
+const END = VARIANT_POSITION + HALF_WINDOW;
+
+console.log(SUMSTATS_TABLE_DATA);
+const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${
+  PAGE_SUMMARY_DATA['chromosome']
+}`;
+console.log(PAGE_KEY);
+const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
+console.log(SUMSTATS_PAGE_STUDY);
 
 const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
@@ -96,14 +112,14 @@ class LocusTraitPage extends React.Component {
           data={COLOC_GWAS_TABLE_DATA}
         />
 
-        <SigSig data={MOCK_SIG_SIG_DATA} />
+        {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
         <Regional
-          data={MOCK_REGIONAL_DATA_1}
+          data={SUMSTATS_PAGE_STUDY}
           title={titles[0]}
-          start={MOCK_REGIONAL_START}
-          end={MOCK_REGIONAL_END}
+          start={START}
+          end={END}
         />
-        <Regional
+        {/* <Regional
           data={MOCK_REGIONAL_DATA_2}
           title={titles[1]}
           start={MOCK_REGIONAL_START}
@@ -114,12 +130,12 @@ class LocusTraitPage extends React.Component {
           title={titles[2]}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
-        />
-        <GeneTrack
+        /> */}
+        {/* <GeneTrack
           data={flatExonsToPairedExons(MOCK_REGIONAL_DATA_GENES)}
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
-        />
+        /> */}
         <SectionHeading
           heading={``}
           subheading={`Which genes colocalise with ${studyId} at this locus (and in which tissues)?`}

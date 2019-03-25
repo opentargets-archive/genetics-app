@@ -57,10 +57,11 @@ FINEMAPPING_DIR = os.path.join(
 )
 TOP_LOCI_FILE = os.path.join(FINEMAPPING_DIR, "top_loci.json.gz")
 
-# SUM_STATS_FILE = os.path.join(PROCESSED_DIR, 'sum-stats.json.gz')
 SUM_STATS_DIR = os.path.join(SCRIPT_DIR, "processed/sum-stats")
 SUM_STATS_FILE_OUT = "sum-stats-table.json"
 SUM_STATS_DISTANCE = 500000
+
+PAGE_SUMMARY_FILE_OUT = "page-summary.json"
 
 
 def build_mock_data_for_locus_and_study(lt, df_coloc):
@@ -71,6 +72,20 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     lt_dir_name = "{}__{}_{}_{}_{}".format(study, chrom, pos, ref, alt)
     lt_dir = os.path.join(PROCESSED_DIR, lt_dir_name)
     os.makedirs(lt_dir, exist_ok=True)
+
+    # page summary
+    page_summary_outfile = os.path.join(lt_dir, PAGE_SUMMARY_FILE_OUT)
+    with open(page_summary_outfile, "w") as f:
+        json.dump(
+            {
+                "study": study,
+                "chromosome": chrom,
+                "position": pos,
+                "ref": ref,
+                "alt": alt,
+            },
+            f,
+        )
 
     # coloc table
     df_coloc_lt = df_coloc[
@@ -98,6 +113,36 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     # summary stats table
     sum_stats_outfile = os.path.join(lt_dir, SUM_STATS_FILE_OUT)
     sum_stats = {}
+
+    # summary stats table (self)
+    key = "{}__null__null__{}".format(study, chrom)
+    filename = key + ".json.gz"
+
+    # silly bug in group-summary-stats means some rows contain two jsonlines
+    with gzip.GzipFile(os.path.join(SUM_STATS_DIR, filename), "r") as f:
+        data = f.read().decode("utf-8").replace("}{", "}\n{")
+    df_partial = pd.read_json(StringIO(data), orient="records", lines=True)
+
+    # get only those within the locus
+    df_partial_filtered = df_partial[
+        ((df_partial["pos"] - pos) < SUM_STATS_DISTANCE)
+        & ((pos - df_partial["pos"]) < SUM_STATS_DISTANCE)
+    ]
+
+    # subset of keys
+    sum_stats[key] = [
+        {
+            "chromosome": r["chrom"],
+            "position": r["pos"],
+            "ref": r["ref"],
+            "alt": r["alt"],
+            "beta": r["beta"],
+            "pval": r["pval"],
+        }
+        for r in df_partial_filtered.to_dict("records")
+    ]
+
+    # summary stats table (coloced gwas)
     for _, row in df_coloc_gwas.iterrows():
         key = "{}__null__null__{}".format(row["study"], row["chrom"])
         filename = key + ".json.gz"
@@ -130,6 +175,7 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
             for r in df_partial_filtered.to_dict("records")
         ]
 
+    # summary stats table (coloced qtls)
     for _, row in df_coloc_qtl.iterrows():
         key = "{}__{}__{}__{}".format(
             row["study"], row["phenotype"], row["bioFeature"], row["chrom"]
