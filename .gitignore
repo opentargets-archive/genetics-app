@@ -23,6 +23,9 @@ yarn-error.log*
 # for vim users
 *.swp
 
+# for vscode users
+.vscode
+
 src/mock-data/ccdc71l-locus.json
 mock-data/raw
 mock-data/processed
