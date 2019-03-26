@@ -12,16 +12,8 @@ import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
 import {
-  // MOCK_STUDY_INFO,
   MOCK_INDEX_VARIANT_INFO,
   MOCK_CREDIBLE_SET_TRACK_PLOT,
-  // MOCK_REGIONAL_DATA_GENES,
-  // MOCK_REGIONAL_START,
-  // MOCK_REGIONAL_END,
-  // MOCK_REGIONAL_DATA_1,
-  // MOCK_REGIONAL_DATA_2,
-  // MOCK_REGIONAL_DATA_3,
-  // MOCK_SIG_SIG_DATA,
 } from '../mock-data/locusTraitPage';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
@@ -45,13 +37,8 @@ const END = POSITION + HALF_WINDOW;
 
 const GENES = { genes: GENE_DATA };
 
-console.log(SUMSTATS_TABLE_DATA);
 const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${CHROMOSOME}`;
-console.log(PAGE_KEY);
 const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
-console.log(SUMSTATS_PAGE_STUDY);
-
-// const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
 // gene exons come as flat list, rendering expects list of pairs
 const flatExonsToPairedExons = ({ genes }) => {
