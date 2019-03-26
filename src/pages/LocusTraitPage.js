@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
-import { SectionHeading } from 'ot-ui';
+import { SectionHeading, PlotContainer } from 'ot-ui';
 import { Regional, GeneTrack, SigSig } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -30,6 +30,7 @@ import PAGE_SUMMARY_DATA from '../mock-data/page-summary.json';
 import COLOC_QTL_TABLE_DATA from '../mock-data/coloc-qtl-table.json';
 import COLOC_GWAS_TABLE_DATA from '../mock-data/coloc-gwas-table.json';
 import SUMSTATS_TABLE_DATA from '../mock-data/sum-stats-table.json';
+import GENE_DATA from '../mock-data/genes.json';
 
 const STUDY_ID = PAGE_SUMMARY_DATA['study'];
 const STUDY_INFO = STUDY_INFOS[STUDY_ID];
@@ -42,6 +43,8 @@ const HALF_WINDOW = 500000;
 const START = POSITION - HALF_WINDOW;
 const END = POSITION + HALF_WINDOW;
 
+const GENES = { genes: GENE_DATA };
+
 console.log(SUMSTATS_TABLE_DATA);
 const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${
   PAGE_SUMMARY_DATA['chromosome']
@@ -52,19 +55,19 @@ console.log(SUMSTATS_PAGE_STUDY);
 
 // const titles = [MOCK_STUDY_INFO.traitReported, 'eQTL 1', 'eQTL 2'];
 
-// // gene exons come as flat list, rendering expects list of pairs
-// const flatExonsToPairedExons = ({ genes }) => {
-//   const paired = genes.map(d => ({
-//     ...d,
-//     exons: d.exons.reduce((result, value, index, array) => {
-//       if (index % 2 === 0) {
-//         result.push(array.slice(index, index + 2));
-//       }
-//       return result;
-//     }, []),
-//   }));
-//   return { genes: paired };
-// };
+// gene exons come as flat list, rendering expects list of pairs
+const flatExonsToPairedExons = ({ genes }) => {
+  const paired = genes.map(d => ({
+    ...d,
+    exons: d.exons.reduce((result, value, index, array) => {
+      if (index % 2 === 0) {
+        result.push(array.slice(index, index + 2));
+      }
+      return result;
+    }, []),
+  }));
+  return { genes: paired };
+};
 
 class LocusTraitPage extends React.Component {
   render() {
@@ -121,14 +124,15 @@ class LocusTraitPage extends React.Component {
           data={COLOC_GWAS_TABLE_DATA}
         />
 
-        {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
-        <Regional
-          data={SUMSTATS_PAGE_STUDY}
-          title={STUDY_INFO.traitReported}
-          start={START}
-          end={END}
-        />
-        {/* <Regional
+        <PlotContainer>
+          {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
+          <Regional
+            data={SUMSTATS_PAGE_STUDY}
+            title={STUDY_INFO.traitReported}
+            start={START}
+            end={END}
+          />
+          {/* <Regional
           data={MOCK_REGIONAL_DATA_2}
           title={titles[1]}
           start={MOCK_REGIONAL_START}
@@ -140,11 +144,12 @@ class LocusTraitPage extends React.Component {
           start={MOCK_REGIONAL_START}
           end={MOCK_REGIONAL_END}
         /> */}
-        {/* <GeneTrack
-          data={flatExonsToPairedExons(MOCK_REGIONAL_DATA_GENES)}
-          start={MOCK_REGIONAL_START}
-          end={MOCK_REGIONAL_END}
-        /> */}
+          <GeneTrack
+            data={flatExonsToPairedExons(GENES)}
+            start={START}
+            end={END}
+          />
+        </PlotContainer>
         {/* <SectionHeading
           heading={``}
           subheading={
