@@ -46,9 +46,7 @@ const END = POSITION + HALF_WINDOW;
 const GENES = { genes: GENE_DATA };
 
 console.log(SUMSTATS_TABLE_DATA);
-const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${
-  PAGE_SUMMARY_DATA['chromosome']
-}`;
+const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${CHROMOSOME}`;
 console.log(PAGE_KEY);
 const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
 console.log(SUMSTATS_PAGE_STUDY);
@@ -132,18 +130,30 @@ class LocusTraitPage extends React.Component {
             start={START}
             end={END}
           />
-          {/* <Regional
-          data={MOCK_REGIONAL_DATA_2}
-          title={titles[1]}
-          start={MOCK_REGIONAL_START}
-          end={MOCK_REGIONAL_END}
-        />
-        <Regional
-          data={MOCK_REGIONAL_DATA_3}
-          title={titles[2]}
-          start={MOCK_REGIONAL_START}
-          end={MOCK_REGIONAL_END}
-        /> */}
+          {COLOC_GWAS_TABLE_DATA.filter(d => d.logH4H3 > 1).map(d => (
+            <Regional
+              key={`${d.study}`}
+              data={
+                SUMSTATS_TABLE_DATA[`${d.study}__null__null__${CHROMOSOME}`]
+              }
+              title={STUDY_INFOS[d.study].traitReported}
+              start={START}
+              end={END}
+            />
+          ))}
+          {COLOC_QTL_TABLE_DATA.filter(d => d.logH4H3 > 1).map(d => (
+            <Regional
+              key={`${d.phenotype}-${d.bioFeature}`}
+              data={
+                SUMSTATS_TABLE_DATA[
+                  `${d.study}__${d.phenotype}__${d.bioFeature}__${CHROMOSOME}`
+                ]
+              }
+              title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
+              start={START}
+              end={END}
+            />
+          ))}
           <GeneTrack
             data={flatExonsToPairedExons(GENES)}
             start={START}
