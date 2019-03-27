@@ -38,6 +38,9 @@ const GENES = { genes: GENE_DATA };
 const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${CHROMOSOME}`;
 const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
 
+const traitAuthorYear = s =>
+  `${s.traitReported} (${s.pubAuthor}, ${new Date(s.pubDate).getFullYear()})`;
+
 // gene exons come as flat list, rendering expects list of pairs
 const flatExonsToPairedExons = ({ genes }) => {
   const paired = genes.map(d => ({
@@ -77,7 +80,7 @@ class LocusTraitPage extends React.Component {
           subheading={
             <React.Fragment>
               Which molecular traits colocalise with{' '}
-              <strong>{STUDY_INFO.traitReported}</strong> at this locus?
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> at this locus?
             </React.Fragment>
           }
         />
@@ -97,7 +100,7 @@ class LocusTraitPage extends React.Component {
           subheading={
             <React.Fragment>
               Which GWAS studies colocalise with{' '}
-              <strong>{STUDY_INFO.traitReported}</strong> at this locus?
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> at this locus?
             </React.Fragment>
           }
         />
@@ -116,7 +119,7 @@ class LocusTraitPage extends React.Component {
           {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
           <Regional
             data={SUMSTATS_PAGE_STUDY}
-            title={STUDY_INFO.traitReported}
+            title={traitAuthorYear(STUDY_INFO)}
             start={START}
             end={END}
           />
@@ -126,7 +129,7 @@ class LocusTraitPage extends React.Component {
               data={
                 SUMSTATS_TABLE_DATA[`${d.study}__null__null__${CHROMOSOME}`]
               }
-              title={STUDY_INFOS[d.study].traitReported}
+              title={traitAuthorYear(STUDY_INFOS[d.study])}
               start={START}
               end={END}
             />
