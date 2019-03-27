@@ -1,17 +1,47 @@
 [
   {
-    "study": "GCST006288_hbmd",
+    "study": "GCST004131_ibd",
     "phenotype": null,
     "phenotypeEnsemblId": null,
     "phenotypeSymbol": null,
     "bioFeature": null,
-    "chrom": 19,
-    "pos": 1170298,
+    "chrom": 2,
+    "pos": 60977506,
     "ref": "A",
-    "alt": "G",
-    "beta": -0.0323465,
-    "h3": 0.077089950490568,
-    "h4": 0.922891702859467,
-    "logH4H3": 2.482538967697081
+    "alt": "C",
+    "beta": -0.1395,
+    "h3": 0.003509773643615,
+    "h4": 0.996490226356384,
+    "logH4H3": 5.648687785233264
+  },
+  {
+    "study": "GCST004132_cr",
+    "phenotype": null,
+    "phenotypeEnsemblId": null,
+    "phenotypeSymbol": null,
+    "bioFeature": null,
+    "chrom": 2,
+    "pos": 60977506,
+    "ref": "A",
+    "alt": "C",
+    "beta": -0.1229,
+    "h3": 0.005199243009322,
+    "h4": 0.994800756771876,
+    "logH4H3": 5.254029432796706
+  },
+  {
+    "study": "GCST004133_uc",
+    "phenotype": null,
+    "phenotypeEnsemblId": null,
+    "phenotypeSymbol": null,
+    "bioFeature": null,
+    "chrom": 2,
+    "pos": 60977506,
+    "ref": "A",
+    "alt": "C",
+    "beta": -0.1597,
+    "h3": 0.004801558392474,
+    "h4": 0.99519844160753,
+    "logH4H3": 5.334001625754553
   }
 ]
