@@ -14,10 +14,11 @@ import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
 
-import PAGE_SUMMARY_DATA from '../mock-data/page-summary.json';
-import COLOC_QTL_TABLE_DATA from '../mock-data/coloc-qtl-table.json';
-import COLOC_GWAS_TABLE_DATA from '../mock-data/coloc-gwas-table.json';
-import SUMSTATS_TABLE_DATA from '../mock-data/sum-stats-table.json';
+import PAGE_SUMMARY_DATA from '../mock-data/specific/page-summary.json';
+import COLOC_QTL_TABLE_DATA from '../mock-data/specific/coloc-qtl-table.json';
+import COLOC_GWAS_TABLE_DATA from '../mock-data/specific/coloc-gwas-table.json';
+import COLOC_GWAS_HEATMAP_TABLE_DATA from '../mock-data/specific/coloc-gwas-heatmap-table.json';
+import SUMSTATS_TABLE_DATA from '../mock-data/specific/sum-stats-table.json';
 import GENE_DATA from '../mock-data/genes.json';
 
 const STUDY_ID = PAGE_SUMMARY_DATA['study'];
@@ -49,6 +50,8 @@ const flatExonsToPairedExons = ({ genes }) => {
   }));
   return { genes: paired };
 };
+
+console.log(COLOC_GWAS_HEATMAP_TABLE_DATA);
 
 class LocusTraitPage extends React.Component {
   render() {
