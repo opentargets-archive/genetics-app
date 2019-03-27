@@ -31,7 +31,13 @@ function hasAssociations(data) {
 }
 
 function transformAssociations(data) {
-  return data.manhattan.associations.map(d => {
+  // TODO: API should fix this
+  const zeroPvals = data.manhattan.associations.filter(d => d.pval === 0);
+  if (zeroPvals.length > 0) {
+    console.error('Found zero pvalues in Manhattan data: ', zeroPvals);
+  }
+
+  return data.manhattan.associations.filter(d => d.pval > 0).map(d => {
     const { variant, ...rest } = d;
     const ch = chromosomesWithCumulativeLengths.find(
       ch => ch.name === variant.chromosome
