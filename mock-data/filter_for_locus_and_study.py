@@ -9,7 +9,13 @@ import numpy as np
 LOCUS_TRAITS = [
     {"study": "GCST006288_hbmd", "chrom": "17", "pos": 7463300, "ref": "T", "alt": "C"},
     {"study": "GCST004132_cr", "chrom": "19", "pos": 1178655, "ref": "G", "alt": "C"},
-    {"study": "GCST003044_cr_ic", "chrom": "2", "pos": 60977721, "ref": "A", "alt": "G"},
+    {
+        "study": "GCST003044_cr_ic",
+        "chrom": "2",
+        "pos": 60977721,
+        "ref": "A",
+        "alt": "G",
+    },
 ]
 SCRIPT_DIR = os.path.dirname(__file__)
 PROCESSED_DIR = os.path.join(SCRIPT_DIR, "processed")
@@ -52,6 +58,7 @@ COLOC_TABLE_COLS_MAPPING = {
 }
 COLOC_QTL_FILE_OUT = "coloc-qtl-table.json"
 COLOC_GWAS_FILE_OUT = "coloc-gwas-table.json"
+COLOC_GWAS_HEATMAP_FILE_OUT = "coloc-gwas-heatmap-table.json"
 
 FINEMAPPING_DIR = os.path.join(
     SCRIPT_DIR, "raw/genetics-portal-staging/finemapping/190320"
@@ -110,6 +117,47 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     df_coloc_gwas = df_coloc_gwas[COLOC_TABLE_COLS]
     df_coloc_gwas.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
     df_coloc_gwas.to_json(coloc_gwas_outfile, orient="records", double_precision=15)
+
+    # coloc heatmap table (filtered gwas set vs self)
+    keys = [
+        (study, chrom, pos, ref, alt),
+        *[
+            (row["study"], row["chrom"], row["pos"], row["ref"], row["alt"])
+            for _, row in df_coloc_gwas.iterrows()
+        ],
+    ]
+    def key_to_string(key):
+        (study, chrom, pos, ref, alt) = key
+        return "{}__{}__{}__{}__{}".format(study, chrom, pos, ref, alt)
+
+    coloc_lt_heatmap = {key_to_string(k): {} for k in keys}
+    for k1 in keys:
+        (study1, chrom1, pos1, ref1, alt1) = k1
+        for k2 in keys:
+            (study2, chrom2, pos2, ref2, alt2) = k2
+            if k1 != k2:
+                k1_k2_rows = df_coloc[
+                    (df_coloc["left_study"] == study1)
+                    & (df_coloc["left_chrom"].astype(str) == str(chrom1))
+                    & (df_coloc["left_pos"].astype(str) == str(pos1))
+                    & (df_coloc["left_ref"] == ref1)
+                    & (df_coloc["left_alt"] == alt1)
+                    & (df_coloc["right_study"] == study2)
+                    & (df_coloc["right_chrom"].astype(str) == str(chrom2))
+                    & (df_coloc["right_pos"].astype(str) == str(pos2))
+                    & (df_coloc["right_ref"] == ref2)
+                    & (df_coloc["right_alt"] == alt2)
+                ]
+                assert len(k1_k2_rows) == 1
+                r = k1_k2_rows.iloc[0]
+                coloc_lt_heatmap[key_to_string(k1)][key_to_string(k2)] = {
+                    "h3": r["coloc_h3"],
+                    "h4": r["coloc_h4"],
+                    "logH4H3": r["coloc_log_H4_H3"],
+                }
+    coloc_heatmap_outfile = os.path.join(lt_dir, COLOC_GWAS_HEATMAP_FILE_OUT)
+    with open(coloc_heatmap_outfile, "w") as f:
+        json.dump(coloc_lt_heatmap, f)
 
     # summary stats table
     sum_stats_outfile = os.path.join(lt_dir, SUM_STATS_FILE_OUT)

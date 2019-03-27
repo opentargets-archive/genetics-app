@@ -11,10 +11,6 @@ import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
-import {
-  MOCK_INDEX_VARIANT_INFO,
-  MOCK_CREDIBLE_SET_TRACK_PLOT,
-} from '../mock-data/locusTraitPage';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
 
@@ -71,7 +67,7 @@ class LocusTraitPage extends React.Component {
           <StudyInfo studyInfo={STUDY_INFO} />
         </Typography>
         <Typography variant="h6" color="textSecondary">
-          {`Locus near ${VARIANT_ID} (${MOCK_INDEX_VARIANT_INFO.rsId})`}
+          {`Locus near ${VARIANT_ID}`}
         </Typography>
 
         <SectionHeading
@@ -165,7 +161,7 @@ class LocusTraitPage extends React.Component {
           heading={`Credible set overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
-        <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} />
+        {/* <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} /> */}
       </BasePage>
     );
   }
