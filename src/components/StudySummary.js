@@ -86,8 +86,14 @@ const StudySummary = ({
       {pmid ? (
         <Typography variant="subtitle2">
           <strong>PubMed ID:</strong>{' '}
-          <a href={`http://europepmc.org/abstract/med/${pmid}`} target="_blank">
-            {pmid}
+          <a
+            href={`https://europepmc.org/abstract/med/${pmid.replace(
+              'PMID:',
+              ''
+            )}`}
+            target="_blank"
+          >
+            {pmid.replace('PMID:', '')}
             <Icon
               className={classNames(
                 'fa',

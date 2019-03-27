@@ -3,7 +3,7 @@ import React from 'react';
 const PmidOrBiobankLink = ({ studyId, pmid }) =>
   studyId && studyId.startsWith('NEALE') ? (
     <a
-      href="http://www.nealelab.is/uk-biobank"
+      href="https://www.nealelab.is/uk-biobank"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -11,7 +11,7 @@ const PmidOrBiobankLink = ({ studyId, pmid }) =>
     </a>
   ) : (
     <a
-      href={`http://europepmc.org/abstract/med/${pmid}`}
+      href={`https://europepmc.org/abstract/med/${pmid.replace('PMID:', '')}`}
       target="_blank"
       rel="noopener noreferrer"
     >
