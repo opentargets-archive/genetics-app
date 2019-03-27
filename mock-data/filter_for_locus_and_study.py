@@ -57,7 +57,7 @@ FINEMAPPING_DIR = os.path.join(
 )
 TOP_LOCI_FILE = os.path.join(FINEMAPPING_DIR, "top_loci.json.gz")
 
-SUM_STATS_DIR = os.path.join(SCRIPT_DIR, "processed/sum-stats")
+SUM_STATS_DIR = os.path.join(SCRIPT_DIR, "processed/sum-stats-grouped")
 SUM_STATS_FILE_OUT = "sum-stats-table.json"
 SUM_STATS_DISTANCE = 500000
 
@@ -116,11 +116,11 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
 
     # summary stats table (self)
     key = "{}__null__null__{}".format(study, chrom)
-    filename = key + ".json.gz"
+    filename = key + ".json"
 
     # silly bug in group-summary-stats means some rows contain two jsonlines
-    with gzip.GzipFile(os.path.join(SUM_STATS_DIR, filename), "r") as f:
-        data = f.read().decode("utf-8").replace("}{", "}\n{")
+    with open(os.path.join(SUM_STATS_DIR, filename), "r") as f:
+        data = f.read().replace("}{", "}\n{")
     df_partial = pd.read_json(StringIO(data), orient="records", lines=True)
 
     # get only those within the locus
@@ -145,15 +145,15 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     # summary stats table (coloced gwas)
     for _, row in df_coloc_gwas.iterrows():
         key = "{}__null__null__{}".format(row["study"], row["chrom"])
-        filename = key + ".json.gz"
+        filename = key + ".json"
 
         # check if already visited
         if key in sum_stats.keys():
             continue
 
         # silly bug in group-summary-stats means some rows contain two jsonlines
-        with gzip.GzipFile(os.path.join(SUM_STATS_DIR, filename), "r") as f:
-            data = f.read().decode("utf-8").replace("}{", "}\n{")
+        with open(os.path.join(SUM_STATS_DIR, filename), "r") as f:
+            data = f.read().replace("}{", "}\n{")
         df_partial = pd.read_json(StringIO(data), orient="records", lines=True)
 
         # get only those within the locus
@@ -180,15 +180,15 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
         key = "{}__{}__{}__{}".format(
             row["study"], row["phenotype"], row["bioFeature"], row["chrom"]
         )
-        filename = key + ".json.gz"
+        filename = key + ".json"
 
         # check if already visited
         if key in sum_stats.keys():
             continue
 
         # silly bug in group-summary-stats means some rows contain two jsonlines
-        with gzip.GzipFile(os.path.join(SUM_STATS_DIR, filename), "r") as f:
-            data = f.read().decode("utf-8").replace("}{", "}\n{")
+        with open(os.path.join(SUM_STATS_DIR, filename), "r") as f:
+            data = f.read().replace("}{", "}\n{")
         df_partial = pd.read_json(StringIO(data), orient="records", lines=True)
 
         # get only those within the locus
