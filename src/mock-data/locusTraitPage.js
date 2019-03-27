@@ -234,8 +234,6 @@
 //   MOCK_REGIONAL_DATA_3,
 // ]);
 
-// // console.log(MOCK_SIG_SIG_DATA);
-
 // export const MOCK_REGIONAL_DATA_GENES = {
 //   genes: GENE_SET,
 // };
