@@ -10,6 +10,7 @@ import StudyInfo from '../components/StudyInfo';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
+import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetTrackPlot from '../components/CredibleSetTrackPlot';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
@@ -50,8 +51,6 @@ const flatExonsToPairedExons = ({ genes }) => {
   }));
   return { genes: paired };
 };
-
-console.log(COLOC_GWAS_HEATMAP_TABLE_DATA);
 
 class LocusTraitPage extends React.Component {
   render() {
@@ -101,6 +100,11 @@ class LocusTraitPage extends React.Component {
               <strong>{STUDY_INFO.traitReported}</strong> at this locus?
             </React.Fragment>
           }
+        />
+        <ColocGWASHeatmapTable
+          loading={false}
+          error={false}
+          data={COLOC_GWAS_HEATMAP_TABLE_DATA}
         />
         <ColocGWASTable
           loading={false}
