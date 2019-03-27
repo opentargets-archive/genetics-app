@@ -102,14 +102,14 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     df_coloc_qtl = df_coloc_lt[df_coloc_lt["right_type"] != "gwas"]
     df_coloc_qtl = df_coloc_qtl[COLOC_TABLE_COLS]
     df_coloc_qtl.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
-    df_coloc_qtl.to_json(coloc_qtl_outfile, orient="records")
+    df_coloc_qtl.to_json(coloc_qtl_outfile, orient="records", double_precision=15)
 
     # coloc table (gwas)
     coloc_gwas_outfile = os.path.join(lt_dir, COLOC_GWAS_FILE_OUT)
     df_coloc_gwas = df_coloc_lt[df_coloc_lt["right_type"] == "gwas"]
     df_coloc_gwas = df_coloc_gwas[COLOC_TABLE_COLS]
     df_coloc_gwas.rename(columns=COLOC_TABLE_COLS_MAPPING, inplace=True)
-    df_coloc_gwas.to_json(coloc_gwas_outfile, orient="records")
+    df_coloc_gwas.to_json(coloc_gwas_outfile, orient="records", double_precision=15)
 
     # summary stats table
     sum_stats_outfile = os.path.join(lt_dir, SUM_STATS_FILE_OUT)
