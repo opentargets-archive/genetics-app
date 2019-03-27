@@ -9,6 +9,7 @@ import numpy as np
 LOCUS_TRAITS = [
     {"study": "GCST006288_hbmd", "chrom": "17", "pos": 7463300, "ref": "T", "alt": "C"},
     {"study": "GCST004132_cr", "chrom": "19", "pos": 1178655, "ref": "G", "alt": "C"},
+    {"study": "GCST003044_cr_ic", "chrom": "2", "pos": 60977721, "ref": "A", "alt": "G"},
 ]
 SCRIPT_DIR = os.path.dirname(__file__)
 PROCESSED_DIR = os.path.join(SCRIPT_DIR, "processed")
