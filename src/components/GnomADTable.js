@@ -61,6 +61,7 @@ const GnomADTable = ({ classes, data, variantId }) => (
             data.rsId
           }`}
           target="_blank"
+          rel="noopener noreferrer"
         >
           {data.rsId}
           <Icon
@@ -81,6 +82,7 @@ const GnomADTable = ({ classes, data, variantId }) => (
               '-'
             )}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             {variantId.replace(/_/g, '-')}
             <Icon
@@ -121,6 +123,7 @@ const GnomADTable = ({ classes, data, variantId }) => (
         <a
           href="https://www.ensembl.org/info/docs/tools/vep/index.html"
           target="_blank"
+          rel="noopener noreferrer"
         >
           VEP
           <Icon
@@ -141,7 +144,11 @@ const GnomADTable = ({ classes, data, variantId }) => (
 
       <Typography variant="subtitle1">
         Combined Annotation Dependent Depletion (
-        <a href="https://cadd.gs.washington.edu/" target="_blank">
+        <a
+          href="https://cadd.gs.washington.edu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           CADD
           <Icon
             className={classNames(
@@ -163,7 +170,11 @@ const GnomADTable = ({ classes, data, variantId }) => (
     <Grid item xs={12} sm={6} md={4}>
       <Typography variant="subtitle1">
         Population allele frequencies (
-        <a href="https://gnomad.broadinstitute.org/" target="_blank">
+        <a
+          href="https://gnomad.broadinstitute.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           gnomAD
           <Icon
             className={classNames(

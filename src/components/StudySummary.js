@@ -50,7 +50,11 @@ const StudySummary = ({
       {studyId && studyId.startsWith('NEALEUKB') ? (
         <Typography variant="subtitle2">
           <strong>Neale UK Biobank:</strong>{' '}
-          <a href="http://www.nealelab.is/uk-biobank" target="_blank">
+          <a
+            href="http://www.nealelab.is/uk-biobank"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Homepage
             <Icon
               className={classNames(
@@ -71,6 +75,7 @@ const StudySummary = ({
               ''
             )}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             {studyId.replace(/_\d+/, '')}
             <Icon
@@ -92,6 +97,7 @@ const StudySummary = ({
               ''
             )}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             {pmid.replace('PMID:', '')}
             <Icon
