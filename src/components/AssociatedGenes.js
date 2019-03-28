@@ -28,8 +28,7 @@ const createDistanceCellRenderer = schema => {
   return rowData => {
     const distanceData = rowData[schema.sourceId];
     if (distanceData !== undefined) {
-      const { distance, quantile } = distanceData.tissues[0];
-      const circleRadius = radiusScale(quantile);
+      const { distance } = distanceData.tissues[0];
       return <React.Fragment>{commaSeparate(distance)}</React.Fragment>;
     }
   };
@@ -45,9 +44,6 @@ const createQtlCellRenderer = schema => {
 };
 
 const tissueComparator = (a, b) =>
-  a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
-
-const distanceComparator = (a, b) =>
   a.label > b.label ? 1 : a.label === b.label ? 0 : -1;
 
 const createIntervalCellRenderer = schema => {
