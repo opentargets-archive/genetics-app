@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -13,8 +11,6 @@ import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
 import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
-import StudyInfo from '../components/StudyInfo';
-import StudySize from '../components/StudySize';
 import StudyComparisonOption from '../components/StudyComparisonOption';
 import STUDIES_PAGE_QUERY from '../queries/StudiesPageQuery.gql';
 
@@ -260,7 +256,7 @@ class StudiesPage extends React.Component {
     );
   };
   render() {
-    const { classes, match } = this.props;
+    const { match } = this.props;
     const { studyId } = match.params;
     const { studyIds } = this._parseQueryProps();
     return (
