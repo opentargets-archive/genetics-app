@@ -14,18 +14,18 @@ SUM_STATS_DIR_OUT = os.path.join(SCRIPT_DIR, "processed/sum-stats-grouped")
 
 def group_summary_stats():
     # remove previous output
-    previous_files = glob.glob(os.path.join(SUM_STATS_DIR_OUT, "*.json"))
+    previous_files = glob.glob(os.path.join(SUM_STATS_DIR_OUT, "*.json.gz"))
     for pf in previous_files:
         os.remove(pf)
 
     # now process the sumstats
     i = 1
     for filename in os.listdir(SUM_STATS_DIR):
-        print("Processing part {}".format(i))
+        print("Processing part {}: {}".format(i, filename))
         i += 1
 
         # use append mode (hence need to remove previous output)
-        mode = "a"
+        mode = "ab"
 
         if filename.endswith(".json.gz"):
             df = pd.read_json(
@@ -36,9 +36,11 @@ def group_summary_stats():
             df_gwas = df[df["type"] == "gwas"]
             grouped = df_gwas.groupby(["study_id", "chrom"])
             for name, group in grouped:
-                filename = "{}__null__null__{}.json".format(name[0], name[1])
-                with open(os.path.join(SUM_STATS_DIR_OUT, filename), mode) as f:
-                    group.to_json(f, orient="records", lines=True, double_precision=15)
+                filename = "{}__null__null__{}.json.gz".format(name[0], name[1])
+                print(' * ' + filename)
+                with gzip.GzipFile(os.path.join(SUM_STATS_DIR_OUT, filename), mode) as f:
+                    content = group.to_json(orient="records", lines=True, double_precision=15) + '\n'
+                    f.write(content.encode('utf-8'))
 
             # handle qtls
             df_qtl = df[df["type"] != "gwas"]
@@ -46,11 +48,13 @@ def group_summary_stats():
                 ["study_id", "phenotype_id", "bio_feature", "chrom"]
             )
             for name, group in grouped:
-                filename = "{}__{}__{}__{}.json".format(
+                filename = "{}__{}__{}__{}.json.gz".format(
                     name[0], name[1], name[2], name[3]
                 )
-                with open(os.path.join(SUM_STATS_DIR_OUT, filename), mode) as f:
-                    group.to_json(f, orient="records", lines=True, double_precision=15)
+                print(' * ' + filename)
+                with gzip.GzipFile(os.path.join(SUM_STATS_DIR_OUT, filename), mode) as f:
+                    content = group.to_json(orient="records", lines=True, double_precision=15) + '\n'
+                    f.write(content.encode('utf-8'))
 
 
 if __name__ == "__main__":
