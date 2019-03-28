@@ -134,9 +134,6 @@ class GenePage extends React.Component {
       traitFilter: traitFilterUrl,
       authorFilter: authorFilterUrl,
     } = this._parseQueryProps();
-    const locusLinkClasses = {
-      button: classes.locusLinkButton,
-    };
     return (
       <BasePage>
         <Query query={GENE_PAGE_QUERY} variables={{ geneId }}>
