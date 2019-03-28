@@ -38,6 +38,13 @@ const GENES = { genes: GENE_DATA };
 const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${CHROMOSOME}`;
 const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
 
+const generateComparatorFromAccessor = accessor => (a, b) => {
+  const aValue = accessor(a);
+  const bValue = accessor(b);
+  return aValue > bValue ? 1 : aValue === bValue ? 0 : -1;
+};
+const logH4H3Comparator = generateComparatorFromAccessor(d => d.logH4H3);
+
 const traitAuthorYear = s =>
   `${s.traitReported} (${s.pubAuthor}, ${new Date(s.pubDate).getFullYear()})`;
 
@@ -115,7 +122,14 @@ class LocusTraitPage extends React.Component {
           data={COLOC_GWAS_TABLE_DATA}
         />
 
-        <PlotContainer>
+        <PlotContainer
+          center={
+            <Typography>
+              Regional plots: page study; other GWAS studies with log(H4/H3) >
+              1; QTL studies with log(H4/H3) > 1
+            </Typography>
+          }
+        >
           {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
           <Regional
             data={SUMSTATS_PAGE_STUDY}
@@ -123,30 +137,36 @@ class LocusTraitPage extends React.Component {
             start={START}
             end={END}
           />
-          {COLOC_GWAS_TABLE_DATA.filter(d => d.logH4H3 > 1).map(d => (
-            <Regional
-              key={`${d.study}`}
-              data={
-                SUMSTATS_TABLE_DATA[`${d.study}__null__null__${CHROMOSOME}`]
-              }
-              title={traitAuthorYear(STUDY_INFOS[d.study])}
-              start={START}
-              end={END}
-            />
-          ))}
-          {COLOC_QTL_TABLE_DATA.filter(d => d.logH4H3 > 1).map(d => (
-            <Regional
-              key={`${d.phenotype}-${d.bioFeature}`}
-              data={
-                SUMSTATS_TABLE_DATA[
-                  `${d.study}__${d.phenotype}__${d.bioFeature}__${CHROMOSOME}`
-                ]
-              }
-              title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
-              start={START}
-              end={END}
-            />
-          ))}
+          {COLOC_GWAS_TABLE_DATA.filter(d => d.logH4H3 > 1)
+            .sort(logH4H3Comparator)
+            .reverse()
+            .map(d => (
+              <Regional
+                key={`${d.study}`}
+                data={
+                  SUMSTATS_TABLE_DATA[`${d.study}__null__null__${CHROMOSOME}`]
+                }
+                title={traitAuthorYear(STUDY_INFOS[d.study])}
+                start={START}
+                end={END}
+              />
+            ))}
+          {COLOC_QTL_TABLE_DATA.filter(d => d.logH4H3 > 1)
+            .sort(logH4H3Comparator)
+            .reverse()
+            .map(d => (
+              <Regional
+                key={`${d.phenotype}-${d.bioFeature}`}
+                data={
+                  SUMSTATS_TABLE_DATA[
+                    `${d.study}__${d.phenotype}__${d.bioFeature}__${CHROMOSOME}`
+                  ]
+                }
+                title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
+                start={START}
+                end={END}
+              />
+            ))}
           <GeneTrack
             data={flatExonsToPairedExons(GENES)}
             start={START}
