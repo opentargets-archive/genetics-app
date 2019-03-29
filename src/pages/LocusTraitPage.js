@@ -23,7 +23,50 @@ import SUMSTATS_TABLE_DATA from '../mock-data/specific/sum-stats-table.json';
 import CREDSETS_TABLE_DATA from '../mock-data/specific/credible-sets-table.json';
 import GENE_DATA from '../mock-data/genes.json';
 
-console.log(CREDSETS_TABLE_DATA);
+// helper to augment summary stats with credible set information
+const combineSumStatsWithCredSets = ({
+  study,
+  phenotype,
+  bioFeature,
+  chromosome,
+  pos: position,
+  ref,
+  alt,
+}) => {
+  const ssKey = `${study}__${phenotype ? phenotype : 'null'}__${
+    bioFeature ? bioFeature : 'null'
+  }__${chromosome}`;
+  const csKey = `${study}__${phenotype ? phenotype : 'null'}__${
+    bioFeature ? bioFeature : 'null'
+  }__${chromosome}__${position}__${ref}__${alt}`;
+  const ss = SUMSTATS_TABLE_DATA[ssKey];
+  const vKey = ({ chromosome, position, ref, alt }) =>
+    `${chromosome}__${position}__${ref}__${alt}`;
+  const lookup = CREDSETS_TABLE_DATA[csKey].reduce((acc, d) => {
+    acc[vKey(d)] = d;
+    return acc;
+  }, {});
+  const ssWith = ss.map(d => {
+    if (Object.keys(lookup).indexOf(vKey(d)) >= 0) {
+      const {
+        posteriorProbability,
+        logABF,
+        is95CredibleSet,
+        is99CredibleSet,
+      } = lookup[vKey(d)];
+      return {
+        ...d,
+        posteriorProbability,
+        logABF,
+        is95CredibleSet,
+        is99CredibleSet,
+      };
+    } else {
+      return d;
+    }
+  });
+  return ssWith;
+};
 
 const STUDY_ID = PAGE_SUMMARY_DATA['study'];
 const STUDY_INFO = STUDY_INFOS[STUDY_ID];
@@ -146,9 +189,10 @@ class LocusTraitPage extends React.Component {
             .map(d => (
               <Regional
                 key={`${d.study}`}
-                data={
-                  SUMSTATS_TABLE_DATA[`${d.study}__null__null__${CHROMOSOME}`]
-                }
+                data={combineSumStatsWithCredSets({
+                  ...d,
+                  chromosome: CHROMOSOME,
+                })}
                 title={traitAuthorYear(STUDY_INFOS[d.study])}
                 start={START}
                 end={END}
@@ -160,11 +204,10 @@ class LocusTraitPage extends React.Component {
             .map(d => (
               <Regional
                 key={`${d.phenotype}-${d.bioFeature}`}
-                data={
-                  SUMSTATS_TABLE_DATA[
-                    `${d.study}__${d.phenotype}__${d.bioFeature}__${CHROMOSOME}`
-                  ]
-                }
+                data={combineSumStatsWithCredSets({
+                  ...d,
+                  chromosome: CHROMOSOME,
+                })}
                 title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
                 start={START}
                 end={END}
