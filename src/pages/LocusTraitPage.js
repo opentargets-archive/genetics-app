@@ -20,7 +20,10 @@ import COLOC_QTL_TABLE_DATA from '../mock-data/specific/coloc-qtl-table.json';
 import COLOC_GWAS_TABLE_DATA from '../mock-data/specific/coloc-gwas-table.json';
 import COLOC_GWAS_HEATMAP_TABLE_DATA from '../mock-data/specific/coloc-gwas-heatmap-table.json';
 import SUMSTATS_TABLE_DATA from '../mock-data/specific/sum-stats-table.json';
+import CREDSETS_TABLE_DATA from '../mock-data/specific/credible-sets-table.json';
 import GENE_DATA from '../mock-data/genes.json';
+
+console.log(CREDSETS_TABLE_DATA);
 
 const STUDY_ID = PAGE_SUMMARY_DATA['study'];
 const STUDY_INFO = STUDY_INFOS[STUDY_ID];
