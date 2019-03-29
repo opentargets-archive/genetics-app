@@ -280,92 +280,98 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
     credible_sets_outfile = os.path.join(lt_dir, CRED_SET_FILE_OUT)
     credible_sets = {}
 
-    # # credible set (self)
-    # key = "{}__null__null__{}".format(study, chrom)
-    # filename = key + ".json"
+    # credible set (self)
+    key = "{}__null__null__{}".format(study, chrom)
+    filename = key + ".json.gz"
 
-    # # silly bug in group-credible-sets means some rows contain two jsonlines
-    # with open(os.path.join(CRED_SET_DIR, filename), "r") as f:
-    #     data = f.read().replace("}{", "}\n{")
-    # df_partial = pd.read_json(StringIO(data), orient="records", lines=True)
+    row_key = "{}__null__null__{}__{}__{}__{}".format(
+        study, chrom, pos, ref, alt
+    )
 
-    # # get only those within the locus
-    # df_partial_filtered = df_partial[
-    #     (df_partial["lead_pos"] == pos)
-    #     & (df_partial["lead_ref"] == ref)
-    #     & (df_partial["lead_alt"] == alt)
-    # ]
+    df_partial = pd.read_json(os.path.join(CRED_SET_DIR, filename), orient="records", lines=True)
 
-    # # subset of keys
-    # credible_sets[key] = [
-    #     {
-    #         "chromosome": r["tag_chrom"],
-    #         "position": r["tag_pos"],
-    #         "ref": r["tag_ref"],
-    #         "alt": r["tag_alt"],
-    #         "beta": r["tag_beta"],
-    #         "betaCond": r["tag_beta_cond"],
-    #         "pval": r["tag_pval"],
-    #         "pvalCond": r["tag_pval_cond"],
-    #         "posteriorProbability": r["postprob"],
-    #         "posteriorProbabilityCumulative": r["postprob_cumsum"],
-    #         "logABF": r["logABF"],
-    #         "is95CredibleSet": r["is95_credset"],
-    #         "is99CredibleSet": r["is99_credset"],
-    #     }
-    #     for r in df_partial_filtered.to_dict("records")
-    # ]
+    # get only those within the locus
+    df_partial_filtered = df_partial[
+        (df_partial["lead_pos"] == pos)
+        & (df_partial["lead_ref"] == ref)
+        & (df_partial["lead_alt"] == alt)
+        & (df_partial["postprob"] > 0.01)
+        & (df_partial["is95_credset"] == True)
+    ]
+
+    # subset of keys
+    credible_sets[row_key] = [
+        {
+            "chromosome": r["tag_chrom"],
+            "position": r["tag_pos"],
+            "ref": r["tag_ref"],
+            "alt": r["tag_alt"],
+            "beta": r["tag_beta"],
+            "betaCond": r["tag_beta_cond"],
+            "pval": r["tag_pval"],
+            "pvalCond": r["tag_pval_cond"],
+            "posteriorProbability": r["postprob"],
+            "posteriorProbabilityCumulative": r["postprob_cumsum"],
+            "logABF": r["logABF"],
+            "is95CredibleSet": r["is95_credset"],
+            "is99CredibleSet": r["is99_credset"],
+        }
+        for r in df_partial_filtered.to_dict("records")
+    ]
 
     # credible sets (coloced qtls)
     for _, row in df_coloc_qtl.iterrows():
-        key = "{}__{}__{}__{}".format(
-            row["study"], row["phenotype"], row["bioFeature"], row["chrom"]
-        )
-        filename = key + ".json"
+        if (row['logH4H3'] > 1):
+            key = "{}__{}__{}__{}".format(
+                row["study"], row["phenotype"], row["bioFeature"], row["chrom"]
+            )
+            filename = key + ".json.gz"
 
-        row_key = "{}__{}__{}__{}__{}__{}__{}".format(
-            row["study"], row["phenotype"], row["bioFeature"], row["chrom"], row['pos'], row['ref'], row['alt']
-        )
+            row_key = "{}__{}__{}__{}__{}__{}__{}".format(
+                row["study"], row["phenotype"], row["bioFeature"], row["chrom"], row['pos'], row['ref'], row['alt']
+            )
 
-        # check if already visited
-        if row_key in credible_sets.keys():
-            print('credible set key hit twice: ' + key)
-            continue
+            # check if already visited
+            if row_key in credible_sets.keys():
+                print('credible set key hit twice: ' + key)
+                continue
 
-        # TODO: remove
-        if not os.path.exists(os.path.join(CRED_SET_DIR, filename)):
-            continue
+            # TODO: remove
+            if not os.path.exists(os.path.join(CRED_SET_DIR, filename)):
+                continue
 
-        df_partial = pd.read_json(os.path.join(CRED_SET_DIR, filename), orient="records", lines=True)
-        print(row_key, df_partial.shape)
+            df_partial = pd.read_json(os.path.join(CRED_SET_DIR, filename), orient="records", lines=True)
+            print(row_key, df_partial.shape)
 
-        # get only those within the locus
-        df_partial_filtered = df_partial[
-            (df_partial["lead_pos"] == row['pos'])
-            & (df_partial["lead_ref"] == row['ref'])
-            & (df_partial["lead_alt"] == row['alt'])
-        ]
-        print(row_key, df_partial_filtered.shape)
+            # get only those within the locus
+            df_partial_filtered = df_partial[
+                (df_partial["lead_pos"] == row['pos'])
+                & (df_partial["lead_ref"] == row['ref'])
+                & (df_partial["lead_alt"] == row['alt'])
+                & (df_partial["postprob"] > 0.01)
+                & (df_partial["is95_credset"] == True)
+            ]
+            print(row_key, df_partial_filtered.shape)
 
-        # subset of keys
-        credible_sets[row_key] = [
-            {
-                "chromosome": r["tag_chrom"],
-                "position": r["tag_pos"],
-                "ref": r["tag_ref"],
-                "alt": r["tag_alt"],
-                "beta": r["tag_beta"],
-                "betaCond": r["tag_beta_cond"],
-                "pval": r["tag_pval"],
-                "pvalCond": r["tag_pval_cond"],
-                "posteriorProbability": r["postprob"],
-                "posteriorProbabilityCumulative": r["postprob_cumsum"],
-                "logABF": r["logABF"],
-                "is95CredibleSet": r["is95_credset"],
-                "is99CredibleSet": r["is99_credset"],
-            }
-            for r in df_partial_filtered.to_dict("records")
-        ]
+            # subset of keys
+            credible_sets[row_key] = [
+                {
+                    "chromosome": r["tag_chrom"],
+                    "position": r["tag_pos"],
+                    "ref": r["tag_ref"],
+                    "alt": r["tag_alt"],
+                    "beta": r["tag_beta"],
+                    "betaCond": r["tag_beta_cond"],
+                    "pval": r["tag_pval"],
+                    "pvalCond": r["tag_pval_cond"],
+                    "posteriorProbability": r["postprob"],
+                    "posteriorProbabilityCumulative": r["postprob_cumsum"],
+                    "logABF": r["logABF"],
+                    "is95CredibleSet": r["is95_credset"],
+                    "is99CredibleSet": r["is99_credset"],
+                }
+                for r in df_partial_filtered.to_dict("records")
+            ]
 
     with open(credible_sets_outfile, "w") as f:
         json.dump(credible_sets, f)
