@@ -319,6 +319,59 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
         for r in df_partial_filtered.to_dict("records")
     ]
 
+    # credible sets (coloced gwas)
+    for _, row in df_coloc_gwas.iterrows():
+        if (row['logH4H3'] > 1):
+            key = "{}__null__null__{}".format(
+                row["study"], row["chrom"]
+            )
+            filename = key + ".json.gz"
+
+            row_key = "{}__null__null__{}__{}__{}__{}".format(
+                row["study"], row["chrom"], row['pos'], row['ref'], row['alt']
+            )
+
+            # check if already visited
+            if row_key in credible_sets.keys():
+                continue
+
+            # TODO: remove
+            if not os.path.exists(os.path.join(CRED_SET_DIR, filename)):
+                continue
+
+            df_partial = pd.read_json(os.path.join(CRED_SET_DIR, filename), orient="records", lines=True)
+            print(row_key, df_partial.shape)
+
+            # get only those within the locus
+            df_partial_filtered = df_partial[
+                (df_partial["lead_pos"] == row['pos'])
+                & (df_partial["lead_ref"] == row['ref'])
+                & (df_partial["lead_alt"] == row['alt'])
+                # & (df_partial["postprob"] > 0.01)
+                # & (df_partial["is95_credset"] == True)
+            ]
+            print(row_key, df_partial_filtered.shape)
+
+            # subset of keys
+            credible_sets[row_key] = [
+                {
+                    "chromosome": r["tag_chrom"],
+                    "position": r["tag_pos"],
+                    "ref": r["tag_ref"],
+                    "alt": r["tag_alt"],
+                    "beta": r["tag_beta"],
+                    "betaCond": r["tag_beta_cond"],
+                    "pval": r["tag_pval"],
+                    "pvalCond": r["tag_pval_cond"],
+                    "posteriorProbability": r["postprob"],
+                    "posteriorProbabilityCumulative": r["postprob_cumsum"],
+                    "logABF": r["logABF"],
+                    "is95CredibleSet": r["is95_credset"],
+                    "is99CredibleSet": r["is99_credset"],
+                }
+                for r in df_partial_filtered.to_dict("records")
+            ]
+
     # credible sets (coloced qtls)
     for _, row in df_coloc_qtl.iterrows():
         if (row['logH4H3'] > 1):
@@ -333,7 +386,6 @@ def build_mock_data_for_locus_and_study(lt, df_coloc):
 
             # check if already visited
             if row_key in credible_sets.keys():
-                print('credible set key hit twice: ' + key)
                 continue
 
             # TODO: remove
