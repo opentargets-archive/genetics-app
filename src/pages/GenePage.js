@@ -25,18 +25,12 @@ import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
 import GENE_PAGE_QUERY from '../queries/GenePageQuery.gql';
 
-function hasGeneData(data, geneId) {
-  return (
-    data &&
-    data.search &&
-    data.search.genes &&
-    data.search.genes.length === 1 &&
-    data.search.genes[0].id === geneId
-  );
+function hasGeneData(data) {
+  return data && data.geneInfo;
 }
 
 function geneData(data) {
-  return data.search.genes[0];
+  return data.geneInfo;
 }
 
 function hasAssociatedStudies(data) {

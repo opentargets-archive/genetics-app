@@ -1,13 +1,11 @@
 query GenePageQuery($geneId: String!) {
-  search(queryString: $geneId) {
-    genes {
-      id
-      symbol
-      chromosome
-      start
-      end
-      bioType
-    }
+  geneInfo(geneId: $geneId) {
+    id
+    symbol
+    chromosome
+    start
+    end
+    bioType
   }
   studiesForGene(geneId: $geneId) {
     study {
