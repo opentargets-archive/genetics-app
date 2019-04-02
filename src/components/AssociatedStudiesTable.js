@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate, Autocomplete } from 'ot-ui';
+import {
+  OtTable,
+  commaSeparate,
+  significantFigures,
+  Autocomplete,
+} from 'ot-ui';
 
+import { pvalThreshold } from '../constants';
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
@@ -18,15 +24,27 @@ const tableColumns = ({
   authorFilterHandler,
 }) => [
   {
-    id: 'studyId',
-    label: 'Study ID',
+    id: 'indexVariant.id',
+    label: 'Lead Variant',
     renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      <Link to={`/variant/${rowData.indexVariant.id}`}>
+        {rowData.indexVariant.rsId}
+      </Link>
     ),
   },
   {
-    id: 'traitReported',
+    id: 'study.studyId',
+    label: 'Study ID',
+    renderCell: rowData => (
+      <Link to={`/study/${rowData.study.studyId}`}>
+        {rowData.study.studyId}
+      </Link>
+    ),
+  },
+  {
+    id: 'study.traitReported',
     label: 'Trait',
+    renderCell: rowData => rowData.study.traitReported,
     renderFilter: () => (
       <Autocomplete
         options={traitFilterOptions}
@@ -38,14 +56,17 @@ const tableColumns = ({
     ),
   },
   {
-    id: 'pmid',
+    id: 'study.pmid',
     label: 'PMID',
     renderCell: rowData => (
-      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
+      <PmidOrBiobankLink
+        studyId={rowData.study.studyId}
+        pmid={rowData.study.pmid}
+      />
     ),
   },
   {
-    id: 'pubAuthor',
+    id: 'study.pubAuthor',
     label: 'Author (Year)',
     renderFilter: () => (
       <Autocomplete
@@ -57,25 +78,67 @@ const tableColumns = ({
       />
     ),
     renderCell: rowData =>
-      `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
+      `${rowData.study.pubAuthor} (${new Date(
+        rowData.study.pubDate
+      ).getFullYear()})`,
   },
   {
-    id: 'nInitial',
+    id: 'study.nInitial',
     label: 'N Initial',
     renderCell: rowData =>
-      rowData.nInitial ? commaSeparate(rowData.nInitial) : '',
+      rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
   {
-    id: 'nReplication',
+    id: 'study.nReplication',
     label: 'N Replication',
     renderCell: rowData =>
-      rowData.nReplication ? commaSeparate(rowData.nReplication) : '',
+      rowData.study.nReplication
+        ? commaSeparate(rowData.study.nReplication)
+        : '',
   },
   {
-    id: 'nCases',
+    id: 'study.nCases',
     label: 'N Cases',
     renderCell: rowData =>
-      rowData.nCases ? commaSeparate(rowData.nCases) : '',
+      rowData.study.nCases ? commaSeparate(rowData.study.nCases) : '',
+  },
+  {
+    id: 'pval',
+    label: 'P-value',
+    renderCell: rowData =>
+      rowData.pval < pvalThreshold
+        ? `<${pvalThreshold}`
+        : significantFigures(rowData.pval),
+  },
+  {
+    id: 'beta',
+    label: 'Beta',
+    tooltip: 'Beta with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.beta ? significantFigures(rowData.beta) : null,
+  },
+  {
+    id: 'oddsRatio',
+    label: 'Odds Ratio',
+    tooltip: 'Odds ratio with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+  },
+  {
+    id: 'ci',
+    label: '95% Confidence Interval',
+    tooltip:
+      '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
+    renderCell: rowData =>
+      rowData.beta
+        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
+            rowData.betaCIUpper
+          )})`
+        : rowData.oddsRatio
+          ? `(${significantFigures(
+              rowData.oddsRatioCILower
+            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+          : null,
   },
   {
     id: 'locusView',

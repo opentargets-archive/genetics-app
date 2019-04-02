@@ -34,7 +34,7 @@ function geneData(data) {
 }
 
 function hasAssociatedStudies(data) {
-  return data && data.studiesForGene;
+  return data && data.studiesAndLeadVariantsForGene;
 }
 
 const styles = theme => {
@@ -138,37 +138,37 @@ class GenePage extends React.Component {
             // all
             const associatedStudies =
               isValidGene && hasAssociatedStudies(data)
-                ? data.studiesForGene.map(d => d.study)
+                ? data.studiesAndLeadVariantsForGene
                 : [];
 
             // filtered
             const associatedStudiesFiltered = associatedStudies.filter(d => {
               return (
                 (traitFilterUrl
-                  ? traitFilterUrl.indexOf(d.traitReported) >= 0
+                  ? traitFilterUrl.indexOf(d.study.traitReported) >= 0
                   : true) &&
                 (authorFilterUrl
-                  ? authorFilterUrl.indexOf(d.pubAuthor) >= 0
+                  ? authorFilterUrl.indexOf(d.study.pubAuthor) >= 0
                   : true)
               );
             });
 
             // filters
             const traitFilterOptions = _.sortBy(
-              _.uniq(associatedStudiesFiltered.map(d => d.traitReported)).map(
-                d => ({
-                  label: d,
-                  value: d,
-                  selected: traitFilterUrl
-                    ? traitFilterUrl.indexOf(d) >= 0
-                    : false,
-                })
-              ),
+              _.uniq(
+                associatedStudiesFiltered.map(d => d.study.traitReported)
+              ).map(d => ({
+                label: d,
+                value: d,
+                selected: traitFilterUrl
+                  ? traitFilterUrl.indexOf(d) >= 0
+                  : false,
+              })),
               [d => !d.selected, 'value']
             );
             const traitFilterValue = traitFilterOptions.filter(d => d.selected);
             const authorFilterOptions = _.sortBy(
-              _.uniq(associatedStudiesFiltered.map(d => d.pubAuthor)).map(
+              _.uniq(associatedStudiesFiltered.map(d => d.study.pubAuthor)).map(
                 d => ({
                   label: d,
                   value: d,
