@@ -24,15 +24,6 @@ const tableColumns = ({
   authorFilterHandler,
 }) => [
   {
-    id: 'indexVariant.id',
-    label: 'Lead Variant',
-    renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariant.id}`}>
-        {rowData.indexVariant.rsId}
-      </Link>
-    ),
-  },
-  {
     id: 'study.studyId',
     label: 'Study ID',
     renderCell: rowData => (
@@ -101,6 +92,15 @@ const tableColumns = ({
     label: 'N Cases',
     renderCell: rowData =>
       rowData.study.nCases ? commaSeparate(rowData.study.nCases) : '',
+  },
+  {
+    id: 'indexVariant.id',
+    label: 'Lead Variant',
+    renderCell: rowData => (
+      <Link to={`/variant/${rowData.indexVariant.id}`}>
+        {rowData.indexVariant.rsId}
+      </Link>
+    ),
   },
   {
     id: 'pval',
