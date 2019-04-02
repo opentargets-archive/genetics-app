@@ -11,6 +11,7 @@ import { pvalThreshold } from '../constants';
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
+import generateComparator from '../utils/generateComparator';
 
 const tableColumns = ({
   geneId,
@@ -26,6 +27,7 @@ const tableColumns = ({
   {
     id: 'study.studyId',
     label: 'Study ID',
+    comparator: generateComparator(d => d.study.studyId),
     renderCell: rowData => (
       <Link to={`/study/${rowData.study.studyId}`}>
         {rowData.study.studyId}
@@ -35,6 +37,7 @@ const tableColumns = ({
   {
     id: 'study.traitReported',
     label: 'Trait',
+    comparator: generateComparator(d => d.study.traitReported),
     renderCell: rowData => rowData.study.traitReported,
     renderFilter: () => (
       <Autocomplete
@@ -49,6 +52,7 @@ const tableColumns = ({
   {
     id: 'study.pmid',
     label: 'PMID',
+    comparator: generateComparator(d => d.study.pmid),
     renderCell: rowData => (
       <PmidOrBiobankLink
         studyId={rowData.study.studyId}
@@ -59,6 +63,7 @@ const tableColumns = ({
   {
     id: 'study.pubAuthor',
     label: 'Author (Year)',
+    comparator: generateComparator(d => d.study.pubAuthor),
     renderFilter: () => (
       <Autocomplete
         options={authorFilterOptions}
@@ -76,12 +81,14 @@ const tableColumns = ({
   {
     id: 'study.nInitial',
     label: 'N Initial',
+    comparator: generateComparator(d => d.study.nInitial),
     renderCell: rowData =>
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
   {
     id: 'study.nReplication',
     label: 'N Replication',
+    comparator: generateComparator(d => d.study.nReplication),
     renderCell: rowData =>
       rowData.study.nReplication
         ? commaSeparate(rowData.study.nReplication)
@@ -90,12 +97,14 @@ const tableColumns = ({
   {
     id: 'study.nCases',
     label: 'N Cases',
+    comparator: generateComparator(d => d.study.nCases),
     renderCell: rowData =>
       rowData.study.nCases ? commaSeparate(rowData.study.nCases) : '',
   },
   {
     id: 'indexVariant.id',
     label: 'Lead Variant',
+    comparator: generateComparator(d => d.indexVariant.rsId),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariant.id}`}>
         {rowData.indexVariant.rsId}
@@ -187,7 +196,7 @@ const AssociatedStudiesTable = ({
       authorFilterHandler,
     })}
     data={data}
-    sortBy="nInitial"
+    sortBy="study.nInitial"
     order="desc"
     downloadFileStem={filenameStem}
     reportTableDownloadEvent={format => {
