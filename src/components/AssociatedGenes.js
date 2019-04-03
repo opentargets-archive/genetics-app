@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import {
-  OtTable,
+  DataDownloader,
+  OtTableRF,
   Tabs,
   Tab,
   DataCircle,
@@ -201,6 +202,19 @@ const getDataAll = genesForVariant => {
     data.push(row);
   });
   return data;
+};
+
+const getDataAllDownload = tableData => {
+  return tableData.map(row => {
+    const newRow = { ...row };
+    if (row.canonical_tss) {
+      newRow.canonical_tss = row.canonical_tss.tissues[0].distance;
+    }
+    if (row.vep) {
+      newRow.vep = row.vep.tissues[0].maxEffectLabel;
+    }
+    return newRow;
+  });
 };
 
 const getTissueColumns = (schema, genesForVariantSchema, genesForVariant) => {
@@ -412,6 +426,43 @@ const getTissueData = (schema, genesForVariantSchema, genesForVariant) => {
   return data;
 };
 
+const getTissueDataDownload = (schema, tableData) => {
+  if (schema.type === 'distances') {
+    return tableData.map(row => {
+      const newRow = { geneSymbol: row.geneSymbol };
+      if (row.aggregated) {
+        newRow.aggregated = row.aggregated.distance;
+      }
+      return newRow;
+    });
+  }
+
+  if (schema.type === 'qtls' || schema.type === 'intervals') {
+    return tableData.map(row => {
+      const newRow = { geneSymbol: row.geneSymbol };
+      if (row.aggregated) {
+        newRow.aggregated = row.aggregated.aggregatedScore;
+      }
+      schema.tissues.forEach(tissue => {
+        if (row[tissue.id]) {
+          newRow[tissue.id] = row[tissue.id].quantile
+            ? row[tissue.id].quantile
+            : row[tissue.id];
+        }
+      });
+      return newRow;
+    });
+  }
+
+  return tableData.map(row => {
+    const newRow = { geneSymbol: row.geneSymbol };
+    if (row.aggregated) {
+      newRow.aggregated = row.aggregated.tissues[0].maxEffectLabel;
+    }
+    return newRow;
+  });
+};
+
 const isDisabledColumn = (allData, sourceId) => {
   return !allData.some(d => d[sourceId]);
 };
@@ -432,7 +483,7 @@ class AssociatedGenes extends Component {
 
   render() {
     const { value } = this.state;
-    const { genesForVariantSchema, genesForVariant } = this.props;
+    const { variantId, genesForVariantSchema, genesForVariant } = this.props;
 
     // Hardcoding the order and assuming qtls, intervals, and
     // functionalPredictions are the only fields in the schema
@@ -457,63 +508,89 @@ class AssociatedGenes extends Component {
 
     const columnsAll = getColumnsAll(genesForVariantSchema, genesForVariant);
     const dataAll = getDataAll(genesForVariant);
+    const dataAllDownload = getDataAllDownload(dataAll);
 
     const tabOverview = value === OVERVIEW && (
-      <OtTable
-        message="Evidence summary linking this variant to different genes."
-        sortBy="overallScore"
-        order="desc"
-        columns={columnsAll}
-        data={dataAll}
-        reportTableDownloadEvent={format => {
-          reportAnalyticsEvent({
-            category: 'table',
-            action: 'download',
-            label: `variant:associated-genes:overview:${format}`,
-          });
-        }}
-        reportTableSortEvent={(sortBy, order) => {
-          reportAnalyticsEvent({
-            category: 'table',
-            action: 'sort-column',
-            label: `variant:associated-genes:overview:${sortBy}(${order})`,
-          });
-        }}
-      />
+      <Fragment>
+        <DataDownloader
+          tableHeaders={columnsAll}
+          rows={dataAllDownload}
+          fileStem={`${variantId}-assigned-genes-summary`}
+        />
+        <OtTableRF
+          message="Evidence summary linking this variant to different genes."
+          sortBy="overallScore"
+          order="desc"
+          columns={columnsAll}
+          data={dataAll}
+          reportTableDownloadEvent={format => {
+            reportAnalyticsEvent({
+              category: 'table',
+              action: 'download',
+              label: `variant:associated-genes:overview:${format}`,
+            });
+          }}
+          reportTableSortEvent={(sortBy, order) => {
+            reportAnalyticsEvent({
+              category: 'table',
+              action: 'sort-column',
+              label: `variant:associated-genes:overview:${sortBy}(${order})`,
+            });
+          }}
+        />
+      </Fragment>
     );
 
     const tabsTissues = schemas.map(schema => {
+      const tableColumns = getTissueColumns(
+        schema,
+        genesForVariantSchema,
+        genesForVariant
+      );
+
+      const tableData = getTissueData(
+        schema,
+        genesForVariantSchema,
+        genesForVariant
+      );
+
+      const tissueDataDownload = getTissueDataDownload(schema, tableData);
+
       return (
         value === schema.sourceId && (
-          <OtTable
-            message={schema.sourceDescriptionBreakdown}
-            sortBy={'aggregated'}
-            order={schema.type === 'distances' ? 'asc' : 'desc'}
-            verticalHeaders
-            key={schema.sourceId}
-            columns={getTissueColumns(
-              schema,
-              genesForVariantSchema,
-              genesForVariant
-            )}
-            data={getTissueData(schema, genesForVariantSchema, genesForVariant)}
-            reportTableDownloadEvent={format => {
-              reportAnalyticsEvent({
-                category: 'table',
-                action: 'download',
-                label: `variant:associated-genes:${schema.sourceId}:${format}`,
-              });
-            }}
-            reportTableSortEvent={(sortBy, order) => {
-              reportAnalyticsEvent({
-                category: 'table',
-                action: 'sort-column',
-                label: `variant:associated-genes:${
-                  schema.sourceId
-                }:${sortBy}(${order})`,
-              });
-            }}
-          />
+          <Fragment key={schema.sourceId}>
+            <DataDownloader
+              tableHeaders={tableColumns}
+              rows={tissueDataDownload}
+              fileStem={`${variantId}-assigned-genes-${schema.sourceLabel}`}
+            />
+            <OtTableRF
+              message={schema.sourceDescriptionBreakdown}
+              sortBy={'aggregated'}
+              order={schema.type === 'distances' ? 'asc' : 'desc'}
+              verticalHeaders
+              columns={tableColumns}
+              data={tableData}
+              reportTableDownloadEvent={format => {
+                reportAnalyticsEvent({
+                  category: 'table',
+                  action: 'download',
+                  label: `variant:associated-genes:${
+                    schema.sourceId
+                  }:${format}`,
+                });
+              }}
+              reportTableSortEvent={(sortBy, order) => {
+                reportAnalyticsEvent({
+                  category: 'table',
+                  action: 'sort-column',
+                  label: `variant:associated-genes:${
+                    schema.sourceId
+                  }:${sortBy}(${order})`,
+                });
+              }}
+            />
+          </Fragment>
         )
       );
     });
