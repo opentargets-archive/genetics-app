@@ -140,12 +140,18 @@ const tableColumns = ({
   {
     id: 'indexVariant.id',
     label: 'Lead Variant',
-    comparator: generateComparator(d => d.indexVariant.rsId),
+    comparator: generateComparator(d => d.indexVariant.id),
     renderCell: rowData => (
       <Link to={`/variant/${rowData.indexVariant.id}`}>
-        {rowData.indexVariant.rsId}
+        {rowData.indexVariant.id}
       </Link>
     ),
+  },
+  {
+    id: 'indexVariant.rsId',
+    label: 'Lead Variant rsID',
+    comparator: generateComparator(d => d.indexVariant.rsId),
+    renderCell: rowData => rowData.indexVariant.rsId,
   },
   {
     id: 'pval',
