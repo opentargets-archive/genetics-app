@@ -21,6 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # for vim users
+mock-data
 *.swp
 
 mock-data
