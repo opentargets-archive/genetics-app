@@ -24,8 +24,13 @@ const EXAMPLES = [
   },
   { label: 'rs4129267', url: '/variant/1_154426264_C_T', type: 'variant-rsid' },
   {
-    label: "Crohn's disease (de Lange KM et al. 2017)",
-    url: '/study/GCST004132_1',
+    label: 'LDL cholesterol (Klarin D et al. 2018)',
+    url: '/study/GCST006612_1',
+    type: 'study',
+  },
+  {
+    label: "Crohn's disease [EA] (Liu JZ et al. 2015)",
+    url: '/study/GCST003044_1',
     type: 'study',
   },
 ];
