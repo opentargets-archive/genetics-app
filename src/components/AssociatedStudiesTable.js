@@ -131,15 +131,6 @@ const tableColumns = ({
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
   {
-    id: 'study.nReplication',
-    label: 'N Replication',
-    comparator: generateComparator(d => d.study.nReplication),
-    renderCell: rowData =>
-      rowData.study.nReplication
-        ? commaSeparate(rowData.study.nReplication)
-        : '',
-  },
-  {
     id: 'study.nCases',
     label: 'N Cases',
     comparator: generateComparator(d => d.study.nCases),
