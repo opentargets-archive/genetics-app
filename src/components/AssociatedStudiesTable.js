@@ -247,8 +247,8 @@ const AssociatedStudiesTable = ({
         authorFilterHandler,
       })}
       data={data}
-      sortBy="study.nInitial"
-      order="desc"
+      sortBy="pval"
+      order="asc"
       reportTableDownloadEvent={format => {
         reportAnalyticsEvent({
           category: 'table',
