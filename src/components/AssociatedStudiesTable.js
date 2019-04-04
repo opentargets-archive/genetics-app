@@ -199,7 +199,7 @@ const tableColumns = ({
         chromosome={chromosome}
         position={position}
         selectedGenes={[geneId]}
-        selectedStudies={[rowData.studyId]}
+        selectedStudies={[rowData.study.studyId]}
       >
         Locus
       </LocusLink>
