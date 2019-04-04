@@ -246,6 +246,7 @@ class VariantPage extends React.Component {
                 />
                 {isGeneVariant ? (
                   <AssociatedGenes
+                    variantId={variantId}
                     genesForVariantSchema={transformGenesForVariantsSchema(
                       data.genesForVariantSchema
                     )}
