@@ -12,6 +12,7 @@ import { HttpLink } from 'apollo-link-http';
 import App from './App';
 import { unregister } from './registerServiceWorker';
 
+// set up the api from environment variable (with production as default)
 const apiUrlDefault = 'https://genetics-api.opentargets.io';
 const apiUrl = process.env.REACT_APP_GRAPHQL_API_URL
   ? process.env.REACT_APP_GRAPHQL_API_URL
