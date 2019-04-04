@@ -34,7 +34,6 @@ class StudyPage extends React.Component {
       <BasePage>
         <Query query={STUDY_PAGE_QUERY} variables={{ studyId }}>
           {({ loading, error, data }) => {
-            console.log(data);
             const isStudyWithInfo = hasStudyInfo(data);
             const { pubAuthor, pubDate, pubJournal } = isStudyWithInfo
               ? data.studyInfo
