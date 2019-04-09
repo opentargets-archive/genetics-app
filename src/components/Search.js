@@ -41,7 +41,7 @@ class Search extends React.Component {
           history.push(`/gene/${value.id}`);
           break;
         case 'variant':
-          history.push(`/variant/${value.variant.id}`);
+          history.push(`/variant/${value.id}`);
           break;
         case 'study':
           history.push(`/study/${value.studyId}`);

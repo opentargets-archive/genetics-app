@@ -14,21 +14,24 @@ const Option = ({ data }) => {
         />
       );
     case 'variant':
-      return (
-        <SearchOption
-          heading={data.variant.id}
-          subheading={data.variant.rsId}
-        />
-      );
+      return <SearchOption heading={data.id} subheading={data.rsId} />;
     case 'study':
       const pubYear = new Date(data.pubDate).getFullYear();
       return (
         <SearchOption
           heading={data.traitReported}
           subheading={`${data.pubAuthor} (${pubYear})`}
-          extra={`${
-            data.pubJournal ? data.pubJournal : ''
-          } N Study: ${commaSeparate(data.nInitial)}`}
+          extra={
+            <React.Fragment>
+              {data.pubJournal ? <em>{data.pubJournal} </em> : null}N Study:{' '}
+              {commaSeparate(data.nInitial)}
+              {data.numAssocLoci ? (
+                <span style={{ float: 'right' }}>
+                  <strong>{data.numAssocLoci} associated loci</strong>
+                </span>
+              ) : null}
+            </React.Fragment>
+          }
         />
       );
     case 'study-overlap':

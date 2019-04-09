@@ -5,10 +5,25 @@ query VariantPageQuery($variantId: String!) {
       id
       symbol
     }
+    nearestGeneDistance
     nearestCodingGene {
       id
       symbol
     }
+    nearestCodingGeneDistance
+    mostSevereConsequence
+    caddRaw
+    caddPhred
+    gnomadAFR
+    gnomadAMR
+    gnomadASJ
+    gnomadEAS
+    gnomadFIN
+    gnomadNFE
+    gnomadNFEEST
+    gnomadNFENWE
+    gnomadNFESEU
+    gnomadOTH
   }
   genesForVariantSchema {
     qtls {
@@ -28,6 +43,14 @@ query VariantPageQuery($variantId: String!) {
       }
     }
     functionalPredictions {
+      id
+      sourceId
+      tissues {
+        id
+        name
+      }
+    }
+    distances {
       id
       sourceId
       tissues {
@@ -79,6 +102,20 @@ query VariantPageQuery($variantId: String!) {
         maxEffectScore
       }
     }
+    distances {
+      typeId
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        distance
+        score
+        quantile
+      }
+    }
   }
   indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
     associations {
@@ -97,6 +134,13 @@ query VariantPageQuery($variantId: String!) {
       nTotal
       overallR2
       posteriorProbability
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
     }
   }
   tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {

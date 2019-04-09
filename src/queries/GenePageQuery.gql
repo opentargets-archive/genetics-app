@@ -1,15 +1,17 @@
 query GenePageQuery($geneId: String!) {
-  search(queryString: $geneId) {
-    genes {
-      id
-      symbol
-      chromosome
-      start
-      end
-      bioType
-    }
+  geneInfo(geneId: $geneId) {
+    id
+    symbol
+    chromosome
+    start
+    end
+    bioType
   }
-  studiesForGene(geneId: $geneId) {
+  studiesAndLeadVariantsForGene(geneId: $geneId) {
+    indexVariant {
+      rsId
+      id
+    }
     study {
       studyId
       traitReported
@@ -20,5 +22,13 @@ query GenePageQuery($geneId: String!) {
       nReplication
       nCases
     }
+    pval
+    oddsRatio
+    oddsRatioCILower
+    oddsRatioCIUpper
+    beta
+    betaCILower
+    betaCIUpper
+    direction
   }
 }

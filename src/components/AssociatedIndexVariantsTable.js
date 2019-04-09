@@ -4,6 +4,7 @@ import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import PmidOrBiobankLink from './PmidOrBiobankLink';
 
 const tableColumns = variantId => [
   {
@@ -41,16 +42,40 @@ const tableColumns = variantId => [
         : significantFigures(rowData.pval),
   },
   {
+    id: 'beta',
+    label: 'Beta',
+    tooltip: 'Beta with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.beta ? significantFigures(rowData.beta) : null,
+  },
+  {
+    id: 'oddsRatio',
+    label: 'Odds Ratio',
+    tooltip: 'Odds ratio with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+  },
+  {
+    id: 'ci',
+    label: '95% Confidence Interval',
+    tooltip:
+      '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
+    renderCell: rowData =>
+      rowData.beta
+        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
+            rowData.betaCIUpper
+          )})`
+        : rowData.oddsRatio
+          ? `(${significantFigures(
+              rowData.oddsRatioCILower
+            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+          : null,
+  },
+  {
     id: 'pmid',
     label: 'PMID',
     renderCell: rowData => (
-      <a
-        href={`http://europepmc.org/abstract/med/${rowData.pmid}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {rowData.pmid}
-      </a>
+      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
     ),
   },
   {

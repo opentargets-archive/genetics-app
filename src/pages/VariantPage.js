@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import queryString from 'query-string';
 
-import { SectionHeading, Typography, Button } from 'ot-ui';
+import { SectionHeading, Typography } from 'ot-ui';
 
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+
+import { PlotContainer } from 'ot-ui';
 
 import BasePage from './BasePage';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';
@@ -17,10 +17,9 @@ import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
-import PlotContainer from 'ot-ui/build/components/PlotContainer';
 import PheWASSection from '../components/PheWASSection';
-
 import VARIANT_PAGE_QUERY from '../queries/VariantPageQuery.gql';
+import GnomADTable from '../components/GnomADTable';
 
 function hasInfo(data) {
   return data && data.variantInfo;
@@ -191,89 +190,46 @@ class VariantPage extends React.Component {
 
             return (
               <Fragment>
-                <Paper className={classes.headerSection}>
-                  <Grid container>
-                    <Grid item>
-                      <Typography
-                        className={classes.header}
-                        variant="h4"
-                        color="textSecondary"
-                      >
-                        {variantId}
-                      </Typography>{' '}
-                      <Typography
-                        className={classes.header}
-                        variant="h6"
-                        color="textSecondary"
-                      >
-                        {variantInfo.rsId}
-                      </Typography>
-                      <a
-                        className={classes.link}
-                        href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
-                          variantInfo.rsId
-                        }`}
-                        target="_blank"
-                      >
-                        <Button variant="outlined">Ensembl</Button>
-                      </a>
-                      <a
-                        className={classes.link}
-                        href={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
-                          /_/g,
-                          '-'
-                        )}`}
-                        target="_blank"
-                      >
-                        <Button variant="outlined">gnomAD</Button>
-                      </a>
-                    </Grid>
+                <Grid container justify="space-between">
+                  <Grid item>
+                    <Typography
+                      className={classes.header}
+                      variant="h4"
+                      color="textSecondary"
+                    >
+                      {variantId}
+                    </Typography>
                   </Grid>
-                  <Grid container justify="space-between">
-                    <Grid item>
-                      {isIndexVariant || isTagVariant ? (
-                        <LocusLink
-                          chromosome={chromosome}
-                          position={position}
-                          selectedIndexVariants={
-                            isIndexVariant ? [variantId] : null
-                          }
-                          selectedTagVariants={
-                            isTagVariant && !isIndexVariant ? [variantId] : null
-                          }
-                        >
-                          View locus
-                        </LocusLink>
-                      ) : null}
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="subtitle1">
-                        {variantInfo.nearestGene ? (
-                          <Fragment>
-                            Nearest Gene:{' '}
-                            <Link to={`/gene/${variantInfo.nearestGene.id}`}>
-                              {variantInfo.nearestGene.symbol}
-                            </Link>
-                          </Fragment>
-                        ) : null}
-                        {variantInfo.nearestGene &&
-                        variantInfo.nearestCodingGene
-                          ? ', '
-                          : null}
-                        {variantInfo.nearestCodingGene ? (
-                          <Fragment>
-                            Nearest Protein-Coding Gene:{' '}
-                            <Link
-                              to={`/gene/${variantInfo.nearestCodingGene.id}`}
-                            >
-                              {variantInfo.nearestCodingGene.symbol}
-                            </Link>
-                          </Fragment>
-                        ) : null}
-                      </Typography>
-                    </Grid>
+                  <Grid item>
+                    {isIndexVariant || isTagVariant ? (
+                      <LocusLink
+                        big
+                        chromosome={chromosome}
+                        position={position}
+                        selectedIndexVariants={
+                          isIndexVariant ? [variantId] : null
+                        }
+                        selectedTagVariants={
+                          isTagVariant && !isIndexVariant ? [variantId] : null
+                        }
+                      >
+                        View locus
+                      </LocusLink>
+                    ) : null}
                   </Grid>
-                </Paper>
+                </Grid>
+                <SectionHeading
+                  heading="Variant summary"
+                  entities={[
+                    {
+                      type: 'variant',
+                      fixed: true,
+                    },
+                  ]}
+                />
+                {isVariantWithInfo ? (
+                  <GnomADTable variantId={variantId} data={variantInfo} />
+                ) : null}
                 <SectionHeading
                   heading="Assigned genes"
                   subheading="Which genes are functionally implicated by this variant?"
@@ -290,6 +246,7 @@ class VariantPage extends React.Component {
                 />
                 {isGeneVariant ? (
                   <AssociatedGenes
+                    variantId={variantId}
                     genesForVariantSchema={transformGenesForVariantsSchema(
                       data.genesForVariantSchema
                     )}

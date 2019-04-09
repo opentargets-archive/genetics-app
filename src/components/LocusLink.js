@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import { withStyles } from '@material-ui/core';
 
-import { Button } from 'ot-ui';
+import { Button, LocusIcon } from 'ot-ui';
 import { chromosomesWithCumulativeLengths } from 'ot-charts';
 
 const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {
@@ -12,8 +13,38 @@ const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {
 
 const mb = 1000000;
 
+const styles = {
+  button: {
+    lineHeight: 1,
+    minWidth: '110px',
+  },
+  buttonBig: {
+    fontSize: '1.1rem',
+    minWidth: '150px',
+    width: '150px',
+    height: '40px',
+    paddingLeft: '15px',
+  },
+  icon: {
+    fill: 'white',
+    width: '20px',
+    height: '20px',
+    marginTop: '-5px',
+    marginBottom: '-5px',
+    marginLeft: '5px',
+  },
+  iconBig: {
+    fill: 'white',
+    width: '30px',
+    height: '30px',
+  },
+  link: {
+    textDecoration: 'none',
+  },
+};
+
 const LocusLink = ({
-  children,
+  big,
   chromosome,
   position,
   selectedGenes,
@@ -44,13 +75,14 @@ const LocusLink = ({
   return (
     <Link
       to={`/locus?${queryString.stringify(params)}`}
-      style={{ textDecoration: 'none' }}
+      className={classes.link}
     >
-      <Button className={classes ? classes.button : null} gradient>
-        {children}
+      <Button gradient className={big ? classes.buttonBig : classes.button}>
+        Locus Plot
+        <LocusIcon className={big ? classes.iconBig : classes.icon} />
       </Button>
     </Link>
   );
 };
 
-export default LocusLink;
+export default withStyles(styles)(LocusLink);

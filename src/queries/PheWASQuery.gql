@@ -4,7 +4,6 @@ query PheWASQuery($variantId: String!) {
       study {
         studyId
         traitReported
-        traitCode
         traitCategory
       }
       pval

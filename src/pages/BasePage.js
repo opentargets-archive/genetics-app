@@ -1,11 +1,19 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import withStyles from '@material-ui/core/styles/withStyles';
+
 import { Page, NavBar, Footer } from 'ot-ui';
 
 import Search from '../components/Search';
 import { externalLinks } from '../constants';
 
-const BasePage = ({ children }) => (
+const styles = theme => ({
+  page: {
+    marginTop: '20px',
+  },
+});
+
+const BasePage = ({ classes, children }) => (
   <Page
     header={
       <NavBar
@@ -21,8 +29,8 @@ const BasePage = ({ children }) => (
       defaultTitle="Open Targets Genetics"
       titleTemplate="%s | Open Targets Genetics"
     />
-    {children}
+    <div className={classes.page}>{children}</div>
   </Page>
 );
 
-export default BasePage;
+export default withStyles(styles)(BasePage);

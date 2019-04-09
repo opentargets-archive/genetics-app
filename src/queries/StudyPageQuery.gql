@@ -21,6 +21,13 @@ query StudyPageQuery($studyId: String!) {
       pval
       credibleSetSize
       ldSetSize
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
       bestGenes {
         score
         gene {

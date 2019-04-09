@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
-import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
+import {
+  OtTableRF,
+  DataDownloader,
+  commaSeparate,
+  significantFigures,
+} from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
@@ -37,6 +42,36 @@ export const tableColumns = studyId => [
       rowData.pval < pvalThreshold
         ? `<${pvalThreshold}`
         : significantFigures(rowData.pval),
+  },
+  {
+    id: 'beta',
+    label: 'Beta',
+    tooltip: 'Beta with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.beta ? significantFigures(rowData.beta) : null,
+  },
+  {
+    id: 'oddsRatio',
+    label: 'Odds Ratio',
+    tooltip: 'Odds ratio with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+  },
+  {
+    id: 'ci',
+    label: '95% Confidence Interval',
+    tooltip:
+      '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
+    renderCell: rowData =>
+      rowData.beta
+        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
+            rowData.betaCIUpper
+          )})`
+        : rowData.oddsRatio
+          ? `(${significantFigures(
+              rowData.oddsRatioCILower
+            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+          : null,
   },
   {
     id: 'credibleSetSize',
@@ -84,6 +119,35 @@ export const tableColumns = studyId => [
   },
 ];
 
+const getDownloadColumns = columns => {
+  return columns.slice(0, columns.length - 1);
+};
+
+const getDownloadData = dataWithCytoband => {
+  return dataWithCytoband.map(row => {
+    return {
+      indexVariantId: row.indexVariantId,
+      indexVariantRsId: row.indexVariantRsId,
+      cytoband: row.cytoband,
+      pval: row.pval,
+      beta: row.beta,
+      oddsRatio: row.oddsRatio,
+      ci: row.beta
+        ? `(${significantFigures(row.betaCILower)}, ${significantFigures(
+            row.betaCIUpper
+          )})`
+        : row.oddsRatio
+          ? `(${significantFigures(row.oddsRatioCILower)}, ${significantFigures(
+              row.oddsRatioCIUpper
+            )})`
+          : null,
+      credibleSetSize: row.credibleSetSize,
+      ldSetSize: row.ldSetSize,
+      bestGenes: row.bestGenes.map(d => d.gene.symbol).join(', '),
+    };
+  });
+};
+
 function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
   const dataWithCytoband = data.map(d => {
     const { chromosome, position } = d;
@@ -92,30 +156,40 @@ function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
       cytoband: getCytoband(chromosome, position),
     };
   });
+  const columns = tableColumns(studyId);
+  const downloadColumns = getDownloadColumns(columns);
+  const downloadData = getDownloadData(dataWithCytoband);
+
   return (
-    <OtTable
-      loading={loading}
-      error={error}
-      columns={tableColumns(studyId)}
-      data={dataWithCytoband}
-      sortBy="pval"
-      order="asc"
-      downloadFileStem={filenameStem}
-      reportTableDownloadEvent={format => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'download',
-          label: `study:manhattan:${format}`,
-        });
-      }}
-      reportTableSortEvent={(sortBy, order) => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'sort-column',
-          label: `study:manhattan:${sortBy}(${order})`,
-        });
-      }}
-    />
+    <Fragment>
+      <DataDownloader
+        tableHeaders={downloadColumns}
+        rows={downloadData}
+        fileStem={filenameStem}
+      />
+      <OtTableRF
+        loading={loading}
+        error={error}
+        columns={columns}
+        data={dataWithCytoband}
+        sortBy="pval"
+        order="asc"
+        reportTableDownloadEvent={format => {
+          reportAnalyticsEvent({
+            category: 'table',
+            action: 'download',
+            label: `study:manhattan:${format}`,
+          });
+        }}
+        reportTableSortEvent={(sortBy, order) => {
+          reportAnalyticsEvent({
+            category: 'table',
+            action: 'sort-column',
+            label: `study:manhattan:${sortBy}(${order})`,
+          });
+        }}
+      />
+    </Fragment>
   );
 }
 

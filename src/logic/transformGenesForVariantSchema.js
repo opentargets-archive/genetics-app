@@ -2,6 +2,14 @@ import React from 'react';
 
 // TODO: this data should be part of the API response
 const SOURCE_MAP = {
+  canonical_tss: {
+    sourceLabel: 'Distance (Canonical TSS)',
+    sourceDescriptionOverview:
+      'Distance from the variant to canonical transcript TSS (base pairs).',
+    sourceDescriptionBreakdown:
+      'Distance from the variant to canonical transcript TSS (base pairs).',
+    pmid: null,
+  },
   gtex_v7: {
     sourceLabel: 'eQTL (GTEx V7)',
     sourceDescriptionOverview: (
@@ -66,8 +74,9 @@ const SOURCE_MAP = {
 };
 
 const transformGenesForVariantSchema = schema => {
-  const { qtls, intervals, functionalPredictions } = schema;
+  const { distances, qtls, intervals, functionalPredictions } = schema;
   return {
+    distances: distances.map(d => ({ ...d, ...SOURCE_MAP[d.sourceId] })),
     qtls: qtls.map(d => ({ ...d, ...SOURCE_MAP[d.sourceId] })),
     intervals: intervals.map(d => ({ ...d, ...SOURCE_MAP[d.sourceId] })),
     functionalPredictions: functionalPredictions.map(d => ({
