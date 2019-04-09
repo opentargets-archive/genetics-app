@@ -164,7 +164,19 @@ const tableColumns = ({
   {
     id: 'beta',
     label: 'Beta',
-    tooltip: 'Beta with respect to the ALT allele',
+    tooltip: (
+      <React.Fragment>
+        Beta with respect to the ALT allele.
+        <a
+          style={{ color: 'white' }}
+          href="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          See FAQ.
+        </a>
+      </React.Fragment>
+    ),
     renderCell: rowData =>
       rowData.beta ? significantFigures(rowData.beta) : null,
   },
