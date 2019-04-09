@@ -1,5 +1,7 @@
 import React from 'react';
 
-const CredibleSetTrackPlot = () => <div>Fill me in!</div>;
+const CredibleSetTrackPlot = ({ data }) => {
+  return <svg width="100" height="100" />;
+};
 
 export default CredibleSetTrackPlot;

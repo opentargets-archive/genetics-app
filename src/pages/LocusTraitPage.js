@@ -108,6 +108,12 @@ const flatExonsToPairedExons = ({ genes }) => {
   return { genes: paired };
 };
 
+const PAGE_CREDSET_KEY = `${STUDY_ID}__null__null__${CHROMOSOME}__${POSITION}__${
+  PAGE_SUMMARY_DATA.ref
+}__${PAGE_SUMMARY_DATA.alt}`;
+
+const pageCredibleSet = CREDSETS_TABLE_DATA[PAGE_CREDSET_KEY];
+
 class LocusTraitPage extends React.Component {
   render() {
     // const { match } = this.props;
@@ -237,7 +243,7 @@ class LocusTraitPage extends React.Component {
           heading={`Credible set overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
-        {/* <CredibleSetTrackPlot data={MOCK_CREDIBLE_SET_TRACK_PLOT} /> */}
+        <CredibleSetTrackPlot data={pageCredibleSet} />
       </BasePage>
     );
   }
