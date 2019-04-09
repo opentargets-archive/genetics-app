@@ -311,7 +311,7 @@ class GenePage extends React.Component {
                             rel="noopener noreferrer"
                           >
                             <Button variant="outlined">
-                              Gene Cards <LinkIcon />
+                              GeneCards <LinkIcon />
                             </Button>
                           </a>
                         </Grid>
