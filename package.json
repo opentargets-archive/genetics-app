@@ -1,6 +1,6 @@
 {
   "name": "genetics-app",
-  "version": "0.1.63",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "contributors": [
     "Gareth Peat <garethpeat@gmail.com>",
@@ -56,8 +56,8 @@
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
     "codecov": "^3.0.4",
-    "enzyme": "^3.4.1",
-    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "eslint-plugin-prettier": "^2.6.2",
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
