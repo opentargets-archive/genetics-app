@@ -1,22 +1,18 @@
 import React from 'react';
+import { Link } from 'ot-ui';
 
 const PmidOrBiobankLink = ({ studyId, pmid }) =>
   studyId && studyId.startsWith('NEALE') ? (
-    <a
-      href="https://www.nealelab.is/uk-biobank"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <Link external to="https://www.nealelab.is/uk-biobank">
       UK Biobank
-    </a>
+    </Link>
   ) : (
-    <a
-      href={`https://europepmc.org/abstract/med/${pmid.replace('PMID:', '')}`}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      external
+      to={`https://europepmc.org/abstract/med/${pmid.replace('PMID:', '')}`}
     >
       {pmid}
-    </a>
+    </Link>
   );
 
 export default PmidOrBiobankLink;

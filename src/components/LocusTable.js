@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { OtTable, DataCircle, significantFigures, Autocomplete } from 'ot-ui';
+import {
+  Link,
+  OtTable,
+  DataCircle,
+  significantFigures,
+  Autocomplete,
+} from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
@@ -122,14 +127,13 @@ export const tableColumns = ({
     tooltip: (
       <React.Fragment>
         Beta with respect to the ALT allele.
-        <a
-          style={{ color: 'white' }}
-          href="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          external
+          tooltip
+          to="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
         >
           See FAQ.
-        </a>
+        </Link>
       </React.Fragment>
     ),
     renderCell: rowData =>

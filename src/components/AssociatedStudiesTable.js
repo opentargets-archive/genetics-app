@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   DataDownloader,
   OtTableRF,
   commaSeparate,
   significantFigures,
   Autocomplete,
+  Link,
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
@@ -167,14 +167,13 @@ const tableColumns = ({
     tooltip: (
       <React.Fragment>
         Beta with respect to the ALT allele.
-        <a
-          style={{ color: 'white' }}
-          href="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          external
+          tooltip
+          to="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
         >
           See FAQ.
-        </a>
+        </Link>
       </React.Fragment>
     ),
     renderCell: rowData =>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
+import { Link, OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';

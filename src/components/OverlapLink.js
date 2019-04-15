@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
 
-import { Button, OverlapIcon } from 'ot-ui';
+import { Link, Button, OverlapIcon } from 'ot-ui';
 
 const styles = {
   button: {

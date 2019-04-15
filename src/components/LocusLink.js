@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import { withStyles } from '@material-ui/core';
 
-import { Button, LocusIcon } from 'ot-ui';
+import { Link, Button, LocusIcon } from 'ot-ui';
 import { chromosomesWithCumulativeLengths } from 'ot-charts';
 
 const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {
