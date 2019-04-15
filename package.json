@@ -38,8 +38,7 @@
     "react-scripts": "1.1.4",
     "react-select": "^2.0.0",
     "source-map-explorer": "^1.5.0",
-    "typeface-inter": "^3.3.0",
-    "typeface-roboto": "^0.0.54"
+    "typeface-inter": "^3.3.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

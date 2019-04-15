@@ -8293,10 +8293,6 @@ typeface-inter@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/typeface-inter/-/typeface-inter-3.3.0.tgz#f58d04db5b4e23b779b574337757d782174848b1"
 
-typeface-roboto@^0.0.54:
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/typeface-roboto/-/typeface-roboto-0.0.54.tgz#8f02c9a18d1cfa7f49381a6ff0d21ff061f38ad2"
-
 ua-parser-js@^0.7.18:
   version "0.7.18"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.18.tgz#a7bfd92f56edfb117083b69e31d2aa8882d4b1ed"

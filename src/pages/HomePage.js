@@ -56,7 +56,7 @@ const styles = theme => {
     },
     slogan: {
       color: theme.palette.grey[700],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '18px',
       marginBottom: '15px',
       textAlign: 'center',
@@ -74,20 +74,20 @@ const styles = theme => {
     },
     introTitle: {
       color: theme.palette.grey[700],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '22px',
       fontWeight: 'bold',
     },
     introText: {
       color: theme.palette.grey[800],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
     },
     list: {
       paddingTop: '44px',
     },
     listText: {
       color: theme.palette.grey[800],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '18px',
     },
   };
