@@ -243,7 +243,11 @@ class LocusTraitPage extends React.Component {
           heading={`Credible set overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
-        <CredibleSetTrackPlot data={pageCredibleSet} />
+        <CredibleSetTrackPlot
+          label="Disease credible set"
+          position={POSITION}
+          data={pageCredibleSet}
+        />
       </BasePage>
     );
   }
