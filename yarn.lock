@@ -6064,9 +6064,9 @@ ot-charts@^0.0.40:
   dependencies:
     lodash.sortby "^4.7.0"
 
-ot-ui@^0.0.80:
-  version "0.0.80"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.80.tgz#0e490a6b607756e527c47eb6e88555c2533905c9"
+ot-ui@^0.0.81:
+  version "0.0.81"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.81.tgz#f87f5c2185bc39ab7dee32fb111db2179a1e7a0d"
 
 p-finally@^1.0.0:
   version "1.0.0"
@@ -6888,14 +6888,14 @@ react-dev-utils@^5.0.1:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
-react-dom@^16.4.2:
-  version "16.5.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.5.0.tgz#57704e5718669374b182a17ea79a6d24922cb27d"
+react-dom@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    schedule "^0.3.0"
+    scheduler "^0.13.6"
 
 react-error-overlay@^4.0.1:
   version "4.0.1"
@@ -7069,14 +7069,14 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     schedule "^0.5.0"
 
-react@^16.4.2:
-  version "16.5.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.5.0.tgz#f2c1e754bf9751a549d9c6d9aca41905beb56575"
+react@^16.8.6:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    schedule "^0.3.0"
+    scheduler "^0.13.6"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -7522,6 +7522,13 @@ schedule@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/schedule/-/schedule-0.5.0.tgz#c128fffa0b402488b08b55ae74bb9df55cc29cc8"
   dependencies:
+    object-assign "^4.1.1"
+
+scheduler@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
+  dependencies:
+    loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
 schema-utils@^0.3.0:
@@ -8282,9 +8289,9 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typeface-roboto@^0.0.54:
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/typeface-roboto/-/typeface-roboto-0.0.54.tgz#8f02c9a18d1cfa7f49381a6ff0d21ff061f38ad2"
+typeface-inter@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/typeface-inter/-/typeface-inter-3.3.0.tgz#f58d04db5b4e23b779b574337757d782174848b1"
 
 ua-parser-js@^0.7.18:
   version "0.7.18"
