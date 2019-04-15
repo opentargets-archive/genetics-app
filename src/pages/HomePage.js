@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 
-import { Splash, HomeBox, Footer, Button, NavBar } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button, NavBar, Link } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
@@ -147,13 +147,9 @@ class HomePage extends Component {
                 ))}
               </Grid>
               <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
-                <a
-                  href="http://eepurl.com/dHnchn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link external to="http://eepurl.com/dHnchn">
                   Subscribe to our newsletter
-                </a>
+                </Link>
               </Typography>
             </HomeBox>
             <Grid container item justify="center">

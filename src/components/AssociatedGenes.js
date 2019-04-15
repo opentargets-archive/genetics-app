@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import {
+  Link,
   DataDownloader,
   OtTableRF,
   Tabs,

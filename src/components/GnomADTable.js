@@ -1,11 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Icon from '@material-ui/core/Icon';
 
-import { Typography, commaSeparate } from 'ot-ui';
+import { Link, Typography, commaSeparate } from 'ot-ui';
 
 const populations = [
   { code: 'AFR', description: 'African/African-American' },
@@ -24,29 +21,9 @@ const populations = [
 ];
 
 const styles = () => ({
-  tooltipIcon: {
-    fontSize: '1.2rem',
-    paddingLeft: `0.6rem`,
-  },
-  valueWithBadgedLabel: {
-    verticalAlign: 'middle',
-    paddingLeft: '0.6rem',
-    paddingRight: '1rem',
-  },
   value: {
     paddingLeft: '0.6rem',
     paddingRight: '1rem',
-  },
-  cardContent: {
-    padding: '8px !important',
-  },
-  externalLinkIcon: {
-    fontSize: '0.7rem',
-    verticalAlign: 'middle',
-    marginLeft: '3px',
-
-    width: '1rem',
-    height: '1rem',
   },
 });
 
@@ -56,43 +33,27 @@ const GnomADTable = ({ classes, data, variantId }) => (
       <Typography variant="subtitle1">External references</Typography>
       <Typography variant="subtitle2">
         <strong>Ensembl:</strong>{' '}
-        <a
-          href={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+        <Link
+          external
+          to={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
             data.rsId
           }`}
-          target="_blank"
-          rel="noopener noreferrer"
         >
           {data.rsId}
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalLinkIcon
-            )}
-          />
-        </a>
+        </Link>
       </Typography>
       <Typography variant="subtitle2">
         <strong>gnomAD:</strong>{' '}
         {variantId ? (
-          <a
-            href={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
+          <Link
+            external
+            to={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
               /_/g,
               '-'
             )}`}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             {variantId.replace(/_/g, '-')}
-            <Icon
-              className={classNames(
-                'fa',
-                'fa-external-link-alt',
-                classes.externalLinkIcon
-              )}
-            />
-          </a>
+          </Link>
         ) : null}
       </Typography>
       <br />
@@ -120,20 +81,12 @@ const GnomADTable = ({ classes, data, variantId }) => (
 
       <Typography variant="subtitle1">
         Variant Effect Predictor (
-        <a
-          href="https://www.ensembl.org/info/docs/tools/vep/index.html"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          external
+          to="https://www.ensembl.org/info/docs/tools/vep/index.html"
         >
           VEP
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalLinkIcon
-            )}
-          />
-        </a>
+        </Link>
         )
       </Typography>
       <Typography variant="subtitle2">
@@ -144,20 +97,9 @@ const GnomADTable = ({ classes, data, variantId }) => (
 
       <Typography variant="subtitle1">
         Combined Annotation Dependent Depletion (
-        <a
-          href="https://cadd.gs.washington.edu/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link external to="https://cadd.gs.washington.edu/">
           CADD
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalLinkIcon
-            )}
-          />
-        </a>
+        </Link>
         )
       </Typography>
       <Typography variant="subtitle2">
@@ -170,20 +112,9 @@ const GnomADTable = ({ classes, data, variantId }) => (
     <Grid item xs={12} sm={6} md={4}>
       <Typography variant="subtitle1">
         Population allele frequencies (
-        <a
-          href="https://gnomad.broadinstitute.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link external to="https://gnomad.broadinstitute.org/">
           gnomAD
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalLinkIcon
-            )}
-          />
-        </a>
+        </Link>
         )
       </Typography>
       <Grid container>
