@@ -16,7 +16,7 @@ class CredibleSetTrackPlot extends Component {
     const { data, position, contentRect } = props;
     const { width: outerWidth = 0 } = contentRect.bounds;
     const width =
-      outerWidth === 0 ? outerWidth : outerWidth - margin.left - margin.right;
+      outerWidth === 0 ? 0 : outerWidth - margin.left - margin.right;
     const start = position - HALF_WINDOW;
     const end = position + HALF_WINDOW;
 
@@ -31,7 +31,7 @@ class CredibleSetTrackPlot extends Component {
       };
     });
 
-    return { bars, width, xScale };
+    return { bars, xScale };
   }
 
   componentDidUpdate() {
@@ -41,11 +41,13 @@ class CredibleSetTrackPlot extends Component {
   }
 
   render() {
-    const { label, data, measureRef } = this.props;
-    const { bars, width } = this.state;
+    const { label, measureRef, contentRect } = this.props;
+    const { bars } = this.state;
+    const { width: outerWidth } = contentRect.bounds;
+
     return (
       <div ref={measureRef}>
-        <svg width={width} height={OUTER_HEIGHT}>
+        <svg width={outerWidth} height={OUTER_HEIGHT}>
           <text x={margin.left} y={OUTER_HEIGHT / 2} dy="10" textAnchor="end">
             {label}
           </text>

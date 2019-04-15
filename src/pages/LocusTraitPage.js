@@ -248,6 +248,22 @@ class LocusTraitPage extends React.Component {
           position={POSITION}
           data={pageCredibleSet}
         />
+        {Object.keys(CREDSETS_TABLE_DATA).map(key => {
+          const parts = key.split('__');
+          const geneId = parts[1];
+          const tissueId = parts[2];
+          if (geneId !== 'null' && tissueId !== 'null') {
+            return (
+              <CredibleSetTrackPlot
+                label={key}
+                position={POSITION}
+                data={CREDSETS_TABLE_DATA[key]}
+              />
+            );
+          } else {
+            return null;
+          }
+        })}
       </BasePage>
     );
   }
