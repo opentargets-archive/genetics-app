@@ -596,7 +596,7 @@ class AssociatedGenes extends Component {
     });
 
     const tabs = (
-      <Tabs scrollable value={value} onChange={this.handleChange}>
+      <Tabs variant="scrollable" value={value} onChange={this.handleChange}>
         <Tab label="Summary" value={OVERVIEW} />
         {schemas.map(schema => {
           return (
