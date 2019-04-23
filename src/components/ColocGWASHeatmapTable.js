@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
-import { OtTable, DataCircle, Tooltip } from 'ot-ui';
+import { Link, OtTable, DataCircle, Tooltip } from 'ot-ui';
 
 // TODO: When more studies are available in the data, use hierarchical clustering
 //       to sort columns. See eg. `clusterfck`.

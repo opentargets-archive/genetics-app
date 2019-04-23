@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { OtTable, Button, significantFigures } from 'ot-ui';
+import { Link, OtTable, Button, significantFigures } from 'ot-ui';
 
 const tableColumns = [
   {

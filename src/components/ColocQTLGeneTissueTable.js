@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 
-import { OtTable, DataCircle, Tooltip } from 'ot-ui';
+import { Link, OtTable, DataCircle, Tooltip } from 'ot-ui';
 
 const tissueComparator = t => (a, b) => {
   if (a[t] && b[t]) {
