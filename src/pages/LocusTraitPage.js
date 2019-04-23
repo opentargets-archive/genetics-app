@@ -116,9 +116,13 @@ const pageCredibleSet = CREDSETS_TABLE_DATA[PAGE_CREDSET_KEY];
 class LocusTraitPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
+    gwasTabsValue: 'heatmap',
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
+  };
+  handleGWASTabsChange = (_, gwasTabsValue) => {
+    this.setState({ gwasTabsValue });
   };
   render() {
     // const { match } = this.props;
@@ -185,16 +189,28 @@ class LocusTraitPage extends React.Component {
             </React.Fragment>
           }
         />
-        <ColocGWASHeatmapTable
-          loading={false}
-          error={false}
-          data={COLOC_GWAS_HEATMAP_TABLE_DATA}
-        />
-        <ColocGWASTable
-          loading={false}
-          error={false}
-          data={COLOC_GWAS_TABLE_DATA}
-        />
+        <Tabs
+          variant="scrollable"
+          value={this.state.gwasTabsValue}
+          onChange={this.handleGWASTabsChange}
+        >
+          <Tab label="Heatmap" value={'heatmap'} />
+          <Tab label="Table" value={'table'} />
+        </Tabs>
+        {this.state.gwasTabsValue === 'heatmap' ? (
+          <ColocGWASHeatmapTable
+            loading={false}
+            error={false}
+            data={COLOC_GWAS_HEATMAP_TABLE_DATA}
+          />
+        ) : null}
+        {this.state.gwasTabsValue === 'table' ? (
+          <ColocGWASTable
+            loading={false}
+            error={false}
+            data={COLOC_GWAS_TABLE_DATA}
+          />
+        ) : null}
 
         <PlotContainer
           center={
