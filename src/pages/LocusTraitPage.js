@@ -212,6 +212,16 @@ class LocusTraitPage extends React.Component {
           />
         ) : null}
 
+        <SectionHeading
+          heading={`Regional plots`}
+          subheading={
+            <React.Fragment>
+              See molecular traits and GWAS studies colocalising with{' '}
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> at this locus
+              (select in the tables above).
+            </React.Fragment>
+          }
+        />
         <PlotContainer
           center={
             <Typography>
@@ -220,7 +230,6 @@ class LocusTraitPage extends React.Component {
             </Typography>
           }
         >
-          {/* <SigSig data={MOCK_SIG_SIG_DATA} /> */}
           <Regional
             data={SUMSTATS_PAGE_STUDY}
             title={traitAuthorYear(STUDY_INFO)}
