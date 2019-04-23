@@ -3,10 +3,9 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
 import { SectionHeading, PlotContainer } from 'ot-ui';
-import { Regional, GeneTrack, SigSig } from 'ot-charts';
+import { Regional, GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
-import StudyInfo from '../components/StudyInfo';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
@@ -128,10 +127,14 @@ class LocusTraitPage extends React.Component {
           {`${STUDY_INFO.traitReported}`}
         </Typography>
         <Typography variant="subtitle1">
-          <StudyInfo studyInfo={STUDY_INFO} />
+          {STUDY_INFO.pubAuthor}{' '}
+          {STUDY_INFO.pubDate
+            ? `(${new Date(STUDY_INFO.pubDate).getFullYear()})`
+            : null}{' '}
+          {STUDY_INFO.pubJournal ? <em>{STUDY_INFO.pubJournal}</em> : null}
         </Typography>
         <Typography variant="h6" color="textSecondary">
-          {`Locus near ${VARIANT_ID}`}
+          {`Locus around ${VARIANT_ID}`}
         </Typography>
 
         <SectionHeading
