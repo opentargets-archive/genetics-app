@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { OtTable, CloseButton, commaSeparate } from 'ot-ui';
+import { Link, OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';

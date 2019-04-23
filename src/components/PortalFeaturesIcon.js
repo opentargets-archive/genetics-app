@@ -62,7 +62,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -72,7 +72,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="5.3"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -82,7 +82,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="21.9"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -94,7 +94,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -104,7 +104,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="6.2"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -114,7 +114,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="15.2"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -126,7 +126,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="0"
           y="0"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -136,7 +136,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="-2.7"
           y="12"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
@@ -146,7 +146,7 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           x="5.8"
           y="24"
           fill="#5b5f5f"
-          fontFamily="Roboto"
+          fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >

@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { OtTable, DataCircle, significantFigures, Autocomplete } from 'ot-ui';
+import {
+  Link,
+  OtTable,
+  DataCircle,
+  significantFigures,
+  Autocomplete,
+} from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
@@ -115,6 +120,47 @@ export const tableColumns = ({
       rowData.pval < pvalThreshold
         ? `<${pvalThreshold}`
         : significantFigures(rowData.pval),
+  },
+  {
+    id: 'beta',
+    label: 'Beta',
+    tooltip: (
+      <React.Fragment>
+        Beta with respect to the ALT allele.
+        <Link
+          external
+          tooltip
+          to="https://genetics-docs.opentargets.org/faqs#why-are-betas-and-odds-ratios-displayed-inconsistently-in-the-portal"
+        >
+          See FAQ.
+        </Link>
+      </React.Fragment>
+    ),
+    renderCell: rowData =>
+      rowData.beta ? significantFigures(rowData.beta) : null,
+  },
+  {
+    id: 'oddsRatio',
+    label: 'Odds Ratio',
+    tooltip: 'Odds ratio with respect to the ALT allele',
+    renderCell: rowData =>
+      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+  },
+  {
+    id: 'ci',
+    label: '95% Confidence Interval',
+    tooltip:
+      '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
+    renderCell: rowData =>
+      rowData.beta
+        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
+            rowData.betaCIUpper
+          )})`
+        : rowData.oddsRatio
+          ? `(${significantFigures(
+              rowData.oddsRatioCILower
+            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+          : null,
   },
   {
     id: 'method',

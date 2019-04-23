@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 
-import { Splash, HomeBox, Footer, Button, NavBar } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button, NavBar, Link } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
@@ -24,8 +24,13 @@ const EXAMPLES = [
   },
   { label: 'rs4129267', url: '/variant/1_154426264_C_T', type: 'variant-rsid' },
   {
-    label: "Crohn's disease (de Lange KM et al. 2017)",
-    url: '/study/GCST004132',
+    label: 'LDL cholesterol (Klarin D et al. 2018)',
+    url: '/study/GCST006612_1',
+    type: 'study',
+  },
+  {
+    label: "Crohn's disease [EA] (Liu JZ et al. 2015)",
+    url: '/study/GCST003044_1',
     type: 'study',
   },
 ];
@@ -51,7 +56,7 @@ const styles = theme => {
     },
     slogan: {
       color: theme.palette.grey[700],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '18px',
       marginBottom: '15px',
       textAlign: 'center',
@@ -69,20 +74,20 @@ const styles = theme => {
     },
     introTitle: {
       color: theme.palette.grey[700],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '22px',
       fontWeight: 'bold',
     },
     introText: {
       color: theme.palette.grey[800],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
     },
     list: {
       paddingTop: '44px',
     },
     listText: {
       color: theme.palette.grey[800],
-      fontFamily: 'Roboto',
+      fontFamily: 'Inter',
       fontSize: '18px',
     },
   };
@@ -142,13 +147,9 @@ class HomePage extends Component {
                 ))}
               </Grid>
               <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
-                <a
-                  href="http://eepurl.com/dHnchn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link external to="http://eepurl.com/dHnchn">
                   Subscribe to our newsletter
-                </a>
+                </Link>
               </Typography>
             </HomeBox>
             <Grid container item justify="center">

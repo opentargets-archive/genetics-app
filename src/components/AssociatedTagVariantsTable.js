@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { OtTable, commaSeparate, significantFigures } from 'ot-ui';
+import { Link, OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+import PmidOrBiobankLink from './PmidOrBiobankLink';
 
 const tableColumns = variantId => [
   {
@@ -44,13 +44,7 @@ const tableColumns = variantId => [
     id: 'pmid',
     label: 'PMID',
     renderCell: rowData => (
-      <a
-        href={`http://europepmc.org/abstract/med/${rowData.pmid}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {rowData.pmid}
-      </a>
+      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
     ),
   },
   {

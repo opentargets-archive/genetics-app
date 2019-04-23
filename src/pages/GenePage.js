@@ -12,7 +12,6 @@ import {
   SectionHeading,
   Button,
   Typography,
-  LocusIcon,
   OverviewIcon,
   DrugsIcon,
   MouseIcon,
@@ -26,22 +25,16 @@ import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
 import GENE_PAGE_QUERY from '../queries/GenePageQuery.gql';
 
-function hasGeneData(data, geneId) {
-  return (
-    data &&
-    data.search &&
-    data.search.genes &&
-    data.search.genes.length === 1 &&
-    data.search.genes[0].id === geneId
-  );
+function hasGeneData(data) {
+  return data && data.geneInfo;
 }
 
 function geneData(data) {
-  return data.search.genes[0];
+  return data.geneInfo;
 }
 
 function hasAssociatedStudies(data) {
-  return data && data.studiesForGene;
+  return data && data.studiesAndLeadVariantsForGene;
 }
 
 const styles = theme => {
@@ -135,9 +128,6 @@ class GenePage extends React.Component {
       traitFilter: traitFilterUrl,
       authorFilter: authorFilterUrl,
     } = this._parseQueryProps();
-    const locusLinkClasses = {
-      button: classes.locusLinkButton,
-    };
     return (
       <BasePage>
         <Query query={GENE_PAGE_QUERY} variables={{ geneId }}>
@@ -148,37 +138,37 @@ class GenePage extends React.Component {
             // all
             const associatedStudies =
               isValidGene && hasAssociatedStudies(data)
-                ? data.studiesForGene.map(d => d.study)
+                ? data.studiesAndLeadVariantsForGene
                 : [];
 
             // filtered
             const associatedStudiesFiltered = associatedStudies.filter(d => {
               return (
                 (traitFilterUrl
-                  ? traitFilterUrl.indexOf(d.traitReported) >= 0
+                  ? traitFilterUrl.indexOf(d.study.traitReported) >= 0
                   : true) &&
                 (authorFilterUrl
-                  ? authorFilterUrl.indexOf(d.pubAuthor) >= 0
+                  ? authorFilterUrl.indexOf(d.study.pubAuthor) >= 0
                   : true)
               );
             });
 
             // filters
             const traitFilterOptions = _.sortBy(
-              _.uniq(associatedStudiesFiltered.map(d => d.traitReported)).map(
-                d => ({
-                  label: d,
-                  value: d,
-                  selected: traitFilterUrl
-                    ? traitFilterUrl.indexOf(d) >= 0
-                    : false,
-                })
-              ),
+              _.uniq(
+                associatedStudiesFiltered.map(d => d.study.traitReported)
+              ).map(d => ({
+                label: d,
+                value: d,
+                selected: traitFilterUrl
+                  ? traitFilterUrl.indexOf(d) >= 0
+                  : false,
+              })),
               [d => !d.selected, 'value']
             );
             const traitFilterValue = traitFilterOptions.filter(d => d.selected);
             const authorFilterOptions = _.sortBy(
-              _.uniq(associatedStudiesFiltered.map(d => d.pubAuthor)).map(
+              _.uniq(associatedStudiesFiltered.map(d => d.study.pubAuthor)).map(
                 d => ({
                   label: d,
                   value: d,
@@ -193,7 +183,7 @@ class GenePage extends React.Component {
               d => d.selected
             );
 
-            const { chromosome, start, end, symbol } = gene;
+            const { chromosome, start, end, symbol, bioType } = gene;
             return (
               <React.Fragment>
                 <Helmet>
@@ -219,15 +209,11 @@ class GenePage extends React.Component {
                         {isValidGene ? (
                           <Grid item>
                             <LocusLink
+                              big
                               chromosome={chromosome}
                               position={Math.round((start + end) / 2)}
                               selectedGenes={[geneId]}
-                              classes={locusLinkClasses}
-                            >
-                              View associated variants and traits within Locus
-                              View plot
-                              <LocusIcon className={classes.locusIcon} />
-                            </LocusLink>
+                            />
                           </Grid>
                         ) : null}
                       </Grid>
@@ -325,7 +311,7 @@ class GenePage extends React.Component {
                             rel="noopener noreferrer"
                           >
                             <Button variant="outlined">
-                              Gene Cards <LinkIcon />
+                              GeneCards <LinkIcon />
                             </Button>
                           </a>
                         </Grid>
@@ -353,18 +339,20 @@ class GenePage extends React.Component {
                             </Button>
                           </a>
                         </Grid>
-                        <Grid item>
-                          <a
-                            className={classes.link}
-                            href={`https://www.uniprot.org/uniprot/?query=${symbol}&sort=score`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Button variant="outlined">
-                              UniProt <LinkIcon />
-                            </Button>
-                          </a>
-                        </Grid>
+                        {bioType === 'protein_coding' ? (
+                          <Grid item>
+                            <a
+                              className={classes.link}
+                              href={`https://www.uniprot.org/uniprot/?query=${symbol}&sort=score`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button variant="outlined">
+                                UniProt <LinkIcon />
+                              </Button>
+                            </a>
+                          </Grid>
+                        ) : null}
                         <Grid item>
                           <a
                             className={classes.link}
@@ -408,6 +396,7 @@ class GenePage extends React.Component {
                   authorFilterValue={authorFilterValue}
                   authorFilterOptions={authorFilterOptions}
                   authorFilterHandler={this.handleAuthorFilter}
+                  filenameStem={`${geneId}-associated-studies`}
                 />
               </React.Fragment>
             );

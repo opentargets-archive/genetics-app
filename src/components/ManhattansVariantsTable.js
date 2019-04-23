@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { OtTable } from 'ot-ui';
+import { Link, OtTable } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';

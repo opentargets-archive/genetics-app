@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
+  Link,
   OtTable,
   commaSeparate,
   significantFigures,
@@ -151,7 +151,7 @@ function PheWASTable({
       sortBy="pval"
       order="asc"
       filters
-      downloadFileStem="associated-studies"
+      downloadFileStem={`${variantId}-associated-studies`}
       excludeDownloadColumns={['locusView']}
       reportTableDownloadEvent={format => {
         reportAnalyticsEvent({
