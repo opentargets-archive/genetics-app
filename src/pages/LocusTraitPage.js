@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
-import { SectionHeading, PlotContainer } from 'ot-ui';
+import { Tab, Tabs, SectionHeading, PlotContainer } from 'ot-ui';
 import { Regional, GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -114,6 +114,12 @@ const PAGE_CREDSET_KEY = `${STUDY_ID}__null__null__${CHROMOSOME}__${POSITION}__$
 const pageCredibleSet = CREDSETS_TABLE_DATA[PAGE_CREDSET_KEY];
 
 class LocusTraitPage extends React.Component {
+  state = {
+    qtlTabsValue: 'heatmap',
+  };
+  handleQtlTabsChange = (_, qtlTabsValue) => {
+    this.setState({ qtlTabsValue });
+  };
   render() {
     // const { match } = this.props;
     // const { studyId, indexVariantId } = match.params;
@@ -146,16 +152,29 @@ class LocusTraitPage extends React.Component {
             </React.Fragment>
           }
         />
-        <ColocQTLGeneTissueTable
-          loading={false}
-          error={false}
-          data={COLOC_QTL_TABLE_DATA}
-        />
-        <ColocQTLTable
-          loading={false}
-          error={false}
-          data={COLOC_QTL_TABLE_DATA}
-        />
+        <Tabs
+          variant="scrollable"
+          value={this.state.qtlTabsValue}
+          onChange={this.handleQtlTabsChange}
+        >
+          <Tab label="Heatmap" value={'heatmap'} />
+          <Tab label="Table" value={'table'} />
+        </Tabs>
+
+        {this.state.qtlTabsValue === 'heatmap' ? (
+          <ColocQTLGeneTissueTable
+            loading={false}
+            error={false}
+            data={COLOC_QTL_TABLE_DATA}
+          />
+        ) : null}
+        {this.state.qtlTabsValue === 'table' ? (
+          <ColocQTLTable
+            loading={false}
+            error={false}
+            data={COLOC_QTL_TABLE_DATA}
+          />
+        ) : null}
 
         <SectionHeading
           heading={`GWAS Study Colocalisation`}
