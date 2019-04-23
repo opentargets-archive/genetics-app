@@ -266,7 +266,7 @@ class LocusTraitPage extends React.Component {
         ) : null}
 
         <SectionHeading
-          heading={`Regional plots`}
+          heading={`Regional Plots`}
           subheading={
             <React.Fragment>
               Where is the signal for molecular traits and GWAS studies
@@ -327,22 +327,8 @@ class LocusTraitPage extends React.Component {
             end={END}
           />
         </PlotContainer>
-        {/* <SectionHeading
-          heading={``}
-          subheading={
-            <React.Fragment>
-              Which genes colocalise with{' '}
-              <strong>{STUDY_INFO.traitReported}</strong> at this locus (and in
-              which tissues)?
-            </React.Fragment>
-          }
-        /> */}
         <SectionHeading
-          heading={`Genes`}
-          subheading={`Which genes are functionally implicated by variants at this locus?`}
-        />
-        <SectionHeading
-          heading={`Credible set overlap`}
+          heading={`Credible Set Overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
         <CredibleSetTrackPlot
@@ -357,6 +343,7 @@ class LocusTraitPage extends React.Component {
           if (geneId !== 'null' && tissueId !== 'null') {
             return (
               <CredibleSetTrackPlot
+                key={key}
                 label={key}
                 position={POSITION}
                 data={CREDSETS_TABLE_DATA[key]}
@@ -366,6 +353,10 @@ class LocusTraitPage extends React.Component {
             return null;
           }
         })}
+        <SectionHeading
+          heading={`Genes`}
+          subheading={`Which genes are functionally implicated by variants at this locus?`}
+        />
       </BasePage>
     );
   }
