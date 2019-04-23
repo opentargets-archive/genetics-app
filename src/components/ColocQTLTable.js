@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, OtTable, Button, significantFigures } from 'ot-ui';
 
-const tableColumns = [
+const tableColumns = handleToggleRegional => [
   {
     id: 'type',
     label: 'Molecular Trait',
@@ -45,15 +45,30 @@ const tableColumns = [
   {
     id: 'show',
     label: 'Regional Plot',
-    renderCell: d => <Button gradient>Add track</Button>,
+    renderCell: d =>
+      d.isShowingRegional ? (
+        <Button gradient onClick={() => handleToggleRegional(d)}>
+          Hide
+        </Button>
+      ) : (
+        <Button gradient onClick={() => handleToggleRegional(d)}>
+          Show
+        </Button>
+      ),
   },
 ];
 
-const ColocTable = ({ loading, error, filenameStem, data }) => (
+const ColocTable = ({
+  loading,
+  error,
+  filenameStem,
+  data,
+  handleToggleRegional,
+}) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns}
+    columns={tableColumns(handleToggleRegional)}
     data={data}
     sortBy="logH4H3"
     order="desc"

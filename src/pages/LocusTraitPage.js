@@ -117,6 +117,7 @@ class LocusTraitPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
+    regionals: [],
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -124,7 +125,57 @@ class LocusTraitPage extends React.Component {
   handleGWASTabsChange = (_, gwasTabsValue) => {
     this.setState({ gwasTabsValue });
   };
+  handleToggleRegional = d => {
+    const { regionals } = this.state;
+    const index = regionals.findIndex(
+      r =>
+        r.study === d.study &&
+        r.phenotype === d.phenotype &&
+        r.bioFeature === d.bioFeature &&
+        r.chrom === d.chrom &&
+        r.pos === d.pos &&
+        r.ref === d.ref &&
+        r.alt === d.alt
+    );
+    if (index >= 0) {
+      const regionalsWithoutD = [
+        ...regionals.slice(0, index),
+        ...regionals.slice(index + 1),
+      ];
+      this.setState({ regionals: regionalsWithoutD });
+    } else {
+      const { isShowingRegional, ...dWithoutIsShowingRegional } = d;
+      this.setState({ regionals: [...regionals, dWithoutIsShowingRegional] });
+    }
+  };
   render() {
+    const { regionals } = this.state;
+    const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA.map(d => ({
+      ...d,
+      isShowingRegional: regionals.some(
+        r =>
+          r.study === d.study &&
+          r.phenotype === d.phenotype &&
+          r.bioFeature === d.bioFeature &&
+          r.chrom === d.chrom &&
+          r.pos === d.pos &&
+          r.ref === d.ref &&
+          r.alt === d.alt
+      ),
+    }));
+    const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
+      ...d,
+      isShowingRegional: regionals.some(
+        r =>
+          r.study === d.study &&
+          r.phenotype === d.phenotype &&
+          r.bioFeature === d.bioFeature &&
+          r.chrom === d.chrom &&
+          r.pos === d.pos &&
+          r.ref === d.ref &&
+          r.alt === d.alt
+      ),
+    }));
     // const { match } = this.props;
     // const { studyId, indexVariantId } = match.params;
 
@@ -176,7 +227,8 @@ class LocusTraitPage extends React.Component {
           <ColocQTLTable
             loading={false}
             error={false}
-            data={COLOC_QTL_TABLE_DATA}
+            data={colocQtlTableDataWithState}
+            handleToggleRegional={this.handleToggleRegional}
           />
         ) : null}
 
@@ -208,7 +260,8 @@ class LocusTraitPage extends React.Component {
           <ColocGWASTable
             loading={false}
             error={false}
-            data={COLOC_GWAS_TABLE_DATA}
+            data={colocGWASTableDataWithState}
+            handleToggleRegional={this.handleToggleRegional}
           />
         ) : null}
 
@@ -216,17 +269,17 @@ class LocusTraitPage extends React.Component {
           heading={`Regional plots`}
           subheading={
             <React.Fragment>
-              See molecular traits and GWAS studies colocalising with{' '}
-              <strong>{traitAuthorYear(STUDY_INFO)}</strong> at this locus
-              (select in the tables above).
+              Where is the signal for molecular traits and GWAS studies
+              colocalising with <strong>{traitAuthorYear(STUDY_INFO)}</strong>?
             </React.Fragment>
           }
         />
         <PlotContainer
           center={
             <Typography>
-              Regional plots: page study; other GWAS studies with log(H4/H3) >
-              1; QTL studies with log(H4/H3) > 1
+              The plot for <strong>{traitAuthorYear(STUDY_INFO)}</strong> is
+              always shown. You can add or remove others in the QTL and GWAS
+              tables above.
             </Typography>
           }
         >
@@ -236,7 +289,8 @@ class LocusTraitPage extends React.Component {
             start={START}
             end={END}
           />
-          {COLOC_GWAS_TABLE_DATA.filter(d => d.logH4H3 > 1)
+          {colocGWASTableDataWithState
+            .filter(d => d.isShowingRegional)
             .sort(logH4H3Comparator)
             .reverse()
             .map(d => (
@@ -251,7 +305,8 @@ class LocusTraitPage extends React.Component {
                 end={END}
               />
             ))}
-          {COLOC_QTL_TABLE_DATA.filter(d => d.logH4H3 > 1)
+          {colocQtlTableDataWithState
+            .filter(d => d.isShowingRegional)
             .sort(logH4H3Comparator)
             .reverse()
             .map(d => (
