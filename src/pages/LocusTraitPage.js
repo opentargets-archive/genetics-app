@@ -1,6 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import {
   Tab,
@@ -123,6 +126,7 @@ class LocusTraitPage extends React.Component {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
     regionals: [],
+    credSet95Value: 'all',
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -152,6 +156,9 @@ class LocusTraitPage extends React.Component {
       const { isShowingRegional, ...dWithoutIsShowingRegional } = d;
       this.setState({ regionals: [...regionals, dWithoutIsShowingRegional] });
     }
+  };
+  handleCredSet95Change = event => {
+    this.setState({ credSet95Value: event.target.value });
   };
   render() {
     const { regionals } = this.state;
@@ -346,6 +353,19 @@ class LocusTraitPage extends React.Component {
           }
         >
           <PlotContainerSection>
+            <RadioGroup
+              style={{ padding: '0 16px' }}
+              row
+              aria-label="95% credible set"
+              name="credset95"
+              value={this.state.credSet95Value}
+              onChange={this.handleCredSet95Change}
+            >
+              <FormControlLabel value="95" control={<Radio />} label="95%" />
+              <FormControlLabel value="all" control={<Radio />} label="all" />
+            </RadioGroup>
+          </PlotContainerSection>
+          <PlotContainerSection>
             <CredibleSet
               label={traitAuthorYear(STUDY_INFO)}
               start={START}
@@ -379,7 +399,13 @@ class LocusTraitPage extends React.Component {
                     label={`${study}: ${phenotypeSymbol} in ${bioFeature}`}
                     start={START}
                     end={END}
-                    data={CREDSETS_TABLE_DATA[key]}
+                    data={
+                      this.state.credSet95Value === 'all'
+                        ? CREDSETS_TABLE_DATA[key]
+                        : CREDSETS_TABLE_DATA[key].filter(
+                            d => d.is95CredibleSet
+                          )
+                    }
                   />
                 ) : null;
               })}
