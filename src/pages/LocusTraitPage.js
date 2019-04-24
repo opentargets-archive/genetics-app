@@ -375,6 +375,34 @@ class LocusTraitPage extends React.Component {
           </PlotContainerSection>
           <PlotContainerSection>
             <Typography style={{ padding: '5px 10px' }}>
+              <strong>GWAS</strong>
+            </Typography>
+            {colocGWASTableDataWithState
+              .sort(logH4H3Comparator)
+              .reverse()
+              .map(d => {
+                const { study, chrom, pos, ref, alt } = d;
+                const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
+                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+                  CREDSETS_TABLE_DATA[key].length > 0 ? (
+                  <CredibleSet
+                    key={key}
+                    label={traitAuthorYear(STUDY_INFOS[d.study])}
+                    start={START}
+                    end={END}
+                    data={
+                      this.state.credSet95Value === 'all'
+                        ? CREDSETS_TABLE_DATA[key]
+                        : CREDSETS_TABLE_DATA[key].filter(
+                            d => d.is95CredibleSet
+                          )
+                    }
+                  />
+                ) : null;
+              })}
+          </PlotContainerSection>
+          <PlotContainerSection>
+            <Typography style={{ padding: '5px 10px' }}>
               <strong>QTLs</strong>
             </Typography>
             {colocQtlTableDataWithState
