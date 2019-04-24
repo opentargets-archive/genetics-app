@@ -288,10 +288,11 @@ class LocusTraitPage extends React.Component {
         />
         <PlotContainer
           center={
-            <Typography>
+            <Typography align="center">
               The plot for <strong>{traitAuthorYear(STUDY_INFO)}</strong> is
-              always shown. You can add or remove others in the QTL and GWAS
-              tables above.
+              always shown. Where possible, credible sets are shown in blue.
+              <br />
+              You can add or remove others in the QTL and GWAS tables above.
             </Typography>
           }
         >
