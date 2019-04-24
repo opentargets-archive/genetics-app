@@ -46,7 +46,6 @@ const ColocTable = ({
   data,
   studiesMetaData,
 }) => {
-  console.log(studiesMetaData);
   const uniqueStudies = Object.keys(data).sort();
   const logH4H3s = Object.values(data).reduce((acc, d) => {
     const dLogH4H3s = Object.values(d).map(d2 => d2.logH4H3);
