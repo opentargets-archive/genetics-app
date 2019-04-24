@@ -267,6 +267,7 @@ class LocusTraitPage extends React.Component {
             loading={false}
             error={false}
             data={COLOC_GWAS_HEATMAP_TABLE_DATA}
+            studiesMetaData={STUDY_INFOS}
           />
         ) : null}
         {this.state.gwasTabsValue === 'table' ? (
