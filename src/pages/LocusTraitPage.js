@@ -177,6 +177,7 @@ class LocusTraitPage extends React.Component {
     }));
     const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
       ...d,
+      ...STUDY_INFOS[d.study],
       isShowingRegional: regionals.some(
         r =>
           r.study === d.study &&

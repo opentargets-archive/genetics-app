@@ -1,10 +1,19 @@
 import React from 'react';
-import { OtTable, Button, significantFigures } from 'ot-ui';
+import { Link, OtTable, Button, significantFigures } from 'ot-ui';
 
 const tableColumns = handleToggleRegional => [
   {
     id: 'study',
     label: 'Study',
+    renderCell: d => <Link to={`/study/${d.studyId}`}>{d.studyId}</Link>,
+  },
+  {
+    id: 'traitReported',
+    label: 'Trait reported',
+  },
+  {
+    id: 'pubAuthor',
+    label: 'Author',
   },
   {
     id: 'beta',
