@@ -2,7 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 
-import { Tab, Tabs, SectionHeading, PlotContainer } from 'ot-ui';
+import {
+  Tab,
+  Tabs,
+  SectionHeading,
+  PlotContainer,
+  PlotContainerSection,
+} from 'ot-ui';
 import { CredibleSet, Regional, GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
@@ -330,39 +336,54 @@ class LocusTraitPage extends React.Component {
           heading={`Credible Set Overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
-        <PlotContainer>
-          <CredibleSet
-            label={traitAuthorYear(STUDY_INFO)}
-            start={START}
-            end={END}
-            data={pageCredibleSet}
-          />
-          {colocQtlTableDataWithState
-            .sort(logH4H3Comparator)
-            .reverse()
-            .map(d => {
-              const {
-                study,
-                phenotype,
-                phenotypeSymbol,
-                bioFeature,
-                chrom,
-                pos,
-                ref,
-                alt,
-              } = d;
-              const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
-              return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-                CREDSETS_TABLE_DATA[key].length > 0 ? (
-                <CredibleSet
-                  key={key}
-                  label={`${study}: ${phenotypeSymbol} in ${bioFeature}`}
-                  start={START}
-                  end={END}
-                  data={CREDSETS_TABLE_DATA[key]}
-                />
-              ) : null;
-            })}
+        <PlotContainer
+          center={
+            <Typography>
+              Showing credible sets for{' '}
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and QTLs in
+              colocalisation.
+            </Typography>
+          }
+        >
+          <PlotContainerSection>
+            <CredibleSet
+              label={traitAuthorYear(STUDY_INFO)}
+              start={START}
+              end={END}
+              data={pageCredibleSet}
+            />
+          </PlotContainerSection>
+          <PlotContainerSection>
+            <Typography style={{ padding: '5px 10px' }}>
+              <strong>QTLs</strong>
+            </Typography>
+            {colocQtlTableDataWithState
+              .sort(logH4H3Comparator)
+              .reverse()
+              .map(d => {
+                const {
+                  study,
+                  phenotype,
+                  phenotypeSymbol,
+                  bioFeature,
+                  chrom,
+                  pos,
+                  ref,
+                  alt,
+                } = d;
+                const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
+                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+                  CREDSETS_TABLE_DATA[key].length > 0 ? (
+                  <CredibleSet
+                    key={key}
+                    label={`${study}: ${phenotypeSymbol} in ${bioFeature}`}
+                    start={START}
+                    end={END}
+                    data={CREDSETS_TABLE_DATA[key]}
+                  />
+                ) : null;
+              })}
+          </PlotContainerSection>
         </PlotContainer>
         <SectionHeading
           heading={`Genes`}
