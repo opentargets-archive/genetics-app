@@ -27,5 +27,6 @@ yarn-error.log*
 .vscode
 
 src/mock-data/ccdc71l-locus.json
+mock-data
 mock-data/raw
 mock-data/processed
