@@ -1,15 +1,7 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import { Link, Typography, commaSeparate } from 'ot-ui';
-
-const styles = () => ({
-  value: {
-    paddingLeft: '0.6rem',
-    paddingRight: '1rem',
-  },
-});
 
 const StudySummary = ({
   classes,
@@ -86,4 +78,4 @@ const StudySummary = ({
   </Grid>
 );
 
-export default withStyles(styles)(StudySummary);
+export default StudySummary;

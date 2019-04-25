@@ -9,6 +9,7 @@ import StudiesPage from './pages/StudiesPage';
 import GenePage from './pages/GenePage';
 import VariantPage from './pages/VariantPage';
 import LocusPage from './pages/LocusPage';
+import LocusTraitPage from './pages/LocusTraitPage';
 import withPageAnalytics from './analytics/withPageAnalytics';
 
 const App = () => (
@@ -35,6 +36,10 @@ const App = () => (
         <Route
           path="/locus"
           component={withPageAnalytics('locus', LocusPage)}
+        />
+        <Route
+          path="/study-locus/:studyId/:indexVariantId"
+          component={withPageAnalytics('study-locus', LocusTraitPage)}
         />
       </React.Fragment>
     </Router>
