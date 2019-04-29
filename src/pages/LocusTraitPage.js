@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -19,6 +20,7 @@ import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
+import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
 
@@ -368,12 +370,21 @@ class LocusTraitPage extends React.Component {
               <FormControlLabel value="all" control={<Radio />} label="all" />
             </RadioGroup>
           </PlotContainerSection>
+
           <PlotContainerSection>
-            <CredibleSet
-              label={traitAuthorYear(STUDY_INFO)}
-              start={START}
-              end={END}
-              data={pageCredibleSet}
+            <CredibleSetWithRegional
+              credibleSetProps={{
+                label: traitAuthorYear(STUDY_INFO),
+                start: START,
+                end: END,
+                data: pageCredibleSet,
+              }}
+              regionalProps={{
+                data: SUMSTATS_PAGE_STUDY,
+                title: traitAuthorYear(STUDY_INFO),
+                start: START,
+                end: END,
+              }}
             />
           </PlotContainerSection>
           <PlotContainerSection>
@@ -388,18 +399,28 @@ class LocusTraitPage extends React.Component {
                 const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
                 return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
                   CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSet
+                  <CredibleSetWithRegional
                     key={key}
-                    label={traitAuthorYear(STUDY_INFOS[d.study])}
-                    start={START}
-                    end={END}
-                    data={
-                      this.state.credSet95Value === 'all'
-                        ? CREDSETS_TABLE_DATA[key]
-                        : CREDSETS_TABLE_DATA[key].filter(
-                            d => d.is95CredibleSet
-                          )
-                    }
+                    credibleSetProps={{
+                      label: traitAuthorYear(STUDY_INFOS[d.study]),
+                      start: START,
+                      end: END,
+                      data:
+                        this.state.credSet95Value === 'all'
+                          ? CREDSETS_TABLE_DATA[key]
+                          : CREDSETS_TABLE_DATA[key].filter(
+                              d => d.is95CredibleSet
+                            ),
+                    }}
+                    regionalProps={{
+                      data: combineSumStatsWithCredSets({
+                        ...d,
+                        chromosome: CHROMOSOME,
+                      }),
+                      title: traitAuthorYear(STUDY_INFO),
+                      start: START,
+                      end: END,
+                    }}
                   />
                 ) : null;
               })}
@@ -425,18 +446,28 @@ class LocusTraitPage extends React.Component {
                 const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
                 return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
                   CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSet
+                  <CredibleSetWithRegional
                     key={key}
-                    label={`${study}: ${phenotypeSymbol} in ${bioFeature}`}
-                    start={START}
-                    end={END}
-                    data={
-                      this.state.credSet95Value === 'all'
-                        ? CREDSETS_TABLE_DATA[key]
-                        : CREDSETS_TABLE_DATA[key].filter(
-                            d => d.is95CredibleSet
-                          )
-                    }
+                    credibleSetProps={{
+                      label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
+                      start: START,
+                      end: END,
+                      data:
+                        this.state.credSet95Value === 'all'
+                          ? CREDSETS_TABLE_DATA[key]
+                          : CREDSETS_TABLE_DATA[key].filter(
+                              d => d.is95CredibleSet
+                            ),
+                    }}
+                    regionalProps={{
+                      data: combineSumStatsWithCredSets({
+                        ...d,
+                        chromosome: CHROMOSOME,
+                      }),
+                      title: traitAuthorYear(STUDY_INFO),
+                      start: START,
+                      end: END,
+                    }}
                   />
                 ) : null;
               })}
