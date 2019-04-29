@@ -1,10 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import * as d3 from 'd3';
 
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 
 import {
   Tab,
@@ -12,6 +14,7 @@ import {
   SectionHeading,
   PlotContainer,
   PlotContainerSection,
+  significantFigures,
 } from 'ot-ui';
 import { GeneTrack } from 'ot-charts';
 
@@ -21,6 +24,7 @@ import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
+import Slider from '../components/Slider';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
 
@@ -128,6 +132,8 @@ class LocusTraitPage extends React.Component {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
     credSet95Value: 'all',
+    logH4H3SliderValue: 0,
+    h4SliderValue: 0,
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -138,13 +144,31 @@ class LocusTraitPage extends React.Component {
   handleCredSet95Change = event => {
     this.setState({ credSet95Value: event.target.value });
   };
+  handleLogH4H3SliderChange = (_, logH4H3SliderValue) => {
+    this.setState({ logH4H3SliderValue });
+  };
+  handleH4SliderChange = (_, h4SliderValue) => {
+    this.setState({ h4SliderValue });
+  };
   render() {
-    const { regionals } = this.state;
     const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA;
     const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
       ...d,
       ...STUDY_INFOS[d.study],
     }));
+
+    const maxQtlLogH4H3 = d3.max(colocQtlTableDataWithState, d => d.logH4H3);
+    const maxGWASLogH4H3 = d3.max(colocGWASTableDataWithState, d => d.logH4H3);
+    const maxLogH4H3 = d3.max([maxQtlLogH4H3, maxGWASLogH4H3]);
+
+    const colocGWASTableDataWithStateFiltered = colocGWASTableDataWithState
+      .filter(d => d.logH4H3 >= this.state.logH4H3SliderValue)
+      .filter(d => d.h4 >= this.state.h4SliderValue);
+
+    const colocQtlTableDataWithStateFiltered = colocQtlTableDataWithState
+      .filter(d => d.logH4H3 >= this.state.logH4H3SliderValue)
+      .filter(d => d.h4 >= this.state.h4SliderValue);
+
     // const { match } = this.props;
     // const { studyId, indexVariantId } = match.params;
 
@@ -250,17 +274,54 @@ class LocusTraitPage extends React.Component {
           }
         >
           <PlotContainerSection>
-            <RadioGroup
-              style={{ padding: '0 16px' }}
-              row
-              aria-label="95% credible set"
-              name="credset95"
-              value={this.state.credSet95Value}
-              onChange={this.handleCredSet95Change}
-            >
-              <FormControlLabel value="95" control={<Radio />} label="95%" />
-              <FormControlLabel value="all" control={<Radio />} label="all" />
-            </RadioGroup>
+            <Grid container alignItems="center">
+              <Grid item>
+                <div style={{ padding: '0 20px' }}>
+                  <Typography>Credible set variants</Typography>
+                  <RadioGroup
+                    style={{ padding: '0 16px' }}
+                    row
+                    aria-label="95% credible set"
+                    name="credset95"
+                    value={this.state.credSet95Value}
+                    onChange={this.handleCredSet95Change}
+                  >
+                    <FormControlLabel
+                      value="95"
+                      control={<Radio />}
+                      label="95%"
+                    />
+                    <FormControlLabel
+                      value="all"
+                      control={<Radio />}
+                      label="all"
+                    />
+                  </RadioGroup>
+                </div>
+              </Grid>
+              <Grid item>
+                <Slider
+                  label={`log(H4/H3) - ${significantFigures(
+                    this.state.logH4H3SliderValue
+                  )}`}
+                  min={0}
+                  max={Math.ceil(maxLogH4H3)}
+                  step={Math.ceil(maxLogH4H3) / 50}
+                  value={this.state.logH4H3SliderValue}
+                  onChange={this.handleLogH4H3SliderChange}
+                />
+              </Grid>
+              <Grid item>
+                <Slider
+                  label={`H4 - ${significantFigures(this.state.h4SliderValue)}`}
+                  min={0}
+                  max={1}
+                  step={0.02}
+                  value={this.state.h4SliderValue}
+                  onChange={this.handleH4SliderChange}
+                />
+              </Grid>
+            </Grid>
           </PlotContainerSection>
         </PlotContainer>
 
@@ -283,7 +344,7 @@ class LocusTraitPage extends React.Component {
           <strong>GWAS</strong>
         </Typography>
 
-        {colocGWASTableDataWithState
+        {colocGWASTableDataWithStateFiltered
           .sort(logH4H3Comparator)
           .reverse()
           .map(d => {
@@ -315,11 +376,17 @@ class LocusTraitPage extends React.Component {
             ) : null;
           })}
 
+        {colocGWASTableDataWithStateFiltered.length === 0 ? (
+          <Typography align="center">
+            No GWAS studies satisfying the applied filters.
+          </Typography>
+        ) : null}
+
         <Typography style={{ paddingTop: '10px' }}>
           <strong>QTLs</strong>
         </Typography>
 
-        {colocQtlTableDataWithState
+        {colocQtlTableDataWithStateFiltered
           .sort(logH4H3Comparator)
           .reverse()
           .map(d => {
@@ -359,6 +426,12 @@ class LocusTraitPage extends React.Component {
               />
             ) : null;
           })}
+
+        {colocQtlTableDataWithStateFiltered.length === 0 ? (
+          <Typography align="center">
+            No QTLs satisfying the applied filters.
+          </Typography>
+        ) : null}
 
         <Typography style={{ paddingTop: '10px' }}>
           <strong>Genes</strong>
