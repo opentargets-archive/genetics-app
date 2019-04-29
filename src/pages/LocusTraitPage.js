@@ -1,9 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import * as d3 from 'd3';
+
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 
 import {
   Tab,
@@ -11,14 +14,17 @@ import {
   SectionHeading,
   PlotContainer,
   PlotContainerSection,
+  significantFigures,
 } from 'ot-ui';
-import { CredibleSet, Regional, GeneTrack } from 'ot-charts';
+import { GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
+import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
+import Slider from '../components/Slider';
 
 import STUDY_INFOS from '../mock-data/study-info.json';
 
@@ -125,8 +131,9 @@ class LocusTraitPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
-    regionals: [],
     credSet95Value: 'all',
+    logH4H3SliderValue: Math.log(2), // ln(2) equivalent to H4 being double H3; suggested by Ed
+    h4SliderValue: 0.2, // 20% default; suggested by Ed
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -134,61 +141,34 @@ class LocusTraitPage extends React.Component {
   handleGWASTabsChange = (_, gwasTabsValue) => {
     this.setState({ gwasTabsValue });
   };
-  handleToggleRegional = d => {
-    const { regionals } = this.state;
-    const index = regionals.findIndex(
-      r =>
-        r.study === d.study &&
-        r.phenotype === d.phenotype &&
-        r.bioFeature === d.bioFeature &&
-        r.chrom === d.chrom &&
-        r.pos === d.pos &&
-        r.ref === d.ref &&
-        r.alt === d.alt
-    );
-    if (index >= 0) {
-      const regionalsWithoutD = [
-        ...regionals.slice(0, index),
-        ...regionals.slice(index + 1),
-      ];
-      this.setState({ regionals: regionalsWithoutD });
-    } else {
-      const { isShowingRegional, ...dWithoutIsShowingRegional } = d;
-      this.setState({ regionals: [...regionals, dWithoutIsShowingRegional] });
-    }
-  };
   handleCredSet95Change = event => {
     this.setState({ credSet95Value: event.target.value });
   };
+  handleLogH4H3SliderChange = (_, logH4H3SliderValue) => {
+    this.setState({ logH4H3SliderValue });
+  };
+  handleH4SliderChange = (_, h4SliderValue) => {
+    this.setState({ h4SliderValue });
+  };
   render() {
-    const { regionals } = this.state;
-    const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA.map(d => ({
-      ...d,
-      isShowingRegional: regionals.some(
-        r =>
-          r.study === d.study &&
-          r.phenotype === d.phenotype &&
-          r.bioFeature === d.bioFeature &&
-          r.chrom === d.chrom &&
-          r.pos === d.pos &&
-          r.ref === d.ref &&
-          r.alt === d.alt
-      ),
-    }));
+    const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA;
     const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
       ...d,
       ...STUDY_INFOS[d.study],
-      isShowingRegional: regionals.some(
-        r =>
-          r.study === d.study &&
-          r.phenotype === d.phenotype &&
-          r.bioFeature === d.bioFeature &&
-          r.chrom === d.chrom &&
-          r.pos === d.pos &&
-          r.ref === d.ref &&
-          r.alt === d.alt
-      ),
     }));
+
+    const maxQtlLogH4H3 = d3.max(colocQtlTableDataWithState, d => d.logH4H3);
+    const maxGWASLogH4H3 = d3.max(colocGWASTableDataWithState, d => d.logH4H3);
+    const maxLogH4H3 = d3.max([maxQtlLogH4H3, maxGWASLogH4H3]);
+
+    const colocGWASTableDataWithStateFiltered = colocGWASTableDataWithState
+      .filter(d => d.logH4H3 >= this.state.logH4H3SliderValue)
+      .filter(d => d.h4 >= this.state.h4SliderValue);
+
+    const colocQtlTableDataWithStateFiltered = colocQtlTableDataWithState
+      .filter(d => d.logH4H3 >= this.state.logH4H3SliderValue)
+      .filter(d => d.h4 >= this.state.h4SliderValue);
+
     // const { match } = this.props;
     // const { studyId, indexVariantId } = match.params;
 
@@ -280,69 +260,6 @@ class LocusTraitPage extends React.Component {
         ) : null}
 
         <SectionHeading
-          heading={`Regional Plots`}
-          subheading={
-            <React.Fragment>
-              Where is the signal for molecular traits and GWAS studies
-              colocalising with <strong>{traitAuthorYear(STUDY_INFO)}</strong>?
-            </React.Fragment>
-          }
-        />
-        <PlotContainer
-          center={
-            <Typography align="center">
-              The plot for <strong>{traitAuthorYear(STUDY_INFO)}</strong> is
-              always shown. Where possible, credible sets are shown in blue.
-              <br />
-              You can add or remove others in the QTL and GWAS tables above.
-            </Typography>
-          }
-        >
-          <Regional
-            data={SUMSTATS_PAGE_STUDY}
-            title={traitAuthorYear(STUDY_INFO)}
-            start={START}
-            end={END}
-          />
-          {colocGWASTableDataWithState
-            .filter(d => d.isShowingRegional)
-            .sort(logH4H3Comparator)
-            .reverse()
-            .map(d => (
-              <Regional
-                key={`${d.study}`}
-                data={combineSumStatsWithCredSets({
-                  ...d,
-                  chromosome: CHROMOSOME,
-                })}
-                title={traitAuthorYear(STUDY_INFOS[d.study])}
-                start={START}
-                end={END}
-              />
-            ))}
-          {colocQtlTableDataWithState
-            .filter(d => d.isShowingRegional)
-            .sort(logH4H3Comparator)
-            .reverse()
-            .map(d => (
-              <Regional
-                key={`${d.phenotype}-${d.bioFeature}`}
-                data={combineSumStatsWithCredSets({
-                  ...d,
-                  chromosome: CHROMOSOME,
-                })}
-                title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
-                start={START}
-                end={END}
-              />
-            ))}
-          <GeneTrack
-            data={flatExonsToPairedExons(GENES)}
-            start={START}
-            end={END}
-          />
-        </PlotContainer>
-        <SectionHeading
           heading={`Credible Set Overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
@@ -350,98 +267,193 @@ class LocusTraitPage extends React.Component {
           center={
             <Typography>
               Showing credible sets for{' '}
-              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and QTLs in
-              colocalisation.
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and GWAS
+              studies/QTLs in colocalisation. Expand the section to see the
+              underlying regional plot.
             </Typography>
           }
         >
           <PlotContainerSection>
-            <RadioGroup
-              style={{ padding: '0 16px' }}
-              row
-              aria-label="95% credible set"
-              name="credset95"
-              value={this.state.credSet95Value}
-              onChange={this.handleCredSet95Change}
-            >
-              <FormControlLabel value="95" control={<Radio />} label="95%" />
-              <FormControlLabel value="all" control={<Radio />} label="all" />
-            </RadioGroup>
-          </PlotContainerSection>
-          <PlotContainerSection>
-            <CredibleSet
-              label={traitAuthorYear(STUDY_INFO)}
-              start={START}
-              end={END}
-              data={pageCredibleSet}
-            />
-          </PlotContainerSection>
-          <PlotContainerSection>
-            <Typography style={{ padding: '5px 10px' }}>
-              <strong>GWAS</strong>
-            </Typography>
-            {colocGWASTableDataWithState
-              .sort(logH4H3Comparator)
-              .reverse()
-              .map(d => {
-                const { study, chrom, pos, ref, alt } = d;
-                const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
-                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-                  CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSet
-                    key={key}
-                    label={traitAuthorYear(STUDY_INFOS[d.study])}
-                    start={START}
-                    end={END}
-                    data={
-                      this.state.credSet95Value === 'all'
-                        ? CREDSETS_TABLE_DATA[key]
-                        : CREDSETS_TABLE_DATA[key].filter(
-                            d => d.is95CredibleSet
-                          )
-                    }
-                  />
-                ) : null;
-              })}
-          </PlotContainerSection>
-          <PlotContainerSection>
-            <Typography style={{ padding: '5px 10px' }}>
-              <strong>QTLs</strong>
-            </Typography>
-            {colocQtlTableDataWithState
-              .sort(logH4H3Comparator)
-              .reverse()
-              .map(d => {
-                const {
-                  study,
-                  phenotype,
-                  phenotypeSymbol,
-                  bioFeature,
-                  chrom,
-                  pos,
-                  ref,
-                  alt,
-                } = d;
-                const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
-                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-                  CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSet
-                    key={key}
-                    label={`${study}: ${phenotypeSymbol} in ${bioFeature}`}
-                    start={START}
-                    end={END}
-                    data={
-                      this.state.credSet95Value === 'all'
-                        ? CREDSETS_TABLE_DATA[key]
-                        : CREDSETS_TABLE_DATA[key].filter(
-                            d => d.is95CredibleSet
-                          )
-                    }
-                  />
-                ) : null;
-              })}
+            <Grid container alignItems="center">
+              <Grid item>
+                <div style={{ padding: '0 20px' }}>
+                  <Typography>Credible set variants</Typography>
+                  <RadioGroup
+                    style={{ padding: '0 16px' }}
+                    row
+                    aria-label="95% credible set"
+                    name="credset95"
+                    value={this.state.credSet95Value}
+                    onChange={this.handleCredSet95Change}
+                  >
+                    <FormControlLabel
+                      value="95"
+                      control={<Radio />}
+                      label="95%"
+                    />
+                    <FormControlLabel
+                      value="all"
+                      control={<Radio />}
+                      label="all"
+                    />
+                  </RadioGroup>
+                </div>
+              </Grid>
+              <Grid item>
+                <Slider
+                  label={`log(H4/H3) - ${significantFigures(
+                    this.state.logH4H3SliderValue
+                  )}`}
+                  min={0}
+                  max={Math.ceil(maxLogH4H3)}
+                  step={Math.ceil(maxLogH4H3) / 50}
+                  value={this.state.logH4H3SliderValue}
+                  onChange={this.handleLogH4H3SliderChange}
+                />
+              </Grid>
+              <Grid item>
+                <Slider
+                  label={`H4 - ${significantFigures(this.state.h4SliderValue)}`}
+                  min={0}
+                  max={1}
+                  step={0.02}
+                  value={this.state.h4SliderValue}
+                  onChange={this.handleH4SliderChange}
+                />
+              </Grid>
+            </Grid>
           </PlotContainerSection>
         </PlotContainer>
+
+        <CredibleSetWithRegional
+          credibleSetProps={{
+            label: traitAuthorYear(STUDY_INFO),
+            start: START,
+            end: END,
+            data: pageCredibleSet,
+          }}
+          regionalProps={{
+            data: SUMSTATS_PAGE_STUDY,
+            title: null,
+            start: START,
+            end: END,
+          }}
+        />
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>GWAS</strong>
+        </Typography>
+
+        {colocGWASTableDataWithStateFiltered
+          .sort(logH4H3Comparator)
+          .reverse()
+          .map(d => {
+            const { study, chrom, pos, ref, alt, h4, logH4H3 } = d;
+            const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
+            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+              CREDSETS_TABLE_DATA[key].length > 0 ? (
+              <CredibleSetWithRegional
+                key={key}
+                credibleSetProps={{
+                  label: traitAuthorYear(STUDY_INFOS[d.study]),
+                  start: START,
+                  end: END,
+                  h4,
+                  logH4H3,
+                  data:
+                    this.state.credSet95Value === 'all'
+                      ? CREDSETS_TABLE_DATA[key]
+                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
+                }}
+                regionalProps={{
+                  data: combineSumStatsWithCredSets({
+                    ...d,
+                    chromosome: CHROMOSOME,
+                  }),
+                  title: null,
+                  start: START,
+                  end: END,
+                }}
+              />
+            ) : null;
+          })}
+
+        {colocGWASTableDataWithStateFiltered.length === 0 ? (
+          <Typography align="center">
+            No GWAS studies satisfying the applied filters.
+          </Typography>
+        ) : null}
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>QTLs</strong>
+        </Typography>
+
+        {colocQtlTableDataWithStateFiltered
+          .sort(logH4H3Comparator)
+          .reverse()
+          .map(d => {
+            const {
+              study,
+              phenotype,
+              phenotypeSymbol,
+              bioFeature,
+              chrom,
+              pos,
+              ref,
+              alt,
+              h4,
+              logH4H3,
+            } = d;
+            const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
+            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+              CREDSETS_TABLE_DATA[key].length > 0 ? (
+              <CredibleSetWithRegional
+                key={key}
+                credibleSetProps={{
+                  label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
+                  start: START,
+                  end: END,
+                  h4,
+                  logH4H3,
+                  data:
+                    this.state.credSet95Value === 'all'
+                      ? CREDSETS_TABLE_DATA[key]
+                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
+                }}
+                regionalProps={{
+                  data: combineSumStatsWithCredSets({
+                    ...d,
+                    chromosome: CHROMOSOME,
+                  }),
+                  title: null,
+                  start: START,
+                  end: END,
+                }}
+              />
+            ) : null;
+          })}
+
+        {colocQtlTableDataWithStateFiltered.length === 0 ? (
+          <Typography align="center">
+            No QTLs satisfying the applied filters.
+          </Typography>
+        ) : null}
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>Genes</strong>
+        </Typography>
+        <PlotContainer>
+          <PlotContainerSection>
+            <div style={{ paddingRight: '32px' }}>
+              <GeneTrack
+                data={flatExonsToPairedExons(GENES)}
+                start={START}
+                end={END}
+              />
+            </div>
+          </PlotContainerSection>
+        </PlotContainer>
+
         <SectionHeading
           heading={`Genes`}
           subheading={`Which genes are functionally implicated by variants at this locus?`}
