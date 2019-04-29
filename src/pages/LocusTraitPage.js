@@ -348,7 +348,7 @@ class LocusTraitPage extends React.Component {
           .sort(logH4H3Comparator)
           .reverse()
           .map(d => {
-            const { study, chrom, pos, ref, alt } = d;
+            const { study, chrom, pos, ref, alt, h4, logH4H3 } = d;
             const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
             return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
               CREDSETS_TABLE_DATA[key].length > 0 ? (
@@ -358,6 +358,8 @@ class LocusTraitPage extends React.Component {
                   label: traitAuthorYear(STUDY_INFOS[d.study]),
                   start: START,
                   end: END,
+                  h4,
+                  logH4H3,
                   data:
                     this.state.credSet95Value === 'all'
                       ? CREDSETS_TABLE_DATA[key]
@@ -399,6 +401,8 @@ class LocusTraitPage extends React.Component {
               pos,
               ref,
               alt,
+              h4,
+              logH4H3,
             } = d;
             const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
             return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
@@ -409,6 +413,8 @@ class LocusTraitPage extends React.Component {
                   label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
                   start: START,
                   end: END,
+                  h4,
+                  logH4H3,
                   data:
                     this.state.credSet95Value === 'all'
                       ? CREDSETS_TABLE_DATA[key]
