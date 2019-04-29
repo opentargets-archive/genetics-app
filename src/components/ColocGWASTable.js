@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, OtTable, Button, significantFigures } from 'ot-ui';
+import { Link, OtTable, significantFigures } from 'ot-ui';
 
-const tableColumns = handleToggleRegional => [
+const tableColumns = [
   {
     id: 'study',
     label: 'Study',
@@ -35,33 +35,13 @@ const tableColumns = handleToggleRegional => [
     label: 'log(H4/H3)',
     renderCell: d => significantFigures(d.logH4H3),
   },
-  {
-    id: 'show',
-    label: 'Regional Plot',
-    renderCell: d =>
-      d.isShowingRegional ? (
-        <Button gradient onClick={() => handleToggleRegional(d)}>
-          Hide
-        </Button>
-      ) : (
-        <Button gradient onClick={() => handleToggleRegional(d)}>
-          Show
-        </Button>
-      ),
-  },
 ];
 
-const ColocTable = ({
-  loading,
-  error,
-  filenameStem,
-  data,
-  handleToggleRegional,
-}) => (
+const ColocTable = ({ loading, error, filenameStem, data }) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns(handleToggleRegional)}
+    columns={tableColumns}
     data={data}
     sortBy="logH4H3"
     order="desc"

@@ -13,7 +13,7 @@ import {
   PlotContainer,
   PlotContainerSection,
 } from 'ot-ui';
-import { CredibleSet, Regional, GeneTrack } from 'ot-charts';
+import { GeneTrack } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
@@ -127,7 +127,6 @@ class LocusTraitPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
-    regionals: [],
     credSet95Value: 'all',
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
@@ -136,60 +135,15 @@ class LocusTraitPage extends React.Component {
   handleGWASTabsChange = (_, gwasTabsValue) => {
     this.setState({ gwasTabsValue });
   };
-  handleToggleRegional = d => {
-    const { regionals } = this.state;
-    const index = regionals.findIndex(
-      r =>
-        r.study === d.study &&
-        r.phenotype === d.phenotype &&
-        r.bioFeature === d.bioFeature &&
-        r.chrom === d.chrom &&
-        r.pos === d.pos &&
-        r.ref === d.ref &&
-        r.alt === d.alt
-    );
-    if (index >= 0) {
-      const regionalsWithoutD = [
-        ...regionals.slice(0, index),
-        ...regionals.slice(index + 1),
-      ];
-      this.setState({ regionals: regionalsWithoutD });
-    } else {
-      const { isShowingRegional, ...dWithoutIsShowingRegional } = d;
-      this.setState({ regionals: [...regionals, dWithoutIsShowingRegional] });
-    }
-  };
   handleCredSet95Change = event => {
     this.setState({ credSet95Value: event.target.value });
   };
   render() {
     const { regionals } = this.state;
-    const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA.map(d => ({
-      ...d,
-      isShowingRegional: regionals.some(
-        r =>
-          r.study === d.study &&
-          r.phenotype === d.phenotype &&
-          r.bioFeature === d.bioFeature &&
-          r.chrom === d.chrom &&
-          r.pos === d.pos &&
-          r.ref === d.ref &&
-          r.alt === d.alt
-      ),
-    }));
+    const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA;
     const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
       ...d,
       ...STUDY_INFOS[d.study],
-      isShowingRegional: regionals.some(
-        r =>
-          r.study === d.study &&
-          r.phenotype === d.phenotype &&
-          r.bioFeature === d.bioFeature &&
-          r.chrom === d.chrom &&
-          r.pos === d.pos &&
-          r.ref === d.ref &&
-          r.alt === d.alt
-      ),
     }));
     // const { match } = this.props;
     // const { studyId, indexVariantId } = match.params;
@@ -282,69 +236,6 @@ class LocusTraitPage extends React.Component {
         ) : null}
 
         <SectionHeading
-          heading={`Regional Plots`}
-          subheading={
-            <React.Fragment>
-              Where is the signal for molecular traits and GWAS studies
-              colocalising with <strong>{traitAuthorYear(STUDY_INFO)}</strong>?
-            </React.Fragment>
-          }
-        />
-        <PlotContainer
-          center={
-            <Typography align="center">
-              The plot for <strong>{traitAuthorYear(STUDY_INFO)}</strong> is
-              always shown. Where possible, credible sets are shown in blue.
-              <br />
-              You can add or remove others in the QTL and GWAS tables above.
-            </Typography>
-          }
-        >
-          <Regional
-            data={SUMSTATS_PAGE_STUDY}
-            title={traitAuthorYear(STUDY_INFO)}
-            start={START}
-            end={END}
-          />
-          {colocGWASTableDataWithState
-            .filter(d => d.isShowingRegional)
-            .sort(logH4H3Comparator)
-            .reverse()
-            .map(d => (
-              <Regional
-                key={`${d.study}`}
-                data={combineSumStatsWithCredSets({
-                  ...d,
-                  chromosome: CHROMOSOME,
-                })}
-                title={traitAuthorYear(STUDY_INFOS[d.study])}
-                start={START}
-                end={END}
-              />
-            ))}
-          {colocQtlTableDataWithState
-            .filter(d => d.isShowingRegional)
-            .sort(logH4H3Comparator)
-            .reverse()
-            .map(d => (
-              <Regional
-                key={`${d.phenotype}-${d.bioFeature}`}
-                data={combineSumStatsWithCredSets({
-                  ...d,
-                  chromosome: CHROMOSOME,
-                })}
-                title={`${d.study}: ${d.phenotypeSymbol} in ${d.bioFeature}`}
-                start={START}
-                end={END}
-              />
-            ))}
-          <GeneTrack
-            data={flatExonsToPairedExons(GENES)}
-            start={START}
-            end={END}
-          />
-        </PlotContainer>
-        <SectionHeading
           heading={`Credible Set Overlap`}
           subheading={`Which variants at this locus are most likely causal?`}
         />
@@ -352,8 +243,9 @@ class LocusTraitPage extends React.Component {
           center={
             <Typography>
               Showing credible sets for{' '}
-              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and QTLs in
-              colocalisation.
+              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and GWAS
+              studies/QTLs in colocalisation. Expand the section to see the
+              underlying regional plot.
             </Typography>
           }
         >
@@ -467,6 +359,21 @@ class LocusTraitPage extends React.Component {
               />
             ) : null;
           })}
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>Genes</strong>
+        </Typography>
+        <PlotContainer>
+          <PlotContainerSection>
+            <div style={{ paddingRight: '32px' }}>
+              <GeneTrack
+                data={flatExonsToPairedExons(GENES)}
+                start={START}
+                end={END}
+              />
+            </div>
+          </PlotContainerSection>
+        </PlotContainer>
 
         <SectionHeading
           heading={`Genes`}
