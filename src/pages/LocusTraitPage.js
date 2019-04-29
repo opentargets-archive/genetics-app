@@ -370,109 +370,104 @@ class LocusTraitPage extends React.Component {
               <FormControlLabel value="all" control={<Radio />} label="all" />
             </RadioGroup>
           </PlotContainerSection>
-
-          <PlotContainerSection>
-            <CredibleSetWithRegional
-              credibleSetProps={{
-                label: traitAuthorYear(STUDY_INFO),
-                start: START,
-                end: END,
-                data: pageCredibleSet,
-              }}
-              regionalProps={{
-                data: SUMSTATS_PAGE_STUDY,
-                title: traitAuthorYear(STUDY_INFO),
-                start: START,
-                end: END,
-              }}
-            />
-          </PlotContainerSection>
-          <PlotContainerSection>
-            <Typography style={{ padding: '5px 10px' }}>
-              <strong>GWAS</strong>
-            </Typography>
-            {colocGWASTableDataWithState
-              .sort(logH4H3Comparator)
-              .reverse()
-              .map(d => {
-                const { study, chrom, pos, ref, alt } = d;
-                const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
-                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-                  CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSetWithRegional
-                    key={key}
-                    credibleSetProps={{
-                      label: traitAuthorYear(STUDY_INFOS[d.study]),
-                      start: START,
-                      end: END,
-                      data:
-                        this.state.credSet95Value === 'all'
-                          ? CREDSETS_TABLE_DATA[key]
-                          : CREDSETS_TABLE_DATA[key].filter(
-                              d => d.is95CredibleSet
-                            ),
-                    }}
-                    regionalProps={{
-                      data: combineSumStatsWithCredSets({
-                        ...d,
-                        chromosome: CHROMOSOME,
-                      }),
-                      title: traitAuthorYear(STUDY_INFO),
-                      start: START,
-                      end: END,
-                    }}
-                  />
-                ) : null;
-              })}
-          </PlotContainerSection>
-          <PlotContainerSection>
-            <Typography style={{ padding: '5px 10px' }}>
-              <strong>QTLs</strong>
-            </Typography>
-            {colocQtlTableDataWithState
-              .sort(logH4H3Comparator)
-              .reverse()
-              .map(d => {
-                const {
-                  study,
-                  phenotype,
-                  phenotypeSymbol,
-                  bioFeature,
-                  chrom,
-                  pos,
-                  ref,
-                  alt,
-                } = d;
-                const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
-                return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-                  CREDSETS_TABLE_DATA[key].length > 0 ? (
-                  <CredibleSetWithRegional
-                    key={key}
-                    credibleSetProps={{
-                      label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
-                      start: START,
-                      end: END,
-                      data:
-                        this.state.credSet95Value === 'all'
-                          ? CREDSETS_TABLE_DATA[key]
-                          : CREDSETS_TABLE_DATA[key].filter(
-                              d => d.is95CredibleSet
-                            ),
-                    }}
-                    regionalProps={{
-                      data: combineSumStatsWithCredSets({
-                        ...d,
-                        chromosome: CHROMOSOME,
-                      }),
-                      title: traitAuthorYear(STUDY_INFO),
-                      start: START,
-                      end: END,
-                    }}
-                  />
-                ) : null;
-              })}
-          </PlotContainerSection>
         </PlotContainer>
+
+        <CredibleSetWithRegional
+          credibleSetProps={{
+            label: traitAuthorYear(STUDY_INFO),
+            start: START,
+            end: END,
+            data: pageCredibleSet,
+          }}
+          regionalProps={{
+            data: SUMSTATS_PAGE_STUDY,
+            title: null,
+            start: START,
+            end: END,
+          }}
+        />
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>GWAS</strong>
+        </Typography>
+
+        {colocGWASTableDataWithState
+          .sort(logH4H3Comparator)
+          .reverse()
+          .map(d => {
+            const { study, chrom, pos, ref, alt } = d;
+            const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
+            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+              CREDSETS_TABLE_DATA[key].length > 0 ? (
+              <CredibleSetWithRegional
+                key={key}
+                credibleSetProps={{
+                  label: traitAuthorYear(STUDY_INFOS[d.study]),
+                  start: START,
+                  end: END,
+                  data:
+                    this.state.credSet95Value === 'all'
+                      ? CREDSETS_TABLE_DATA[key]
+                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
+                }}
+                regionalProps={{
+                  data: combineSumStatsWithCredSets({
+                    ...d,
+                    chromosome: CHROMOSOME,
+                  }),
+                  title: null,
+                  start: START,
+                  end: END,
+                }}
+              />
+            ) : null;
+          })}
+
+        <Typography style={{ paddingTop: '10px' }}>
+          <strong>QTLs</strong>
+        </Typography>
+
+        {colocQtlTableDataWithState
+          .sort(logH4H3Comparator)
+          .reverse()
+          .map(d => {
+            const {
+              study,
+              phenotype,
+              phenotypeSymbol,
+              bioFeature,
+              chrom,
+              pos,
+              ref,
+              alt,
+            } = d;
+            const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
+            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
+              CREDSETS_TABLE_DATA[key].length > 0 ? (
+              <CredibleSetWithRegional
+                key={key}
+                credibleSetProps={{
+                  label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
+                  start: START,
+                  end: END,
+                  data:
+                    this.state.credSet95Value === 'all'
+                      ? CREDSETS_TABLE_DATA[key]
+                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
+                }}
+                regionalProps={{
+                  data: combineSumStatsWithCredSets({
+                    ...d,
+                    chromosome: CHROMOSOME,
+                  }),
+                  title: null,
+                  start: START,
+                  end: END,
+                }}
+              />
+            ) : null;
+          })}
+
         <SectionHeading
           heading={`Genes`}
           subheading={`Which genes are functionally implicated by variants at this locus?`}
