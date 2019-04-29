@@ -132,8 +132,8 @@ class LocusTraitPage extends React.Component {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
     credSet95Value: 'all',
-    logH4H3SliderValue: 0,
-    h4SliderValue: 0,
+    logH4H3SliderValue: Math.log(2), // ln(2) equivalent to H4 being double H3; suggested by Ed
+    h4SliderValue: 0.2, // 20% default; suggested by Ed
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
