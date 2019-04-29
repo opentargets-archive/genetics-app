@@ -301,7 +301,7 @@ class LocusTraitPage extends React.Component {
               </Grid>
               <Grid item>
                 <Slider
-                  label={`log(H4/H3) - ${significantFigures(
+                  label={`log(H4/H3): ${significantFigures(
                     this.state.logH4H3SliderValue
                   )}`}
                   min={0}
@@ -313,7 +313,7 @@ class LocusTraitPage extends React.Component {
               </Grid>
               <Grid item>
                 <Slider
-                  label={`H4 - ${significantFigures(this.state.h4SliderValue)}`}
+                  label={`H4: ${significantFigures(this.state.h4SliderValue)}`}
                   min={0}
                   max={1}
                   step={0.02}
