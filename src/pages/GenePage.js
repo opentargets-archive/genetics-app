@@ -24,6 +24,7 @@ import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
 import GENE_PAGE_QUERY from '../queries/GenePageQuery.gql';
+import { platformUrl } from '../configuration';
 
 function hasGeneData(data) {
   return data && data.geneInfo;
@@ -231,7 +232,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}`}
+                            href={`${platformUrl}/target/${geneId}`}
                             target="_blank"
                           >
                             <OverviewIcon className={classes.iconLink} />
@@ -241,7 +242,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:known_drug`}
+                            href={`${platformUrl}/target/${geneId}?view=sec:known_drug`}
                             target="_blank"
                           >
                             <DrugsIcon className={classes.iconLink} />
@@ -251,7 +252,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:mouse_phenotypes`}
+                            href={`${platformUrl}/target/${geneId}?view=sec:mouse_phenotypes`}
                             target="_blank"
                           >
                             <MouseIcon className={classes.iconLink} />
@@ -263,7 +264,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:affected_pathway`}
+                            href={`${platformUrl}/target/${geneId}?view=sec:affected_pathway`}
                             target="_blank"
                           >
                             <PathwaysIcon className={classes.iconLink} />
@@ -273,7 +274,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`https://www.targetvalidation.org/target/${geneId}?view=sec:expression`}
+                            href={`${platformUrl}/target/${geneId}?view=sec:expression`}
                             target="_blank"
                           >
                             <ExpressionIcon className={classes.iconLink} />

@@ -11,15 +11,11 @@ import { HttpLink } from 'apollo-link-http';
 
 import App from './App';
 import { unregister } from './registerServiceWorker';
-
-const apiUrlDefault = 'https://genetics-api.opentargets.io';
-const apiUrl = process.env.REACT_APP_GRAPHQL_API_URL
-  ? process.env.REACT_APP_GRAPHQL_API_URL
-  : apiUrlDefault;
+import { graphqlApiUrl } from './configuration';
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: `${apiUrl}/graphql`,
+    uri: `${graphqlApiUrl}/graphql`,
   }),
   cache: new InMemoryCache(),
 });
