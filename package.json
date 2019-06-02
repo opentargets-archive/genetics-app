@@ -43,7 +43,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "REACT_APP_REVISION=\"$(git rev-parse --short HEAD)\" react-app-rewired build",
+    "build": "REACT_APP_GIT_REVISION=\"$(git rev-parse --short HEAD)\" react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "test:coverage": "yarn test --coverage",
     "eject": "react-scripts eject",

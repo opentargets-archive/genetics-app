@@ -1,20 +1,12 @@
-import pkg from '../package.json';
+import { platformUrl, gitRevision, packageVersion } from './configuration';
 
 export const pvalThreshold = 4.94e-322;
 
 export const externalLinks = {
   about: [
     {
-      label: `Version ${pkg.version} (${
-        process.env.REACT_APP_REVISION
-          ? process.env.REACT_APP_REVISION
-          : '2222ccc'
-      })`,
-      url: `https://github.com/opentargets/genetics-app/commit/${
-        process.env.REACT_APP_REVISION
-          ? process.env.REACT_APP_REVISION
-          : '2222ccc'
-      }`,
+      label: `Version ${packageVersion} (${gitRevision})`,
+      url: `https://github.com/opentargets/genetics-app/commit/${gitRevision}`,
     },
     {
       label: 'Github codebase',
@@ -26,7 +18,7 @@ export const externalLinks = {
     },
     {
       label: 'Terms of use',
-      url: 'http://www.targetvalidation.org/terms-of-use',
+      url: `${platformUrl}/terms-of-use`,
     },
   ],
   network: [
