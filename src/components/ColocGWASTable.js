@@ -5,15 +5,19 @@ const tableColumns = [
   {
     id: 'study',
     label: 'Study',
-    renderCell: d => <Link to={`/study/${d.studyId}`}>{d.studyId}</Link>,
+    renderCell: d => (
+      <Link to={`/study/${d.study.studyId}`}>{d.study.studyId}</Link>
+    ),
   },
   {
     id: 'traitReported',
     label: 'Trait reported',
+    renderCell: d => d.study.traitReported,
   },
   {
     id: 'pubAuthor',
     label: 'Author',
+    renderCell: d => d.study.pubAuthor,
   },
   {
     id: 'beta',

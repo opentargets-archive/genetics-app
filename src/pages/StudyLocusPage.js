@@ -250,6 +250,41 @@ class LocusTraitPage extends React.Component {
                     handleToggleRegional={this.handleToggleRegional}
                   />
                 ) : null}
+
+                <SectionHeading
+                  heading={`GWAS Study Colocalisation`}
+                  subheading={
+                    <React.Fragment>
+                      Which GWAS studies colocalise with{' '}
+                      <strong>{traitAuthorYear(studyInfo)}</strong> at this
+                      locus?
+                    </React.Fragment>
+                  }
+                />
+                <Tabs
+                  variant="scrollable"
+                  value={this.state.gwasTabsValue}
+                  onChange={this.handleGWASTabsChange}
+                >
+                  <Tab label="Heatmap" value={'heatmap'} />
+                  <Tab label="Table" value={'table'} />
+                </Tabs>
+                {/* {this.state.gwasTabsValue === 'heatmap' ? (
+          <ColocGWASHeatmapTable
+            loading={false}
+            error={false}
+            data={COLOC_GWAS_HEATMAP_TABLE_DATA}
+            studiesMetaData={STUDY_INFOS}
+          />
+        ) : null} */}
+                {this.state.gwasTabsValue === 'table' ? (
+                  <ColocGWASTable
+                    loading={false}
+                    error={false}
+                    data={gwasColocalisation}
+                    handleToggleRegional={this.handleToggleRegional}
+                  />
+                ) : null}
               </React.Fragment>
             );
           }}
@@ -257,39 +292,7 @@ class LocusTraitPage extends React.Component {
 
         {/* 
 
-        <SectionHeading
-          heading={`GWAS Study Colocalisation`}
-          subheading={
-            <React.Fragment>
-              Which GWAS studies colocalise with{' '}
-              <strong>{traitAuthorYear(STUDY_INFO)}</strong> at this locus?
-            </React.Fragment>
-          }
-        />
-        <Tabs
-          variant="scrollable"
-          value={this.state.gwasTabsValue}
-          onChange={this.handleGWASTabsChange}
-        >
-          <Tab label="Heatmap" value={'heatmap'} />
-          <Tab label="Table" value={'table'} />
-        </Tabs>
-        {this.state.gwasTabsValue === 'heatmap' ? (
-          <ColocGWASHeatmapTable
-            loading={false}
-            error={false}
-            data={COLOC_GWAS_HEATMAP_TABLE_DATA}
-            studiesMetaData={STUDY_INFOS}
-          />
-        ) : null}
-        {this.state.gwasTabsValue === 'table' ? (
-          <ColocGWASTable
-            loading={false}
-            error={false}
-            data={colocGWASTableDataWithState}
-            handleToggleRegional={this.handleToggleRegional}
-          />
-        ) : null}
+        
 
         <SectionHeading
           heading={`Credible Set Overlap`}
