@@ -11,6 +11,7 @@ import {
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import StudyDetailCell from './StudyDetailCell';
+import StudyLocusLink from './StudyLocusLink';
 
 export const tableColumns = ({
   overallScoreScale,
@@ -192,6 +193,16 @@ export const tableColumns = ({
       <DataCircle
         radius={overallScoreScale(rowData.overallScore)}
         colorScheme="bold"
+      />
+    ),
+  },
+  {
+    id: 'studyLocus',
+    label: 'View',
+    renderCell: rowData => (
+      <StudyLocusLink
+        indexVariantId={rowData.indexVariantId}
+        studyId={rowData.studyId}
       />
     ),
   },
