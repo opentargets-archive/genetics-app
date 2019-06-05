@@ -30,15 +30,12 @@ class CredibleSetWithRegional extends React.Component {
     return (
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
-          expandIcon={
-            <ExpandMoreIcon
-              onClick={() => {
-                this.setState({
-                  expanded: !this.state.expanded,
-                });
-              }}
-            />
-          }
+          onClick={() => {
+            this.setState({
+              expanded: !this.state.expanded,
+            });
+          }}
+          expandIcon={<ExpandMoreIcon />}
         >
           <div className={classes.container}>
             <CredibleSet {...credibleSetProps} />
