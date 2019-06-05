@@ -1,12 +1,14 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
+import { loader } from 'graphql.macro';
 
 import { Search as OtSearch } from 'ot-ui';
 
 import SearchOption from './SearchOption';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import SEARCH_QUERY from '../queries/SearchQuery.gql';
+
+const SEARCH_QUERY = loader('../queries/SearchQuery.gql');
 
 const asGroupedOptions = data => {
   return [

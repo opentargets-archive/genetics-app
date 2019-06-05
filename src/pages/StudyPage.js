@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { loader } from 'graphql.macro';
 
 import { SectionHeading } from 'ot-ui';
 
@@ -13,7 +14,8 @@ import ScrollToTop from '../components/ScrollToTop';
 import OverlapLink from '../components/OverlapLink';
 import ManhattanContainer from '../components/ManhattanContainer';
 import StudySummary from '../components/StudySummary';
-import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
+
+const STUDY_PAGE_QUERY = loader('../queries/StudyPageQuery.gql');
 
 function hasStudyInfo(data) {
   return data && data.studyInfo;

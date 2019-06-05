@@ -1,13 +1,15 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import _ from 'lodash';
-import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
+import { loader } from 'graphql.macro';
 
+import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import PHEWAS_QUERY from '../queries/PheWASQuery.gql';
+
+const PHEWAS_QUERY = loader('../queries/PheWASQuery.gql');
 
 function hasAssociations(data) {
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
+import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import _ from 'lodash';
 import { Grid } from '@material-ui/core';
@@ -23,8 +24,9 @@ import {
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
-import GENE_PAGE_QUERY from '../queries/GenePageQuery.gql';
 import { platformUrl } from '../configuration';
+
+const GENE_PAGE_QUERY = loader('../queries/GenePageQuery.gql');
 
 function hasGeneData(data) {
   return data && data.geneInfo;

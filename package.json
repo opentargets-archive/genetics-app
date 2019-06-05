@@ -36,15 +36,15 @@
     "react-helmet": "^5.2.0",
     "react-measure": "^2.1.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
+    "react-scripts": "3.0.1",
     "react-select": "^2.0.0",
     "source-map-explorer": "^1.5.0",
     "typeface-inter": "^3.3.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "REACT_APP_GIT_REVISION=\"$(git rev-parse --short HEAD)\" react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
+    "start": "react-scripts start",
+    "build": "REACT_APP_GIT_REVISION=\"$(git rev-parse --short HEAD)\" react-scripts build",
+    "test": "react-scripts test --env=jsdom",
     "test:coverage": "yarn test --coverage",
     "eject": "react-scripts eject",
     "analyse": "source-map-explorer build/static/js/main.*",
@@ -60,12 +60,10 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "eslint-plugin-prettier": "^2.6.2",
+    "graphql.macro": "^1.4.2",
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
     "prettier": "1.14.0",
-    "react-app-rewire-graphql-tag": "^1.1.0",
-    "react-app-rewire-inline-import-graphql-ast": "^1.1.1",
-    "react-app-rewired": "^1.5.2",
     "react-test-renderer": "^16.4.2"
   },
   "husky": {
@@ -91,6 +89,18 @@
       "!src/index.js",
       "!src/registerServiceWorker.js",
       "!src/setupTests.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

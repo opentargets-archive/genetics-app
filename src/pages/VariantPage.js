@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
+import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 
 import { SectionHeading, Typography } from 'ot-ui';
@@ -18,8 +19,9 @@ import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
 import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PheWASSection from '../components/PheWASSection';
-import VARIANT_PAGE_QUERY from '../queries/VariantPageQuery.gql';
 import GnomADTable from '../components/GnomADTable';
+
+const VARIANT_PAGE_QUERY = loader('../queries/VariantPageQuery.gql');
 
 function hasInfo(data) {
   return data && data.variantInfo;
