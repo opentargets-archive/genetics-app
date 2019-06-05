@@ -143,7 +143,7 @@ export const tableColumns = studyId => [
     ),
   },
   {
-    id: 'study-locus',
+    id: 'studyLocus',
     label: 'View',
     renderCell: rowData => (
       <StudyLocusLink
