@@ -92,7 +92,7 @@ const POSITION = PAGE_SUMMARY_DATA['position'];
 const VARIANT_ID = `${CHROMOSOME}_${POSITION}_${PAGE_SUMMARY_DATA.ref}_${
   PAGE_SUMMARY_DATA.alt
 }`;
-const HALF_WINDOW = 500000;
+const HALF_WINDOW = 250000;
 const START = POSITION - HALF_WINDOW;
 const END = POSITION + HALF_WINDOW;
 
@@ -158,6 +158,16 @@ class LocusTraitPage extends React.Component {
     const { match } = this.props;
     const { studyId, indexVariantId } = match.params;
 
+    const [
+      chromosome,
+      positionStr,
+      refAllele,
+      altAllele,
+    ] = indexVariantId.split('_');
+    const position = parseInt(positionStr);
+    const start = position - HALF_WINDOW;
+    const end = position + HALF_WINDOW;
+
     // const colocQtlTableDataWithState = COLOC_QTL_TABLE_DATA;
     // const colocGWASTableDataWithState = COLOC_GWAS_TABLE_DATA.map(d => ({
     //   ...d,
@@ -180,7 +190,13 @@ class LocusTraitPage extends React.Component {
       <BasePage>
         <Query
           query={STUDY_LOCUS_PAGE_QUERY}
-          variables={{ studyId, variantId: indexVariantId }}
+          variables={{
+            studyId,
+            variantId: indexVariantId,
+            chromosome,
+            start,
+            end,
+          }}
         >
           {({ loading, error, data }) => {
             if (loading || error) {
@@ -192,6 +208,7 @@ class LocusTraitPage extends React.Component {
               variantInfo,
               gwasColocalisation,
               qtlColocalisation,
+              gwasColocalisationForRegion,
             } = data;
             return (
               <React.Fragment>
@@ -269,14 +286,13 @@ class LocusTraitPage extends React.Component {
                   <Tab label="Heatmap" value={'heatmap'} />
                   <Tab label="Table" value={'table'} />
                 </Tabs>
-                {/* {this.state.gwasTabsValue === 'heatmap' ? (
-          <ColocGWASHeatmapTable
-            loading={false}
-            error={false}
-            data={COLOC_GWAS_HEATMAP_TABLE_DATA}
-            studiesMetaData={STUDY_INFOS}
-          />
-        ) : null} */}
+                {this.state.gwasTabsValue === 'heatmap' ? (
+                  <ColocGWASHeatmapTable
+                    loading={false}
+                    error={false}
+                    data={gwasColocalisationForRegion}
+                  />
+                ) : null}
                 {this.state.gwasTabsValue === 'table' ? (
                   <ColocGWASTable
                     loading={false}

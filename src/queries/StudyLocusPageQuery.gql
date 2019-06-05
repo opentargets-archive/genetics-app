@@ -1,4 +1,10 @@
-query StudyLocusPageQuery($studyId: String!, $variantId: String!) {
+query StudyLocusPageQuery(
+  $studyId: String!
+  $variantId: String!
+  $chromosome: String!
+  $start: Long!
+  $end: Long!
+) {
   variantInfo(variantId: $variantId) {
     id
     rsId
@@ -61,6 +67,35 @@ query StudyLocusPageQuery($studyId: String!, $variantId: String!) {
     }
     qtlStudyName
     beta
+    h3
+    h4
+    log2h4h3
+  }
+  gwasColocalisationForRegion(
+    chromosome: $chromosome
+    start: $start
+    end: $end
+  ) {
+    leftVariant {
+      id
+      rsId
+    }
+    leftStudy {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+    }
+    rightVariant {
+      id
+      rsId
+    }
+    rightStudy {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+    }
     h3
     h4
     log2h4h3

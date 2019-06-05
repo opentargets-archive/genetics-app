@@ -23,6 +23,14 @@ const studyVariantToLabel = (s, studiesMetaData) => {
   );
 };
 
+const studyIndexVariantToLabel = ({ study, variant }) => (
+  <span style={{ textAlign: 'left', padding: '4px', display: 'inline-block' }}>
+    <span style={{ whiteSpace: 'nowrap' }}>{traitAuthorYear(study)}</span>
+    <br />
+    {variant.id}
+  </span>
+);
+
 const studyComparator = t => (a, b) => {
   if (a[t] && b[t]) {
     return a[t].log2h4h3 > b[t].log2h4h3
@@ -44,28 +52,44 @@ const ColocTable = ({
   error,
   filenameStem,
   data,
-  studiesMetaData,
+  // studiesMetaData,
 }) => {
-  const uniqueStudies = Object.keys(data).sort();
-  const log2h4h3s = Object.values(data).reduce((acc, d) => {
-    const dlog2h4h3s = Object.values(d).map(d2 => d2.log2h4h3);
-    return acc.concat(dlog2h4h3s);
-  }, []);
-  const [minVal, maxVal] = d3.extent(log2h4h3s);
+  const uniqueStudyIndexVariantsLookup = data.reduce((acc, d) => {
+    const leftId = `${d.leftStudy.studyId}-${d.leftVariant.id}`;
+    acc[leftId] = {
+      id: leftId,
+      study: d.leftStudy,
+      variant: d.leftVariant,
+    };
+    const rightId = `${d.rightStudy.studyId}-${d.rightVariant.id}`;
+    acc[rightId] = {
+      id: rightId,
+      study: d.rightStudy,
+      variant: d.rightVariant,
+    };
+    return acc;
+  }, {});
+  const uniqueStudyIndexVariantIds = Object.keys(
+    uniqueStudyIndexVariantsLookup
+  ).sort();
+  const uniqueStudyIndexVariants = Object.values(
+    uniqueStudyIndexVariantsLookup
+  );
+  const [minVal, maxVal] = d3.extent(data.map(d => d.log2h4h3));
   const absMax = Math.max(Math.abs(minVal), maxVal);
   const radiusScale = d3
     .scaleSqrt()
     .domain([0, absMax])
     .range([0, 6]);
-  const tissueColumns = uniqueStudies.map(s => {
-    const label = studyVariantToLabel(s, studiesMetaData);
+  const studyIndexVariantColumns = uniqueStudyIndexVariants.map(sv => {
+    const label = studyIndexVariantToLabel(sv);
     return {
-      id: s,
+      id: sv.id,
       label,
       verticalHeader: true,
-      comparator: studyComparator(s),
+      // comparator: studyComparator(s),
       renderCell: row => {
-        const item = row[s] || {};
+        const item = row[sv.id] || {};
         const { h3, h4, log2h4h3 } = item;
 
         if (!log2h4h3 || !h3 || !h4) {
@@ -89,19 +113,40 @@ const ColocTable = ({
       },
     };
   });
-  const dataByStudy = uniqueStudies.map(s => ({ studyId: s, ...data[s] }));
-  const studyColumn = {
+  const dataByStudyIndexVariant = Object.values(uniqueStudyIndexVariants).map(
+    ({ id, study, variant }) => ({
+      study,
+      variant,
+      ...data
+        .filter(
+          d =>
+            d.leftStudy.studyId === study.studyId &&
+            d.leftVariant.id === variant.id
+        )
+        .reduce(
+          (
+            acc,
+            { leftStudy, leftVariant, rightStudy, rightVariant, ...rest }
+          ) => {
+            acc[`${rightStudy.studyId}-${rightVariant.id}`] = { ...rest };
+            return acc;
+          },
+          {}
+        ),
+    })
+  );
+  const studyIndexVariantColumn = {
     id: 'studyId',
     label: 'Study',
-    renderCell: d => studyVariantToLabel(d.studyId, studiesMetaData),
+    renderCell: d => studyIndexVariantToLabel(d),
   };
-  const tableColumns = [studyColumn, ...tissueColumns];
+  const tableColumns = [studyIndexVariantColumn, ...studyIndexVariantColumns];
   return (
     <OtTable
       loading={loading}
       error={error}
       columns={tableColumns}
-      data={dataByStudy}
+      data={dataByStudyIndexVariant}
       verticalHeaders
       downloadFileStem={filenameStem}
     />
