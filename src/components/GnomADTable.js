@@ -59,24 +59,36 @@ const GnomADTable = ({ classes, data, variantId }) => (
       <br />
 
       <Typography variant="subtitle1">Neighbourhood</Typography>
-      <Typography variant="subtitle2">
-        <strong>
-          Nearest gene ({commaSeparate(data.nearestGeneDistance)} bp to
-          canonical TSS):
-        </strong>{' '}
-        <Link to={`/gene/${data.nearestGene.id}`}>
-          {data.nearestGene.symbol}
-        </Link>
-      </Typography>
-      <Typography variant="subtitle2">
-        <strong>
-          Nearest coding gene ({commaSeparate(data.nearestCodingGeneDistance)}{' '}
-          bp to canonical TSS):
-        </strong>{' '}
-        <Link to={`/gene/${data.nearestCodingGene.id}`}>
-          {data.nearestCodingGene.symbol}
-        </Link>
-      </Typography>
+      {data.nearestGene ? (
+        <Typography variant="subtitle2">
+          <strong>
+            Nearest gene ({commaSeparate(data.nearestGeneDistance)} bp to
+            canonical TSS):
+          </strong>{' '}
+          <Link to={`/gene/${data.nearestGene.id}`}>
+            {data.nearestGene.symbol}
+          </Link>
+        </Typography>
+      ) : (
+        <Typography variant="subtitle2">
+          <strong>Nearest gene:</strong> N/A
+        </Typography>
+      )}
+      {data.nearestCodingGene ? (
+        <Typography variant="subtitle2">
+          <strong>
+            Nearest coding gene ({commaSeparate(data.nearestCodingGeneDistance)}{' '}
+            bp to canonical TSS):
+          </strong>{' '}
+          <Link to={`/gene/${data.nearestCodingGene.id}`}>
+            {data.nearestCodingGene.symbol}
+          </Link>
+        </Typography>
+      ) : (
+        <Typography variant="subtitle2">
+          <strong>Nearest coding gene:</strong> N/A
+        </Typography>
+      )}
       <br />
 
       <Typography variant="subtitle1">
@@ -91,7 +103,9 @@ const GnomADTable = ({ classes, data, variantId }) => (
       </Typography>
       <Typography variant="subtitle2">
         <strong>Most severe consequence:</strong>{' '}
-        {data.mostSevereConsequence.replace(/_/g, ' ')}
+        {data.mostSevereConsequence
+          ? data.mostSevereConsequence.replace(/_/g, ' ')
+          : 'N/A'}
       </Typography>
       <br />
 
@@ -104,9 +118,13 @@ const GnomADTable = ({ classes, data, variantId }) => (
       </Typography>
       <Typography variant="subtitle2">
         <strong>raw: </strong>
-        <span className={classes.value}>{data.caddRaw.toPrecision(3)}</span>
+        <span className={classes.value}>
+          {data.caddRaw ? data.caddRaw.toPrecision(3) : 'N/A'}
+        </span>
         <strong>scaled: </strong>
-        <span className={classes.value}>{data.caddPhred.toPrecision(3)}</span>
+        <span className={classes.value}>
+          {data.caddPhred ? data.caddPhred.toPrecision(3) : 'N/A'}
+        </span>
       </Typography>
     </Grid>
     <Grid item xs={12} sm={6} md={4}>
@@ -125,7 +143,9 @@ const GnomADTable = ({ classes, data, variantId }) => (
             </Grid>
             <Grid item xs={3}>
               <Typography variant="subtitle2" align="right">
-                {data[`gnomad${p.code}`].toPrecision(3)}
+                {data[`gnomad${p.code}`]
+                  ? data[`gnomad${p.code}`].toPrecision(3)
+                  : 'N/A'}
               </Typography>
             </Grid>
           </React.Fragment>
