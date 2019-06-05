@@ -5,6 +5,7 @@
 FROM node:8.15-alpine as build_section
 
 ARG REACT_APP_GRAPHQL_API_URL=https://genetics-api.opentargets.io
+ARG REACT_APP_PLATFORM_URL=https://targetvalidation.org
 
 RUN apk update && apk add --update git
 COPY ./ /app/
