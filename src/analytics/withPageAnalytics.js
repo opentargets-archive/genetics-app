@@ -2,10 +2,10 @@ import React from 'react';
 import GoogleAnalytics from 'react-ga';
 
 import { ANALYTICS_TOKEN } from './constants';
-import useAnalytics from './useAnalytics';
+import shouldUseAnalytics from './useAnalytics';
 import reportAnalyticsEvent from './reportAnalyticsEvent';
 
-if (useAnalytics()) {
+if (shouldUseAnalytics()) {
   GoogleAnalytics.initialize(ANALYTICS_TOKEN);
 }
 
@@ -13,7 +13,7 @@ if (useAnalytics()) {
 
 const withPageAnalytics = (pageId, WrappedComponent, options = {}) => {
   // only track on production
-  if (!useAnalytics()) {
+  if (!shouldUseAnalytics()) {
     return WrappedComponent;
   }
 

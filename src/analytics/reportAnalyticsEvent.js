@@ -1,9 +1,9 @@
 import GoogleAnalytics from 'react-ga';
-import useAnalytics from './useAnalytics';
+import shouldUseAnalytics from './useAnalytics';
 
 const reportAnalyticsEvent = options => {
   // report to analytics if production
-  if (useAnalytics()) {
+  if (shouldUseAnalytics()) {
     GoogleAnalytics.event(options);
   }
 };
