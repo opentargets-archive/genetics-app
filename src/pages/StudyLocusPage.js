@@ -112,7 +112,7 @@ const traitAuthorYear = s =>
   `${s.traitReported} (${s.pubAuthor}, ${new Date(s.pubDate).getFullYear()})`;
 
 // gene exons come as flat list, rendering expects list of pairs
-const flatExonsToPairedExons = ({ genes }) => {
+const flatExonsToPairedExons = genes => {
   const paired = genes.map(d => ({
     ...d,
     exons: d.exons.reduce((result, value, index, array) => {
@@ -122,7 +122,7 @@ const flatExonsToPairedExons = ({ genes }) => {
       return result;
     }, []),
   }));
-  return { genes: paired };
+  return paired;
 };
 
 const PAGE_CREDSET_KEY = `${STUDY_ID}__null__null__${CHROMOSOME}__${POSITION}__${
@@ -209,6 +209,7 @@ class LocusTraitPage extends React.Component {
               gwasColocalisation,
               qtlColocalisation,
               gwasColocalisationForRegion,
+              genes,
             } = data;
             return (
               <React.Fragment>
@@ -301,6 +302,21 @@ class LocusTraitPage extends React.Component {
                     handleToggleRegional={this.handleToggleRegional}
                   />
                 ) : null}
+
+                <Typography style={{ paddingTop: '10px' }}>
+                  <strong>Genes</strong>
+                </Typography>
+                <PlotContainer>
+                  <PlotContainerSection>
+                    <div style={{ paddingRight: '32px' }}>
+                      <GeneTrack
+                        data={{ genes: flatExonsToPairedExons(genes) }}
+                        start={start}
+                        end={end}
+                      />
+                    </div>
+                  </PlotContainerSection>
+                </PlotContainer>
               </React.Fragment>
             );
           }}
@@ -490,20 +506,7 @@ class LocusTraitPage extends React.Component {
           </Typography>
         ) : null}
 
-        <Typography style={{ paddingTop: '10px' }}>
-          <strong>Genes</strong>
-        </Typography>
-        <PlotContainer>
-          <PlotContainerSection>
-            <div style={{ paddingRight: '32px' }}>
-              <GeneTrack
-                data={flatExonsToPairedExons(GENES)}
-                start={START}
-                end={END}
-              />
-            </div>
-          </PlotContainerSection>
-        </PlotContainer>
+        
 
         <SectionHeading
           heading={`Genes`}

@@ -100,4 +100,12 @@ query StudyLocusPageQuery(
     h4
     log2h4h3
   }
+  genes(chromosome: $chromosome, start: $start, end: $end) {
+    id
+    symbol
+    tss
+    start
+    end
+    exons
+  }
 }
