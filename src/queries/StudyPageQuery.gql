@@ -35,6 +35,13 @@ query StudyPageQuery($studyId: String!) {
           symbol
         }
       }
+      bestColocGenes {
+        score
+        gene {
+          id
+          symbol
+        }
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import {
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
+import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
@@ -115,6 +116,21 @@ export const tableColumns = studyId => [
     ),
   },
   {
+    id: 'bestColocGenes',
+    label: 'Top Ranked Colocalising Genes',
+    tooltip:
+      'The list of colocalising genes with equal best overall score for this lead variant',
+    renderCell: rowData => (
+      <React.Fragment>
+        {rowData.bestColocGenes.map((d, i) => (
+          <React.Fragment key={i}>
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+          </React.Fragment>
+        ))}
+      </React.Fragment>
+    ),
+  },
+  {
     id: 'locus',
     label: 'View',
     renderCell: rowData => (
@@ -123,9 +139,17 @@ export const tableColumns = studyId => [
         position={rowData.position}
         selectedIndexVariants={[rowData.indexVariantId]}
         selectedStudies={[studyId]}
-      >
-        Locus
-      </LocusLink>
+      />
+    ),
+  },
+  {
+    id: 'study-locus',
+    label: 'View',
+    renderCell: rowData => (
+      <StudyLocusLink
+        indexVariantId={rowData.indexVariantId}
+        studyId={studyId}
+      />
     ),
   },
 ];
