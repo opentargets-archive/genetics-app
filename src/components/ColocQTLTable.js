@@ -2,11 +2,11 @@ import React from 'react';
 import { Link, OtTable, significantFigures } from 'ot-ui';
 
 const tableColumns = [
-  {
-    id: 'type',
-    label: 'Molecular Trait',
-    renderCell: d => 'eQTL',
-  },
+  // {
+  //   id: 'type',
+  //   label: 'Molecular Trait',
+  //   renderCell: d => 'eQTL',
+  // },
   {
     id: 'gene.symbol',
     label: 'Gene',
