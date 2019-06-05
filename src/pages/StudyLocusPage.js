@@ -174,9 +174,10 @@ class LocusTraitPage extends React.Component {
     //   ...STUDY_INFOS[d.study],
     // }));
 
+    // TODO: reenable
     // const maxQtlLogH4H3 = d3.max(colocQtlTableDataWithState, d => d.logH4H3);
     // const maxGWASLogH4H3 = d3.max(colocGWASTableDataWithState, d => d.logH4H3);
-    // const maxLogH4H3 = d3.max([maxQtlLogH4H3, maxGWASLogH4H3]);
+    const maxLog2h4h3 = 10; // d3.max([maxQtlLogH4H3, maxGWASLogH4H3]);
 
     // const colocGWASTableDataWithStateFiltered = colocGWASTableDataWithState
     //   .filter(d => d.logH4H3 >= this.state.logH4H3SliderValue)
@@ -209,6 +210,7 @@ class LocusTraitPage extends React.Component {
               gwasColocalisation,
               qtlColocalisation,
               gwasColocalisationForRegion,
+              pageCredibleSet,
               genes,
             } = data;
             return (
@@ -303,6 +305,94 @@ class LocusTraitPage extends React.Component {
                   />
                 ) : null}
 
+                <SectionHeading
+                  heading={`Credible Set Overlap`}
+                  subheading={`Which variants at this locus are most likely causal?`}
+                />
+                <PlotContainer
+                  center={
+                    <Typography>
+                      Showing credible sets for{' '}
+                      <strong>{traitAuthorYear(STUDY_INFO)}</strong> and GWAS
+                      studies/QTLs in colocalisation. Expand the section to see
+                      the underlying regional plot.
+                    </Typography>
+                  }
+                >
+                  <PlotContainerSection>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <div style={{ padding: '0 20px' }}>
+                          <Typography>Credible set variants</Typography>
+                          <RadioGroup
+                            style={{ padding: '0 16px' }}
+                            row
+                            aria-label="95% credible set"
+                            name="credset95"
+                            value={this.state.credSet95Value}
+                            onChange={this.handleCredSet95Change}
+                          >
+                            <FormControlLabel
+                              value="95"
+                              control={<Radio />}
+                              label="95%"
+                            />
+                            <FormControlLabel
+                              value="all"
+                              control={<Radio />}
+                              label="all"
+                            />
+                          </RadioGroup>
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <Slider
+                          label={`log2(H4/H3): ${significantFigures(
+                            this.state.log2h4h3SliderValue
+                          )}`}
+                          min={0}
+                          max={Math.ceil(maxLog2h4h3)}
+                          step={Math.ceil(maxLog2h4h3) / 50}
+                          value={this.state.log2h4h3SliderValue}
+                          onChange={this.handleLog2h4h3SliderChange}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Slider
+                          label={`H4: ${significantFigures(
+                            this.state.h4SliderValue
+                          )}`}
+                          min={0}
+                          max={1}
+                          step={0.02}
+                          value={this.state.h4SliderValue}
+                          onChange={this.handleH4SliderChange}
+                        />
+                      </Grid>
+                    </Grid>
+                  </PlotContainerSection>
+                </PlotContainer>
+
+                <CredibleSetWithRegional
+                  credibleSetProps={{
+                    label: traitAuthorYear(studyInfo),
+                    start,
+                    end,
+                    data: pageCredibleSet.map(({ tagVariant, ...rest }) => ({
+                      tagVariant,
+                      position: tagVariant.position,
+                      ...rest,
+                    })),
+                  }}
+                  regionalProps={{
+                    title: null,
+                    studyId: studyInfo.studyId,
+                    chromosome,
+                    start,
+                    end,
+                  }}
+                />
+
                 <Typography style={{ paddingTop: '10px' }}>
                   <strong>Genes</strong>
                 </Typography>
@@ -326,86 +416,9 @@ class LocusTraitPage extends React.Component {
 
         
 
-        <SectionHeading
-          heading={`Credible Set Overlap`}
-          subheading={`Which variants at this locus are most likely causal?`}
-        />
-        <PlotContainer
-          center={
-            <Typography>
-              Showing credible sets for{' '}
-              <strong>{traitAuthorYear(STUDY_INFO)}</strong> and GWAS
-              studies/QTLs in colocalisation. Expand the section to see the
-              underlying regional plot.
-            </Typography>
-          }
-        >
-          <PlotContainerSection>
-            <Grid container alignItems="center">
-              <Grid item>
-                <div style={{ padding: '0 20px' }}>
-                  <Typography>Credible set variants</Typography>
-                  <RadioGroup
-                    style={{ padding: '0 16px' }}
-                    row
-                    aria-label="95% credible set"
-                    name="credset95"
-                    value={this.state.credSet95Value}
-                    onChange={this.handleCredSet95Change}
-                  >
-                    <FormControlLabel
-                      value="95"
-                      control={<Radio />}
-                      label="95%"
-                    />
-                    <FormControlLabel
-                      value="all"
-                      control={<Radio />}
-                      label="all"
-                    />
-                  </RadioGroup>
-                </div>
-              </Grid>
-              <Grid item>
-                <Slider
-                  label={`log(H4/H3): ${significantFigures(
-                    this.state.logH4H3SliderValue
-                  )}`}
-                  min={0}
-                  max={Math.ceil(maxLogH4H3)}
-                  step={Math.ceil(maxLogH4H3) / 50}
-                  value={this.state.logH4H3SliderValue}
-                  onChange={this.handleLogH4H3SliderChange}
-                />
-              </Grid>
-              <Grid item>
-                <Slider
-                  label={`H4: ${significantFigures(this.state.h4SliderValue)}`}
-                  min={0}
-                  max={1}
-                  step={0.02}
-                  value={this.state.h4SliderValue}
-                  onChange={this.handleH4SliderChange}
-                />
-              </Grid>
-            </Grid>
-          </PlotContainerSection>
-        </PlotContainer>
+        
 
-        <CredibleSetWithRegional
-          credibleSetProps={{
-            label: traitAuthorYear(STUDY_INFO),
-            start: START,
-            end: END,
-            data: pageCredibleSet,
-          }}
-          regionalProps={{
-            data: SUMSTATS_PAGE_STUDY,
-            title: null,
-            start: START,
-            end: END,
-          }}
-        />
+        
 
         <Typography style={{ paddingTop: '10px' }}>
           <strong>GWAS</strong>

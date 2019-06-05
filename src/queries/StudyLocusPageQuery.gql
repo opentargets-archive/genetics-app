@@ -100,6 +100,21 @@ query StudyLocusPageQuery(
     h4
     log2h4h3
   }
+  pageCredibleSet: gwasCredibleSet(studyId: $studyId, variantId: $variantId) {
+    tagVariant {
+      id
+      rsId
+      position
+    }
+    pval
+    se
+    beta
+    postProb
+    MultisignalMethod
+    logABF
+    is95
+    is99
+  }
   genes(chromosome: $chromosome, start: $start, end: $end) {
     id
     symbol
