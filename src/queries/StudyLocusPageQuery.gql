@@ -1,0 +1,68 @@
+query StudyLocusPageQuery($studyId: String!, $variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    id
+    rsId
+    chromosome
+    position
+    refAllele
+    altAllele
+  }
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+  }
+  gwasColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+    }
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+  qtlColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    gene {
+      id
+      symbol
+      chromosome
+      start
+      end
+      bioType
+    }
+    phenotypeId
+    tissue {
+      id
+      name
+    }
+    qtlStudyName
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+}

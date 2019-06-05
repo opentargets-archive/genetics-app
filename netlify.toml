@@ -17,3 +17,5 @@
   REACT_APP_GRAPHQL_API_URL = "https://genetics-api-qa.opentargets.io"
 [context.dev.environment]
   REACT_APP_GRAPHQL_API_URL = "https://open-targets-genetics.appspot.com"
+[context."gp-connect-lt".environment]
+  REACT_APP_GRAPHQL_API_URL = "https://open-targets-genetics.appspot.com"

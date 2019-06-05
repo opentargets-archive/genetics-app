@@ -8,18 +8,22 @@ const tableColumns = [
     renderCell: d => 'eQTL',
   },
   {
-    id: 'phenotype',
+    id: 'gene.symbol',
     label: 'Gene',
-    renderCell: d => (
-      <Link to={`/gene/${d.phenotypeEnsemblId}`}>{d.phenotypeSymbol}</Link>
-    ),
+    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   },
   {
-    id: 'bioFeature',
+    id: 'phenotypeId',
+    label: 'Phenotype',
+    // renderCell: d => (d.phenotypeId !== d.gene.id ? d.phenotypeId : null),
+  },
+  {
+    id: 'tissue.name',
     label: 'Tissue',
+    renderCell: d => d.tissue.name,
   },
   {
-    id: 'study',
+    id: 'qtlStudyName',
     label: 'Source',
   },
   {
@@ -38,9 +42,9 @@ const tableColumns = [
     renderCell: d => significantFigures(d.h4),
   },
   {
-    id: 'logH4H3',
-    label: 'log(H4/H3)',
-    renderCell: d => significantFigures(d.logH4H3),
+    id: 'log2h4h3',
+    label: 'log2(H4/H3)',
+    renderCell: d => significantFigures(d.log2h4h3),
   },
 ];
 
@@ -50,7 +54,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => (
     error={error}
     columns={tableColumns}
     data={data}
-    sortBy="logH4H3"
+    sortBy="log2h4h3"
     order="desc"
     downloadFileStem={filenameStem}
   />
