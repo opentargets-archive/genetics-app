@@ -72,8 +72,8 @@ const ColocTable = ({
   const uniqueStudyIndexVariantIds = Object.keys(
     uniqueStudyIndexVariantsLookup
   ).sort();
-  const uniqueStudyIndexVariants = Object.values(
-    uniqueStudyIndexVariantsLookup
+  const uniqueStudyIndexVariants = uniqueStudyIndexVariantIds.map(
+    d => uniqueStudyIndexVariantsLookup[d]
   );
   const [minVal, maxVal] = d3.extent(data.map(d => d.log2h4h3));
   const absMax = Math.max(Math.abs(minVal), maxVal);
