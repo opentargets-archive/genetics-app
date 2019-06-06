@@ -91,9 +91,12 @@ qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${tissue.id}__${
 }
 `;
 
-const flattenPosition = ({ tagVariant, ...rest }) => ({
+const flattenPosition = ({ tagVariant, postProb, is95, is99, ...rest }) => ({
   tagVariant,
   position: tagVariant.position,
+  posteriorProbability: postProb,
+  is95CredibleSet: is95,
+  is99CredibleSet: is99,
   ...rest,
 });
 
