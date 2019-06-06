@@ -201,18 +201,6 @@ class LocusTraitPage extends React.Component {
               genes,
             } = data;
 
-            {
-              /* const gwasCredibleSetQuery = gql(`
-query GWASCredibleSetsQuery {
-  ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
-}`);
-
-const qtlCredibleSetQuery = gql(`
-query QTLCredibleSetsQuery {
-  ${qtlColocalisation.map(qtlCredibleSetQueryAliasedFragment).join('')}
-}`); */
-            }
-
             const colocalisationCredibleSetQuery = gql(`
 query CredibleSetsQuery {
   ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
