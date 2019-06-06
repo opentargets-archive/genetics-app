@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { loader } from 'graphql.macro';
+import gql from 'graphql-tag';
 import { Helmet } from 'react-helmet';
 import * as d3 from 'd3';
 
@@ -108,6 +109,34 @@ const generateComparatorFromAccessor = accessor => (a, b) => {
 };
 const log2h4h3Comparator = generateComparatorFromAccessor(d => d.log2h4h3);
 
+const gwasCredibleSetQueryAliasedFragment = ({ study, indexVariant }) => `
+gwasCredibleSet__${study.studyId}__${
+  indexVariant.id
+}: gwasCredibleSet(studyId: "${study.studyId}", variantId: "${
+  indexVariant.id
+}") {
+  tagVariant {
+    id
+    rsId
+    position
+  }
+  pval
+  se
+  beta
+  postProb
+  MultisignalMethod
+  logABF
+  is95
+  is99
+}
+`;
+
+const flattenPosition = ({ tagVariant, ...rest }) => ({
+  tagVariant,
+  position: tagVariant.position,
+  ...rest,
+});
+
 const traitAuthorYear = s =>
   `${s.traitReported} (${s.pubAuthor}, ${new Date(s.pubDate).getFullYear()})`;
 
@@ -213,6 +242,12 @@ class LocusTraitPage extends React.Component {
               pageCredibleSet,
               genes,
             } = data;
+
+            const gwasCredibleSetQuery = gql(`
+query GWASCredibleSetsQuery {
+  ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
+}`);
+
             return (
               <React.Fragment>
                 <Helmet>
@@ -378,11 +413,7 @@ class LocusTraitPage extends React.Component {
                     label: traitAuthorYear(studyInfo),
                     start,
                     end,
-                    data: pageCredibleSet.map(({ tagVariant, ...rest }) => ({
-                      tagVariant,
-                      position: tagVariant.position,
-                      ...rest,
-                    })),
+                    data: pageCredibleSet.map(flattenPosition),
                   }}
                   regionalProps={{
                     title: null,
@@ -392,6 +423,72 @@ class LocusTraitPage extends React.Component {
                     end,
                   }}
                 />
+
+                <Query query={gwasCredibleSetQuery} variables={{}}>
+                  {({ loading: loading2, error: error2, data: data2 }) => {
+                    if (loading2 || error2) {
+                      return null;
+                    }
+
+                    // de-alias
+                    const gwasColocalisationCredibleSets = gwasColocalisation.map(
+                      ({ study, indexVariant, ...rest }) => ({
+                        study,
+                        indexVariant,
+                        credibleSet: data2[
+                          `gwasCredibleSet__${study.studyId}__${
+                            indexVariant.id
+                          }`
+                        ].map(flattenPosition),
+                        ...rest,
+                      })
+                    );
+
+                    const gwasColocalisationCredibleSetsFiltered = gwasColocalisationCredibleSets
+                      .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
+                      .filter(d => d.h4 >= this.state.h4SliderValue)
+                      .sort(log2h4h3Comparator)
+                      .reverse();
+
+                    return (
+                      <React.Fragment>
+                        <Typography style={{ paddingTop: '10px' }}>
+                          <strong>GWAS</strong>
+                        </Typography>
+                        {gwasColocalisationCredibleSetsFiltered.length > 0 ? (
+                          gwasColocalisationCredibleSetsFiltered.map(d => {
+                            return (
+                              <CredibleSetWithRegional
+                                key={`gwasCredibleSet__${d.study.studyId}__${
+                                  d.indexVariant.id
+                                }`}
+                                credibleSetProps={{
+                                  label: traitAuthorYear(d.study),
+                                  start,
+                                  end,
+                                  h4: d.h4,
+                                  logH4H3: d.log2h4h3,
+                                  data: d.credibleSet,
+                                }}
+                                regionalProps={{
+                                  title: null,
+                                  studyId: d.study.studyId,
+                                  chromosome: d.indexVariant.chromosome,
+                                  start,
+                                  end,
+                                }}
+                              />
+                            );
+                          })
+                        ) : (
+                          <Typography align="center">
+                            No GWAS studies satisfying the applied filters.
+                          </Typography>
+                        )}
+                      </React.Fragment>
+                    );
+                  }}
+                </Query>
 
                 <Typography style={{ paddingTop: '10px' }}>
                   <strong>Genes</strong>
