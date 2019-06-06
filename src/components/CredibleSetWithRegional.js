@@ -1,6 +1,5 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import { loader } from 'graphql.macro';
 
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -9,8 +8,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { CredibleSet, Regional } from 'ot-charts';
-
-const REGIONAL_QUERY = loader('../queries/RegionalQuery.gql');
 
 const styles = () => ({
   container: {
@@ -26,7 +23,7 @@ class CredibleSetWithRegional extends React.Component {
   render() {
     const { classes, credibleSetProps, regionalProps } = this.props;
     const { expanded } = this.state;
-    const { studyId, chromosome, start, end, ...rest } = regionalProps;
+    const { query, variables, start, end, ...rest } = regionalProps;
     return (
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
@@ -43,10 +40,7 @@ class CredibleSetWithRegional extends React.Component {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {expanded && (
-            <Query
-              query={REGIONAL_QUERY}
-              variables={{ studyId, chromosome, start, end }}
-            >
+            <Query query={query} variables={variables}>
               {({ loading, error, data }) => {
                 if (loading || error) {
                   return null;
@@ -56,7 +50,7 @@ class CredibleSetWithRegional extends React.Component {
                   <div className={classes.container}>
                     <Regional
                       {...{
-                        data: data.gwasRegional.map(({ variant, pval }) => ({
+                        data: data.regional.map(({ variant, pval }) => ({
                           pval,
                           ...variant,
                         })),

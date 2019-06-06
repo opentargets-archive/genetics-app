@@ -30,6 +30,8 @@ import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import Slider from '../components/Slider';
 
 const STUDY_LOCUS_PAGE_QUERY = loader('../queries/StudyLocusPageQuery.gql');
+const GWAS_REGIONAL_QUERY = loader('../queries/GWASRegionalQuery.gql');
+const QTL_REGIONAL_QUERY = loader('../queries/QTLRegionalQuery.gql');
 
 const HALF_WINDOW = 250000;
 
@@ -46,6 +48,42 @@ gwasCredibleSet__${study.studyId}__${
 }: gwasCredibleSet(studyId: "${study.studyId}", variantId: "${
   indexVariant.id
 }") {
+  tagVariant {
+    id
+    rsId
+    position
+  }
+  pval
+  se
+  beta
+  postProb
+  MultisignalMethod
+  logABF
+  is95
+  is99
+}
+`;
+
+const qtlCredibleSetId = ({
+  qtlStudyName,
+  phenotypeId,
+  tissue,
+  indexVariant,
+}) =>
+  `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${tissue.id}__${
+    indexVariant.id
+  }`;
+const qtlCredibleSetQueryAliasedFragment = ({
+  qtlStudyName,
+  phenotypeId,
+  tissue,
+  indexVariant,
+}) => `
+qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${tissue.id}__${
+  indexVariant.id
+}: qtlCredibleSet(studyId: "${qtlStudyName}", variantId: "${
+  indexVariant.id
+}", phenotypeId: "${phenotypeId}", bioFeature: "${tissue.id}") {
   tagVariant {
     id
     rsId
@@ -112,12 +150,7 @@ class LocusTraitPage extends React.Component {
     const { match } = this.props;
     const { studyId, indexVariantId } = match.params;
 
-    const [
-      chromosome,
-      positionStr,
-      refAllele,
-      altAllele,
-    ] = indexVariantId.split('_');
+    const [chromosome, positionStr] = indexVariantId.split('_');
     const position = parseInt(positionStr);
     const start = position - HALF_WINDOW;
     const end = position + HALF_WINDOW;
@@ -168,10 +201,24 @@ class LocusTraitPage extends React.Component {
               genes,
             } = data;
 
-            const gwasCredibleSetQuery = gql(`
+            {
+              /* const gwasCredibleSetQuery = gql(`
 query GWASCredibleSetsQuery {
   ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
 }`);
+
+const qtlCredibleSetQuery = gql(`
+query QTLCredibleSetsQuery {
+  ${qtlColocalisation.map(qtlCredibleSetQueryAliasedFragment).join('')}
+}`); */
+            }
+
+            const colocalisationCredibleSetQuery = gql(`
+query CredibleSetsQuery {
+  ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
+  ${qtlColocalisation.map(qtlCredibleSetQueryAliasedFragment).join('')}
+}
+            `);
 
             return (
               <React.Fragment>
@@ -349,7 +396,7 @@ query GWASCredibleSetsQuery {
                   }}
                 />
 
-                <Query query={gwasCredibleSetQuery} variables={{}}>
+                <Query query={colocalisationCredibleSetQuery} variables={{}}>
                   {({ loading: loading2, error: error2, data: data2 }) => {
                     if (loading2 || error2) {
                       return null;
@@ -368,8 +415,34 @@ query GWASCredibleSetsQuery {
                         ...rest,
                       })
                     );
+                    const qtlColocalisationCredibleSets = qtlColocalisation.map(
+                      ({
+                        qtlStudyName,
+                        phenotypeId,
+                        tissue,
+                        indexVariant,
+                        ...rest
+                      }) => ({
+                        qtlStudyName,
+                        phenotypeId,
+                        tissue,
+                        indexVariant,
+                        credibleSet: data2[
+                          `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
+                            tissue.id
+                          }__${indexVariant.id}`
+                        ].map(flattenPosition),
+                        ...rest,
+                      })
+                    );
 
                     const gwasColocalisationCredibleSetsFiltered = gwasColocalisationCredibleSets
+                      .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
+                      .filter(d => d.h4 >= this.state.h4SliderValue)
+                      .sort(log2h4h3Comparator)
+                      .reverse();
+
+                    const qtlColocalisationCredibleSetsFiltered = qtlColocalisationCredibleSets
                       .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
                       .filter(d => d.h4 >= this.state.h4SliderValue)
                       .sort(log2h4h3Comparator)
@@ -397,8 +470,13 @@ query GWASCredibleSetsQuery {
                                 }}
                                 regionalProps={{
                                   title: null,
-                                  studyId: d.study.studyId,
-                                  chromosome: d.indexVariant.chromosome,
+                                  query: GWAS_REGIONAL_QUERY,
+                                  variables: {
+                                    studyId: d.study.studyId,
+                                    chromosome,
+                                    start,
+                                    end,
+                                  },
                                   start,
                                   end,
                                 }}
@@ -408,6 +486,49 @@ query GWASCredibleSetsQuery {
                         ) : (
                           <Typography align="center">
                             No GWAS studies satisfying the applied filters.
+                          </Typography>
+                        )}
+
+                        <Typography style={{ paddingTop: '10px' }}>
+                          <strong>QTL</strong>
+                        </Typography>
+                        {qtlColocalisationCredibleSetsFiltered.length > 0 ? (
+                          qtlColocalisationCredibleSetsFiltered.map(d => {
+                            return (
+                              <CredibleSetWithRegional
+                                key={`qtlCredibleSet__${d.qtlStudyName}__${
+                                  d.phenotypeId
+                                }__${d.tissue.id}__${d.indexVariant.id}`}
+                                credibleSetProps={{
+                                  label: `${d.qtlStudyName}: ${
+                                    d.gene.symbol
+                                  } in ${d.tissue.name}`,
+                                  start,
+                                  end,
+                                  h4: d.h4,
+                                  logH4H3: d.log2h4h3,
+                                  data: d.credibleSet,
+                                }}
+                                regionalProps={{
+                                  title: null,
+                                  query: QTL_REGIONAL_QUERY,
+                                  variables: {
+                                    studyId: d.qtlStudyName,
+                                    phenotypeId: d.phenotypeId,
+                                    bioFeature: d.tissue.id,
+                                    chromosome,
+                                    start,
+                                    end,
+                                  },
+                                  start,
+                                  end,
+                                }}
+                              />
+                            );
+                          })
+                        ) : (
+                          <Typography align="center">
+                            No QTL studies satisfying the applied filters.
                           </Typography>
                         )}
                       </React.Fragment>
@@ -433,120 +554,6 @@ query GWASCredibleSetsQuery {
             );
           }}
         </Query>
-
-        {/* 
-
-        
-
-        
-
-        
-
-        <Typography style={{ paddingTop: '10px' }}>
-          <strong>GWAS</strong>
-        </Typography>
-
-        {colocGWASTableDataWithStateFiltered
-          .sort(logH4H3Comparator)
-          .reverse()
-          .map(d => {
-            const { study, chrom, pos, ref, alt, h4, logH4H3 } = d;
-            const key = `${study}__null__null__${chrom}__${pos}__${ref}__${alt}`;
-            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-              CREDSETS_TABLE_DATA[key].length > 0 ? (
-              <CredibleSetWithRegional
-                key={key}
-                credibleSetProps={{
-                  label: traitAuthorYear(STUDY_INFOS[d.study]),
-                  start: START,
-                  end: END,
-                  h4,
-                  logH4H3,
-                  data:
-                    this.state.credSet95Value === 'all'
-                      ? CREDSETS_TABLE_DATA[key]
-                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
-                }}
-                regionalProps={{
-                  data: combineSumStatsWithCredSets({
-                    ...d,
-                    chromosome: CHROMOSOME,
-                  }),
-                  title: null,
-                  start: START,
-                  end: END,
-                }}
-              />
-            ) : null;
-          })}
-
-        {colocGWASTableDataWithStateFiltered.length === 0 ? (
-          <Typography align="center">
-            No GWAS studies satisfying the applied filters.
-          </Typography>
-        ) : null}
-
-        <Typography style={{ paddingTop: '10px' }}>
-          <strong>QTLs</strong>
-        </Typography>
-
-        {colocQtlTableDataWithStateFiltered
-          .sort(logH4H3Comparator)
-          .reverse()
-          .map(d => {
-            const {
-              study,
-              phenotype,
-              phenotypeSymbol,
-              bioFeature,
-              chrom,
-              pos,
-              ref,
-              alt,
-              h4,
-              logH4H3,
-            } = d;
-            const key = `${study}__${phenotype}__${bioFeature}__${chrom}__${pos}__${ref}__${alt}`;
-            return Object.keys(CREDSETS_TABLE_DATA).indexOf(key) >= 0 &&
-              CREDSETS_TABLE_DATA[key].length > 0 ? (
-              <CredibleSetWithRegional
-                key={key}
-                credibleSetProps={{
-                  label: `${study}: ${phenotypeSymbol} in ${bioFeature}`,
-                  start: START,
-                  end: END,
-                  h4,
-                  logH4H3,
-                  data:
-                    this.state.credSet95Value === 'all'
-                      ? CREDSETS_TABLE_DATA[key]
-                      : CREDSETS_TABLE_DATA[key].filter(d => d.is95CredibleSet),
-                }}
-                regionalProps={{
-                  data: combineSumStatsWithCredSets({
-                    ...d,
-                    chromosome: CHROMOSOME,
-                  }),
-                  title: null,
-                  start: START,
-                  end: END,
-                }}
-              />
-            ) : null;
-          })}
-
-        {colocQtlTableDataWithStateFiltered.length === 0 ? (
-          <Typography align="center">
-            No QTLs satisfying the applied filters.
-          </Typography>
-        ) : null}
-
-        
-
-        <SectionHeading
-          heading={`Genes`}
-          subheading={`Which genes are functionally implicated by variants at this locus?`}
-        /> */}
       </BasePage>
     );
   }

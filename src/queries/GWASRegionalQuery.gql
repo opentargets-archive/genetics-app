@@ -1,10 +1,10 @@
-query RegionalQuery(
+query GWASRegionalQuery(
   $studyId: String!
   $chromosome: String!
   $start: Long!
   $end: Long!
 ) {
-  gwasRegional(
+  regional: gwasRegional(
     studyId: $studyId
     chromosome: $chromosome
     start: $start
