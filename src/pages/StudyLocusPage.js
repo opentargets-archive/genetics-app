@@ -29,78 +29,9 @@ import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import Slider from '../components/Slider';
 
-import STUDY_INFOS from '../mock-data/study-info.json';
-
-import PAGE_SUMMARY_DATA from '../mock-data/specific/page-summary.json';
-import COLOC_QTL_TABLE_DATA from '../mock-data/specific/coloc-qtl-table.json';
-import COLOC_GWAS_TABLE_DATA from '../mock-data/specific/coloc-gwas-table.json';
-import COLOC_GWAS_HEATMAP_TABLE_DATA from '../mock-data/specific/coloc-gwas-heatmap-table.json';
-import SUMSTATS_TABLE_DATA from '../mock-data/specific/sum-stats-table.json';
-import CREDSETS_TABLE_DATA from '../mock-data/specific/credible-sets-table.json';
-import GENE_DATA from '../mock-data/genes.json';
-
 const STUDY_LOCUS_PAGE_QUERY = loader('../queries/StudyLocusPageQuery.gql');
 
-// // helper to augment summary stats with credible set information
-// const combineSumStatsWithCredSets = ({
-//   study,
-//   phenotype,
-//   bioFeature,
-//   chromosome,
-//   pos: position,
-//   ref,
-//   alt,
-// }) => {
-//   const ssKey = `${study}__${phenotype ? phenotype : 'null'}__${
-//     bioFeature ? bioFeature : 'null'
-//   }__${chromosome}`;
-//   const csKey = `${study}__${phenotype ? phenotype : 'null'}__${
-//     bioFeature ? bioFeature : 'null'
-//   }__${chromosome}__${position}__${ref}__${alt}`;
-//   const ss = SUMSTATS_TABLE_DATA[ssKey];
-//   const vKey = ({ chromosome, position, ref, alt }) =>
-//     `${chromosome}__${position}__${ref}__${alt}`;
-//   const lookup = CREDSETS_TABLE_DATA[csKey].reduce((acc, d) => {
-//     acc[vKey(d)] = d;
-//     return acc;
-//   }, {});
-//   const ssWith = ss.map(d => {
-//     if (Object.keys(lookup).indexOf(vKey(d)) >= 0) {
-//       const {
-//         posteriorProbability,
-//         logABF,
-//         is95CredibleSet,
-//         is99CredibleSet,
-//       } = lookup[vKey(d)];
-//       return {
-//         ...d,
-//         posteriorProbability,
-//         logABF,
-//         is95CredibleSet,
-//         is99CredibleSet,
-//       };
-//     } else {
-//       return d;
-//     }
-//   });
-//   return ssWith;
-// };
-
-const STUDY_ID = PAGE_SUMMARY_DATA['study'];
-const STUDY_INFO = STUDY_INFOS[STUDY_ID];
-const CHROMOSOME = PAGE_SUMMARY_DATA['chromosome'];
-const POSITION = PAGE_SUMMARY_DATA['position'];
-const VARIANT_ID = `${CHROMOSOME}_${POSITION}_${PAGE_SUMMARY_DATA.ref}_${
-  PAGE_SUMMARY_DATA.alt
-}`;
 const HALF_WINDOW = 250000;
-const START = POSITION - HALF_WINDOW;
-const END = POSITION + HALF_WINDOW;
-
-const GENES = { genes: GENE_DATA };
-
-const PAGE_KEY = `${PAGE_SUMMARY_DATA['study']}__null__null__${CHROMOSOME}`;
-const SUMSTATS_PAGE_STUDY = SUMSTATS_TABLE_DATA[PAGE_KEY];
 
 const generateComparatorFromAccessor = accessor => (a, b) => {
   const aValue = accessor(a);
@@ -154,18 +85,12 @@ const flatExonsToPairedExons = genes => {
   return paired;
 };
 
-const PAGE_CREDSET_KEY = `${STUDY_ID}__null__null__${CHROMOSOME}__${POSITION}__${
-  PAGE_SUMMARY_DATA.ref
-}__${PAGE_SUMMARY_DATA.alt}`;
-
-const pageCredibleSet = CREDSETS_TABLE_DATA[PAGE_CREDSET_KEY];
-
 class LocusTraitPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
     credSet95Value: 'all',
-    log2h4h3SliderValue: 1, // ln(2) equivalent to H4 being double H3; suggested by Ed
+    log2h4h3SliderValue: 1, // equivalent to H4 being double H3; suggested by Ed
     h4SliderValue: 0.2, // 20% default; suggested by Ed
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
@@ -348,7 +273,7 @@ query GWASCredibleSetsQuery {
                   center={
                     <Typography>
                       Showing credible sets for{' '}
-                      <strong>{traitAuthorYear(STUDY_INFO)}</strong> and GWAS
+                      <strong>{traitAuthorYear(studyInfo)}</strong> and GWAS
                       studies/QTLs in colocalisation. Expand the section to see
                       the underlying regional plot.
                     </Typography>
