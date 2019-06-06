@@ -59,9 +59,9 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
           <Tooltip
             title={`log2(H4/H3): ${log2h4h3.toPrecision(
               3
-            )}, H3: ${h3.toPrecision(3)}, H4: ${h4.toPrecision(
-              3
-            )}, QTL beta: ${beta.toPrecision(3)}`}
+            )}, H3: ${h3.toPrecision(3)}, H4: ${h4.toPrecision(3)}, QTL beta: ${
+              beta ? beta.toPrecision(3) : 'N/A'
+            }`}
           >
             <span>
               <DataCircle radius={qtlRadius} colorScheme={qtlColor} />
