@@ -20,6 +20,13 @@ const tableColumns = [
     renderCell: d => d.study.pubAuthor,
   },
   {
+    id: 'indexVariant',
+    label: 'Lead variant',
+    renderCell: d => (
+      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+    ),
+  },
+  {
     id: 'beta',
     label: 'Study beta',
     renderCell: d => significantFigures(d.beta),

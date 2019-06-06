@@ -27,6 +27,13 @@ const tableColumns = [
     label: 'Source',
   },
   {
+    id: 'indexVariant',
+    label: 'Lead variant',
+    renderCell: d => (
+      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+    ),
+  },
+  {
     id: 'beta',
     label: 'QTL beta',
     renderCell: d => significantFigures(d.beta),
