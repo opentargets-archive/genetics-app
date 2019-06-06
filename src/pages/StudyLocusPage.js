@@ -64,15 +64,6 @@ gwasCredibleSet__${study.studyId}__${
 }
 `;
 
-const qtlCredibleSetId = ({
-  qtlStudyName,
-  phenotypeId,
-  tissue,
-  indexVariant,
-}) =>
-  `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${tissue.id}__${
-    indexVariant.id
-  }`;
 const qtlCredibleSetQueryAliasedFragment = ({
   qtlStudyName,
   phenotypeId,
