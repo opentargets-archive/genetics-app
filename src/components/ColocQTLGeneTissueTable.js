@@ -22,8 +22,8 @@ const tissueComparator = t => (a, b) => {
 const ColocTable = ({ loading, error, filenameStem, data }) => {
   const uniquePhenotypeIds = Object.values(
     data.reduce((acc, d) => {
-      const { phenotypeId, gene } = d;
-      acc[phenotypeId] = { phenotypeId, gene };
+      const { phenotypeId, gene, qtlStudyName } = d;
+      acc[phenotypeId] = { phenotypeId, gene, qtlStudyName };
       return acc;
     }, {})
   );
@@ -70,21 +70,29 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
         );
       },
     }));
-  const dataByPhenotypeId = uniquePhenotypeIds.map(({ phenotypeId, gene }) => ({
-    phenotypeId,
-    gene,
-    ...uniqueTissues.reduce((acc, t) => {
-      const items = data
-        .filter(d => d.phenotypeId === phenotypeId && d.tissue.id === t.id)
-        .map(d => ({ h3: d.h3, h4: d.h4, log2h4h3: d.log2h4h3, beta: d.beta }))
-        .sort((a, b) => d3.descending(a.log2h4h3, b.log2h4h3));
+  const dataByPhenotypeId = uniquePhenotypeIds.map(
+    ({ phenotypeId, gene, qtlStudyName }) => ({
+      phenotypeId,
+      gene,
+      qtlStudyName,
+      ...uniqueTissues.reduce((acc, t) => {
+        const items = data
+          .filter(d => d.phenotypeId === phenotypeId && d.tissue.id === t.id)
+          .map(d => ({
+            h3: d.h3,
+            h4: d.h4,
+            log2h4h3: d.log2h4h3,
+            beta: d.beta,
+          }))
+          .sort((a, b) => d3.descending(a.log2h4h3, b.log2h4h3));
 
-      // there could be multiple loci for gene-tissue, so pick
-      // by highest log2h4h3 value
-      acc[t.id] = items.length > 0 ? items[0] : null;
-      return acc;
-    }, {}),
-  }));
+        // there could be multiple loci for gene-tissue, so pick
+        // by highest log2h4h3 value
+        acc[t.id] = items.length > 0 ? items[0] : null;
+        return acc;
+      }, {}),
+    })
+  );
   const geneColumn = {
     id: 'gene.symbol',
     label: 'Gene',
@@ -94,7 +102,16 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     id: 'phenotypeId',
     label: 'Phenotype',
   };
-  const tableColumns = [geneColumn, phenotypeIdColumn, ...tissueColumns];
+  const studyColumn = {
+    id: 'qtlStudyName',
+    label: 'Source',
+  };
+  const tableColumns = [
+    geneColumn,
+    phenotypeIdColumn,
+    studyColumn,
+    ...tissueColumns,
+  ];
   return (
     <OtTable
       loading={loading}
