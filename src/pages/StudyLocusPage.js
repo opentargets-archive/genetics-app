@@ -377,8 +377,13 @@ query CredibleSetsQuery {
                   }}
                   regionalProps={{
                     title: null,
-                    studyId: studyInfo.studyId,
-                    chromosome,
+                    query: GWAS_REGIONAL_QUERY,
+                    variables: {
+                      studyId: studyInfo.studyId,
+                      chromosome,
+                      start,
+                      end,
+                    },
                     start,
                     end,
                   }}
