@@ -25,7 +25,7 @@ import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
-import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
+// import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import Slider from '../components/Slider';
 
@@ -275,7 +275,13 @@ query CredibleSetsQuery {
                     </React.Fragment>
                   }
                 />
-                <Tabs
+                <ColocGWASTable
+                  loading={false}
+                  error={false}
+                  data={gwasColocalisation}
+                  handleToggleRegional={this.handleToggleRegional}
+                />
+                {/* <Tabs
                   variant="scrollable"
                   value={this.state.gwasTabsValue}
                   onChange={this.handleGWASTabsChange}
@@ -297,7 +303,7 @@ query CredibleSetsQuery {
                     data={gwasColocalisation}
                     handleToggleRegional={this.handleToggleRegional}
                   />
-                ) : null}
+                ) : null} */}
 
                 <SectionHeading
                   heading={`Credible Set Overlap`}
