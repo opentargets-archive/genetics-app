@@ -168,10 +168,10 @@ class LocusTraitPage extends React.Component {
 
             const {
               studyInfo,
-              variantInfo,
+              // variantInfo,
               gwasColocalisation,
               qtlColocalisation,
-              gwasColocalisationForRegion,
+              // gwasColocalisationForRegion,
               pageCredibleSet,
               genes,
             } = data;
@@ -180,7 +180,6 @@ class LocusTraitPage extends React.Component {
             const maxGWASLog2h4h3 = d3.max(gwasColocalisation, d => d.log2h4h3);
             const maxLog2h4h3 = d3.max([maxQTLLog2h4h3, maxGWASLog2h4h3]);
 
-            console.log(gwasColocalisation.length, qtlColocalisation.length);
             const shouldMakeColocalisationCredibleSetQuery =
               gwasColocalisation.length > 0 || qtlColocalisation.length > 0;
             const colocalisationCredibleSetQuery = shouldMakeColocalisationCredibleSetQuery
