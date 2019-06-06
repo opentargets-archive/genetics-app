@@ -18,19 +18,19 @@ import { externalLinks } from '../constants';
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
   {
-    label: '1_154426264_C_T',
-    url: '/variant/1_154426264_C_T',
+    label: '1_154453788_C_T',
+    url: '/variant/1_154453788_C_T',
     type: 'variant-id',
   },
-  { label: 'rs4129267', url: '/variant/1_154426264_C_T', type: 'variant-rsid' },
+  { label: 'rs4129267', url: '/variant/1_154453788_C_T', type: 'variant-rsid' },
   {
     label: 'LDL cholesterol (Klarin D et al. 2018)',
-    url: '/study/GCST006612_1',
+    url: '/study/GCST006612',
     type: 'study',
   },
   {
-    label: "Crohn's disease [EA] (Liu JZ et al. 2015)",
-    url: '/study/GCST003044_1',
+    label: "Crohn's disease (Liu JZ et al. 2015)",
+    url: '/study/GCST003044',
     type: 'study',
   },
 ];
