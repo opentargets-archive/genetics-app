@@ -20,13 +20,16 @@ const tissueComparator = t => (a, b) => {
 };
 
 const ColocTable = ({ loading, error, filenameStem, data }) => {
-  const uniquePhenotypeIds = Object.values(
-    data.reduce((acc, d) => {
-      const { phenotypeId, gene, qtlStudyName } = d;
-      acc[phenotypeId] = { phenotypeId, gene, qtlStudyName };
-      return acc;
-    }, {})
-  );
+  const uniqueStudyGenePhenotypes = data.reduce((acc, d) => {
+    const { phenotypeId, gene, qtlStudyName } = d;
+    acc[`${qtlStudyName}__${gene.id}__${phenotypeId}`] = {
+      phenotypeId,
+      gene,
+      qtlStudyName,
+    };
+    return acc;
+  }, {});
+  const uniquePhenotypeIds = Object.values(uniqueStudyGenePhenotypes);
   const uniqueTissues = Object.values(
     data.reduce((acc, d) => {
       acc[d.tissue.id] = d.tissue;
@@ -77,7 +80,13 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
       qtlStudyName,
       ...uniqueTissues.reduce((acc, t) => {
         const items = data
-          .filter(d => d.phenotypeId === phenotypeId && d.tissue.id === t.id)
+          .filter(
+            d =>
+              d.phenotypeId === phenotypeId &&
+              d.gene.id === gene.id &&
+              d.qtlStudyName === qtlStudyName &&
+              d.tissue.id === t.id
+          )
           .map(d => ({
             h3: d.h3,
             h4: d.h4,
@@ -87,7 +96,16 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
           .sort((a, b) => d3.descending(a.log2h4h3, b.log2h4h3));
 
         // there could be multiple loci for gene-tissue, so pick
-        // by highest log2h4h3 value
+        // by highest log2h4h3 value (this should not happen due
+        // to deduplication on index variants)
+        if (items.length > 1) {
+          console.info(
+            `Multiple entries found: ${
+              gene.symbol
+            }, ${qtlStudyName}, ${phenotypeId}`,
+            items
+          );
+        }
         acc[t.id] = items.length > 0 ? items[0] : null;
         return acc;
       }, {}),
