@@ -42,6 +42,7 @@ query GenePageQuery($geneId: String!) {
       pubAuthor
       pubDate
       pmid
+      hasSumsStats
     }
     qtlStudyId
     phenotypeId
