@@ -146,6 +146,15 @@ class HomePage extends Component {
                   </a>
                 ))}
               </Grid>
+              <Typography
+                style={{
+                  marginTop: '25px',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}
+              >
+                Note: All genomic coordinates are now based on GRCh38
+              </Typography>
               <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
                 <Link external to="http://eepurl.com/dHnchn">
                   Subscribe to our newsletter
