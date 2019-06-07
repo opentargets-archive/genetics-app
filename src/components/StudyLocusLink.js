@@ -54,19 +54,24 @@ const StudyLocusLink = ({
       }
       placement="top"
     >
-      <div className={classes.container}>
-        <Link
-          to={`/study-locus/${studyId}/${indexVariantId}`}
-          className={classes.link}
-        >
-          <Button
-            disabled={!hasSumsStats}
-            className={big ? classes.buttonBig : classes.button}
+      {hasSumsStats ? (
+        <div className={classes.container}>
+          <Link
+            to={`/study-locus/${studyId}/${indexVariantId}`}
+            className={classes.link}
           >
+            <Button className={big ? classes.buttonBig : classes.button}>
+              Colocalisation
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <div className={classes.container}>
+          <Button disabled className={big ? classes.buttonBig : classes.button}>
             Colocalisation
           </Button>
-        </Link>
-      </div>
+        </div>
+      )}
     </Tooltip>
   );
 };
