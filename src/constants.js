@@ -1,6 +1,13 @@
-import { platformUrl, gitRevision, packageVersion } from './configuration';
+import {
+  contactUrl as contactUrlConfig,
+  gitRevision,
+  packageVersion,
+  platformUrl,
+} from './configuration';
 
 export const pvalThreshold = 4.94e-322;
+
+export const contactUrl = contactUrlConfig;
 
 export const externalLinks = {
   about: [
@@ -48,9 +55,9 @@ export const externalLinks = {
       url: 'https://genetics-docs.opentargets.org',
     },
     {
-      label: 'geneticsportal@opentargets.org',
+      label: 'Contact',
       iconClasses: 'fa fa-envelope',
-      url: 'mailto:geneticsportal@opentargets.org',
+      url: `${contactUrl}`,
     },
   ],
   social: [
