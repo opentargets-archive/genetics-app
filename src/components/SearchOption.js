@@ -1,4 +1,5 @@
 import React from 'react';
+import Chip from '@material-ui/core/Chip';
 import { SearchOption, commaSeparate } from 'ot-ui';
 
 const Option = ({ data }) => {
@@ -27,7 +28,26 @@ const Option = ({ data }) => {
               {commaSeparate(data.nInitial)}
               {data.numAssocLoci ? (
                 <span style={{ float: 'right' }}>
-                  <strong>{data.numAssocLoci} associated loci</strong>
+                  {data.hasSumsStats ? (
+                    <Chip
+                      style={{
+                        height: '16px',
+                        fontSize: '0.7rem',
+                        marginRight: '16px',
+                      }}
+                      color="primary"
+                      label="summary statistics"
+                    />
+                  ) : null}
+                  <span
+                    style={{
+                      minWidth: '100px',
+                      display: 'inline-block',
+                      textAlign: 'right',
+                    }}
+                  >
+                    <strong>{data.numAssocLoci} associated loci</strong>
+                  </span>
                 </span>
               ) : null}
             </React.Fragment>
