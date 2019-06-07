@@ -49,7 +49,7 @@ const StudyLocusLink = ({
     <Tooltip
       title={
         hasSumsStats
-          ? 'View colocalisation results'
+          ? 'View colocalisation results at this locus'
           : 'Colocalisation results are only available for studies that have summary statistics available'
       }
       placement="top"
