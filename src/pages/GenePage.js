@@ -24,6 +24,7 @@ import {
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
+import ColocForGeneTable from '../components/ColocForGeneTable';
 import { platformUrl } from '../configuration';
 
 const GENE_PAGE_QUERY = loader('../queries/GenePageQuery.gql');
@@ -137,6 +138,8 @@ class GenePage extends React.Component {
           {({ loading, error, data }) => {
             const isValidGene = hasGeneData(data, geneId);
             const gene = isValidGene ? geneData(data) : {};
+
+            const { colocalisationsForGene } = data;
 
             // all
             const associatedStudies =
@@ -400,6 +403,16 @@ class GenePage extends React.Component {
                   authorFilterOptions={authorFilterOptions}
                   authorFilterHandler={this.handleAuthorFilter}
                   filenameStem={`${geneId}-associated-studies`}
+                />
+                <SectionHeading
+                  heading={`Colocalising studies`}
+                  subheading={`Which studies have evidence of colocalisation with molecular QTLs for ${symbol}?`}
+                />
+                <ColocForGeneTable
+                  loading={loading}
+                  error={error}
+                  data={colocalisationsForGene || []}
+                  filenameStem={`${geneId}-colocalising-studies`}
                 />
               </React.Fragment>
             );

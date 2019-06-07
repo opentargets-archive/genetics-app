@@ -31,4 +31,26 @@ query GenePageQuery($geneId: String!) {
     betaCIUpper
     direction
   }
+  colocalisationsForGene(geneId: $geneId) {
+    leftVariant {
+      id
+      rsId
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pmid
+    }
+    qtlStudyId
+    phenotypeId
+    tissue {
+      id
+      name
+    }
+    h3
+    h4
+    log2h4h3
+  }
 }
