@@ -27,7 +27,7 @@
     "graphql-tag": "^2.10.1",
     "lodash": "^4.17.10",
     "ot-charts": "^0.0.45",
-    "ot-ui": "^0.0.84",
+    "ot-ui": "^0.0.88",
     "polished": "^2.1.1",
     "query-string": "5",
     "react": "^16.8.6",
