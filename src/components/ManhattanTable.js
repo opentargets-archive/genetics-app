@@ -102,9 +102,9 @@ export const tableColumns = studyId => [
   },
   {
     id: 'bestGenes',
-    label: 'Top Ranked Genes',
+    label: 'Top V2G Genes',
     tooltip:
-      'The list of genes with equal best overall score for this lead variant',
+      'The top ranked genes from our variant-to-gene pipeline for this lead variant',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
@@ -117,9 +117,9 @@ export const tableColumns = studyId => [
   },
   {
     id: 'bestColocGenes',
-    label: 'Top Ranked Colocalising Genes',
+    label: 'Top Colocalising Genes',
     tooltip:
-      'The list of colocalising genes with equal best overall score for this lead variant',
+      'The list of genes which colocalise at this locus with PP(H4) > 0.95 and log2(H4/H3) > log2(5)',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestColocGenes.map((d, i) => (
