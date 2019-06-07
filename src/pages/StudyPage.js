@@ -37,9 +37,12 @@ class StudyPage extends React.Component {
         <Query query={STUDY_PAGE_QUERY} variables={{ studyId }}>
           {({ loading, error, data }) => {
             const isStudyWithInfo = hasStudyInfo(data);
-            const { pubAuthor, pubDate, pubJournal } = isStudyWithInfo
-              ? data.studyInfo
-              : {};
+            const {
+              pubAuthor,
+              pubDate,
+              pubJournal,
+              hasSumsStats,
+            } = isStudyWithInfo ? data.studyInfo : {};
             return (
               <React.Fragment>
                 <ScrollToTop />
@@ -76,7 +79,9 @@ class StudyPage extends React.Component {
                   ]}
                 />
                 {isStudyWithInfo ? <StudySummary {...data.studyInfo} /> : null}
-                <ManhattanContainer {...{ studyId, loading, error, data }} />
+                <ManhattanContainer
+                  {...{ studyId, hasSumsStats, loading, error, data }}
+                />
               </React.Fragment>
             );
           }}

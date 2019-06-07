@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { Link, Button } from 'ot-ui';
 
@@ -7,6 +8,7 @@ const styles = {
   button: {
     lineHeight: 1,
     minWidth: '110px',
+    marginLeft: '2px',
   },
   buttonBig: {
     fontSize: '1.1rem',
@@ -31,18 +33,41 @@ const styles = {
   link: {
     textDecoration: 'none',
   },
+  container: {
+    display: 'inline-block',
+  },
 };
 
-const StudyLocusLink = ({ big, studyId, indexVariantId, classes }) => {
+const StudyLocusLink = ({
+  big,
+  studyId,
+  indexVariantId,
+  classes,
+  hasSumsStats,
+}) => {
   return (
-    <Link
-      to={`/study-locus/${studyId}/${indexVariantId}`}
-      className={classes.link}
+    <Tooltip
+      title={
+        hasSumsStats
+          ? 'View colocalisation results'
+          : 'Colocalisation results are only available for studies that have summary statistics available'
+      }
+      placement="top"
     >
-      <Button gradient className={big ? classes.buttonBig : classes.button}>
-        Colocalisation
-      </Button>
-    </Link>
+      <div className={classes.container}>
+        <Link
+          to={`/study-locus/${studyId}/${indexVariantId}`}
+          className={classes.link}
+        >
+          <Button
+            disabled={!hasSumsStats}
+            className={big ? classes.buttonBig : classes.button}
+          >
+            Colocalisation
+          </Button>
+        </Link>
+      </div>
+    </Tooltip>
   );
 };
 

@@ -89,7 +89,7 @@ class ManhattanContainer extends React.Component {
   }
 
   render() {
-    const { data, loading, error, studyId } = this.props;
+    const { data, loading, error, studyId, hasSumsStats } = this.props;
     const { associations, start, end } = this.state;
 
     const significantLociCount = significantLoci(data);
@@ -144,6 +144,7 @@ class ManhattanContainer extends React.Component {
             return start <= assoc.globalPosition && assoc.globalPosition <= end;
           })}
           studyId={studyId}
+          hasSumsStats={hasSumsStats}
           filenameStem={`${studyId}-independently-associated-loci`}
         />
       </React.Fragment>

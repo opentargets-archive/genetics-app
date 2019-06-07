@@ -16,7 +16,7 @@ import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import cytobandComparator from '../logic/cytobandComparator';
 
-export const tableColumns = studyId => [
+export const tableColumns = (studyId, hasSumsStats) => [
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
@@ -134,22 +134,19 @@ export const tableColumns = studyId => [
     id: 'locus',
     label: 'View',
     renderCell: rowData => (
-      <LocusLink
-        chromosome={rowData.chromosome}
-        position={rowData.position}
-        selectedIndexVariants={[rowData.indexVariantId]}
-        selectedStudies={[studyId]}
-      />
-    ),
-  },
-  {
-    id: 'studyLocus',
-    label: 'View',
-    renderCell: rowData => (
-      <StudyLocusLink
-        indexVariantId={rowData.indexVariantId}
-        studyId={studyId}
-      />
+      <React.Fragment>
+        <LocusLink
+          chromosome={rowData.chromosome}
+          position={rowData.position}
+          selectedIndexVariants={[rowData.indexVariantId]}
+          selectedStudies={[studyId]}
+        />
+        <StudyLocusLink
+          hasSumsStats={hasSumsStats}
+          indexVariantId={rowData.indexVariantId}
+          studyId={studyId}
+        />
+      </React.Fragment>
     ),
   },
 ];
@@ -183,7 +180,14 @@ const getDownloadData = dataWithCytoband => {
   });
 };
 
-function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
+function ManhattanTable({
+  loading,
+  error,
+  data,
+  studyId,
+  hasSumsStats,
+  filenameStem,
+}) {
   const dataWithCytoband = data.map(d => {
     const { chromosome, position } = d;
     return {
@@ -191,7 +195,7 @@ function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
       cytoband: getCytoband(chromosome, position),
     };
   });
-  const columns = tableColumns(studyId);
+  const columns = tableColumns(studyId, hasSumsStats);
   const downloadColumns = getDownloadColumns(columns);
   const downloadData = getDownloadData(dataWithCytoband);
 

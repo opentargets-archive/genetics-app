@@ -9,6 +9,7 @@ query StudyPageQuery($studyId: String!) {
     nInitial
     nReplication
     nCases
+    hasSumsStats
   }
   manhattan(studyId: $studyId) {
     associations {

@@ -36,7 +36,7 @@ const styles = {
 const OverlapLink = ({ big, studyId, classes }) => {
   return (
     <Link to={`/study-comparison/${studyId}`} className={classes.link}>
-      <Button gradient className={big ? classes.buttonBig : classes.button}>
+      <Button className={big ? classes.buttonBig : classes.button}>
         Compare Studies
         <OverlapIcon className={big ? classes.iconBig : classes.icon} />
       </Button>
