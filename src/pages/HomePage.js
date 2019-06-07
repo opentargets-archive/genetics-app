@@ -24,8 +24,8 @@ const EXAMPLES = [
   },
   { label: 'rs4129267', url: '/variant/1_154453788_C_T', type: 'variant-rsid' },
   {
-    label: 'LDL cholesterol (Klarin D et al. 2018)',
-    url: '/study/GCST006612',
+    label: 'LDL cholesterol (Willer CJ et al. 2013)',
+    url: '/study/GCST002222',
     type: 'study',
   },
   {
