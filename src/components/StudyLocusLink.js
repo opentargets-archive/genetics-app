@@ -50,7 +50,7 @@ const StudyLocusLink = ({
       title={
         hasSumsStats
           ? 'View colocalisation results at this locus'
-          : 'Colocalisation results are only available for studies that have summary statistics available'
+          : 'Colocalisation results are only available for studies that have summary statistics'
       }
       placement="top"
     >
