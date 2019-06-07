@@ -201,6 +201,7 @@ export const tableColumns = ({
     label: 'View',
     renderCell: rowData => (
       <StudyLocusLink
+        hasSumsStats={rowData.study.hasSumsStats}
         indexVariantId={rowData.indexVariantId}
         studyId={rowData.studyId}
       />
