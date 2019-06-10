@@ -17,7 +17,6 @@ import AssociatedIndexVariantsTable from '../components/AssociatedIndexVariantsT
 import AssociatedGenes from '../components/AssociatedGenes';
 import ScrollToTop from '../components/ScrollToTop';
 import LocusLink from '../components/LocusLink';
-import transformGenesForVariantsSchema from '../logic/transformGenesForVariantSchema';
 import PheWASSection from '../components/PheWASSection';
 import GnomADTable from '../components/GnomADTable';
 
@@ -250,9 +249,7 @@ class VariantPage extends React.Component {
                 {isGeneVariant ? (
                   <AssociatedGenes
                     variantId={variantId}
-                    genesForVariantSchema={transformGenesForVariantsSchema(
-                      data.genesForVariantSchema
-                    )}
+                    genesForVariantSchema={data.genesForVariantSchema}
                     genesForVariant={data.genesForVariant}
                   />
                 ) : (

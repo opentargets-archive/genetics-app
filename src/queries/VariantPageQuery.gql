@@ -29,6 +29,10 @@ query VariantPageQuery($variantId: String!) {
     qtls {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -37,6 +41,10 @@ query VariantPageQuery($variantId: String!) {
     intervals {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -45,6 +53,10 @@ query VariantPageQuery($variantId: String!) {
     functionalPredictions {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -53,6 +65,10 @@ query VariantPageQuery($variantId: String!) {
     distances {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
