@@ -34,16 +34,24 @@ const tableColumns = [
   {
     id: 'h3',
     label: 'H3',
+    tooltip: (
+      <React.Fragment>
+        Posterior probability that the signals <strong>do not</strong>{' '}
+        colocalise
+      </React.Fragment>
+    ),
     renderCell: d => significantFigures(d.h3),
   },
   {
     id: 'h4',
     label: 'H4',
+    tooltip: 'Posterior probability that the signals colocalise',
     renderCell: d => significantFigures(d.h4),
   },
   {
     id: 'log2h4h3',
     label: 'log2(H4/H3)',
+    tooltip: 'Log-likelihood that the signals colocalise',
     renderCell: d => significantFigures(d.log2h4h3),
   },
 ];
