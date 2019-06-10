@@ -14,7 +14,7 @@ const tableColumns = [
   },
   {
     id: 'phenotypeId',
-    label: 'Phenotype',
+    label: 'Molecular trait',
     // renderCell: d => (d.phenotypeId !== d.gene.id ? d.phenotypeId : null),
   },
   {

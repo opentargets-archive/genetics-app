@@ -118,7 +118,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
   };
   const phenotypeIdColumn = {
     id: 'phenotypeId',
-    label: 'Phenotype',
+    label: 'Molecular trait',
   };
   const studyColumn = {
     id: 'qtlStudyName',
