@@ -29,6 +29,7 @@ import ColocGWASTable from '../components/ColocGWASTable';
 // import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import Slider from '../components/Slider';
+import LocusLink from '../components/LocusLink';
 
 const STUDY_LOCUS_PAGE_QUERY = loader('../queries/StudyLocusPageQuery.gql');
 const GWAS_REGIONAL_QUERY = loader('../queries/GWASRegionalQuery.gql');
@@ -212,25 +213,40 @@ query CredibleSetsQuery {
                     studyInfo.traitReported
                   }, ${indexVariantId})`}</title>
                 </Helmet>
-                <Typography variant="h4" color="textSecondary">
-                  {`${studyInfo.traitReported}`}
-                </Typography>
-                <Typography variant="subtitle1">
-                  {studyInfo.pubAuthor}{' '}
-                  {studyInfo.pubDate
-                    ? `(${new Date(studyInfo.pubDate).getFullYear()})`
-                    : null}{' '}
-                  {studyInfo.pubJournal ? (
-                    <em>{studyInfo.pubJournal}</em>
-                  ) : null}
-                </Typography>
-                <Typography variant="h6" color="textSecondary">
-                  Locus around{' '}
-                  <Link to={`/variant/${indexVariantId}`}>
-                    {indexVariantId}
-                    {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
-                  </Link>
-                </Typography>
+                <Grid container justify="space-between">
+                  <Grid item>
+                    <Typography variant="h4" color="textSecondary">
+                      {`${studyInfo.traitReported}`}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {studyInfo.pubAuthor}{' '}
+                      {studyInfo.pubDate
+                        ? `(${new Date(studyInfo.pubDate).getFullYear()})`
+                        : null}{' '}
+                      {studyInfo.pubJournal ? (
+                        <em>{studyInfo.pubJournal}</em>
+                      ) : null}
+                    </Typography>
+                    <Typography variant="h6" color="textSecondary">
+                      Locus around{' '}
+                      <Link to={`/variant/${indexVariantId}`}>
+                        {indexVariantId}
+                        {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
+                      </Link>
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <LocusLink
+                      big
+                      chromosome={chromosome}
+                      position={position}
+                      selectedStudies={[studyId]}
+                      selectedIndexVariants={[indexVariantId]}
+                    >
+                      View locus
+                    </LocusLink>
+                  </Grid>
+                </Grid>
 
                 <SectionHeading
                   heading={`QTL Colocalisation`}
