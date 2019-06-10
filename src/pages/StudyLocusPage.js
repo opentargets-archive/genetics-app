@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 
 import {
+  Link,
   Tab,
   Tabs,
   SectionHeading,
@@ -169,7 +170,7 @@ class LocusTraitPage extends React.Component {
 
             const {
               studyInfo,
-              // variantInfo,
+              variantInfo,
               gwasColocalisation,
               qtlColocalisation,
               // gwasColocalisationForRegion,
@@ -224,7 +225,11 @@ query CredibleSetsQuery {
                   ) : null}
                 </Typography>
                 <Typography variant="h6" color="textSecondary">
-                  {`Locus around ${indexVariantId}`}
+                  Locus around{' '}
+                  <Link to={`/variant/${indexVariantId}`}>
+                    {indexVariantId}
+                    {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
+                  </Link>
                 </Typography>
 
                 <SectionHeading
