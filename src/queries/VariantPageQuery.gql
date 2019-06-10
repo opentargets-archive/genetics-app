@@ -1,6 +1,11 @@
 query VariantPageQuery($variantId: String!) {
   variantInfo(variantId: $variantId) {
     rsId
+    chromosome
+    position
+    idB37
+    chromosomeB37
+    positionB37
     nearestGene {
       id
       symbol

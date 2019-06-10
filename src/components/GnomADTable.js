@@ -30,6 +30,17 @@ const styles = () => ({
 const GnomADTable = ({ classes, data, variantId }) => (
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
+      <Typography variant="subtitle1">Location</Typography>
+      <Typography variant="subtitle2">
+        <strong>GRCh38:</strong> {data.chromosome}:
+        {commaSeparate(data.position)}
+      </Typography>
+      <Typography variant="subtitle2">
+        <strong>GRCh37:</strong> {data.chromosomeB37}:
+        {commaSeparate(data.positionB37)}
+      </Typography>
+      <br />
+
       <Typography variant="subtitle1">External references</Typography>
       <Typography variant="subtitle2">
         <strong>Ensembl:</strong>{' '}
@@ -44,15 +55,15 @@ const GnomADTable = ({ classes, data, variantId }) => (
       </Typography>
       <Typography variant="subtitle2">
         <strong>gnomAD:</strong>{' '}
-        {variantId ? (
+        {data.idB37 ? (
           <Link
             external
-            to={`http://gnomad.broadinstitute.org/variant/${variantId.replace(
+            to={`http://gnomad.broadinstitute.org/variant/${data.idB37.replace(
               /_/g,
               '-'
             )}`}
           >
-            {variantId.replace(/_/g, '-')}
+            {data.idB37.replace(/_/g, '-')}
           </Link>
         ) : null}
       </Typography>
