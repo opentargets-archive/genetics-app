@@ -123,7 +123,7 @@ class LocusTraitPage extends React.Component {
     gwasTabsValue: 'heatmap',
     credSet95Value: 'all',
     log2h4h3SliderValue: 1, // equivalent to H4 being double H3; suggested by Ed
-    h4SliderValue: 0.2, // 20% default; suggested by Ed
+    h4SliderValue: 0.95, // 95% default; suggested by Ed
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -336,7 +336,7 @@ query CredibleSetsQuery {
                             <FormControlLabel
                               value="all"
                               control={<Radio />}
-                              label="all"
+                              label="PP > 0.1%"
                             />
                           </RadioGroup>
                         </div>
