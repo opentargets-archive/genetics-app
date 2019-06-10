@@ -29,6 +29,8 @@ const tableColumns = [
   {
     id: 'beta',
     label: 'Study beta',
+    tooltip:
+      'Effect with respect to the alternative allele of the page variant',
     renderCell: d => significantFigures(d.beta),
   },
   {

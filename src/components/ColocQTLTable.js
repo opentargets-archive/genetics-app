@@ -36,6 +36,8 @@ const tableColumns = [
   {
     id: 'beta',
     label: 'QTL beta',
+    tooltip:
+      'QTL effect with respect to the alternative allele of the page variant',
     renderCell: d => significantFigures(d.beta),
   },
   {
