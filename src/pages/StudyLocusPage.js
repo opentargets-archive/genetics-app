@@ -141,6 +141,7 @@ class LocusTraitPage extends React.Component {
     this.setState({ h4SliderValue });
   };
   render() {
+    const { credSet95Value } = this.state;
     const { match } = this.props;
     const { studyId, indexVariantId } = match.params;
 
@@ -374,7 +375,12 @@ query CredibleSetsQuery {
                     label: traitAuthorYear(studyInfo),
                     start,
                     end,
-                    data: pageCredibleSet.map(flattenPosition),
+                    data: pageCredibleSet
+                      .map(flattenPosition)
+                      .filter(
+                        d =>
+                          credSet95Value === '95' ? d.is95CredibleSet : true
+                      ),
                   }}
                   regionalProps={{
                     title: null,
@@ -406,7 +412,14 @@ query CredibleSetsQuery {
                             `gwasCredibleSet__${study.studyId}__${
                               indexVariant.id
                             }`
-                          ].map(flattenPosition),
+                          ]
+                            .map(flattenPosition)
+                            .filter(
+                              d =>
+                                credSet95Value === '95'
+                                  ? d.is95CredibleSet
+                                  : true
+                            ),
                           ...rest,
                         })
                       );
@@ -426,7 +439,14 @@ query CredibleSetsQuery {
                             `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
                               tissue.id
                             }__${indexVariant.id}`
-                          ].map(flattenPosition),
+                          ]
+                            .map(flattenPosition)
+                            .filter(
+                              d =>
+                                credSet95Value === '95'
+                                  ? d.is95CredibleSet
+                                  : true
+                            ),
                           ...rest,
                         })
                       );
