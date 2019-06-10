@@ -120,6 +120,7 @@ const tableColumns = variantId => [
       <StudyLocusLink
         indexVariantId={rowData.indexVariantId}
         studyId={rowData.studyId}
+        hasSumsStats={rowData.hasSumsStats}
       />
     ),
   },
