@@ -37,6 +37,7 @@ query StudyLocusPageQuery(
       pubDate
       pubJournal
       pmid
+      hasSumsStats
     }
     beta
     h3

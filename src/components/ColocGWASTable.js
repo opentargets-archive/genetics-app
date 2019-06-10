@@ -1,5 +1,8 @@
 import React from 'react';
+
 import { Link, OtTable, significantFigures } from 'ot-ui';
+
+import StudyLocusLink from './StudyLocusLink';
 
 const tableColumns = [
   {
@@ -55,6 +58,17 @@ const tableColumns = [
     label: 'log2(H4/H3)',
     tooltip: 'Log-likelihood that the signals colocalise',
     renderCell: d => significantFigures(d.log2h4h3),
+  },
+  {
+    id: 'locus',
+    label: 'View',
+    renderCell: d => (
+      <StudyLocusLink
+        hasSumsStats={d.study.hasSumsStats}
+        indexVariantId={d.indexVariant.id}
+        studyId={d.study.studyId}
+      />
+    ),
   },
 ];
 
