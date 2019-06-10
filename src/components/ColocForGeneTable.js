@@ -1,8 +1,12 @@
 import React from 'react';
-import { Link, OtTable, significantFigures } from 'ot-ui';
+import { Link, OtTable, Autocomplete, significantFigures } from 'ot-ui';
 import StudyLocusLink from './StudyLocusLink';
 
-const tableColumns = [
+const tableColumns = ({
+  colocTraitFilterValue,
+  colocTraitFilterOptions,
+  colocTraitFilterHandler,
+}) => [
   {
     id: 'study',
     label: 'Study',
@@ -14,6 +18,15 @@ const tableColumns = [
     id: 'traitReported',
     label: 'Trait reported',
     renderCell: d => d.study.traitReported,
+    renderFilter: () => (
+      <Autocomplete
+        options={colocTraitFilterOptions}
+        value={colocTraitFilterValue}
+        handleSelectOption={colocTraitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pubAuthor',
@@ -73,11 +86,24 @@ const tableColumns = [
   },
 ];
 
-const ColocTable = ({ loading, error, filenameStem, data }) => (
+const ColocTable = ({
+  loading,
+  error,
+  filenameStem,
+  data,
+  colocTraitFilterValue,
+  colocTraitFilterOptions,
+  colocTraitFilterHandler,
+}) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns}
+    columns={tableColumns({
+      colocTraitFilterValue,
+      colocTraitFilterOptions,
+      colocTraitFilterHandler,
+    })}
+    filters
     data={data}
     sortBy="log2h4h3"
     order="desc"

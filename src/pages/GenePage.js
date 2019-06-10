@@ -81,6 +81,18 @@ const styles = theme => {
 };
 
 class GenePage extends React.Component {
+  handleColocTraitFilter = newColocTraitFilterValue => {
+    const { colocTraitFilter, ...rest } = this._parseQueryProps();
+    const newQueryParams = {
+      ...rest,
+    };
+    if (newColocTraitFilterValue && newColocTraitFilterValue.length > 0) {
+      newQueryParams.colocTraitFilter = newColocTraitFilterValue.map(
+        d => d.value
+      );
+    }
+    this._stringifyQueryProps(newQueryParams);
+  };
   handleTraitFilter = newTraitFilterValue => {
     const { traitFilter, ...rest } = this._parseQueryProps();
     const newQueryParams = {
@@ -106,6 +118,11 @@ class GenePage extends React.Component {
     const queryProps = queryString.parse(history.location.search);
 
     // single values need to be put in lists
+    if (queryProps.colocTraitFilter) {
+      queryProps.colocTraitFilter = Array.isArray(queryProps.colocTraitFilter)
+        ? queryProps.colocTraitFilter
+        : [queryProps.colocTraitFilter];
+    }
     if (queryProps.traitFilter) {
       queryProps.traitFilter = Array.isArray(queryProps.traitFilter)
         ? queryProps.traitFilter
@@ -129,6 +146,7 @@ class GenePage extends React.Component {
     const { match, classes } = this.props;
     const { geneId } = match.params;
     const {
+      colocTraitFilter: colocTraitFilterUrl,
       traitFilter: traitFilterUrl,
       authorFilter: authorFilterUrl,
     } = this._parseQueryProps();
@@ -140,6 +158,15 @@ class GenePage extends React.Component {
             const gene = isValidGene ? geneData(data) : {};
 
             const { colocalisationsForGene } = data;
+
+            const colocalisationsForGeneFiltered = (
+              colocalisationsForGene || []
+            ).filter(
+              d =>
+                colocTraitFilterUrl
+                  ? colocTraitFilterUrl.indexOf(d.study.traitReported) >= 0
+                  : true
+            );
 
             // all
             const associatedStudies =
@@ -160,6 +187,21 @@ class GenePage extends React.Component {
             });
 
             // filters
+            const colocTraitFilterOptions = _.sortBy(
+              _.uniq(
+                colocalisationsForGeneFiltered.map(d => d.study.traitReported)
+              ).map(d => ({
+                label: d,
+                value: d,
+                selected: colocTraitFilterUrl
+                  ? colocTraitFilterUrl.indexOf(d) >= 0
+                  : false,
+              })),
+              [d => !d.selected, 'value']
+            );
+            const colocTraitFilterValue = colocTraitFilterOptions.filter(
+              d => d.selected
+            );
             const traitFilterOptions = _.sortBy(
               _.uniq(
                 associatedStudiesFiltered.map(d => d.study.traitReported)
@@ -411,7 +453,10 @@ class GenePage extends React.Component {
                 <ColocForGeneTable
                   loading={loading}
                   error={error}
-                  data={colocalisationsForGene || []}
+                  data={colocalisationsForGeneFiltered}
+                  colocTraitFilterValue={colocTraitFilterValue}
+                  colocTraitFilterOptions={colocTraitFilterOptions}
+                  colocTraitFilterHandler={this.handleColocTraitFilter}
                   filenameStem={`${geneId}-colocalising-studies`}
                 />
               </React.Fragment>
