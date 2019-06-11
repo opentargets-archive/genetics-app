@@ -226,6 +226,12 @@ query CredibleSetsQuery {
                       {studyInfo.pubJournal ? (
                         <em>{studyInfo.pubJournal}</em>
                       ) : null}
+                      {studyId ? (
+                        <React.Fragment>
+                          {' '}
+                          <Link to={`/study/${studyId}`}>{studyId}</Link>
+                        </React.Fragment>
+                      ) : null}
                     </Typography>
                     <Typography variant="h6" color="textSecondary">
                       Locus around{' '}
