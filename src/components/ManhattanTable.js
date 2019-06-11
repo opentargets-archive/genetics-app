@@ -119,7 +119,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
     id: 'bestColocGenes',
     label: 'Top Colocalising Genes',
     tooltip:
-      'The list of genes which colocalise at this locus with PP(H4) > 0.95 and log2(H4/H3) > log2(5)',
+      'The list of genes which colocalise at this locus with PP(H4) ≥ 0.95 and log2(H4/H3) ≥ log2(5)',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestColocGenes.map((d, i) => (
