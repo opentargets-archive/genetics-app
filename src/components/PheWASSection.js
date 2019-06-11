@@ -23,11 +23,21 @@ function hasAssociations(data) {
 function transformPheWAS(data) {
   return data.pheWAS.associations.map(d => {
     const { study, ...rest } = d;
-    const { studyId, traitReported, traitCategory } = study;
+    const {
+      studyId,
+      traitReported,
+      traitCategory,
+      pubDate,
+      pubAuthor,
+      pmid,
+    } = study;
     return {
       studyId,
       traitReported,
       traitCategory,
+      pubDate,
+      pubAuthor,
+      pmid,
       ...rest,
     };
   });

@@ -8,6 +8,7 @@ import {
 } from 'ot-ui';
 
 import LocusLink from './LocusLink';
+import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
@@ -77,6 +78,19 @@ export const tableColumns = ({
     tooltip: 'Odds ratio is with respect to the ALT allele',
     renderCell: rowData =>
       rowData.oddsRatio ? rowData.oddsRatio.toPrecision(3) : null,
+  },
+  {
+    id: 'pmid',
+    label: 'PMID',
+    renderCell: rowData => (
+      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
+    ),
+  },
+  {
+    id: 'pubAuthor',
+    label: 'Author (Year)',
+    renderCell: rowData =>
+      `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
   },
   {
     id: 'nCases',
