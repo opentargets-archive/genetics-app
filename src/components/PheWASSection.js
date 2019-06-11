@@ -150,6 +150,7 @@ class PheWASSection extends React.Component {
                   }}
                 >
                   <PheWASWithTooltip
+                    significancePVal={0.05 / data.pheWAS.totalGWASStudies}
                     associations={pheWASAssociationsFiltered}
                     ref={pheWASPlot}
                   />

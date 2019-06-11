@@ -1,5 +1,6 @@
 query PheWASQuery($variantId: String!) {
   pheWAS(variantId: $variantId) {
+    totalGWASStudies
     associations {
       study {
         studyId
