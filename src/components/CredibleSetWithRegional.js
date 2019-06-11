@@ -34,9 +34,7 @@ class CredibleSetWithRegional extends React.Component {
           }}
           expandIcon={<ExpandMoreIcon />}
         >
-          <div className={classes.container}>
-            <CredibleSet {...credibleSetProps} />
-          </div>
+          <CredibleSet {...credibleSetProps} />
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {expanded && (
