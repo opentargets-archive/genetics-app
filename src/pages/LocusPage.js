@@ -329,11 +329,9 @@ class LocusPage extends React.Component {
         <Helmet>
           <title>{locationString}</title>
         </Helmet>
-        <Paper className={classes.section}>
-          <Typography variant="h4" color="textSecondary">
-            Locus {locationString}
-          </Typography>
-        </Paper>
+        <Typography variant="h4" color="textSecondary">
+          Locus {locationString}
+        </Typography>
         <SectionHeading
           heading="Associations"
           subheading={subheading}
