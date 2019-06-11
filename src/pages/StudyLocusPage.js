@@ -206,6 +206,10 @@ query CredibleSetsQuery {
               .sort(log2h4h3Comparator)
               .reverse();
 
+            const associationSummary =
+              pageCredibleSet.find(d => d.tagVariant.id === indexVariantId) ||
+              {};
+
             return (
               <React.Fragment>
                 <Helmet>
@@ -253,6 +257,31 @@ query CredibleSetsQuery {
                     </LocusLink>
                   </Grid>
                 </Grid>
+
+                <SectionHeading heading="Association summary" />
+                <Typography variant="subtitle2">
+                  <strong>P-value:</strong>{' '}
+                  {significantFigures(associationSummary.pval)}
+                </Typography>
+                <Typography variant="subtitle2">
+                  <strong>Beta:</strong>{' '}
+                  {significantFigures(associationSummary.beta)}
+                </Typography>
+                <Typography variant="subtitle2">
+                  <strong>Beta 95% Confidence Interval:</strong> (
+                  {significantFigures(
+                    associationSummary.beta - 1.959 * associationSummary.se
+                  )}
+                  ,{' '}
+                  {significantFigures(
+                    associationSummary.beta + 1.959 * associationSummary.se
+                  )}
+                  )
+                </Typography>
+                <Typography variant="subtitle2">
+                  <strong>Standard Error:</strong>{' '}
+                  {significantFigures(associationSummary.se)}
+                </Typography>
 
                 <SectionHeading
                   heading={`QTL Colocalisation`}
