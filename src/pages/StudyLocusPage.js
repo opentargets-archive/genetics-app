@@ -231,8 +231,8 @@ query CredibleSetsQuery {
                       Locus around{' '}
                       <Link to={`/variant/${indexVariantId}`}>
                         {indexVariantId}
-                        {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
                       </Link>
+                      {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
                     </Typography>
                   </Grid>
                   <Grid item>
