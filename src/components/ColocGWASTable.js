@@ -1,4 +1,5 @@
 import React from 'react';
+import * as d3 from 'd3';
 
 import { Link, OtTable, significantFigures } from 'ot-ui';
 
@@ -8,6 +9,7 @@ const tableColumns = [
   {
     id: 'study',
     label: 'Study',
+    comparator: (a, b) => d3.ascending(a.study.studyId, b.study.studyId),
     renderCell: d => (
       <Link to={`/study/${d.study.studyId}`}>{d.study.studyId}</Link>
     ),
@@ -15,16 +17,20 @@ const tableColumns = [
   {
     id: 'traitReported',
     label: 'Trait reported',
+    comparator: (a, b) =>
+      d3.ascending(a.study.traitReported, b.study.traitReported),
     renderCell: d => d.study.traitReported,
   },
   {
     id: 'pubAuthor',
     label: 'Author',
+    comparator: (a, b) => d3.ascending(a.study.pubAuthor, b.study.pubAuthor),
     renderCell: d => d.study.pubAuthor,
   },
   {
     id: 'indexVariant',
     label: 'Lead variant',
+    comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
     renderCell: d => (
       <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
     ),
@@ -62,6 +68,8 @@ const tableColumns = [
   {
     id: 'locus',
     label: 'View',
+    comparator: (a, b) =>
+      d3.ascending(a.study.hasSumsStats, b.study.hasSumsStats),
     renderCell: d => (
       <StudyLocusLink
         hasSumsStats={d.study.hasSumsStats}

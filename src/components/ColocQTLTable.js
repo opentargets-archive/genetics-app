@@ -1,4 +1,6 @@
 import React from 'react';
+import * as d3 from 'd3';
+
 import { Link, OtTable, significantFigures } from 'ot-ui';
 
 const tableColumns = [
@@ -10,6 +12,7 @@ const tableColumns = [
   {
     id: 'gene.symbol',
     label: 'Gene',
+    comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
     renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   },
   {
@@ -20,6 +23,7 @@ const tableColumns = [
   {
     id: 'tissue.name',
     label: 'Tissue',
+    comparator: (a, b) => d3.ascending(a.tissue.name, b.tissue.name),
     renderCell: d => d.tissue.name,
   },
   {
@@ -29,6 +33,7 @@ const tableColumns = [
   {
     id: 'indexVariant',
     label: 'Lead variant',
+    comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
     renderCell: d => (
       <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
     ),

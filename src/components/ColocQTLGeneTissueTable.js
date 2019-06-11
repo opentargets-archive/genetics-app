@@ -114,6 +114,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
   const geneColumn = {
     id: 'gene.symbol',
     label: 'Gene',
+    comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
     renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   };
   const phenotypeIdColumn = {

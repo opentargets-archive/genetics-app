@@ -1,5 +1,8 @@
 import React from 'react';
+import * as d3 from 'd3';
+
 import { Link, OtTable, Autocomplete, significantFigures } from 'ot-ui';
+
 import StudyLocusLink from './StudyLocusLink';
 
 const tableColumns = ({
@@ -10,6 +13,7 @@ const tableColumns = ({
   {
     id: 'study',
     label: 'Study',
+    comparator: (a, b) => d3.ascending(a.study.studyId, b.study.studyId),
     renderCell: d => (
       <Link to={`/study/${d.study.studyId}`}>{d.study.studyId}</Link>
     ),
@@ -17,6 +21,8 @@ const tableColumns = ({
   {
     id: 'traitReported',
     label: 'Trait reported',
+    comparator: (a, b) =>
+      d3.ascending(a.study.traitReported, b.study.traitReported),
     renderCell: d => d.study.traitReported,
     renderFilter: () => (
       <Autocomplete
@@ -31,11 +37,13 @@ const tableColumns = ({
   {
     id: 'pubAuthor',
     label: 'Author',
+    comparator: (a, b) => d3.ascending(a.study.pubAuthor, b.study.pubAuthor),
     renderCell: d => d.study.pubAuthor,
   },
   {
     id: 'indexVariant',
     label: 'Lead variant',
+    comparator: (a, b) => d3.ascending(a.leftVariant.id, b.leftVariant.id),
     renderCell: d => (
       <Link to={`/variant/${d.leftVariant.id}`}>{d.leftVariant.id}</Link>
     ),
@@ -47,6 +55,7 @@ const tableColumns = ({
   {
     id: 'tissue.name',
     label: 'Tissue',
+    comparator: (a, b) => d3.ascending(a.tissue.name, b.tissue.name),
     renderCell: d => d.tissue.name,
   },
   {
