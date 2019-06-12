@@ -33,14 +33,22 @@ class CredibleSetWithRegional extends React.Component {
     return (
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
-          onClick={() => {
-            this.setState({
-              expanded: !this.state.expanded,
-            });
-          }}
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={
+            <ExpandMoreIcon
+              onClick={() => {
+                this.setState({
+                  expanded: !this.state.expanded,
+                });
+              }}
+            />
+          }
         >
-          <Checkbox style={{ position: 'absolute' }} {...checkboxProps} />
+          {checkboxProps ? (
+            <div onClick={e => e.stopPropagation()}>
+              <Checkbox {...checkboxProps} />
+            </div>
+          ) : null}
+
           <CredibleSet {...credibleSetProps} />
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>

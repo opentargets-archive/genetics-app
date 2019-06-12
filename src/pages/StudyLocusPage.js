@@ -145,6 +145,29 @@ class LocusTraitPage extends React.Component {
   handleH4SliderChange = (_, h4SliderValue) => {
     this.setState({ h4SliderValue });
   };
+  handleCredibleSetIntersectionKeysCheckboxClick = key => event => {
+    const { credibleSetIntersectionKeys } = this.state;
+    if (event.target.checked) {
+      this.setState({
+        credibleSetIntersectionKeys: [key, ...credibleSetIntersectionKeys],
+      });
+    } else {
+      this.setState({
+        credibleSetIntersectionKeys: credibleSetIntersectionKeys.filter(
+          d => d !== key
+        ),
+      });
+    }
+  };
+  componentDidMount() {
+    const { match } = this.props;
+    const { studyId, indexVariantId } = match.params;
+    this.setState({
+      credibleSetIntersectionKeys: [
+        `gwasCredibleSet__${studyId}__${indexVariantId}`,
+      ],
+    });
+  }
   render() {
     const { credSet95Value } = this.state;
     const { match } = this.props;
@@ -218,6 +241,7 @@ query CredibleSetsQuery {
               .filter(
                 d => (credSet95Value === '95' ? d.is95CredibleSet : true)
               );
+            const pageCredibleSetKey = `gwasCredibleSet__${studyId}__${indexVariantId}`;
 
             return (
               <React.Fragment>
@@ -437,9 +461,14 @@ query CredibleSetsQuery {
 
                 <CredibleSetWithRegional
                   checkboxProps={{
-                    checked: true,
-                    onChange: () => {},
-                    value: 'true',
+                    checked:
+                      this.state.credibleSetIntersectionKeys.indexOf(
+                        pageCredibleSetKey
+                      ) >= 0,
+                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
+                      pageCredibleSetKey
+                    ),
+                    value: pageCredibleSetKey,
                   }}
                   credibleSetProps={{
                     label: traitAuthorYear(studyInfo),
@@ -522,9 +551,10 @@ query CredibleSetsQuery {
                         })
                       );
 
+                      // get the intersecting variants
                       const credibleSetsAll = [
                         {
-                          key: `gwasCredibleSet__${studyId}__${indexVariantId}`,
+                          key: pageCredibleSetKey,
                           credibleSet: pageCredibleSetAdjusted,
                         },
                         ...gwasColocalisationCredibleSetsFiltered.map(
@@ -534,17 +564,25 @@ query CredibleSetsQuery {
                           ({ key, credibleSet }) => ({ key, credibleSet })
                         ),
                       ];
-                      console.log(credibleSetsAll);
-                      const credibleSetsChecked = credibleSetsAll; // TODO: hook up
+                      const { credibleSetIntersectionKeys } = this.state;
+                      const credibleSetsChecked = credibleSetsAll.filter(
+                        d => credibleSetIntersectionKeys.indexOf(d.key) >= 0
+                      );
                       const variantsByCredibleSets = credibleSetsChecked.map(
                         d => d.credibleSet.map(a => a.tagVariant)
                       );
-                      console.log(variantsByCredibleSets);
-                      const variantsByCredibleSetsIntersection = _.intersectionWith(
-                        variantsByCredibleSets,
-                        (a, b) => a.id === b.id
-                      )[0];
-                      console.log(variantsByCredibleSetsIntersection);
+                      let variantsByCredibleSetsIntersection = [];
+                      if (variantsByCredibleSets.length > 1) {
+                        const [first, ...rest] = variantsByCredibleSets;
+                        variantsByCredibleSetsIntersection = first.filter(d =>
+                          rest.every(
+                            cs => cs.map(d2 => d2.id).indexOf(d.id) >= 0
+                          )
+                        );
+                      } else if (variantsByCredibleSets.length === 1) {
+                        variantsByCredibleSetsIntersection =
+                          variantsByCredibleSets[0];
+                      }
 
                       return (
                         <React.Fragment>
@@ -555,9 +593,17 @@ query CredibleSetsQuery {
                             gwasColocalisationCredibleSetsFiltered.map(d => {
                               return (
                                 <CredibleSetWithRegional
-                                  key={`gwasCredibleSet__${d.study.studyId}__${
-                                    d.indexVariant.id
-                                  }`}
+                                  key={d.key}
+                                  checkboxProps={{
+                                    checked:
+                                      this.state.credibleSetIntersectionKeys.indexOf(
+                                        d.key
+                                      ) >= 0,
+                                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
+                                      d.key
+                                    ),
+                                    value: d.key,
+                                  }}
                                   credibleSetProps={{
                                     label: traitAuthorYear(d.study),
                                     start,
@@ -594,9 +640,17 @@ query CredibleSetsQuery {
                             qtlColocalisationCredibleSetsFiltered.map(d => {
                               return (
                                 <CredibleSetWithRegional
-                                  key={`qtlCredibleSet__${d.qtlStudyName}__${
-                                    d.phenotypeId
-                                  }__${d.tissue.id}__${d.indexVariant.id}`}
+                                  key={d.key}
+                                  checkboxProps={{
+                                    checked:
+                                      this.state.credibleSetIntersectionKeys.indexOf(
+                                        d.key
+                                      ) >= 0,
+                                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
+                                      d.key
+                                    ),
+                                    value: d.key,
+                                  }}
                                   credibleSetProps={{
                                     label: `${d.qtlStudyName}: ${
                                       d.gene.symbol
