@@ -33,6 +33,7 @@ class CredibleSetWithRegional extends React.Component {
     return (
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
+          style={{ cursor: 'default' }}
           expandIcon={
             <ExpandMoreIcon
               onClick={() => {
@@ -44,7 +45,10 @@ class CredibleSetWithRegional extends React.Component {
           }
         >
           {checkboxProps ? (
-            <div onClick={e => e.stopPropagation()}>
+            <div
+              style={{ position: 'absolute', zIndex: 1000 }}
+              onClick={e => e.stopPropagation()}
+            >
               <Checkbox {...checkboxProps} />
             </div>
           ) : null}
