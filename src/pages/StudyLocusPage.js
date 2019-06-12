@@ -168,6 +168,21 @@ class LocusTraitPage extends React.Component {
       ],
     });
   }
+  componentDidUpdate(prevProps) {
+    // page changed
+    const { match } = this.props;
+    const { studyId, indexVariantId } = match.params;
+    if (
+      prevProps.match.params.studyId !== studyId ||
+      prevProps.match.params.indexVariantId !== indexVariantId
+    ) {
+      this.setState({
+        credibleSetIntersectionKeys: [
+          `gwasCredibleSet__${studyId}__${indexVariantId}`,
+        ],
+      });
+    }
+  }
   render() {
     const { credSet95Value } = this.state;
     const { match } = this.props;
