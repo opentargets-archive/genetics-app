@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, OtTable } from 'ot-ui';
+import { Link, OtTable, significantFigures } from 'ot-ui';
 
 const tableColumns = [
   {
@@ -15,6 +15,16 @@ const tableColumns = [
   {
     id: 'position',
     label: 'Position',
+  },
+  {
+    id: 'posteriorProbabilityMax',
+    label: 'Maximum Posterior Probability (across selected studies)',
+    renderCell: d => significantFigures(d.posteriorProbabilityMax),
+  },
+  {
+    id: 'posteriorProbabilityProd',
+    label: 'Product of Posterior Probabilities (across selected studies)',
+    renderCell: d => significantFigures(d.posteriorProbabilityProd),
   },
 ];
 

@@ -584,20 +584,50 @@ query CredibleSetsQuery {
                         d => credibleSetIntersectionKeys.indexOf(d.key) >= 0
                       );
                       const variantsByCredibleSets = credibleSetsChecked.map(
-                        d => d.credibleSet.map(a => a.tagVariant)
+                        d =>
+                          d.credibleSet.map(({ tagVariant, ...rest }) => ({
+                            statsFields: rest,
+                            ...tagVariant,
+                          }))
                       );
-                      let variantsByCredibleSetsIntersection = [];
-                      if (variantsByCredibleSets.length > 1) {
-                        const [first, ...rest] = variantsByCredibleSets;
-                        variantsByCredibleSetsIntersection = first.filter(d =>
-                          rest.every(
-                            cs => cs.map(d2 => d2.id).indexOf(d.id) >= 0
-                          )
-                        );
-                      } else if (variantsByCredibleSets.length === 1) {
-                        variantsByCredibleSetsIntersection =
-                          variantsByCredibleSets[0];
-                      }
+                      const variantIdsInCredibleSetsIntersection = variantsByCredibleSets.reduce(
+                        (acc, vs, i) => {
+                          vs.forEach(v => {
+                            const { statsFields, ...variantFields } = v;
+                            if (acc[v.id]) {
+                              acc[v.id].posteriorProbabilityProd *=
+                                statsFields.posteriorProbability;
+                              acc[v.id].posteriorProbabilityMax = Math.max(
+                                acc[v.id].posteriorProbabilityMax,
+                                statsFields.posteriorProbability
+                              );
+                              acc[v.id].appearsInCount += 1;
+                            } else {
+                              acc[v.id] = {
+                                ...variantFields,
+                                posteriorProbabilityMax:
+                                  statsFields.posteriorProbability,
+                                posteriorProbabilityProd:
+                                  statsFields.posteriorProbability,
+                                appearsInCount: 1,
+                              };
+                            }
+                          });
+                          return acc;
+                        },
+                        {}
+                      );
+                      const variantsByCredibleSetsIntersection = Object.values(
+                        variantIdsInCredibleSetsIntersection
+                      )
+                        .filter(
+                          v =>
+                            v.appearsInCount === variantsByCredibleSets.length
+                        )
+                        .map(v => ({
+                          ...v,
+                          posteriorProbability: v.posteriorProbabilityProd, // aliased for colouring on plot
+                        }));
 
                       return (
                         <React.Fragment>
