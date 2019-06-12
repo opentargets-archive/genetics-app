@@ -4,6 +4,7 @@ import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
 import { Helmet } from 'react-helmet';
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
@@ -20,7 +21,7 @@ import {
   PlotContainerSection,
   significantFigures,
 } from 'ot-ui';
-import { GeneTrack } from 'ot-charts';
+import { GeneTrack, CredibleSet } from 'ot-charts';
 
 import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
@@ -28,6 +29,7 @@ import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
 // import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
+import CredibleSetsIntersectionTable from '../components/CredibleSetsIntersectionTable';
 import Slider from '../components/Slider';
 import LocusLink from '../components/LocusLink';
 
@@ -126,6 +128,7 @@ class LocusTraitPage extends React.Component {
     credSet95Value: 'all',
     log2h4h3SliderValue: 1, // equivalent to H4 being double H3; suggested by Ed
     h4SliderValue: 0.95, // 95% default; suggested by Ed
+    credibleSetIntersectionKeys: [],
   };
   handleQtlTabsChange = (_, qtlTabsValue) => {
     this.setState({ qtlTabsValue });
@@ -209,6 +212,12 @@ query CredibleSetsQuery {
             const associationSummary =
               pageCredibleSet.find(d => d.tagVariant.id === indexVariantId) ||
               {};
+
+            const pageCredibleSetAdjusted = pageCredibleSet
+              .map(flattenPosition)
+              .filter(
+                d => (credSet95Value === '95' ? d.is95CredibleSet : true)
+              );
 
             return (
               <React.Fragment>
@@ -427,16 +436,16 @@ query CredibleSetsQuery {
                 </PlotContainer>
 
                 <CredibleSetWithRegional
+                  checkboxProps={{
+                    checked: true,
+                    onChange: () => {},
+                    value: 'true',
+                  }}
                   credibleSetProps={{
                     label: traitAuthorYear(studyInfo),
                     start,
                     end,
-                    data: pageCredibleSet
-                      .map(flattenPosition)
-                      .filter(
-                        d =>
-                          credSet95Value === '95' ? d.is95CredibleSet : true
-                      ),
+                    data: pageCredibleSetAdjusted,
                   }}
                   regionalProps={{
                     title: null,
@@ -462,6 +471,9 @@ query CredibleSetsQuery {
                       // de-alias
                       const gwasColocalisationCredibleSetsFiltered = gwasColocalisationFiltered.map(
                         ({ study, indexVariant, ...rest }) => ({
+                          key: `gwasCredibleSet__${study.studyId}__${
+                            indexVariant.id
+                          }`,
                           study,
                           indexVariant,
                           credibleSet: data2[
@@ -487,6 +499,9 @@ query CredibleSetsQuery {
                           indexVariant,
                           ...rest
                         }) => ({
+                          key: `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
+                            tissue.id
+                          }__${indexVariant.id}`,
                           qtlStudyName,
                           phenotypeId,
                           tissue,
@@ -506,6 +521,30 @@ query CredibleSetsQuery {
                           ...rest,
                         })
                       );
+
+                      const credibleSetsAll = [
+                        {
+                          key: `gwasCredibleSet__${studyId}__${indexVariantId}`,
+                          credibleSet: pageCredibleSetAdjusted,
+                        },
+                        ...gwasColocalisationCredibleSetsFiltered.map(
+                          ({ key, credibleSet }) => ({ key, credibleSet })
+                        ),
+                        ...qtlColocalisationCredibleSetsFiltered.map(
+                          ({ key, credibleSet }) => ({ key, credibleSet })
+                        ),
+                      ];
+                      console.log(credibleSetsAll);
+                      const credibleSetsChecked = credibleSetsAll; // TODO: hook up
+                      const variantsByCredibleSets = credibleSetsChecked.map(
+                        d => d.credibleSet.map(a => a.tagVariant)
+                      );
+                      console.log(variantsByCredibleSets);
+                      const variantsByCredibleSetsIntersection = _.intersectionWith(
+                        variantsByCredibleSets,
+                        (a, b) => a.id === b.id
+                      )[0];
+                      console.log(variantsByCredibleSetsIntersection);
 
                       return (
                         <React.Fragment>
@@ -590,6 +629,28 @@ query CredibleSetsQuery {
                               No QTL studies satisfying the applied filters.
                             </Typography>
                           )}
+
+                          <Typography style={{ paddingTop: '10px' }}>
+                            <strong>
+                              Intersection of credible set variants
+                            </strong>
+                          </Typography>
+                          <PlotContainer>
+                            <PlotContainerSection>
+                              <div style={{ paddingRight: '32px' }}>
+                                <CredibleSet
+                                  label="Intersection Variants"
+                                  start={start}
+                                  end={end}
+                                  data={variantsByCredibleSetsIntersection}
+                                />
+                              </div>
+                            </PlotContainerSection>
+                          </PlotContainer>
+                          <CredibleSetsIntersectionTable
+                            data={variantsByCredibleSetsIntersection}
+                            filenameStem={`${studyId}-${indexVariantId}-credset-intersection`}
+                          />
                         </React.Fragment>
                       );
                     }}

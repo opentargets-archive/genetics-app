@@ -6,6 +6,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { CredibleSet, Regional } from 'ot-charts';
 
@@ -21,7 +22,12 @@ class CredibleSetWithRegional extends React.Component {
     expanded: false,
   };
   render() {
-    const { classes, credibleSetProps, regionalProps } = this.props;
+    const {
+      classes,
+      checkboxProps,
+      credibleSetProps,
+      regionalProps,
+    } = this.props;
     const { expanded } = this.state;
     const { query, variables, start, end, ...rest } = regionalProps;
     return (
@@ -34,6 +40,7 @@ class CredibleSetWithRegional extends React.Component {
           }}
           expandIcon={<ExpandMoreIcon />}
         >
+          <Checkbox style={{ position: 'absolute' }} {...checkboxProps} />
           <CredibleSet {...credibleSetProps} />
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
