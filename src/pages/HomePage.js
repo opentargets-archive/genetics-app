@@ -13,7 +13,7 @@ import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import ScrollDownButton from '../components/ScrollDownButton';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-import { externalLinks } from '../constants';
+import { contactUrl, externalLinks } from '../constants';
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -125,7 +125,7 @@ class HomePage extends Component {
               search={null}
               homepage
               docs="https://genetics-docs.opentargets.org"
-              contact="mailto:geneticsportal@opentargets.org"
+              contact={contactUrl}
             />
             <HomeBox name="Genetics">
               <div className={classes.slogan}>
