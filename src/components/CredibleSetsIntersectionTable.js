@@ -8,22 +8,26 @@ const tableColumns = [
     label: 'Variant',
     renderCell: d => <Link to={`/variant/${d.id}`}>{d.id}</Link>,
   },
-  {
-    id: 'rsId',
-    label: 'Variant rsID',
-  },
+  // {
+  //   id: 'rsId',
+  //   label: 'Variant rsID',
+  // },
   {
     id: 'position',
     label: 'Position',
   },
   {
     id: 'posteriorProbabilityMax',
-    label: 'Maximum Posterior Probability (across selected studies)',
+    label: 'Maximum Posterior Probability',
+    tooltip:
+      'The maximum posterior probability for this variant across selected colocalisation tracks',
     renderCell: d => significantFigures(d.posteriorProbabilityMax),
   },
   {
     id: 'posteriorProbabilityProd',
     label: 'Product of Posterior Probabilities (across selected studies)',
+    tooltip:
+      'The product of posterior probabilities for this variant across selected colocalisation tracks',
     renderCell: d => significantFigures(d.posteriorProbabilityProd),
   },
 ];
@@ -34,8 +38,8 @@ const CredibleSetsIntersectionTable = ({ filenameStem, data }) => (
     error={false}
     columns={tableColumns}
     data={data}
-    sortBy="position"
-    order="asc"
+    sortBy="posteriorProbabilityProd"
+    order="desc"
     downloadFileStem={filenameStem}
   />
 );
