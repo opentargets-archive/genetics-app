@@ -1,16 +1,22 @@
 query PheWASQuery($variantId: String!) {
   pheWAS(variantId: $variantId) {
+    totalGWASStudies
     associations {
       study {
         studyId
         traitReported
         traitCategory
+        pmid
+        pubDate
+        pubAuthor
       }
       pval
       beta
       oddsRatio
       nTotal
-      nCases: nCasesStudy
+      nCases
+      eaf
+      se
     }
   }
 }

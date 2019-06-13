@@ -76,7 +76,7 @@ const LocusLink = ({
       to={`/locus?${queryString.stringify(params)}`}
       className={classes.link}
     >
-      <Button gradient className={big ? classes.buttonBig : classes.button}>
+      <Button className={big ? classes.buttonBig : classes.button}>
         Locus Plot
         <LocusIcon className={big ? classes.iconBig : classes.icon} />
       </Button>

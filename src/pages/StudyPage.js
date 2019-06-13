@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { loader } from 'graphql.macro';
 
 import { SectionHeading } from 'ot-ui';
 
@@ -13,7 +14,8 @@ import ScrollToTop from '../components/ScrollToTop';
 import OverlapLink from '../components/OverlapLink';
 import ManhattanContainer from '../components/ManhattanContainer';
 import StudySummary from '../components/StudySummary';
-import STUDY_PAGE_QUERY from '../queries/StudyPageQuery.gql';
+
+const STUDY_PAGE_QUERY = loader('../queries/StudyPageQuery.gql');
 
 function hasStudyInfo(data) {
   return data && data.studyInfo;
@@ -35,9 +37,12 @@ class StudyPage extends React.Component {
         <Query query={STUDY_PAGE_QUERY} variables={{ studyId }}>
           {({ loading, error, data }) => {
             const isStudyWithInfo = hasStudyInfo(data);
-            const { pubAuthor, pubDate, pubJournal } = isStudyWithInfo
-              ? data.studyInfo
-              : {};
+            const {
+              pubAuthor,
+              pubDate,
+              pubJournal,
+              hasSumsStats,
+            } = isStudyWithInfo ? data.studyInfo : {};
             return (
               <React.Fragment>
                 <ScrollToTop />
@@ -74,7 +79,9 @@ class StudyPage extends React.Component {
                   ]}
                 />
                 {isStudyWithInfo ? <StudySummary {...data.studyInfo} /> : null}
-                <ManhattanContainer {...{ studyId, loading, error, data }} />
+                <ManhattanContainer
+                  {...{ studyId, hasSumsStats, loading, error, data }}
+                />
               </React.Fragment>
             );
           }}

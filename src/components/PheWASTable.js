@@ -8,6 +8,7 @@ import {
 } from 'ot-ui';
 
 import LocusLink from './LocusLink';
+import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
@@ -79,6 +80,19 @@ export const tableColumns = ({
       rowData.oddsRatio ? rowData.oddsRatio.toPrecision(3) : null,
   },
   {
+    id: 'pmid',
+    label: 'PMID',
+    renderCell: rowData => (
+      <PmidOrBiobankLink studyId={rowData.studyId} pmid={rowData.pmid} />
+    ),
+  },
+  {
+    id: 'pubAuthor',
+    label: 'Author (Year)',
+    renderCell: rowData =>
+      `${rowData.pubAuthor} (${new Date(rowData.pubDate).getFullYear()})`,
+  },
+  {
     id: 'nCases',
     label: 'N Cases',
     renderCell: rowData =>
@@ -92,11 +106,12 @@ export const tableColumns = ({
   {
     id: 'locusView',
     label: 'View',
-    renderCell: () => {
+    renderCell: rowData => {
       return isIndexVariant ? (
         <LocusLink
           chromosome={chromosome}
           position={position}
+          selectedStudies={[rowData.studyId]}
           selectedIndexVariants={[variantId]}
         >
           Locus
@@ -105,6 +120,7 @@ export const tableColumns = ({
         <LocusLink
           chromosome={chromosome}
           position={position}
+          selectedStudies={[rowData.studyId]}
           selectedTagVariants={[variantId]}
         >
           Locus

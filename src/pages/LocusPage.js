@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
+import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import { findDOMNode } from 'react-dom';
 import Paper from '@material-ui/core/Paper';
@@ -27,7 +28,8 @@ import locusScheme, {
 } from '../logic/locusScheme';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import ScrollToTop from '../components/ScrollToTop';
-import LOCUS_PAGE_QUERY from '../queries/LocusPageQuery.gql';
+
+const LOCUS_PAGE_QUERY = loader('../queries/LocusPageQuery.gql');
 
 function hasData(data) {
   return data && data.gecko;
@@ -327,11 +329,9 @@ class LocusPage extends React.Component {
         <Helmet>
           <title>{locationString}</title>
         </Helmet>
-        <Paper className={classes.section}>
-          <Typography variant="h4" color="textSecondary">
-            Locus {locationString}
-          </Typography>
-        </Paper>
+        <Typography variant="h4" color="textSecondary">
+          Locus {locationString}
+        </Typography>
         <SectionHeading
           heading="Associations"
           subheading={subheading}

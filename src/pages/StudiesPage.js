@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
+import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -12,7 +13,8 @@ import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
 import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
 import StudyComparisonOption from '../components/StudyComparisonOption';
-import STUDIES_PAGE_QUERY from '../queries/StudiesPageQuery.gql';
+
+const STUDIES_PAGE_QUERY = loader('../queries/StudiesPageQuery.gql');
 
 function hasStudyInfo(data) {
   return data && data.studyInfo;

@@ -1,6 +1,11 @@
 query VariantPageQuery($variantId: String!) {
   variantInfo(variantId: $variantId) {
     rsId
+    chromosome
+    position
+    idB37
+    chromosomeB37
+    positionB37
     nearestGene {
       id
       symbol
@@ -29,6 +34,10 @@ query VariantPageQuery($variantId: String!) {
     qtls {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -37,6 +46,10 @@ query VariantPageQuery($variantId: String!) {
     intervals {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -45,6 +58,10 @@ query VariantPageQuery($variantId: String!) {
     functionalPredictions {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -53,6 +70,10 @@ query VariantPageQuery($variantId: String!) {
     distances {
       id
       sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
       tissues {
         id
         name
@@ -129,6 +150,7 @@ query VariantPageQuery($variantId: String!) {
         pmid
         pubDate
         pubAuthor
+        hasSumsStats
       }
       pval
       nTotal

@@ -1,13 +1,15 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import _ from 'lodash';
-import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
+import { loader } from 'graphql.macro';
 
+import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import PHEWAS_QUERY from '../queries/PheWASQuery.gql';
+
+const PHEWAS_QUERY = loader('../queries/PheWASQuery.gql');
 
 function hasAssociations(data) {
   return (
@@ -21,11 +23,21 @@ function hasAssociations(data) {
 function transformPheWAS(data) {
   return data.pheWAS.associations.map(d => {
     const { study, ...rest } = d;
-    const { studyId, traitReported, traitCategory } = study;
+    const {
+      studyId,
+      traitReported,
+      traitCategory,
+      pubDate,
+      pubAuthor,
+      pmid,
+    } = study;
     return {
       studyId,
       traitReported,
       traitCategory,
+      pubDate,
+      pubAuthor,
+      pmid,
       ...rest,
     };
   });
@@ -111,7 +123,7 @@ class PheWASSection extends React.Component {
             <React.Fragment>
               <SectionHeading
                 heading="PheWAS"
-                subheading="Which traits are associated with this variant in UK Biobank?"
+                subheading="Which traits are associated with this variant in the UK Biobank and GWAS Catalog summary statistics repository? Only traits with P-value < 0.05 are returned."
                 entities={[
                   {
                     type: 'study',
@@ -138,6 +150,7 @@ class PheWASSection extends React.Component {
                   }}
                 >
                   <PheWASWithTooltip
+                    significancePVal={0.05 / data.pheWAS.totalGWASStudies}
                     associations={pheWASAssociationsFiltered}
                     ref={pheWASPlot}
                   />

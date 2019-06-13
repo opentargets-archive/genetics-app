@@ -1,11 +1,15 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTable, significantFigures } from 'ot-ui';
+import { Link, OtTable, Autocomplete, significantFigures } from 'ot-ui';
 
 import StudyLocusLink from './StudyLocusLink';
 
-const tableColumns = [
+const tableColumns = ({
+  colocTraitFilterValue,
+  colocTraitFilterOptions,
+  colocTraitFilterHandler,
+}) => [
   {
     id: 'study',
     label: 'Study',
@@ -20,6 +24,15 @@ const tableColumns = [
     comparator: (a, b) =>
       d3.ascending(a.study.traitReported, b.study.traitReported),
     renderCell: d => d.study.traitReported,
+    renderFilter: () => (
+      <Autocomplete
+        options={colocTraitFilterOptions}
+        value={colocTraitFilterValue}
+        handleSelectOption={colocTraitFilterHandler}
+        placeholder="None"
+        multiple
+      />
+    ),
   },
   {
     id: 'pubAuthor',
@@ -30,61 +43,76 @@ const tableColumns = [
   {
     id: 'indexVariant',
     label: 'Lead variant',
-    comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
+    comparator: (a, b) => d3.ascending(a.leftVariant.id, b.leftVariant.id),
     renderCell: d => (
-      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+      <Link to={`/variant/${d.leftVariant.id}`}>{d.leftVariant.id}</Link>
     ),
   },
   {
-    id: 'beta',
-    label: 'Study beta',
-    tooltip:
-      'Effect with respect to the alternative allele of the page variant',
-    renderCell: d => significantFigures(d.beta),
+    id: 'phenotypeId',
+    label: 'Phenotype',
   },
+  {
+    id: 'tissue.name',
+    label: 'Tissue',
+    comparator: (a, b) => d3.ascending(a.tissue.name, b.tissue.name),
+    renderCell: d => d.tissue.name,
+  },
+  {
+    id: 'qtlStudyId',
+    label: 'Source',
+  },
+  // {
+  //   id: 'beta',
+  //   label: 'QTL beta',
+  //   renderCell: d => significantFigures(d.beta),
+  // },
   {
     id: 'h3',
     label: 'H3',
-    tooltip: (
-      <React.Fragment>
-        Posterior probability that the signals <strong>do not</strong>{' '}
-        colocalise
-      </React.Fragment>
-    ),
     renderCell: d => significantFigures(d.h3),
   },
   {
     id: 'h4',
     label: 'H4',
-    tooltip: 'Posterior probability that the signals colocalise',
     renderCell: d => significantFigures(d.h4),
   },
   {
     id: 'log2h4h3',
     label: 'log2(H4/H3)',
-    tooltip: 'Log-likelihood that the signals colocalise',
     renderCell: d => significantFigures(d.log2h4h3),
   },
   {
-    id: 'locus',
+    id: 'studyLocus',
     label: 'View',
-    comparator: (a, b) =>
-      d3.ascending(a.study.hasSumsStats, b.study.hasSumsStats),
     renderCell: d => (
       <StudyLocusLink
         hasSumsStats={d.study.hasSumsStats}
-        indexVariantId={d.indexVariant.id}
+        indexVariantId={d.leftVariant.id}
         studyId={d.study.studyId}
       />
     ),
   },
 ];
 
-const ColocTable = ({ loading, error, filenameStem, data }) => (
+const ColocTable = ({
+  loading,
+  error,
+  filenameStem,
+  data,
+  colocTraitFilterValue,
+  colocTraitFilterOptions,
+  colocTraitFilterHandler,
+}) => (
   <OtTable
     loading={loading}
     error={error}
-    columns={tableColumns}
+    columns={tableColumns({
+      colocTraitFilterValue,
+      colocTraitFilterOptions,
+      colocTraitFilterHandler,
+    })}
+    filters
     data={data}
     sortBy="log2h4h3"
     order="desc"

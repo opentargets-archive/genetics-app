@@ -4,6 +4,7 @@ import { OtTable, commaSeparate, significantFigures, Link } from 'ot-ui';
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
+import StudyLocusLink from './StudyLocusLink';
 
 const tableColumns = variantId => [
   {
@@ -111,6 +112,17 @@ const tableColumns = variantId => [
     label: 'Is in 95% Credible Set',
     renderCell: rowData =>
       rowData.posteriorProbability !== null ? 'True' : '',
+  },
+  {
+    id: 'studyLocus',
+    label: 'View',
+    renderCell: rowData => (
+      <StudyLocusLink
+        indexVariantId={rowData.indexVariantId}
+        studyId={rowData.studyId}
+        hasSumsStats={rowData.hasSumsStats}
+      />
+    ),
   },
 ];
 

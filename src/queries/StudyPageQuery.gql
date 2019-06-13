@@ -9,6 +9,7 @@ query StudyPageQuery($studyId: String!) {
     nInitial
     nReplication
     nCases
+    hasSumsStats
   }
   manhattan(studyId: $studyId) {
     associations {
@@ -29,6 +30,13 @@ query StudyPageQuery($studyId: String!) {
       betaCIUpper
       direction
       bestGenes {
+        score
+        gene {
+          id
+          symbol
+        }
+      }
+      bestColocGenes {
         score
         gene {
           id

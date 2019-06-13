@@ -10,12 +10,13 @@ import {
 import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
+import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import cytobandComparator from '../logic/cytobandComparator';
 
-export const tableColumns = studyId => [
+export const tableColumns = (studyId, hasSumsStats) => [
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
@@ -101,9 +102,9 @@ export const tableColumns = studyId => [
   },
   {
     id: 'bestGenes',
-    label: 'Top Ranked Genes',
+    label: 'Top V2G Genes',
     tooltip:
-      'The list of genes with equal best overall score for this lead variant',
+      'The top ranked genes from our variant-to-gene pipeline for this lead variant',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
@@ -115,17 +116,37 @@ export const tableColumns = studyId => [
     ),
   },
   {
+    id: 'bestColocGenes',
+    label: 'Top Colocalising Genes',
+    tooltip:
+      'The list of genes which colocalise at this locus with PP(H4) ≥ 0.95 and log2(H4/H3) ≥ log2(5)',
+    renderCell: rowData => (
+      <React.Fragment>
+        {rowData.bestColocGenes.map((d, i) => (
+          <React.Fragment key={i}>
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+          </React.Fragment>
+        ))}
+      </React.Fragment>
+    ),
+  },
+  {
     id: 'locus',
     label: 'View',
     renderCell: rowData => (
-      <LocusLink
-        chromosome={rowData.chromosome}
-        position={rowData.position}
-        selectedIndexVariants={[rowData.indexVariantId]}
-        selectedStudies={[studyId]}
-      >
-        Locus
-      </LocusLink>
+      <React.Fragment>
+        <LocusLink
+          chromosome={rowData.chromosome}
+          position={rowData.position}
+          selectedIndexVariants={[rowData.indexVariantId]}
+          selectedStudies={[studyId]}
+        />
+        <StudyLocusLink
+          hasSumsStats={hasSumsStats}
+          indexVariantId={rowData.indexVariantId}
+          studyId={studyId}
+        />
+      </React.Fragment>
     ),
   },
 ];
@@ -159,7 +180,14 @@ const getDownloadData = dataWithCytoband => {
   });
 };
 
-function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
+function ManhattanTable({
+  loading,
+  error,
+  data,
+  studyId,
+  hasSumsStats,
+  filenameStem,
+}) {
   const dataWithCytoband = data.map(d => {
     const { chromosome, position } = d;
     return {
@@ -167,7 +195,7 @@ function ManhattanTable({ loading, error, data, studyId, filenameStem }) {
       cytoband: getCytoband(chromosome, position),
     };
   });
-  const columns = tableColumns(studyId);
+  const columns = tableColumns(studyId, hasSumsStats);
   const downloadColumns = getDownloadColumns(columns);
   const downloadData = getDownloadData(dataWithCytoband);
 

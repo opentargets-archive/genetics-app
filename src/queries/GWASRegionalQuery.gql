@@ -1,0 +1,20 @@
+query GWASRegionalQuery(
+  $studyId: String!
+  $chromosome: String!
+  $start: Long!
+  $end: Long!
+) {
+  regional: gwasRegional(
+    studyId: $studyId
+    chromosome: $chromosome
+    start: $start
+    end: $end
+  ) {
+    variant {
+      id
+      rsId
+      position
+    }
+    pval
+  }
+}
