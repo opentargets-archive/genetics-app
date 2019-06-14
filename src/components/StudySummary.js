@@ -17,10 +17,18 @@ const StudySummary = ({
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
       <Typography variant="subtitle1">External references</Typography>
-      {studyId && studyId.startsWith('NEALEUKB') ? (
+      {studyId && studyId.startsWith('NEALE2') ? (
         <Typography variant="subtitle2">
           <strong>Neale UK Biobank:</strong>{' '}
           <Link external to="http://www.nealelab.is/uk-biobank">
+            Homepage
+          </Link>
+        </Typography>
+      ) : null}
+      {studyId && studyId.startsWith('SAIGE') ? (
+        <Typography variant="subtitle2">
+          <strong>SAIGE:</strong>{' '}
+          <Link external to="https://www.leelabsg.org/resources">
             Homepage
           </Link>
         </Typography>
