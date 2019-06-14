@@ -111,7 +111,6 @@ export const tableColumns = ({
         <LocusLink
           chromosome={chromosome}
           position={position}
-          selectedStudies={[rowData.studyId]}
           selectedIndexVariants={[variantId]}
         >
           Locus
@@ -120,7 +119,6 @@ export const tableColumns = ({
         <LocusLink
           chromosome={chromosome}
           position={position}
-          selectedStudies={[rowData.studyId]}
           selectedTagVariants={[variantId]}
         >
           Locus
