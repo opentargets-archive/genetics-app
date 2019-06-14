@@ -256,7 +256,7 @@ const getTissueColumns = (schema, genesForVariantSchema, genesForVariant) => {
               if (rowData[tissue.id]) {
                 const { quantile, beta, pval } = rowData[tissue.id];
                 const qtlRadius = radiusScale(quantile);
-                const qtlColor = beta > 0 ? 'red' : 'blue';
+                const qtlColor = beta < 0 ? 'red' : 'blue';
                 return (
                   <Tooltip
                     title={`Beta: ${beta.toPrecision(3)} pval: ${
