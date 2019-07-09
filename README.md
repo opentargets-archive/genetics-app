@@ -46,6 +46,10 @@ yarn build
 
 We deploy the public version of this site on [Netlify](https://www.netlify.com/). See the [netlify.toml](netlify.toml) for more detail.
 
+### Customisation
+
+To add an organisation logo or change colour scheme of the web application add the CSS to `customisations.css`. It can be done during application deployment.
+
 ## Contribute
 
 Read our [contributing guidelines](CONTRIBUTING.md).
