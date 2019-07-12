@@ -55,7 +55,7 @@
     "eslint": "eslint . --fix --ext .js",
     "version": "yarn build",
     "report:coverage": "codecov",
-    "test:selenium": "node webdriver-smoke-tests.js"
+    "test:selenium": "yarn build && serve -s build & node webdriver-smoke-tests.js"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
@@ -69,7 +69,7 @@
     "prettier": "1.14.0",
     "react-test-renderer": "^16.4.2",
     "selenium-webdriver": "^4.0.0-alpha.4",
-    "serve": "^11.0.1"
+    "serve": "^11.1.0"
   },
   "husky": {
     "hooks": {

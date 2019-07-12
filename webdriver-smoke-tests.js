@@ -2,10 +2,10 @@ const webdriver = require('selenium-webdriver');
 
 // Input capabilities
 const capabilities = {
-  browserName: 'IE',
-  browser_version: '11.0',
-  os: 'Windows',
-  os_version: '10',
+  browserName: 'Chrome',
+  browser_version: '75.0',
+  os: 'OS X',
+  os_version: 'Mojave',
   resolution: '1024x768',
   'browserstack.user': process.env.BROWSERSTACK_USERNAME,
   'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
@@ -18,7 +18,7 @@ var driver = new webdriver.Builder()
   .build();
 
 driver
-  .get('https://genetics.opentargets.org/gene/ENSG00000169174')
+  .get('http://localhost:5000/gene/ENSG00000169174')
   .then(function() {
     driver.sleep(5000);
     driver.getTitle().then(function(title) {
