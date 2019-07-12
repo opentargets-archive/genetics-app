@@ -281,6 +281,7 @@ class GenePage extends React.Component {
                             className={classes.platformLink}
                             href={`${platformUrl}/target/${geneId}`}
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <OverviewIcon className={classes.iconLink} />
                             <Typography>Target profile overview</Typography>
@@ -291,6 +292,7 @@ class GenePage extends React.Component {
                             className={classes.platformLink}
                             href={`${platformUrl}/target/${geneId}?view=sec:known_drug`}
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <DrugsIcon className={classes.iconLink} />
                             <Typography>Is there known drug data?</Typography>
@@ -301,6 +303,7 @@ class GenePage extends React.Component {
                             className={classes.platformLink}
                             href={`${platformUrl}/target/${geneId}?view=sec:mouse_phenotypes`}
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <MouseIcon className={classes.iconLink} />
                             <Typography>
@@ -313,6 +316,7 @@ class GenePage extends React.Component {
                             className={classes.platformLink}
                             href={`${platformUrl}/target/${geneId}?view=sec:affected_pathway`}
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <PathwaysIcon className={classes.iconLink} />
                             <Typography>Is there pathway data?</Typography>
@@ -323,6 +327,7 @@ class GenePage extends React.Component {
                             className={classes.platformLink}
                             href={`${platformUrl}/target/${geneId}?view=sec:expression`}
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <ExpressionIcon className={classes.iconLink} />
                             <Typography>Is there expression data?</Typography>

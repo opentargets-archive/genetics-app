@@ -4,7 +4,6 @@ import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
 import { Helmet } from 'react-helmet';
 import * as d3 from 'd3';
-import _ from 'lodash';
 
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
