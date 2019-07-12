@@ -54,7 +54,8 @@
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
     "eslint": "eslint . --fix --ext .js",
     "version": "yarn build",
-    "report:coverage": "codecov"
+    "report:coverage": "codecov",
+    "test:selenium": "node webdriver-smoke-tests.js"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
