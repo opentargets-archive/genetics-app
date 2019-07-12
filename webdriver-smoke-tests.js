@@ -2,10 +2,10 @@ const webdriver = require('selenium-webdriver');
 
 // Input capabilities
 const capabilities = {
-  browserName: 'Chrome',
-  browser_version: '76.0 beta',
-  os: 'OS X',
-  os_version: 'Mojave',
+  browserName: 'IE',
+  browser_version: '11.0',
+  os: 'Windows',
+  os_version: '10',
   resolution: '1024x768',
   'browserstack.user': process.env.BROWSERSTACK_USERNAME,
   'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
