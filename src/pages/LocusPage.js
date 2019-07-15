@@ -4,7 +4,6 @@ import { Query } from 'react-apollo';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import { findDOMNode } from 'react-dom';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -304,7 +303,6 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   render() {
-    const { classes } = this.props;
     const {
       start,
       end,

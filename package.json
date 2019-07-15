@@ -54,10 +54,13 @@
     "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
     "eslint": "eslint . --fix --ext .js",
     "version": "yarn build",
-    "report:coverage": "codecov"
+    "report:coverage": "codecov",
+    "test:nightwatch": "node end-to-end-test-runner.js",
+    "test:nightwatch:serve": "serve -s build -l 8080 &"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
+    "browserstack-local": "^1.4.0",
     "codecov": "^3.0.4",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
@@ -65,9 +68,10 @@
     "graphql.macro": "^1.4.2",
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
+    "nightwatch": "^1.1.13",
     "prettier": "1.14.0",
     "react-test-renderer": "^16.4.2",
-    "serve": "^11.0.1"
+    "serve": "^11.1.0"
   },
   "husky": {
     "hooks": {
