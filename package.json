@@ -55,7 +55,6 @@
     "eslint": "eslint . --fix --ext .js",
     "version": "yarn build",
     "report:coverage": "codecov",
-    "test:selenium": "yarn build && serve -s build & node webdriver-smoke-tests.js",
     "test:nightwatch": "node end-to-end-test-runner.js",
     "test:nightwatch:serve": "serve -s build -l 8080 &"
   },
