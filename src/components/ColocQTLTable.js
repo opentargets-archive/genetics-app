@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTable, significantFigures } from 'ot-ui';
+import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
 const tableColumns = [
   // {
@@ -70,16 +70,39 @@ const tableColumns = [
   },
 ];
 
-const ColocTable = ({ loading, error, filenameStem, data }) => (
-  <OtTable
-    loading={loading}
-    error={error}
-    columns={tableColumns}
-    data={data}
-    sortBy="log2h4h3"
-    order="desc"
-    downloadFileStem={filenameStem}
-  />
-);
+const getDownloadData = data => {
+  return data.map(d => ({
+    'gene.symbol': d.gene.symbol,
+    phenotypeId: d.phenotypeId,
+    'tissue.name': d.tissue.name,
+    qtlStudyName: d.qtlStudyName,
+    indexVariant: d.indexVariant.id,
+    beta: d.beta,
+    h3: d.h3,
+    h4: d.h4,
+    log2h4h3: d.log2h4h3,
+  }));
+};
+
+const ColocTable = ({ loading, error, fileStem, data }) => {
+  const downloadData = getDownloadData(data);
+  return (
+    <>
+      <DataDownloader
+        tableHeaders={tableColumns}
+        rows={downloadData}
+        fileStem={fileStem}
+      />
+      <OtTableRF
+        loading={loading}
+        error={error}
+        columns={tableColumns}
+        data={data}
+        sortBy="log2h4h3"
+        order="desc"
+      />
+    </>
+  );
+};
 
 export default ColocTable;

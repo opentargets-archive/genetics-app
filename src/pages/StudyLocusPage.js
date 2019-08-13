@@ -362,6 +362,7 @@ query CredibleSetsQuery {
                     error={false}
                     data={qtlColocalisation}
                     handleToggleRegional={this.handleToggleRegional}
+                    fileStem="qtl-coloc"
                   />
                 ) : null}
 
