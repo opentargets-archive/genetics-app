@@ -420,7 +420,7 @@ query CredibleSetsQuery {
                 <DataDownloader
                   tableHeaders={tableColumns}
                   rows={qtlColocDownloadData}
-                  fileStem="qtl-coloc"
+                  fileStem={`qtl-coloc-${studyId}-${indexVariantId}`}
                 />
 
                 <Tabs
@@ -463,7 +463,7 @@ query CredibleSetsQuery {
                   error={false}
                   data={gwasColocalisation}
                   handleToggleRegional={this.handleToggleRegional}
-                  fileStem="gwas-coloc"
+                  fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
                 />
                 {/* <Tabs
                   variant="scrollable"
