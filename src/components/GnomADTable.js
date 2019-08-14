@@ -46,7 +46,7 @@ const GnomADTable = ({ classes, data, variantId }) => (
         <strong>Ensembl:</strong>{' '}
         <Link
           external
-          to={`http://grch37.ensembl.org/Homo_sapiens/Variation/Explore?v=${
+          to={`http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=${
             data.rsId
           }`}
         >
