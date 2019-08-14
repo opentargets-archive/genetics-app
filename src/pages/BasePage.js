@@ -13,6 +13,8 @@ const BasePage = ({ children }) => (
         name="Genetics"
         search={<Search searchLocation="navbar" />}
         docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
+        api="https://genetics-docs.opentargets.org/technical-pipeline/graphql-api"
+        downloads="https://genetics-docs.opentargets.org/technical-pipeline/data-download"
         contact={contactUrl}
       />
     }

@@ -125,6 +125,8 @@ class HomePage extends Component {
               search={null}
               homepage
               docs="https://genetics-docs.opentargets.org"
+              api="https://genetics-docs.opentargets.org/technical-pipeline/graphql-api"
+              downloads="https://genetics-docs.opentargets.org/technical-pipeline/data-download"
               contact={contactUrl}
             />
             <HomeBox name="Genetics">

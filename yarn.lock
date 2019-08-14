@@ -7800,10 +7800,10 @@ ot-charts@^0.0.48:
     lodash.sortby "^4.7.0"
     react-sizeme "^2.6.7"
 
-ot-ui@^0.0.96:
-  version "0.0.96"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.96.tgz#29f4c146767da6c3633cae538822609f5d007c3c"
-  integrity sha512-duw+TYb5sJ1OgWij16/qSWRQD1ZtkqLhiEZEL9qG9ls07B56f3e7vBtP7GlSMkBLTaU41Kz8bcJg6OyBFTupeA==
+ot-ui@^0.0.97:
+  version "0.0.97"
+  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.97.tgz#19992ee051932fe343034e48bdbe9340d6835bd9"
+  integrity sha512-h2DWP5ICO1fcfVAXaBHuZtAl13MvOjVG3HPK+PLI771aaJ7ZKiVeE5ACy1pJOi2iEfkMyZta/db1pTrIht49pg==
 
 p-defer@^1.0.0:
   version "1.0.0"
