@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTable, significantFigures } from 'ot-ui';
+import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
 import StudyLocusLink from './StudyLocusLink';
 
@@ -80,16 +80,38 @@ const tableColumns = [
   },
 ];
 
-const ColocTable = ({ loading, error, filenameStem, data }) => (
-  <OtTable
-    loading={loading}
-    error={error}
-    columns={tableColumns}
-    data={data}
-    sortBy="log2h4h3"
-    order="desc"
-    downloadFileStem={filenameStem}
-  />
-);
+const getDownloadData = data => {
+  return data.map(d => ({
+    study: d.study.studyId,
+    traitReported: d.study.traitReported,
+    pubAuthor: d.study.pubAuthor,
+    indexVariant: d.indexVariant.id,
+    beta: d.beta,
+    h3: d.h3,
+    h4: d.h4,
+    log2h4h3: d.log2h4h3,
+  }));
+};
 
-export default ColocTable;
+const ColocGWASTable = ({ loading, error, fileStem, data }) => {
+  const downloadData = getDownloadData(data);
+  return (
+    <>
+      <DataDownloader
+        tableHeaders={tableColumns}
+        rows={downloadData}
+        fileStem={fileStem}
+      />
+      <OtTableRF
+        loading={loading}
+        error={error}
+        columns={tableColumns}
+        data={data}
+        sortBy="log2h4h3"
+        order="desc"
+      />
+    </>
+  );
+};
+
+export default ColocGWASTable;

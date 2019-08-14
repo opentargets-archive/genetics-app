@@ -408,7 +408,7 @@ query CredibleSetsQuery {
                   {significantFigures(associationSummary.se)}
                 </Typography>
                 <SectionHeading
-                  heading={`QTL Colocalisation`}
+                  heading="QTL Colocalisation"
                   subheading={
                     <React.Fragment>
                       Which molecular traits colocalise with{' '}
@@ -417,6 +417,12 @@ query CredibleSetsQuery {
                     </React.Fragment>
                   }
                 />
+                <DataDownloader
+                  tableHeaders={tableColumns}
+                  rows={qtlColocDownloadData}
+                  fileStem="qtl-coloc"
+                />
+
                 <Tabs
                   variant="scrollable"
                   value={this.state.qtlTabsValue}
@@ -425,11 +431,6 @@ query CredibleSetsQuery {
                   <Tab label="Heatmap" value="heatmap" />
                   <Tab label="Table" value="table" />
                 </Tabs>
-                <DataDownloader
-                  tableHeaders={tableColumns}
-                  rows={qtlColocDownloadData}
-                  fileStem="qtl-coloc"
-                />
                 {this.state.qtlTabsValue === 'heatmap' ? (
                   <ColocQTLGeneTissueTable
                     loading={false}
@@ -448,7 +449,7 @@ query CredibleSetsQuery {
                 ) : null}
 
                 <SectionHeading
-                  heading={`GWAS Study Colocalisation`}
+                  heading="GWAS Study Colocalisation"
                   subheading={
                     <React.Fragment>
                       Which GWAS studies colocalise with{' '}
@@ -462,6 +463,7 @@ query CredibleSetsQuery {
                   error={false}
                   data={gwasColocalisation}
                   handleToggleRegional={this.handleToggleRegional}
+                  fileStem="gwas-coloc"
                 />
                 {/* <Tabs
                   variant="scrollable"

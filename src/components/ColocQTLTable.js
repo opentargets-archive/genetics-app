@@ -2,7 +2,7 @@ import React from 'react';
 
 import { OtTableRF } from 'ot-ui';
 
-const ColocTable = ({ loading, error, data, tableColumns }) => {
+const ColocQTLTable = ({ loading, error, data, tableColumns }) => {
   return (
     <OtTableRF
       loading={loading}
@@ -15,4 +15,4 @@ const ColocTable = ({ loading, error, data, tableColumns }) => {
   );
 };
 
-export default ColocTable;
+export default ColocQTLTable;
