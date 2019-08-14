@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTable, DataCircle, Tooltip } from 'ot-ui';
+import { Link, OtTableRF, DataCircle, Tooltip } from 'ot-ui';
 
 const tissueComparator = t => (a, b) => {
   if (a[t] && b[t]) {
@@ -19,7 +19,7 @@ const tissueComparator = t => (a, b) => {
   }
 };
 
-const ColocTable = ({ loading, error, filenameStem, data }) => {
+const ColocTable = ({ loading, error, fileStem, data }) => {
   const uniqueStudyGenePhenotypes = data.reduce((acc, d) => {
     const { phenotypeId, gene, qtlStudyName } = d;
     acc[`${qtlStudyName}__${gene.id}__${phenotypeId}`] = {
@@ -132,7 +132,7 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
     ...tissueColumns,
   ];
   return (
-    <OtTable
+    <OtTableRF
       loading={loading}
       error={error}
       columns={tableColumns}
@@ -140,7 +140,6 @@ const ColocTable = ({ loading, error, filenameStem, data }) => {
       sortBy="gene.symbol"
       order="asc"
       verticalHeaders
-      downloadFileStem={filenameStem}
     />
   );
 };

@@ -19,6 +19,7 @@ import {
   PlotContainer,
   PlotContainerSection,
   significantFigures,
+  DataDownloader,
 } from 'ot-ui';
 import { GeneTrack, CredibleSet } from 'ot-charts';
 
@@ -118,6 +119,82 @@ const flatExonsToPairedExons = genes => {
     }, []),
   }));
   return paired;
+};
+
+const tableColumns = [
+  {
+    id: 'gene.symbol',
+    label: 'Gene',
+    comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
+    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
+  },
+  {
+    id: 'phenotypeId',
+    label: 'Molecular trait',
+    // renderCell: d => (d.phenotypeId !== d.gene.id ? d.phenotypeId : null),
+  },
+  {
+    id: 'tissue.name',
+    label: 'Tissue',
+    comparator: (a, b) => d3.ascending(a.tissue.name, b.tissue.name),
+    renderCell: d => d.tissue.name,
+  },
+  {
+    id: 'qtlStudyName',
+    label: 'Source',
+  },
+  {
+    id: 'indexVariant',
+    label: 'Lead variant',
+    comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
+    renderCell: d => (
+      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+    ),
+  },
+  {
+    id: 'beta',
+    label: 'QTL beta',
+    tooltip:
+      'QTL effect with respect to the alternative allele of the page variant',
+    renderCell: d => significantFigures(d.beta),
+  },
+  {
+    id: 'h3',
+    label: 'H3',
+    tooltip: (
+      <React.Fragment>
+        Posterior probability that the signals <strong>do not</strong>{' '}
+        colocalise
+      </React.Fragment>
+    ),
+    renderCell: d => significantFigures(d.h3),
+  },
+  {
+    id: 'h4',
+    label: 'H4',
+    tooltip: 'Posterior probability that the signals colocalise',
+    renderCell: d => significantFigures(d.h4),
+  },
+  {
+    id: 'log2h4h3',
+    label: 'log2(H4/H3)',
+    tooltip: 'Log-likelihood that the signals colocalise',
+    renderCell: d => significantFigures(d.log2h4h3),
+  },
+];
+
+const getDownloadData = data => {
+  return data.map(d => ({
+    'gene.symbol': d.gene.symbol,
+    phenotypeId: d.phenotypeId,
+    'tissue.name': d.tissue.name,
+    qtlStudyName: d.qtlStudyName,
+    indexVariant: d.indexVariant.id,
+    beta: d.beta,
+    h3: d.h3,
+    h4: d.h4,
+    log2h4h3: d.log2h4h3,
+  }));
 };
 
 class LocusTraitPage extends React.Component {
@@ -256,6 +333,7 @@ query CredibleSetsQuery {
                 d => (credSet95Value === '95' ? d.is95CredibleSet : true)
               );
             const pageCredibleSetKey = `gwasCredibleSet__${studyId}__${indexVariantId}`;
+            const qtlColocDownloadData = getDownloadData(qtlColocalisation);
 
             return (
               <React.Fragment>
@@ -329,7 +407,6 @@ query CredibleSetsQuery {
                   <strong>Standard Error:</strong>{' '}
                   {significantFigures(associationSummary.se)}
                 </Typography>
-
                 <SectionHeading
                   heading={`QTL Colocalisation`}
                   subheading={
@@ -345,15 +422,20 @@ query CredibleSetsQuery {
                   value={this.state.qtlTabsValue}
                   onChange={this.handleQtlTabsChange}
                 >
-                  <Tab label="Heatmap" value={'heatmap'} />
-                  <Tab label="Table" value={'table'} />
+                  <Tab label="Heatmap" value="heatmap" />
+                  <Tab label="Table" value="table" />
                 </Tabs>
-
+                <DataDownloader
+                  tableHeaders={tableColumns}
+                  rows={qtlColocDownloadData}
+                  fileStem="qtl-coloc"
+                />
                 {this.state.qtlTabsValue === 'heatmap' ? (
                   <ColocQTLGeneTissueTable
                     loading={false}
                     error={false}
                     data={qtlColocalisation}
+                    fileStem="qtl-coloc-heatmap"
                   />
                 ) : null}
                 {this.state.qtlTabsValue === 'table' ? (
@@ -361,8 +443,7 @@ query CredibleSetsQuery {
                     loading={false}
                     error={false}
                     data={qtlColocalisation}
-                    handleToggleRegional={this.handleToggleRegional}
-                    fileStem="qtl-coloc"
+                    tableColumns={tableColumns}
                   />
                 ) : null}
 
