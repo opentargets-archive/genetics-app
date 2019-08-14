@@ -39,6 +39,13 @@ const GnomADTable = ({ classes, data, variantId }) => (
         <strong>GRCh37:</strong> {data.chromosomeB37}:
         {commaSeparate(data.positionB37)}
       </Typography>
+      <Typography variant="subtitle2">
+        <strong>Reference allele:</strong> {data.refAllele}
+      </Typography>
+      <Typography variant="subtitle2">
+        <strong>Alternative allele (effect allele):</strong> {data.altAllele}
+      </Typography>
+
       <br />
 
       <Typography variant="subtitle1">External references</Typography>
