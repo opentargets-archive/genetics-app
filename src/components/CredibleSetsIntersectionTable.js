@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, OtTable, significantFigures } from 'ot-ui';
+import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
 const tableColumns = [
   {
@@ -32,16 +32,34 @@ const tableColumns = [
   },
 ];
 
-const CredibleSetsIntersectionTable = ({ filenameStem, data }) => (
-  <OtTable
-    loading={false}
-    error={false}
-    columns={tableColumns}
-    data={data}
-    sortBy="posteriorProbabilityProd"
-    order="desc"
-    downloadFileStem={filenameStem}
-  />
-);
+const getDownloadData = data => {
+  return data.map(d => ({
+    id: d.id,
+    position: d.position,
+    posteriorProbabilityMax: d.posteriorProbabilityMax,
+    posteriorProbabilityProd: d.posteriorProbabilityProd,
+  }));
+};
+
+const CredibleSetsIntersectionTable = ({ filenameStem, data }) => {
+  const downloadData = getDownloadData(data);
+  return (
+    <>
+      <DataDownloader
+        tableHeaders={tableColumns}
+        rows={downloadData}
+        fileStem={filenameStem}
+      />
+      <OtTableRF
+        loading={false}
+        error={false}
+        columns={tableColumns}
+        data={data}
+        sortBy="posteriorProbabilityProd"
+        order="desc"
+      />
+    </>
+  );
+};
 
 export default CredibleSetsIntersectionTable;
