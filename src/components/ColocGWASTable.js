@@ -96,7 +96,7 @@ const getDownloadData = data => {
 const ColocGWASTable = ({ loading, error, fileStem, data }) => {
   const downloadData = getDownloadData(data);
   return (
-    <>
+    <React.Fragment>
       <DataDownloader
         tableHeaders={tableColumns}
         rows={downloadData}
@@ -110,7 +110,7 @@ const ColocGWASTable = ({ loading, error, fileStem, data }) => {
         sortBy="log2h4h3"
         order="desc"
       />
-    </>
+    </React.Fragment>
   );
 };
 
