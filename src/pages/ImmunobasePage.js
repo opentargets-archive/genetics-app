@@ -61,7 +61,7 @@ const ImmunobasePage = ({ classes }) => (
             <Link external to="https://www.ebi.ac.uk/gwas/">
               NHGRI-EBI GWAS Catalog
             </Link>{' '}
-            (see table below for links).
+            (see below for links).
           </p>
           <p>
             <Button variant="outlined">
@@ -69,7 +69,7 @@ const ImmunobasePage = ({ classes }) => (
                 external
                 to="https://docs.google.com/spreadsheets/d/1YYbxC1NhtbYuBYe2gYZNcxO0a0S4oTxHfoYtZrqKsrM/edit#gid=1589938306"
               >
-                Table with links
+                Immunobase study links
               </Link>
             </Button>
           </p>
