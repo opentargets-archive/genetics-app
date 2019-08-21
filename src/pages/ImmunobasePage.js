@@ -27,6 +27,7 @@ class ImmunobasePage extends React.Component {
         >
           <Grid item xs={12} sm={10} md={6}>
             <Typography align="center">
+              <img src="immunobase.svg" alt="Immunobase Logo" />
               <p>
                 ImmunoBase ownership has been transferred to{' '}
                 <Link external to="https://www.opentargets.org/">
