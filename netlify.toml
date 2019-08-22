@@ -5,6 +5,12 @@
   force = true
 
 [[redirects]]
+  from = "https://www.immunobase.org/*"
+  to = "https://genetics.opentargets.org/immunobase"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "https://immunobase.org.uk/*"
   to = "https://genetics.opentargets.org/immunobase"
   status = 301
