@@ -11,6 +11,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "https://immunobase.org.uk/*"
+  to = "https://genetics.opentargets.org/immunobase"
+  status = 301
+  force = true
+
 # qa and dev branches to use different apis
 # (as per https://github.com/opentargets/genetics/issues/312)
 [context.qa.environment]
