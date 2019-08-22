@@ -1,3 +1,15 @@
+[[redirects]]
+  from = "https://www.immunobase.org.uk/*"
+  to = "https://genetics.opentargets.org/immunobase"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://immunobase.org.uk/*"
+  to = "https://genetics.opentargets.org/immunobase"
+  status = 301
+  force = true
+
 # redirect to ensure longer urls still fetch index.html
 [[redirects]]
   from = "/*"
@@ -8,18 +20,6 @@
 [[redirects]]
   from = "https://genetics.opentargets.io/*"
   to = "https://genetics.opentargets.org/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.immunobase.org.uk/*"
-  to = "https://genetics.opentargets.org/immunobase"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://immunobase.org.uk/*"
-  to = "https://genetics.opentargets.org/immunobase"
   status = 301
   force = true
 
