@@ -16,6 +16,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "https://immunobase.org/*"
+  to = "https://genetics.opentargets.org/immunobase"
+  status = 301
+  force = true
+
 # redirect to ensure longer urls still fetch index.html
 [[redirects]]
   from = "/*"
