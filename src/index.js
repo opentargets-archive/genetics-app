@@ -20,12 +20,28 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById('root')
-);
+fetch('/config.json')
+  .then(response => {
+    if (!response.ok) {
+      throw Error('Got ' + response.status + ' http status');
+    }
+    return response.json();
+  })
+  .catch(err => {
+    console.log(
+      "Use default application configuration as config.json hasn't been found or parsed:",
+      err
+    );
+    return {};
+  })
+  .then(config =>
+    ReactDOM.render(
+      <ApolloProvider client={client}>
+        <App {...config} />
+      </ApolloProvider>,
+      document.getElementById('root')
+    )
+  );
 
 // disable service worker
 unregister();
