@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import * as d3 from 'd3';
 import {
   Link,
@@ -32,7 +33,9 @@ export const tableColumns = ({
     id: 'studyId',
     label: 'Study ID',
     renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      <Link component={RouterLink} to={`/study/${rowData.studyId}`}>
+        {rowData.studyId}
+      </Link>
     ),
   },
   {
@@ -70,7 +73,7 @@ export const tableColumns = ({
       />
     ),
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariantId}`}>
+      <Link component={RouterLink} to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
       </Link>
     ),
@@ -90,7 +93,7 @@ export const tableColumns = ({
       />
     ),
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.tagVariantId}`}>
+      <Link component={RouterLink} to={`/variant/${rowData.tagVariantId}`}>
         {rowData.tagVariantId}
       </Link>
     ),
@@ -111,7 +114,9 @@ export const tableColumns = ({
       />
     ),
     renderCell: rowData => (
-      <Link to={`/gene/${rowData.geneId}`}>{rowData.gene.symbol}</Link>
+      <Link component={RouterLink} to={`/gene/${rowData.geneId}`}>
+        {rowData.gene.symbol}
+      </Link>
     ),
   },
   {
