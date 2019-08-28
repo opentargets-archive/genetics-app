@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Link, OtTable, CloseButton, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
@@ -22,7 +23,9 @@ export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
       rowData.pileup ? (
         <b>Intersection</b>
       ) : (
-        <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+        <Link component={RouterLink} to={`/study/${rowData.studyId}`}>
+          {rowData.studyId}
+        </Link>
       ),
   },
   {

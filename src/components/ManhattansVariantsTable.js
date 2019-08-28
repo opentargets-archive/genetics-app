@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Link, OtTable } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
@@ -15,7 +16,7 @@ const tableColumns = studyIds => [
     tooltip:
       'This locus is shared across all selected studies. Only the lead variant in the root study is shown.',
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariantId}`}>
+      <Link component={RouterLink} to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
       </Link>
     ),
@@ -39,7 +40,9 @@ const tableColumns = studyIds => [
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            <Link component={RouterLink} to={`/gene/${d.gene.id}`}>
+              {d.gene.symbol}
+            </Link>{' '}
           </React.Fragment>
         ))}
       </React.Fragment>
