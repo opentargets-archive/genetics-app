@@ -1,6 +1,7 @@
 import React from 'react';
 import queryString from 'query-string';
 import { withStyles } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Link, Button, LocusIcon } from 'ot-ui';
 import { chromosomesWithCumulativeLengths } from 'ot-charts';
@@ -73,6 +74,7 @@ const LocusLink = ({
   }
   return (
     <Link
+      component={RouterLink}
       to={`/locus?${queryString.stringify(params)}`}
       className={classes.link}
     >
