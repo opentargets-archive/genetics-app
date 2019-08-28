@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -57,6 +58,7 @@ const StudyLocusLink = ({
       {hasSumsStats ? (
         <div className={classes.container}>
           <Link
+            component={RouterLink}
             to={`/study-locus/${studyId}/${indexVariantId}`}
             className={classes.link}
           >
