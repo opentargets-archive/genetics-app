@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   Link,
@@ -21,7 +22,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
     id: 'indexVariantId',
     label: 'Lead Variant',
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariantId}`}>
+      <Link component={RouterLink} to={`/variant/${rowData.indexVariantId}`}>
         {rowData.indexVariantId}
       </Link>
     ),
@@ -109,7 +110,9 @@ export const tableColumns = (studyId, hasSumsStats) => [
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            <Link component={RouterLink} to={`/gene/${d.gene.id}`}>
+              {d.gene.symbol}
+            </Link>{' '}
           </React.Fragment>
         ))}
       </React.Fragment>
@@ -124,7 +127,9 @@ export const tableColumns = (studyId, hasSumsStats) => [
       <React.Fragment>
         {rowData.bestColocGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            <Link component={RouterLink} to={`/gene/${d.gene.id}`}>
+              {d.gene.symbol}
+            </Link>{' '}
           </React.Fragment>
         ))}
       </React.Fragment>
