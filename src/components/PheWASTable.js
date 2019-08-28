@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Link,
   OtTable,
@@ -29,7 +30,9 @@ export const tableColumns = ({
     id: 'studyId',
     label: 'Study ID',
     renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      <Link component={RouterLink} to={`/study/${rowData.studyId}`}>
+        {rowData.studyId}
+      </Link>
     ),
   },
   {

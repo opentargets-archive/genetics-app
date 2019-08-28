@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import {
@@ -129,7 +130,11 @@ const getColumnsAll = (genesForVariantSchema, genesForVariant) => {
       id: 'geneSymbol',
       label: 'Gene',
       renderCell: rowData => {
-        return <Link to={`/gene/${rowData.geneId}`}>{rowData.geneSymbol}</Link>;
+        return (
+          <Link component={RouterLink} to={`/gene/${rowData.geneId}`}>
+            {rowData.geneSymbol}
+          </Link>
+        );
       },
     },
     {
@@ -336,7 +341,11 @@ const getTissueColumns = (schema, genesForVariantSchema, genesForVariant) => {
       id: 'geneSymbol',
       label: 'Gene',
       renderCell: rowData => {
-        return <Link to={`/gene/${rowData.geneId}`}>{rowData.geneSymbol}</Link>;
+        return (
+          <Link component={RouterLink} to={`/gene/${rowData.geneId}`}>
+            {rowData.geneSymbol}
+          </Link>
+        );
       },
     },
     ...aggregateColumns,

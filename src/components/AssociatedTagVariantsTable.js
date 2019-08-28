@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Link, OtTable, commaSeparate, significantFigures } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
@@ -16,7 +17,7 @@ const tableColumns = variantId => [
     label: 'Tag Variant',
     renderCell: rowData =>
       variantId !== rowData.tagVariantId ? (
-        <Link to={`/variant/${rowData.tagVariantId}`}>
+        <Link component={RouterLink} to={`/variant/${rowData.tagVariantId}`}>
           {rowData.tagVariantId}
         </Link>
       ) : (
@@ -28,7 +29,9 @@ const tableColumns = variantId => [
     id: 'studyId',
     label: 'Study ID',
     renderCell: rowData => (
-      <Link to={`/study/${rowData.studyId}`}>{rowData.studyId}</Link>
+      <Link component={RouterLink} to={`/study/${rowData.studyId}`}>
+        {rowData.studyId}
+      </Link>
     ),
   },
   { id: 'traitReported', label: 'Trait' },
