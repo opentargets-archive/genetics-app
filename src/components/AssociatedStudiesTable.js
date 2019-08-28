@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   DataDownloader,
   OtTableRF,
@@ -74,7 +75,7 @@ const tableColumns = ({
     label: 'Study ID',
     comparator: generateComparator(d => d.study.studyId),
     renderCell: rowData => (
-      <Link to={`/study/${rowData.study.studyId}`}>
+      <Link component={RouterLink} to={`/study/${rowData.study.studyId}`}>
         {rowData.study.studyId}
       </Link>
     ),
@@ -142,7 +143,7 @@ const tableColumns = ({
     label: 'Lead Variant',
     comparator: generateComparator(d => d.indexVariant.id),
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariant.id}`}>
+      <Link component={RouterLink} to={`/variant/${rowData.indexVariant.id}`}>
         {rowData.indexVariant.id}
       </Link>
     ),

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Page, NavBar, Footer } from 'ot-ui';
 
@@ -16,6 +17,7 @@ const BasePage = ({ children }) => (
         api="https://genetics-docs.opentargets.org/technical-pipeline/graphql-api"
         downloads="https://genetics-docs.opentargets.org/technical-pipeline/data-download"
         contact={contactUrl}
+        linkComponent={RouterLink}
       />
     }
     footer={<Footer externalLinks={externalLinks} />}
