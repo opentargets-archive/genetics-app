@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import { Link, OtTableRF, DataCircle, Tooltip } from 'ot-ui';
@@ -115,7 +116,11 @@ const ColocTable = ({ loading, error, fileStem, data }) => {
     id: 'gene.symbol',
     label: 'Gene',
     comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
-    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
+    renderCell: d => (
+      <Link component={RouterLink} to={`/gene/${d.gene.id}`}>
+        {d.gene.symbol}
+      </Link>
+    ),
   };
   const phenotypeIdColumn = {
     id: 'phenotypeId',

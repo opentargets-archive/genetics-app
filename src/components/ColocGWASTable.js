@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
@@ -11,7 +12,9 @@ const tableColumns = [
     label: 'Study',
     comparator: (a, b) => d3.ascending(a.study.studyId, b.study.studyId),
     renderCell: d => (
-      <Link to={`/study/${d.study.studyId}`}>{d.study.studyId}</Link>
+      <Link component={RouterLink} to={`/study/${d.study.studyId}`}>
+        {d.study.studyId}
+      </Link>
     ),
   },
   {
@@ -32,7 +35,9 @@ const tableColumns = [
     label: 'Lead variant',
     comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
     renderCell: d => (
-      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+      <Link component={RouterLink} to={`/variant/${d.indexVariant.id}`}>
+        {d.indexVariant.id}
+      </Link>
     ),
   },
   {

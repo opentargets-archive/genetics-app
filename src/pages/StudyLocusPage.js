@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
@@ -126,7 +127,11 @@ const tableColumns = [
     id: 'gene.symbol',
     label: 'Gene',
     comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
-    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
+    renderCell: d => (
+      <Link component={RouterLink} to={`/gene/${d.gene.id}`}>
+        {d.gene.symbol}
+      </Link>
+    ),
   },
   {
     id: 'phenotypeId',
@@ -148,7 +153,9 @@ const tableColumns = [
     label: 'Lead variant',
     comparator: (a, b) => d3.ascending(a.indexVariant.id, b.indexVariant.id),
     renderCell: d => (
-      <Link to={`/variant/${d.indexVariant.id}`}>{d.indexVariant.id}</Link>
+      <Link component={RouterLink} to={`/variant/${d.indexVariant.id}`}>
+        {d.indexVariant.id}
+      </Link>
     ),
   },
   {

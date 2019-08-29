@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
@@ -6,7 +7,11 @@ const tableColumns = [
   {
     id: 'id',
     label: 'Variant',
-    renderCell: d => <Link to={`/variant/${d.id}`}>{d.id}</Link>,
+    renderCell: d => (
+      <Link component={RouterLink} to={`/variant/${d.id}`}>
+        {d.id}
+      </Link>
+    ),
   },
   // {
   //   id: 'rsId',
