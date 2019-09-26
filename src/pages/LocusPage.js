@@ -10,7 +10,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { Gecko } from 'ot-charts';
 import {
   SectionHeading,
-  BrowserControls,
   PlotContainer,
   PlotContainerSection,
   Button,
@@ -19,6 +18,7 @@ import {
 } from 'ot-ui';
 
 import BasePage from './BasePage';
+import BrowserControls from '../components/BrowserControls';
 import LocusSelection from '../components/LocusSelection';
 import LocusTable from '../components/LocusTable';
 import locusScheme, {

@@ -8,7 +8,6 @@ import {
   Tabs,
   Tab,
   DataCircle,
-  LabelHML,
   Tooltip,
   significantFigures,
   commaSeparate,
@@ -17,6 +16,7 @@ import {
 import { pvalThreshold } from '../constants';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import generateComparator from '../utils/generateComparator';
+import LabelHML from './LabelHML';
 
 const OVERVIEW = 'overview';
 

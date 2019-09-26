@@ -1,5 +1,7 @@
 import React from 'react';
-import { Chip, Typography } from 'ot-ui';
+import { Typography } from 'ot-ui';
+
+import Chip from './LocusChip';
 
 const LocusSelection = ({
   selectedGenes,
