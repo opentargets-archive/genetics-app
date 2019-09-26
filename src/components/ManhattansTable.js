@@ -1,8 +1,17 @@
 import React from 'react';
-import { Link, OtTable, CloseButton, commaSeparate } from 'ot-ui';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+import { Link, OtTable, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
+
+const CloseButton = props => (
+  <IconButton {...props}>
+    <CloseIcon />
+  </IconButton>
+);
 
 export const tableColumns = ({ onDeleteStudy, onClickIntersectionLocus }) => [
   {
