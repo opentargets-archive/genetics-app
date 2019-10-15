@@ -9,7 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 
-import App from './App';
+import ConfigApp from './ConfigApp';
 import { unregister } from './registerServiceWorker';
 import { graphqlApiUrl } from './configuration';
 
@@ -20,28 +20,12 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-fetch('/config.json')
-  .then(response => {
-    if (!response.ok) {
-      throw Error('Got ' + response.status + ' http status');
-    }
-    return response.json();
-  })
-  .catch(err => {
-    console.log(
-      "Use default application configuration as config.json hasn't been found or parsed:",
-      err
-    );
-    return {};
-  })
-  .then(config =>
-    ReactDOM.render(
-      <ApolloProvider client={client}>
-        <App {...config} />
-      </ApolloProvider>,
-      document.getElementById('root')
-    )
-  );
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <ConfigApp />
+  </ApolloProvider>,
+  document.getElementById('root')
+);
 
 // disable service worker
 unregister();
