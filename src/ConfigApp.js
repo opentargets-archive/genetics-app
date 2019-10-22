@@ -28,7 +28,7 @@ class ConfigApp extends React.Component {
 
   render() {
     if (this.state.config === undefined) {
-      return <i>Loading...</i>;
+      return null;
     } else {
       return <App {...this.state.config} />;
     }

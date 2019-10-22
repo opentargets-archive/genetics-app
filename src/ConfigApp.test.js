@@ -6,11 +6,11 @@ import App from './App';
 const waitForAsync = () => new Promise(resolve => setImmediate(resolve));
 
 describe('<ConfigApp />', () => {
-  it('shows the loading message before cofig.json gets fetched', () => {
+  it('renders nothing while cofig.json being fetched', () => {
     let ca = shallow(<ConfigApp />);
 
     expect(ca.state().config).toEqual(undefined);
-    expect(ca.text()).toEqual('Loading...');
+    expect(ca.isEmptyRender()).toEqual(true);
   });
 
   it('renders application using defaults when config.json is not found', async () => {
