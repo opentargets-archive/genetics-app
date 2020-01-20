@@ -28,15 +28,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
     comparator: variantIdComparator,
   },
   {
-    id: 'indexVariantRsId',
-    label: 'rsID',
-  },
-  {
-    id: 'cytoband',
-    label: 'Cytoband',
-    comparator: cytobandComparator,
-  },
-  {
     id: 'pval',
     label: 'P-value',
     renderCell: rowData =>
