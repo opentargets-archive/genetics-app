@@ -93,7 +93,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
   },
   {
     id: 'bestGenes',
-    label: 'Top V2G Genes',
+    label: 'L2G',
     tooltip:
       'The top ranked genes from our variant-to-gene pipeline for this lead variant',
     renderCell: rowData => (
@@ -108,7 +108,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
   },
   {
     id: 'bestColocGenes',
-    label: 'Top Colocalising Genes',
+    label: 'Colocalisation',
     tooltip:
       'The list of genes which colocalise at this locus with PP(H4) ≥ 0.95 and log2(H4/H3) ≥ log2(5)',
     renderCell: rowData => (
