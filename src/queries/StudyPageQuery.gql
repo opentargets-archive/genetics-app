@@ -43,6 +43,13 @@ query StudyPageQuery($studyId: String!) {
           symbol
         }
       }
+      bestLocus2Genes{
+        score
+        gene {
+          id
+          symbol
+        }
+      }
     }
   }
 }
