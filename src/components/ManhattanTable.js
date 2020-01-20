@@ -218,6 +218,10 @@ function ManhattanTable({
             label: `study:manhattan:${sortBy}(${order})`,
           });
         }}
+        headerGroups={[
+          { colspan: 7, label: 'Association Information' },
+          { colspan: 5, label: 'Prioritised Genes' },
+        ]}
       />
     </Fragment>
   );
