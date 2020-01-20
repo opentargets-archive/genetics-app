@@ -126,12 +126,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
     label: 'View',
     renderCell: rowData => (
       <React.Fragment>
-        <LocusLink
-          chromosome={rowData.chromosome}
-          position={rowData.position}
-          selectedIndexVariants={[rowData.indexVariantId]}
-          selectedStudies={[studyId]}
-        />
         <StudyLocusLink
           hasSumsStats={hasSumsStats}
           indexVariantId={rowData.indexVariantId}
