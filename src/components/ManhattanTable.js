@@ -9,12 +9,10 @@ import {
 } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
-import LocusLink from './LocusLink';
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import cytobandComparator from '../logic/cytobandComparator';
 
 export const tableColumns = (studyId, hasSumsStats) => [
   {
