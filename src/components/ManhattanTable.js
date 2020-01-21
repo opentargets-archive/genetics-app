@@ -93,7 +93,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
     id: 'bestLocus2Genes',
     label: 'L2G',
     tooltip:
-      'The top ranked genes from our variant-to-gene pipeline for this lead variant',
+      'Genes prioritised by our locus-to-gene model with posterior probability ≥ 0.5',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestLocus2Genes.map((d, i) => (
@@ -108,7 +108,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
   {
     id: 'bestGenes',
     label: 'Closest Gene',
-    tooltip: '', // TODO: need tooltip text
+    tooltip: 'The closest gene with the closest transcription start site',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
@@ -229,7 +229,16 @@ function ManhattanTable({
         }}
         headerGroups={[
           { colspan: 7, label: 'Association Information' },
-          { colspan: 5, label: 'Prioritised Genes' },
+          {
+            colspan: 5,
+            label: (
+              <Fragment>
+                Prioritised Genes
+                <br />
+                <small>results from our gene prioritisation pipelines</small>
+              </Fragment>
+            ),
+          },
         ]}
       />
     </Fragment>
