@@ -92,15 +92,31 @@ export const tableColumns = (studyId, hasSumsStats) => [
       rowData.ldSetSize ? commaSeparate(rowData.ldSetSize) : null,
   },
   {
-    id: 'bestGenes',
+    id: 'bestLocus2Genes',
     label: 'L2G',
     tooltip:
       'The top ranked genes from our variant-to-gene pipeline for this lead variant',
     renderCell: rowData => (
       <React.Fragment>
+        {rowData.bestLocus2Genes.map((d, i) => (
+          <React.Fragment key={i}>
+            {i > 0 ? ', ' : ''}
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
+          </React.Fragment>
+        ))}
+      </React.Fragment>
+    ),
+  },
+  {
+    id: 'bestGenes',
+    label: 'Closest Gene',
+    tooltip: '', // TODO: need tooltip text
+    renderCell: rowData => (
+      <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            {i > 0 ? ', ' : ''}
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
           </React.Fragment>
         ))}
       </React.Fragment>
@@ -115,7 +131,8 @@ export const tableColumns = (studyId, hasSumsStats) => [
       <React.Fragment>
         {rowData.bestColocGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            {i > 0 ? ', ' : ''}
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
           </React.Fragment>
         ))}
       </React.Fragment>
