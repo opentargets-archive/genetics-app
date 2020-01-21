@@ -61,14 +61,14 @@ const StudyLocusLink = ({
             className={classes.link}
           >
             <Button className={big ? classes.buttonBig : classes.button}>
-              Colocalisation
+              Gene Prioritisation
             </Button>
           </Link>
         </div>
       ) : (
         <div className={classes.container}>
           <Button disabled className={big ? classes.buttonBig : classes.button}>
-            Colocalisation
+            Gene Prioritisation
           </Button>
         </div>
       )}
