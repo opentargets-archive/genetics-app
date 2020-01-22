@@ -11,7 +11,6 @@ import {
 import { pvalThreshold } from '../constants';
 import LocusLink from './LocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import PmidOrBiobankLink from './PmidOrBiobankLink';
 import generateComparator from '../utils/generateComparator';
 
 const getDownloadColumns = () => {
@@ -95,17 +94,6 @@ const tableColumns = ({
     ),
   },
   {
-    id: 'study.pmid',
-    label: 'PMID',
-    comparator: generateComparator(d => d.study.pmid),
-    renderCell: rowData => (
-      <PmidOrBiobankLink
-        studyId={rowData.study.studyId}
-        pmid={rowData.study.pmid}
-      />
-    ),
-  },
-  {
     id: 'study.pubAuthor',
     label: 'Author (Year)',
     comparator: generateComparator(d => d.study.pubAuthor),
@@ -131,13 +119,6 @@ const tableColumns = ({
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
   {
-    id: 'study.nCases',
-    label: 'N Cases',
-    comparator: generateComparator(d => d.study.nCases),
-    renderCell: rowData =>
-      rowData.study.nCases ? commaSeparate(rowData.study.nCases) : '',
-  },
-  {
     id: 'indexVariant.id',
     label: 'Lead Variant',
     comparator: generateComparator(d => d.indexVariant.id),
@@ -146,12 +127,6 @@ const tableColumns = ({
         {rowData.indexVariant.id}
       </Link>
     ),
-  },
-  {
-    id: 'indexVariant.rsId',
-    label: 'Lead Variant rsID',
-    comparator: generateComparator(d => d.indexVariant.rsId),
-    renderCell: rowData => rowData.indexVariant.rsId,
   },
   {
     id: 'pval',
