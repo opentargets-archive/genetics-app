@@ -36,25 +36,26 @@ const getDownloadColumns = () => {
 };
 
 const getDownloadRows = rows => {
-  return rows.map(row => ({
-    studyId: row.study.studyId,
-    studyTrait: row.study.traitReported,
-    studyPmid: row.study.pmid,
-    studyAuthor: row.study.pubAuthor,
-    studyDate: row.study.pubDate,
-    nInitial: row.study.nInitial,
-    nReplication: row.study.nReplication,
-    nCases: row.study.nCases,
-    indexVariantId: row.indexVariant.id,
-    indexVariantRsId: row.indexVariant.rsId,
-    pval: row.pval,
-    beta: row.beta,
-    betaCILower: row.betaCILower,
-    betaCIUpper: row.betaCIUpper,
-    oddsRatio: row.oddsRatio,
-    oddsRatioCILower: row.oddsRatioCILower,
-    oddsRatioCIUpper: row.oddsRatioCIUpper,
-  }));
+  // return rows.map(row => ({
+  //   studyId: row.study.studyId,
+  //   studyTrait: row.study.traitReported,
+  //   studyPmid: row.study.pmid,
+  //   studyAuthor: row.study.pubAuthor,
+  //   studyDate: row.study.pubDate,
+  //   nInitial: row.study.nInitial,
+  //   nReplication: row.study.nReplication,
+  //   nCases: row.study.nCases,
+  //   indexVariantId: row.indexVariant.id,
+  //   indexVariantRsId: row.indexVariant.rsId,
+  //   pval: row.pval,
+  //   beta: row.beta,
+  //   betaCILower: row.betaCILower,
+  //   betaCIUpper: row.betaCIUpper,
+  //   oddsRatio: row.oddsRatio,
+  //   oddsRatioCILower: row.oddsRatioCILower,
+  //   oddsRatioCIUpper: row.oddsRatioCIUpper,
+  // }));
+  return [];
 };
 
 const tableColumns = ({
@@ -119,13 +120,11 @@ const tableColumns = ({
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
   {
-    id: 'indexVariant.id',
+    id: 'variant.id',
     label: 'Lead Variant',
-    comparator: generateComparator(d => d.indexVariant.id),
+    comparator: generateComparator(d => d.variant.id),
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariant.id}`}>
-        {rowData.indexVariant.id}
-      </Link>
+      <Link to={`/variant/${rowData.variant.id}`}>{rowData.variant.id}</Link>
     ),
   },
   {
@@ -137,7 +136,7 @@ const tableColumns = ({
         : significantFigures(rowData.pval),
   },
   {
-    id: 'beta',
+    id: 'beta.betaCI',
     label: 'Beta',
     tooltip: (
       <React.Fragment>
@@ -152,14 +151,14 @@ const tableColumns = ({
       </React.Fragment>
     ),
     renderCell: rowData =>
-      rowData.beta ? significantFigures(rowData.beta) : null,
+      rowData.beta.betaCI ? significantFigures(rowData.beta.betaCI) : null,
   },
   {
-    id: 'oddsRatio',
+    id: 'odds.oddsCI',
     label: 'Odds Ratio',
     tooltip: 'Odds ratio with respect to the ALT allele',
     renderCell: rowData =>
-      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+      rowData.odds.oddsCI ? significantFigures(rowData.odds.oddsCI) : null,
   },
   {
     id: 'ci',
@@ -167,15 +166,22 @@ const tableColumns = ({
     tooltip:
       '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
     renderCell: rowData =>
-      rowData.beta
-        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
-            rowData.betaCIUpper
-          )})`
-        : rowData.oddsRatio
+      rowData.beta.betaCI
+        ? `(${significantFigures(
+            rowData.beta.betaCILower
+          )}, ${significantFigures(rowData.beta.betaCIUpper)})`
+        : rowData.odds.oddsCI
           ? `(${significantFigures(
-              rowData.oddsRatioCILower
-            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+              rowData.odds.oddsCILower
+            )}, ${significantFigures(rowData.odds.oddsCIUpper)})`
           : null,
+  },
+  {
+    id: 'yProbaModel',
+    label: 'L2G pipeline score',
+    tooltip: '',
+    renderCell: rowData =>
+      rowData.yProbaModel ? significantFigures(rowData.yProbaModel) : null,
   },
   {
     id: 'locusView',
