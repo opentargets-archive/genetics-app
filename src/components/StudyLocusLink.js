@@ -44,6 +44,7 @@ const StudyLocusLink = ({
   indexVariantId,
   classes,
   hasSumsStats,
+  label,
 }) => {
   return (
     <Tooltip
@@ -61,14 +62,14 @@ const StudyLocusLink = ({
             className={classes.link}
           >
             <Button className={big ? classes.buttonBig : classes.button}>
-              Gene Prioritisation
+              {label || 'Gene Prioritisation'}
             </Button>
           </Link>
         </div>
       ) : (
         <div className={classes.container}>
           <Button disabled className={big ? classes.buttonBig : classes.button}>
-            Gene Prioritisation
+            {label || 'Gene Prioritisation'}
           </Button>
         </div>
       )}
