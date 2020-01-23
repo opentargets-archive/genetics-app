@@ -79,6 +79,7 @@ const tableColumns = ({
       </Link>
     ),
   },
+
   {
     id: 'study.traitReported',
     label: 'Trait',
@@ -94,9 +95,10 @@ const tableColumns = ({
       />
     ),
   },
+
   {
     id: 'study.pubAuthor',
-    label: 'Author (Year)',
+    label: 'Publication',
     comparator: generateComparator(d => d.study.pubAuthor),
     renderFilter: () => (
       <Autocomplete
@@ -107,11 +109,26 @@ const tableColumns = ({
         multiple
       />
     ),
-    renderCell: rowData =>
-      `${rowData.study.pubAuthor} (${new Date(
+    renderCell: rowData => {
+      // Some studies don't have a pmid so need to avoid dead links
+      const url = rowData.study.pmid
+        ? `"http://europepmc.org/article/MED/${
+            rowData.study.pmid.split(':')[1]
+          }"`
+        : null;
+      const pub = `${rowData.study.pubAuthor} (${new Date(
         rowData.study.pubDate
-      ).getFullYear()})`,
+      ).getFullYear()})`;
+      return url ? (
+        <Link to={url} external>
+          {pub}
+        </Link>
+      ) : (
+        pub
+      );
+    },
   },
+
   {
     id: 'study.nInitial',
     label: 'N Initial',
@@ -119,6 +136,7 @@ const tableColumns = ({
     renderCell: rowData =>
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
+
   {
     id: 'variant.id',
     label: 'Lead Variant',
@@ -127,6 +145,7 @@ const tableColumns = ({
       <Link to={`/variant/${rowData.variant.id}`}>{rowData.variant.id}</Link>
     ),
   },
+
   {
     id: 'pval',
     label: 'P-value',
@@ -135,6 +154,7 @@ const tableColumns = ({
         ? `<${pvalThreshold}`
         : significantFigures(rowData.pval),
   },
+
   {
     id: 'beta.betaCI',
     label: 'Beta',
@@ -153,6 +173,7 @@ const tableColumns = ({
     renderCell: rowData =>
       rowData.beta.betaCI ? significantFigures(rowData.beta.betaCI) : null,
   },
+
   {
     id: 'odds.oddsCI',
     label: 'Odds Ratio',
@@ -160,6 +181,7 @@ const tableColumns = ({
     renderCell: rowData =>
       rowData.odds.oddsCI ? significantFigures(rowData.odds.oddsCI) : null,
   },
+
   {
     id: 'ci',
     label: '95% Confidence Interval',
@@ -176,6 +198,7 @@ const tableColumns = ({
             )}, ${significantFigures(rowData.odds.oddsCIUpper)})`
           : null,
   },
+
   {
     id: 'yProbaModel',
     label: 'L2G pipeline score',
@@ -183,6 +206,7 @@ const tableColumns = ({
     renderCell: rowData =>
       rowData.yProbaModel ? significantFigures(rowData.yProbaModel) : null,
   },
+
   {
     id: 'locusView',
     label: 'View',
