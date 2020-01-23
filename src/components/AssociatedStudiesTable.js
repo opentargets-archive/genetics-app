@@ -32,30 +32,31 @@ const getDownloadColumns = () => {
     { id: 'oddsRatio', label: 'Odds Ratio' },
     { id: 'oddsRatioCILower', label: 'Odds Ratio CI Lower' },
     { id: 'oddsRatioCIUpper', label: 'Odds Ratio CI Upper' },
+    { id: 'yProbaModel', label: 'L2G Pipeline Score' },
   ];
 };
 
 const getDownloadRows = rows => {
-  // return rows.map(row => ({
-  //   studyId: row.study.studyId,
-  //   studyTrait: row.study.traitReported,
-  //   studyPmid: row.study.pmid,
-  //   studyAuthor: row.study.pubAuthor,
-  //   studyDate: row.study.pubDate,
-  //   nInitial: row.study.nInitial,
-  //   nReplication: row.study.nReplication,
-  //   nCases: row.study.nCases,
-  //   indexVariantId: row.indexVariant.id,
-  //   indexVariantRsId: row.indexVariant.rsId,
-  //   pval: row.pval,
-  //   beta: row.beta,
-  //   betaCILower: row.betaCILower,
-  //   betaCIUpper: row.betaCIUpper,
-  //   oddsRatio: row.oddsRatio,
-  //   oddsRatioCILower: row.oddsRatioCILower,
-  //   oddsRatioCIUpper: row.oddsRatioCIUpper,
-  // }));
-  return [];
+  return rows.map(row => ({
+    studyId: row.study.studyId,
+    studyTrait: row.study.traitReported,
+    studyPmid: row.study.pmid,
+    studyAuthor: row.study.pubAuthor,
+    studyDate: row.study.pubDate,
+    nInitial: row.study.nInitial,
+    nReplication: row.study.nReplication,
+    nCases: row.study.nCases,
+    indexVariantId: row.variant.id,
+    indexVariantRsId: row.variant.rsId,
+    pval: row.pval,
+    beta: row.beta.betaCI,
+    betaCILower: row.beta.betaCILower,
+    betaCIUpper: row.beta.betaCIUpper,
+    oddsRatio: row.odds.oddsCI,
+    oddsRatioCILower: row.odds.oddsCILower,
+    oddsRatioCIUpper: row.odds.oddsCIUpper,
+    yProbaModel: row.yProbaModel,
+  }));
 };
 
 const tableColumns = ({
