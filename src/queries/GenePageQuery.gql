@@ -17,6 +17,7 @@ query GenePageQuery($geneId: String!) {
       pubDate
       pmid
       nInitial
+      hasSumsStats
     }
     variant {
       rsId
