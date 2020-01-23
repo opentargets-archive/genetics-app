@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   DataDownloader,
   OtTableRF,
@@ -159,7 +159,7 @@ const tableColumns = ({
     id: 'beta.betaCI',
     label: 'Beta',
     tooltip: (
-      <React.Fragment>
+      <Fragment>
         Beta with respect to the ALT allele.
         <Link
           external
@@ -168,7 +168,7 @@ const tableColumns = ({
         >
           See FAQ.
         </Link>
-      </React.Fragment>
+      </Fragment>
     ),
     renderCell: rowData =>
       rowData.beta.betaCI ? significantFigures(rowData.beta.betaCI) : null,
@@ -242,7 +242,7 @@ const AssociatedStudiesTable = ({
   authorFilterOptions,
   authorFilterHandler,
 }) => (
-  <React.Fragment>
+  <Fragment>
     <DataDownloader
       tableHeaders={getDownloadColumns()}
       rows={getDownloadRows(data)}
@@ -280,8 +280,15 @@ const AssociatedStudiesTable = ({
           label: `gene:associated-studies:${sortBy}(${order})`,
         });
       }}
+      headerGroups={[
+        { colspan: 4, label: 'Study Information' },
+        {
+          colspan: 7,
+          label: 'Association Information',
+        },
+      ]}
     />
-  </React.Fragment>
+  </Fragment>
 );
 
 export default AssociatedStudiesTable;
