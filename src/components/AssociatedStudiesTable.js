@@ -9,7 +9,7 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import LocusLink from './LocusLink';
+import StudyLocusLink from './StudyLocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import generateComparator from '../utils/generateComparator';
 
@@ -211,14 +211,18 @@ const tableColumns = ({
     id: 'locusView',
     label: 'View',
     renderCell: rowData => (
-      <LocusLink
-        chromosome={chromosome}
-        position={position}
-        selectedGenes={[geneId]}
-        selectedStudies={[rowData.study.studyId]}
-      >
-        Locus
-      </LocusLink>
+      <StudyLocusLink
+        hasSumsStats={rowData.study.hasSumsStats}
+        indexVariantId={rowData.variant.id}
+        studyId={rowData.study.studyId}
+        label={
+          <div>
+            Gene prioritisation
+            <br />
+            <small>(L2G pipeline)</small>
+          </div>
+        }
+      />
     ),
   },
 ];
