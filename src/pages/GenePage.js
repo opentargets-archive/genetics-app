@@ -38,7 +38,7 @@ function geneData(data) {
 }
 
 function hasAssociatedStudies(data) {
-  return data && data.studiesAndLeadVariantsForGene;
+  return data && data.studiesAndLeadVariantsForGeneByL2G;
 }
 
 const styles = theme => {
@@ -171,7 +171,7 @@ class GenePage extends React.Component {
             // all
             const associatedStudies =
               isValidGene && hasAssociatedStudies(data)
-                ? data.studiesAndLeadVariantsForGene
+                ? data.studiesAndLeadVariantsForGeneByL2G
                 : [];
 
             // filtered
