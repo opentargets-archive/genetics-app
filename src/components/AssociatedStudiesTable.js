@@ -85,7 +85,18 @@ const tableColumns = ({
     id: 'study.traitReported',
     label: 'Trait',
     comparator: generateComparator(d => d.study.traitReported),
-    renderCell: rowData => rowData.study.traitReported,
+    renderCell: rowData => {
+      // truncate long trait names for display
+      return rowData.study.traitReported &&
+        rowData.study.traitReported.length > 100 ? (
+        <span title={rowData.study.traitReported}>
+          {rowData.study.traitReported.substring(0, 100)}
+          &hellip;
+        </span>
+      ) : (
+        rowData.study.traitReported
+      );
+    },
     renderFilter: () => (
       <Autocomplete
         options={traitFilterOptions}
