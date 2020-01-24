@@ -21,6 +21,22 @@ query StudyLocusPageQuery(
     pubJournal
     pmid
   }
+  studyLocus2GeneTable(studyId:$studyId variantId:$variantId){
+    rows{
+      gene{
+        symbol
+        id
+      }
+      yProbaModel
+      yProbaDistance
+      yProbaInterlocus
+      yProbaInteraction
+      yProbaMolecularQTL
+      yProbaPathogenicity
+      hasColoc
+      distanceToLocus
+    }
+  }
   gwasColocalisation(studyId: $studyId, variantId: $variantId) {
     indexVariant {
       id
