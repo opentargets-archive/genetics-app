@@ -222,20 +222,32 @@ const tableColumns = ({
   {
     id: 'locusView',
     label: 'View',
-    renderCell: rowData => (
-      <StudyLocusLink
-        hasSumsStats={rowData.study.hasSumsStats}
-        indexVariantId={rowData.variant.id}
-        studyId={rowData.study.studyId}
-        label={
-          <div>
-            Gene prioritisation
-            <br />
-            <small>(L2G pipeline)</small>
-          </div>
-        }
-      />
-    ),
+    renderCell: rowData => {
+      return (
+        <StudyLocusLink
+          hasSumsStats={rowData.study.hasSumsStats}
+          indexVariantId={rowData.variant.id}
+          studyId={rowData.study.studyId}
+          label={
+            <div>
+              Gene prioritisation
+              <br />
+              <small>(L2G pipeline)</small>
+            </div>
+          }
+        />
+      );
+      // Alternative link styling option:
+      // return (
+      //   <Link
+      //     to={`/study-locus/${rowData.study.studyId}/${rowData.variant.id}`}
+      //   >
+      //     Gene prioritisation
+      //     <br />
+      //     <small>(L2G pipeline)</small>
+      //   </Link>
+      // );
+    },
   },
 ];
 
