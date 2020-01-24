@@ -27,6 +27,7 @@ import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
+import ColocL2GTable from '../components/ColocL2GTable';
 // import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import CredibleSetsIntersectionTable from '../components/CredibleSetsIntersectionTable';
@@ -294,6 +295,7 @@ class LocusTraitPage extends React.Component {
               // gwasColocalisationForRegion,
               pageCredibleSet,
               genes,
+              studyLocus2GeneTable,
             } = data;
 
             const maxQTLLog2h4h3 = d3.max(qtlColocalisation, d => d.log2h4h3);
@@ -407,6 +409,24 @@ query CredibleSetsQuery {
                   <strong>Standard Error:</strong>{' '}
                   {significantFigures(associationSummary.se)}
                 </Typography>
+
+                <SectionHeading
+                  heading="New stuff goes here..."
+                  subheading={
+                    <React.Fragment>
+                      With some more details on{' '}
+                      <strong>{traitAuthorYear(studyInfo)}</strong> here?
+                    </React.Fragment>
+                  }
+                />
+                <ColocL2GTable
+                  loading={false}
+                  error={false}
+                  data={studyLocus2GeneTable.rows}
+                  handleToggleRegional={this.handleToggleRegional}
+                  fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
+                />
+
                 <SectionHeading
                   heading="QTL Colocalisation"
                   subheading={
