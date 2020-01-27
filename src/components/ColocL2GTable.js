@@ -3,94 +3,102 @@ import * as d3 from 'd3';
 
 import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
-import StudyLocusLink from './StudyLocusLink';
+// import StudyLocusLink from './StudyLocusLink';
 
 const tableColumns = [
   {
     id: 'gene.symbol',
     label: 'Gene',
     comparator: (a, b) => d3.ascending(a.gene.symbol, b.gene.symbol),
-    renderCell: d => <Link to={`/gene/${d.gene.symbol}`}>{d.gene.symbol}</Link>,
+    renderCell: d => <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>,
   },
   {
     id: 'yProbaModel',
     label: 'Overall L2G score',
     comparator: (a, b) => d3.ascending(a.yProbaModel, b.yProbaModel),
-    renderCell: d => d.yProbaModel,
+    renderCell: d => significantFigures(d.yProbaModel),
   },
   {
     id: 'yProbaPathogenicity',
     label: 'Variant Pathogenicity',
     comparator: (a, b) =>
       d3.ascending(a.yProbaPathogenicity, b.yProbaPathogenicity),
-    renderCell: d => d.yProbaPathogenicity,
+    renderCell: d => significantFigures(d.yProbaPathogenicity),
   },
   {
     id: 'yProbaDistance',
     label: 'Distance',
     comparator: (a, b) => d3.ascending(a.yProbaDistance, b.yProbaDistance),
-    renderCell: d => (
-      <Link to={`/variant/${d.yProbaDistance}`}>{d.yProbaDistance}</Link>
-    ),
+    renderCell: d => significantFigures(d.yProbaDistance),
   },
   {
     id: 'yProbaInterlocus',
     label: 'QTL Coloc',
-    tooltip:
-      'Effect with respect to the alternative allele of the page variant',
+    comparator: (a, b) => d3.ascending(a.yProbaInterlocus, b.yProbaInterlocus),
     renderCell: d => significantFigures(d.yProbaInterlocus),
   },
   {
     id: 'yProbaInteraction',
     label: 'Chromatin Interaction',
-    tooltip: (
-      <React.Fragment>
-        Posterior probability that the signals <strong>do not</strong>{' '}
-        colocalise
-      </React.Fragment>
-    ),
+    comparator: (a, b) =>
+      d3.ascending(a.yProbaInteraction, b.yProbaInteraction),
     renderCell: d => significantFigures(d.yProbaInteraction),
   },
   {
-    id: 'yProbaDistance',
+    id: 'distanceToLocus',
     label: 'Distance to Locus ',
-    tooltip: 'Posterior probability that the signals colocalise',
-    renderCell: d => significantFigures(d.yProbaDistance),
+    comparator: (a, b) => d3.ascending(a.distanceToLocus, b.distanceToLocus),
+    renderCell: d => significantFigures(d.distanceToLocus),
   },
   {
     id: 'hasColoc',
     label: 'Evidence of colocalisation',
     tooltip: 'Log-likelihood that the signals colocalise',
-    renderCell: d => (d.hasColoc ? 'yes' : 'no'),
+    renderCell: d => (d.hasColoc ? 'Yes' : 'No'),
   },
   {
     id: 'locus',
     label: 'View other evidence linking study-locus-gene',
-    renderCell: d => <Link>click</Link>,
+    renderCell: d => <Link>Platform Evidence</Link>,
   },
 ];
 
-const getDownloadData = data => {
+const getDownloadColumns = () => {
+  return [
+    { id: 'geneSymbol', label: 'Gene' },
+    { id: 'geneId', label: 'Gene ID' },
+    { id: 'yProbaModel', label: 'Overall L2G score' },
+
+    { id: 'yProbaPathogenicity', label: 'Variant Pathogenicity' },
+    { id: 'yProbaDistance', label: 'Distance' },
+    { id: 'yProbaInterlocus', label: 'QTL Coloc' },
+    { id: 'yProbaInteraction', label: 'Chromatin Interaction' },
+
+    { id: 'distanceToLocus', label: 'Distance to Locus ' },
+    { id: 'hasColoc', label: 'Evidence of colocalisation' },
+  ];
+};
+
+const getDownloadRows = data => {
   return data.map(d => ({
-    study: d.study.studyId,
-    traitReported: d.study.traitReported,
-    pubAuthor: d.study.pubAuthor,
-    indexVariant: d.indexVariant.id,
-    beta: d.beta,
-    h3: d.h3,
-    h4: d.h4,
-    log2h4h3: d.log2h4h3,
+    geneSymbol: d.gene.symbol,
+    geneId: d.gene.id,
+    yProbaModel: d.yProbaModel,
+    yProbaPathogenicity: d.yProbaPathogenicity,
+    yProbaDistance: d.yProbaDistance,
+    yProbaInterlocus: d.yProbaInterlocus,
+    yProbaInteraction: d.yProbaInteraction,
+    distanceToLocus: d.distanceToLocus,
+    hasColoc: d.hasColoc,
   }));
 };
 
 const ColocL2GTable = ({ loading, error, fileStem, data }) => {
-  console.log(data);
-  const downloadData = []; // getDownloadData(data);
   return (
     <React.Fragment>
       <DataDownloader
-        tableHeaders={tableColumns}
-        rows={downloadData}
+        tableHeaders={getDownloadColumns()}
+        rows={getDownloadRows(data)}
         fileStem={fileStem}
       />
       <OtTableRF
