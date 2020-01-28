@@ -469,7 +469,7 @@ query CredibleSetsQuery {
                 ) : null}
 
                 <SectionHeading
-                  heading="GWAS Study Colocalisation"
+                  heading={<div id="coloc">GWAS Study Colocalisation</div>}
                   subheading={
                     <React.Fragment>
                       Which GWAS studies colocalise with{' '}
