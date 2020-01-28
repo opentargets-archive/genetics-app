@@ -3,8 +3,6 @@ import * as d3 from 'd3';
 
 import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
 
-// import StudyLocusLink from './StudyLocusLink';
-
 const tableColumns = [
   {
     id: 'gene.symbol',
@@ -48,13 +46,13 @@ const tableColumns = [
     id: 'distanceToLocus',
     label: 'Distance to Locus ',
     comparator: (a, b) => d3.ascending(a.distanceToLocus, b.distanceToLocus),
-    renderCell: d => significantFigures(d.distanceToLocus),
+    renderCell: d => d.distanceToLocus,
   },
   {
     id: 'hasColoc',
     label: 'Evidence of colocalisation',
-    tooltip: 'Log-likelihood that the signals colocalise',
-    renderCell: d => (d.hasColoc ? 'Yes' : 'No'),
+    tooltip: 'TODO -- tooltip help text',
+    renderCell: d => (d.hasColoc ? <a href="#coloc">Yes</a> : 'No'),
   },
   {
     id: 'locus',
