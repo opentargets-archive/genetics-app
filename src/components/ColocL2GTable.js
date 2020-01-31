@@ -54,7 +54,7 @@ const tableColumns = [
   },
   {
     id: 'distanceToLocus',
-    label: 'Distance to Locus ',
+    label: 'Distance to locus (bp)',
     comparator: (a, b) => d3.ascending(a.distanceToLocus, b.distanceToLocus),
     renderCell: d => d.distanceToLocus,
   },
