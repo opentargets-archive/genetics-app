@@ -441,6 +441,7 @@ class GenePage extends React.Component {
                   error={error}
                   data={associatedStudiesFiltered}
                   geneId={geneId}
+                  geneSymbol={symbol}
                   chromosome={chromosome}
                   position={Math.round((start + end) / 2)}
                   traitFilterValue={traitFilterValue}

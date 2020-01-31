@@ -61,6 +61,7 @@ const getDownloadRows = rows => {
 
 const tableColumns = ({
   geneId,
+  geneSymbol,
   chromosome,
   position,
   traitFilterValue,
@@ -212,7 +213,7 @@ const tableColumns = ({
   {
     id: 'yProbaModel',
     label: 'L2G pipeline score',
-    tooltip: '',
+    tooltip: `Evidence linking ${geneSymbol} to this study via our locus-to-gene pipeline. Score range [0, 1].`,
     renderCell: rowData =>
       rowData.yProbaModel ? significantFigures(rowData.yProbaModel) : null,
   },
@@ -239,6 +240,7 @@ const AssociatedStudiesTable = ({
   filenameStem,
   data,
   geneId,
+  geneSymbol,
   chromosome,
   position,
   traitFilterValue,
@@ -260,6 +262,7 @@ const AssociatedStudiesTable = ({
       filters
       columns={tableColumns({
         geneId,
+        geneSymbol,
         chromosome,
         position,
         traitFilterValue,
