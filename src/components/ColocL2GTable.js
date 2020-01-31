@@ -13,12 +13,16 @@ const tableColumns = [
   {
     id: 'yProbaModel',
     label: 'Overall L2G score',
+    tooltip:
+      'Overall evidence linking gene to this study using all features. Score range [0, 1].',
     comparator: (a, b) => d3.ascending(a.yProbaModel, b.yProbaModel),
     renderCell: d => significantFigures(d.yProbaModel),
   },
   {
     id: 'yProbaPathogenicity',
     label: 'Variant Pathogenicity',
+    tooltip:
+      'Evidence linking gene to this study including variant pathogenicity features only. Score range [0, 1].',
     comparator: (a, b) =>
       d3.ascending(a.yProbaPathogenicity, b.yProbaPathogenicity),
     renderCell: d => significantFigures(d.yProbaPathogenicity),
@@ -26,18 +30,24 @@ const tableColumns = [
   {
     id: 'yProbaDistance',
     label: 'Distance',
+    tooltip:
+      'Evidence linking gene to this study including distance features only. Score range [0, 1].',
     comparator: (a, b) => d3.ascending(a.yProbaDistance, b.yProbaDistance),
     renderCell: d => significantFigures(d.yProbaDistance),
   },
   {
     id: 'yProbaInterlocus',
     label: 'QTL Coloc',
+    tooltip:
+      'Evidence linking gene to this study including molecular trait colocalisation features only. Score range [0, 1].',
     comparator: (a, b) => d3.ascending(a.yProbaInterlocus, b.yProbaInterlocus),
     renderCell: d => significantFigures(d.yProbaInterlocus),
   },
   {
     id: 'yProbaInteraction',
     label: 'Chromatin Interaction',
+    tooltip:
+      'Evidence linking gene to this study including chromatin interaction features only. Score range [0, 1].',
     comparator: (a, b) =>
       d3.ascending(a.yProbaInteraction, b.yProbaInteraction),
     renderCell: d => significantFigures(d.yProbaInteraction),
@@ -51,7 +61,6 @@ const tableColumns = [
   {
     id: 'hasColoc',
     label: 'Evidence of colocalisation',
-    tooltip: 'TODO -- tooltip help text',
     renderCell: d => (d.hasColoc ? <a href="#coloc">Yes</a> : 'No'),
   },
   {
