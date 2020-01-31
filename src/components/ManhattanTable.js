@@ -106,18 +106,13 @@ export const tableColumns = (studyId, hasSumsStats) => [
     ),
   },
   {
-    id: 'bestGenes',
+    id: 'nearestCodingGene.id',
     label: 'Closest Gene',
     tooltip: 'The gene with the closest transcription start site',
     renderCell: rowData => (
-      <React.Fragment>
-        {rowData.bestGenes.map((d, i) => (
-          <React.Fragment key={i}>
-            {i > 0 ? ', ' : ''}
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
-          </React.Fragment>
-        ))}
-      </React.Fragment>
+      <Link to={`/gene/${rowData.nearestCodingGene.id}`}>
+        {rowData.nearestCodingGene.symbol}
+      </Link>
     ),
   },
   {

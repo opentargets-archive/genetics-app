@@ -40,6 +40,7 @@ function transformAssociations(data) {
       chromosome: variant.chromosome,
       position: variant.position,
       globalPosition: ch.cumulativeLength - ch.length + variant.position,
+      nearestCodingGene: variant.nearestCodingGene,
     };
   });
 }
