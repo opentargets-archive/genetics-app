@@ -1,7 +1,13 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
+import {
+  Link,
+  OtTableRF,
+  DataDownloader,
+  significantFigures,
+  commaSeparate,
+} from 'ot-ui';
 
 const tableColumns = [
   {
@@ -56,7 +62,8 @@ const tableColumns = [
     id: 'distanceToLocus',
     label: 'Distance to locus (bp)',
     comparator: (a, b) => d3.ascending(a.distanceToLocus, b.distanceToLocus),
-    renderCell: d => d.distanceToLocus,
+    renderCell: d =>
+      d.distanceToLocus ? commaSeparate(d.distanceToLocus) : '',
   },
   {
     id: 'hasColoc',
