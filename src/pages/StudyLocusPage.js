@@ -411,13 +411,8 @@ query CredibleSetsQuery {
                 </Typography>
 
                 <SectionHeading
-                  heading="New stuff goes here..."
-                  subheading={
-                    <React.Fragment>
-                      With some more details on{' '}
-                      <strong>{traitAuthorYear(studyInfo)}</strong> here?
-                    </React.Fragment>
-                  }
+                  heading="Gene prioritisation using locus-to-gene pipeline"
+                  subheading="Which genes were prioritised by L2G pipeline at this locus?"
                 />
                 <ColocL2GTable
                   loading={false}
@@ -428,7 +423,7 @@ query CredibleSetsQuery {
                 />
 
                 <SectionHeading
-                  heading="QTL Colocalisation"
+                  heading="Gene prioritisation using colocalisation analysis"
                   subheading={
                     <React.Fragment>
                       Which molecular traits colocalise with{' '}
