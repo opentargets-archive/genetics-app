@@ -106,7 +106,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
     ),
   },
   {
-    id: 'nearestCodingGene.id',
+    id: 'nearestCodingGene',
     label: 'Closest Gene',
     tooltip: 'The gene with the closest transcription start site',
     renderCell: rowData => (
@@ -170,7 +170,9 @@ const getDownloadData = dataWithCytoband => {
           : null,
       credibleSetSize: row.credibleSetSize,
       ldSetSize: row.ldSetSize,
-      bestGenes: row.bestGenes.map(d => d.gene.symbol).join(', '),
+      bestLocus2Genes: row.bestLocus2Genes.map(d => d.gene.symbol).join(', '),
+      nearestCodingGene: row.nearestCodingGene.symbol,
+      bestColocGenes: row.bestColocGenes.map(d => d.gene.symbol).join(', '),
     };
   });
 };
