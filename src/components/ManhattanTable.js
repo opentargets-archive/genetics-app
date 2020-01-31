@@ -108,7 +108,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
   {
     id: 'bestGenes',
     label: 'Closest Gene',
-    tooltip: 'The closest gene with the closest transcription start site',
+    tooltip: 'The gene with the closest transcription start site',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestGenes.map((d, i) => (
