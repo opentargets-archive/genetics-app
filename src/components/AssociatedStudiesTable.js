@@ -226,25 +226,9 @@ const tableColumns = ({
           hasSumsStats={rowData.study.hasSumsStats}
           indexVariantId={rowData.variant.id}
           studyId={rowData.study.studyId}
-          label={
-            <div>
-              Gene prioritisation
-              <br />
-              <small>(L2G pipeline)</small>
-            </div>
-          }
+          label="Gene prioritisation"
         />
       );
-      // Alternative link styling option:
-      // return (
-      //   <Link
-      //     to={`/study-locus/${rowData.study.studyId}/${rowData.variant.id}`}
-      //   >
-      //     Gene prioritisation
-      //     <br />
-      //     <small>(L2G pipeline)</small>
-      //   </Link>
-      // );
     },
   },
 ];
