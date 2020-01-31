@@ -124,9 +124,7 @@ const tableColumns = ({
     renderCell: rowData => {
       // Some studies don't have a pmid so need to avoid dead links
       const url = rowData.study.pmid
-        ? `"http://europepmc.org/article/MED/${
-            rowData.study.pmid.split(':')[1]
-          }"`
+        ? `http://europepmc.org/article/MED/${rowData.study.pmid.split(':')[1]}`
         : null;
       const pub = `${rowData.study.pubAuthor} (${new Date(
         rowData.study.pubDate
