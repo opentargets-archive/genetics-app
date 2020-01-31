@@ -423,7 +423,7 @@ class GenePage extends React.Component {
                   </Grid>
                 </Grid>
                 <SectionHeading
-                  heading={`Associated studies`}
+                  heading="Associated studies: locus-to-gene pipeline"
                   subheading={`Which studies are associated with ${symbol}?`}
                   entities={[
                     {
@@ -452,7 +452,7 @@ class GenePage extends React.Component {
                   filenameStem={`${geneId}-associated-studies`}
                 />
                 <SectionHeading
-                  heading={`Colocalising studies`}
+                  heading="Associated studies: Colocalisation analysis"
                   subheading={`Which studies have evidence of colocalisation with molecular QTLs for ${symbol}?`}
                 />
                 <ColocForGeneTable
