@@ -113,6 +113,8 @@ const ColocL2GTable = ({ loading, error, fileStem, data }) => {
         error={error}
         columns={tableColumns}
         data={data}
+        sortBy="yProbaModel"
+        order="desc"
         headerGroups={[
           { colspan: 2, label: '' },
           {
