@@ -70,11 +70,6 @@ const tableColumns = [
     label: 'Evidence of colocalisation',
     renderCell: d => (d.hasColoc ? <a href="#coloc">Yes</a> : 'No'),
   },
-  {
-    id: 'locus',
-    label: 'View other evidence linking study-locus-gene',
-    renderCell: d => <Link>Platform Evidence</Link>,
-  },
 ];
 
 const getDownloadColumns = () => {
