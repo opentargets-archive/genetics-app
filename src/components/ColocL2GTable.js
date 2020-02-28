@@ -68,7 +68,14 @@ const tableColumns = [
   {
     id: 'hasColoc',
     label: 'Evidence of colocalisation',
-    renderCell: d => (d.hasColoc ? <a href="#coloc">Yes</a> : 'No'),
+    renderCell: d =>
+      d.hasColoc ? (
+        <a href="#coloc" style={{ color: '#3489ca', textDecoration: 'none' }}>
+          Yes
+        </a>
+      ) : (
+        'No'
+      ),
   },
 ];
 
