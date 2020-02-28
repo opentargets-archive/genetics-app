@@ -109,11 +109,12 @@ export const tableColumns = (studyId, hasSumsStats) => [
     id: 'nearestCodingGene',
     label: 'Closest Gene',
     tooltip: 'The gene with the closest transcription start site',
-    renderCell: rowData => (
-      <Link to={`/gene/${rowData.nearestCodingGene.id}`}>
-        {rowData.nearestCodingGene.symbol}
-      </Link>
-    ),
+    renderCell: rowData =>
+      rowData.nearestCodingGene ? (
+        <Link to={`/gene/${rowData.nearestCodingGene.id}`}>
+          {rowData.nearestCodingGene.symbol}
+        </Link>
+      ) : null,
   },
   {
     id: 'bestColocGenes',
@@ -171,7 +172,9 @@ const getDownloadData = dataWithCytoband => {
       credibleSetSize: row.credibleSetSize,
       ldSetSize: row.ldSetSize,
       bestLocus2Genes: row.bestLocus2Genes.map(d => d.gene.symbol).join(', '),
-      nearestCodingGene: row.nearestCodingGene.symbol,
+      nearestCodingGene: row.nearestCodingGene
+        ? row.nearestCodingGene.symbol
+        : '',
       bestColocGenes: row.bestColocGenes.map(d => d.gene.symbol).join(', '),
     };
   });
