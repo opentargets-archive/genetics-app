@@ -29,7 +29,7 @@ query StudyLocusPageQuery(
       }
       yProbaModel
       yProbaDistance
-      yProbaInterlocus
+      # yProbaInterlocus
       yProbaInteraction
       yProbaMolecularQTL
       yProbaPathogenicity
