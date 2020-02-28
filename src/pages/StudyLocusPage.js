@@ -419,7 +419,7 @@ query CredibleSetsQuery {
                   error={false}
                   data={studyLocus2GeneTable.rows}
                   handleToggleRegional={this.handleToggleRegional}
-                  fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
+                  fileStem={`l2g-assignment-${studyId}-${indexVariantId}`}
                 />
 
                 <SectionHeading
