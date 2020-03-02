@@ -92,8 +92,7 @@ export const tableColumns = (studyId, hasSumsStats) => [
   {
     id: 'bestLocus2Genes',
     label: 'L2G',
-    tooltip:
-      'Genes prioritised by our locus-to-gene model with posterior probability ≥ 0.5',
+    tooltip: 'Genes prioritised by our locus-to-gene model with score ≥ 0.5',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestLocus2Genes.map((d, i) => (
