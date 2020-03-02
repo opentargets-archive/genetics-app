@@ -327,10 +327,6 @@ query CredibleSetsQuery {
               .reverse();
 
             const associationSummary = pageSummary;
-            const associationSummarySE = (
-              pageCredibleSet.find(d => d.tagVariant.id === indexVariantId) ||
-              {}
-            ).se;
 
             const pageCredibleSetAdjusted = pageCredibleSet
               .map(flattenPosition)
@@ -428,13 +424,6 @@ query CredibleSetsQuery {
                     <strong>Beta:</strong> N/A
                   </Typography>
                 )}
-
-                <Typography variant="subtitle2">
-                  <strong>Standard Error:</strong>{' '}
-                  {associationSummarySE
-                    ? significantFigures(associationSummarySE)
-                    : 'N/A'}
-                </Typography>
 
                 <SectionHeading
                   heading="Gene prioritisation using locus-to-gene pipeline"
