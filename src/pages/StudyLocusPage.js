@@ -294,6 +294,7 @@ class LocusTraitPage extends React.Component {
               qtlColocalisation,
               // gwasColocalisationForRegion,
               pageCredibleSet,
+              pageSummary,
               genes,
               studyLocus2GeneTable,
             } = data;
@@ -325,9 +326,11 @@ query CredibleSetsQuery {
               .sort(log2h4h3Comparator)
               .reverse();
 
-            const associationSummary =
+            const associationSummary = pageSummary;
+            const associationSummarySE = (
               pageCredibleSet.find(d => d.tagVariant.id === indexVariantId) ||
-              {};
+              {}
+            ).se;
 
             const pageCredibleSetAdjusted = pageCredibleSet
               .map(flattenPosition)
@@ -386,28 +389,51 @@ query CredibleSetsQuery {
                 </Grid>
 
                 <SectionHeading heading="Association summary" />
+
                 <Typography variant="subtitle2">
                   <strong>P-value:</strong>{' '}
-                  {significantFigures(associationSummary.pval)}
+                  {significantFigures(associationSummary.pvalMantissa) +
+                    'e' +
+                    associationSummary.pvalExponent}
                 </Typography>
-                <Typography variant="subtitle2">
-                  <strong>Beta:</strong>{' '}
-                  {significantFigures(associationSummary.beta)}
-                </Typography>
-                <Typography variant="subtitle2">
-                  <strong>Beta 95% Confidence Interval:</strong> (
-                  {significantFigures(
-                    associationSummary.beta - 1.959 * associationSummary.se
-                  )}
-                  ,{' '}
-                  {significantFigures(
-                    associationSummary.beta + 1.959 * associationSummary.se
-                  )}
-                  )
-                </Typography>
+
+                {associationSummary.beta ? (
+                  <>
+                    <Typography variant="subtitle2">
+                      <strong>Beta:</strong>{' '}
+                      {significantFigures(associationSummary.beta)}
+                    </Typography>
+
+                    <Typography variant="subtitle2">
+                      <strong>Beta 95% Confidence Interval:</strong> (
+                      {significantFigures(associationSummary.betaCILower)},{' '}
+                      {significantFigures(associationSummary.betaCIUpper)})
+                    </Typography>
+                  </>
+                ) : associationSummary.oddsRatio ? (
+                  <>
+                    <Typography variant="subtitle2">
+                      <strong>Odds ratio:</strong>{' '}
+                      {significantFigures(associationSummary.oddsRatio)}
+                    </Typography>
+
+                    <Typography variant="subtitle2">
+                      <strong>Odds ratio Confidence Interval:</strong> (
+                      {significantFigures(associationSummary.oddsRatioCILower)},{' '}
+                      {significantFigures(associationSummary.oddsRatioCIUpper)})
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="subtitle2">
+                    <strong>Beta:</strong> N/A
+                  </Typography>
+                )}
+
                 <Typography variant="subtitle2">
                   <strong>Standard Error:</strong>{' '}
-                  {significantFigures(associationSummary.se)}
+                  {associationSummarySE
+                    ? significantFigures(associationSummarySE)
+                    : 'N/A'}
                 </Typography>
 
                 <SectionHeading
