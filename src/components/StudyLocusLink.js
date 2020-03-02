@@ -44,34 +44,23 @@ const StudyLocusLink = ({
   indexVariantId,
   classes,
   hasSumsStats,
+  label,
 }) => {
   return (
     <Tooltip
-      title={
-        hasSumsStats
-          ? 'View colocalisation results at this locus'
-          : 'Colocalisation results are only available for studies that have summary statistics'
-      }
+      title="View gene prioritisation results for this locus"
       placement="top"
     >
-      {hasSumsStats ? (
-        <div className={classes.container}>
-          <Link
-            to={`/study-locus/${studyId}/${indexVariantId}`}
-            className={classes.link}
-          >
-            <Button className={big ? classes.buttonBig : classes.button}>
-              Colocalisation
-            </Button>
-          </Link>
-        </div>
-      ) : (
-        <div className={classes.container}>
-          <Button disabled className={big ? classes.buttonBig : classes.button}>
-            Colocalisation
+      <div className={classes.container}>
+        <Link
+          to={`/study-locus/${studyId}/${indexVariantId}`}
+          className={classes.link}
+        >
+          <Button className={big ? classes.buttonBig : classes.button}>
+            {label || 'Gene Prioritisation'}
           </Button>
-        </div>
-      )}
+        </Link>
+      </div>
     </Tooltip>
   );
 };

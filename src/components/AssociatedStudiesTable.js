@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   DataDownloader,
   OtTableRF,
@@ -9,9 +9,8 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import LocusLink from './LocusLink';
+import StudyLocusLink from './StudyLocusLink';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import PmidOrBiobankLink from './PmidOrBiobankLink';
 import generateComparator from '../utils/generateComparator';
 
 const getDownloadColumns = () => {
@@ -33,6 +32,7 @@ const getDownloadColumns = () => {
     { id: 'oddsRatio', label: 'Odds Ratio' },
     { id: 'oddsRatioCILower', label: 'Odds Ratio CI Lower' },
     { id: 'oddsRatioCIUpper', label: 'Odds Ratio CI Upper' },
+    { id: 'yProbaModel', label: 'L2G Pipeline Score' },
   ];
 };
 
@@ -46,20 +46,22 @@ const getDownloadRows = rows => {
     nInitial: row.study.nInitial,
     nReplication: row.study.nReplication,
     nCases: row.study.nCases,
-    indexVariantId: row.indexVariant.id,
-    indexVariantRsId: row.indexVariant.rsId,
+    indexVariantId: row.variant.id,
+    indexVariantRsId: row.variant.rsId,
     pval: row.pval,
-    beta: row.beta,
-    betaCILower: row.betaCILower,
-    betaCIUpper: row.betaCIUpper,
-    oddsRatio: row.oddsRatio,
-    oddsRatioCILower: row.oddsRatioCILower,
-    oddsRatioCIUpper: row.oddsRatioCIUpper,
+    beta: row.beta.betaCI,
+    betaCILower: row.beta.betaCILower,
+    betaCIUpper: row.beta.betaCIUpper,
+    oddsRatio: row.odds.oddsCI,
+    oddsRatioCILower: row.odds.oddsCILower,
+    oddsRatioCIUpper: row.odds.oddsCIUpper,
+    yProbaModel: row.yProbaModel,
   }));
 };
 
 const tableColumns = ({
   geneId,
+  geneSymbol,
   chromosome,
   position,
   traitFilterValue,
@@ -79,11 +81,23 @@ const tableColumns = ({
       </Link>
     ),
   },
+
   {
     id: 'study.traitReported',
     label: 'Trait',
     comparator: generateComparator(d => d.study.traitReported),
-    renderCell: rowData => rowData.study.traitReported,
+    renderCell: rowData => {
+      // truncate long trait names for display
+      return rowData.study.traitReported &&
+        rowData.study.traitReported.length > 100 ? (
+        <span title={rowData.study.traitReported}>
+          {rowData.study.traitReported.substring(0, 100)}
+          &hellip;
+        </span>
+      ) : (
+        rowData.study.traitReported
+      );
+    },
     renderFilter: () => (
       <Autocomplete
         options={traitFilterOptions}
@@ -94,20 +108,10 @@ const tableColumns = ({
       />
     ),
   },
-  {
-    id: 'study.pmid',
-    label: 'PMID',
-    comparator: generateComparator(d => d.study.pmid),
-    renderCell: rowData => (
-      <PmidOrBiobankLink
-        studyId={rowData.study.studyId}
-        pmid={rowData.study.pmid}
-      />
-    ),
-  },
+
   {
     id: 'study.pubAuthor',
-    label: 'Author (Year)',
+    label: 'Publication',
     comparator: generateComparator(d => d.study.pubAuthor),
     renderFilter: () => (
       <Autocomplete
@@ -118,11 +122,24 @@ const tableColumns = ({
         multiple
       />
     ),
-    renderCell: rowData =>
-      `${rowData.study.pubAuthor} (${new Date(
+    renderCell: rowData => {
+      // Some studies don't have a pmid so need to avoid dead links
+      const url = rowData.study.pmid
+        ? `http://europepmc.org/article/MED/${rowData.study.pmid.split(':')[1]}`
+        : null;
+      const pub = `${rowData.study.pubAuthor} (${new Date(
         rowData.study.pubDate
-      ).getFullYear()})`,
+      ).getFullYear()})`;
+      return url ? (
+        <Link to={url} external>
+          {pub}
+        </Link>
+      ) : (
+        pub
+      );
+    },
   },
+
   {
     id: 'study.nInitial',
     label: 'N Initial',
@@ -130,29 +147,16 @@ const tableColumns = ({
     renderCell: rowData =>
       rowData.study.nInitial ? commaSeparate(rowData.study.nInitial) : '',
   },
+
   {
-    id: 'study.nCases',
-    label: 'N Cases',
-    comparator: generateComparator(d => d.study.nCases),
-    renderCell: rowData =>
-      rowData.study.nCases ? commaSeparate(rowData.study.nCases) : '',
-  },
-  {
-    id: 'indexVariant.id',
+    id: 'variant.id',
     label: 'Lead Variant',
-    comparator: generateComparator(d => d.indexVariant.id),
+    comparator: generateComparator(d => d.variant.id),
     renderCell: rowData => (
-      <Link to={`/variant/${rowData.indexVariant.id}`}>
-        {rowData.indexVariant.id}
-      </Link>
+      <Link to={`/variant/${rowData.variant.id}`}>{rowData.variant.id}</Link>
     ),
   },
-  {
-    id: 'indexVariant.rsId',
-    label: 'Lead Variant rsID',
-    comparator: generateComparator(d => d.indexVariant.rsId),
-    renderCell: rowData => rowData.indexVariant.rsId,
-  },
+
   {
     id: 'pval',
     label: 'P-value',
@@ -161,11 +165,12 @@ const tableColumns = ({
         ? `<${pvalThreshold}`
         : significantFigures(rowData.pval),
   },
+
   {
-    id: 'beta',
+    id: 'beta.betaCI',
     label: 'Beta',
     tooltip: (
-      <React.Fragment>
+      <Fragment>
         Beta with respect to the ALT allele.
         <Link
           external
@@ -174,47 +179,58 @@ const tableColumns = ({
         >
           See FAQ.
         </Link>
-      </React.Fragment>
+      </Fragment>
     ),
     renderCell: rowData =>
-      rowData.beta ? significantFigures(rowData.beta) : null,
+      rowData.beta.betaCI ? significantFigures(rowData.beta.betaCI) : null,
   },
+
   {
-    id: 'oddsRatio',
+    id: 'odds.oddsCI',
     label: 'Odds Ratio',
     tooltip: 'Odds ratio with respect to the ALT allele',
     renderCell: rowData =>
-      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+      rowData.odds.oddsCI ? significantFigures(rowData.odds.oddsCI) : null,
   },
+
   {
     id: 'ci',
     label: '95% Confidence Interval',
     tooltip:
       '95% confidence interval for the effect estimate. CIs are calculated approximately using the reported p-value.',
     renderCell: rowData =>
-      rowData.beta
-        ? `(${significantFigures(rowData.betaCILower)}, ${significantFigures(
-            rowData.betaCIUpper
-          )})`
-        : rowData.oddsRatio
+      rowData.beta.betaCI
+        ? `(${significantFigures(
+            rowData.beta.betaCILower
+          )}, ${significantFigures(rowData.beta.betaCIUpper)})`
+        : rowData.odds.oddsCI
           ? `(${significantFigures(
-              rowData.oddsRatioCILower
-            )}, ${significantFigures(rowData.oddsRatioCIUpper)})`
+              rowData.odds.oddsCILower
+            )}, ${significantFigures(rowData.odds.oddsCIUpper)})`
           : null,
   },
+
+  {
+    id: 'yProbaModel',
+    label: 'L2G pipeline score',
+    tooltip: `Evidence linking ${geneSymbol} to this study via our locus-to-gene pipeline. Score range [0, 1].`,
+    renderCell: rowData =>
+      rowData.yProbaModel ? significantFigures(rowData.yProbaModel) : null,
+  },
+
   {
     id: 'locusView',
     label: 'View',
-    renderCell: rowData => (
-      <LocusLink
-        chromosome={chromosome}
-        position={position}
-        selectedGenes={[geneId]}
-        selectedStudies={[rowData.study.studyId]}
-      >
-        Locus
-      </LocusLink>
-    ),
+    renderCell: rowData => {
+      return (
+        <StudyLocusLink
+          hasSumsStats={rowData.study.hasSumsStats}
+          indexVariantId={rowData.variant.id}
+          studyId={rowData.study.studyId}
+          label="Gene prioritisation"
+        />
+      );
+    },
   },
 ];
 
@@ -224,6 +240,7 @@ const AssociatedStudiesTable = ({
   filenameStem,
   data,
   geneId,
+  geneSymbol,
   chromosome,
   position,
   traitFilterValue,
@@ -233,7 +250,7 @@ const AssociatedStudiesTable = ({
   authorFilterOptions,
   authorFilterHandler,
 }) => (
-  <React.Fragment>
+  <Fragment>
     <DataDownloader
       tableHeaders={getDownloadColumns()}
       rows={getDownloadRows(data)}
@@ -245,6 +262,7 @@ const AssociatedStudiesTable = ({
       filters
       columns={tableColumns({
         geneId,
+        geneSymbol,
         chromosome,
         position,
         traitFilterValue,
@@ -255,8 +273,8 @@ const AssociatedStudiesTable = ({
         authorFilterHandler,
       })}
       data={data}
-      sortBy="pval"
-      order="asc"
+      sortBy="yProbaModel"
+      order="desc"
       reportTableDownloadEvent={format => {
         reportAnalyticsEvent({
           category: 'table',
@@ -271,8 +289,15 @@ const AssociatedStudiesTable = ({
           label: `gene:associated-studies:${sortBy}(${order})`,
         });
       }}
+      headerGroups={[
+        { colspan: 4, label: 'Study Information' },
+        {
+          colspan: 7,
+          label: 'Association Information',
+        },
+      ]}
     />
-  </React.Fragment>
+  </Fragment>
 );
 
 export default AssociatedStudiesTable;

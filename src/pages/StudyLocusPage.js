@@ -27,6 +27,7 @@ import BasePage from './BasePage';
 import ColocQTLTable from '../components/ColocQTLTable';
 import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
 import ColocGWASTable from '../components/ColocGWASTable';
+import ColocL2GTable from '../components/ColocL2GTable';
 // import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
 import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
 import CredibleSetsIntersectionTable from '../components/CredibleSetsIntersectionTable';
@@ -293,7 +294,9 @@ class LocusTraitPage extends React.Component {
               qtlColocalisation,
               // gwasColocalisationForRegion,
               pageCredibleSet,
+              pageSummary,
               genes,
+              studyLocus2GeneTable,
             } = data;
 
             const maxQTLLog2h4h3 = d3.max(qtlColocalisation, d => d.log2h4h3);
@@ -323,9 +326,7 @@ query CredibleSetsQuery {
               .sort(log2h4h3Comparator)
               .reverse();
 
-            const associationSummary =
-              pageCredibleSet.find(d => d.tagVariant.id === indexVariantId) ||
-              {};
+            const associationSummary = pageSummary;
 
             const pageCredibleSetAdjusted = pageCredibleSet
               .map(flattenPosition)
@@ -384,31 +385,60 @@ query CredibleSetsQuery {
                 </Grid>
 
                 <SectionHeading heading="Association summary" />
+
                 <Typography variant="subtitle2">
                   <strong>P-value:</strong>{' '}
-                  {significantFigures(associationSummary.pval)}
+                  {significantFigures(associationSummary.pvalMantissa) +
+                    'e' +
+                    associationSummary.pvalExponent}
                 </Typography>
-                <Typography variant="subtitle2">
-                  <strong>Beta:</strong>{' '}
-                  {significantFigures(associationSummary.beta)}
-                </Typography>
-                <Typography variant="subtitle2">
-                  <strong>Beta 95% Confidence Interval:</strong> (
-                  {significantFigures(
-                    associationSummary.beta - 1.959 * associationSummary.se
-                  )}
-                  ,{' '}
-                  {significantFigures(
-                    associationSummary.beta + 1.959 * associationSummary.se
-                  )}
-                  )
-                </Typography>
-                <Typography variant="subtitle2">
-                  <strong>Standard Error:</strong>{' '}
-                  {significantFigures(associationSummary.se)}
-                </Typography>
+
+                {associationSummary.beta ? (
+                  <>
+                    <Typography variant="subtitle2">
+                      <strong>Beta:</strong>{' '}
+                      {significantFigures(associationSummary.beta)}
+                    </Typography>
+
+                    <Typography variant="subtitle2">
+                      <strong>Beta 95% Confidence Interval:</strong> (
+                      {significantFigures(associationSummary.betaCILower)},{' '}
+                      {significantFigures(associationSummary.betaCIUpper)})
+                    </Typography>
+                  </>
+                ) : associationSummary.oddsRatio ? (
+                  <>
+                    <Typography variant="subtitle2">
+                      <strong>Odds ratio:</strong>{' '}
+                      {significantFigures(associationSummary.oddsRatio)}
+                    </Typography>
+
+                    <Typography variant="subtitle2">
+                      <strong>Odds ratio Confidence Interval:</strong> (
+                      {significantFigures(associationSummary.oddsRatioCILower)},{' '}
+                      {significantFigures(associationSummary.oddsRatioCIUpper)})
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="subtitle2">
+                    <strong>Beta:</strong> N/A
+                  </Typography>
+                )}
+
                 <SectionHeading
-                  heading="QTL Colocalisation"
+                  heading="Gene prioritisation using locus-to-gene pipeline"
+                  subheading="Which genes were prioritised by L2G pipeline at this locus?"
+                />
+                <ColocL2GTable
+                  loading={false}
+                  error={false}
+                  data={studyLocus2GeneTable.rows}
+                  handleToggleRegional={this.handleToggleRegional}
+                  fileStem={`l2g-assignment-${studyId}-${indexVariantId}`}
+                />
+
+                <SectionHeading
+                  heading="Gene prioritisation using colocalisation analysis"
                   subheading={
                     <React.Fragment>
                       Which molecular traits colocalise with{' '}
@@ -449,7 +479,7 @@ query CredibleSetsQuery {
                 ) : null}
 
                 <SectionHeading
-                  heading="GWAS Study Colocalisation"
+                  heading={<div id="coloc">GWAS Study Colocalisation</div>}
                   subheading={
                     <React.Fragment>
                       Which GWAS studies colocalise with{' '}

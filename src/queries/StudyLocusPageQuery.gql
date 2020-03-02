@@ -21,6 +21,22 @@ query StudyLocusPageQuery(
     pubJournal
     pmid
   }
+  studyLocus2GeneTable(studyId:$studyId variantId:$variantId){
+    rows{
+      gene{
+        symbol
+        id
+      }
+      yProbaModel
+      yProbaDistance
+      # yProbaInterlocus
+      yProbaInteraction
+      yProbaMolecularQTL
+      yProbaPathogenicity
+      hasColoc
+      distanceToLocus
+    }
+  }
   gwasColocalisation(studyId: $studyId, variantId: $variantId) {
     indexVariant {
       id
@@ -101,6 +117,7 @@ query StudyLocusPageQuery(
   #     h4
   #     log2h4h3
   #   }
+  
   pageCredibleSet: gwasCredibleSet(studyId: $studyId, variantId: $variantId) {
     tagVariant {
       id
@@ -116,6 +133,25 @@ query StudyLocusPageQuery(
     is95
     is99
   }
+
+  pageSummary: studyAndLeadVariantInfo(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      rsId
+    }
+    study {
+      traitReported
+    }
+    pvalMantissa
+    pvalExponent
+    oddsRatio
+    oddsRatioCILower
+    oddsRatioCIUpper
+    beta
+    direction
+    betaCILower
+    betaCIUpper
+  }
+
   genes(chromosome: $chromosome, start: $start, end: $end) {
     id
     symbol

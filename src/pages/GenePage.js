@@ -38,7 +38,7 @@ function geneData(data) {
 }
 
 function hasAssociatedStudies(data) {
-  return data && data.studiesAndLeadVariantsForGene;
+  return data && data.studiesAndLeadVariantsForGeneByL2G;
 }
 
 const styles = theme => {
@@ -171,7 +171,7 @@ class GenePage extends React.Component {
             // all
             const associatedStudies =
               isValidGene && hasAssociatedStudies(data)
-                ? data.studiesAndLeadVariantsForGene
+                ? data.studiesAndLeadVariantsForGeneByL2G
                 : [];
 
             // filtered
@@ -423,7 +423,7 @@ class GenePage extends React.Component {
                   </Grid>
                 </Grid>
                 <SectionHeading
-                  heading={`Associated studies`}
+                  heading="Associated studies: locus-to-gene pipeline"
                   subheading={`Which studies are associated with ${symbol}?`}
                   entities={[
                     {
@@ -441,6 +441,7 @@ class GenePage extends React.Component {
                   error={error}
                   data={associatedStudiesFiltered}
                   geneId={geneId}
+                  geneSymbol={symbol}
                   chromosome={chromosome}
                   position={Math.round((start + end) / 2)}
                   traitFilterValue={traitFilterValue}
@@ -452,7 +453,7 @@ class GenePage extends React.Component {
                   filenameStem={`${geneId}-associated-studies`}
                 />
                 <SectionHeading
-                  heading={`Colocalising studies`}
+                  heading="Associated studies: Colocalisation analysis"
                   subheading={`Which studies have evidence of colocalisation with molecular QTLs for ${symbol}?`}
                 />
                 <ColocForGeneTable

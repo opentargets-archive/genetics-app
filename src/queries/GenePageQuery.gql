@@ -7,11 +7,9 @@ query GenePageQuery($geneId: String!) {
     end
     bioType
   }
-  studiesAndLeadVariantsForGene(geneId: $geneId) {
-    indexVariant {
-      rsId
-      id
-    }
+  studiesAndLeadVariantsForGeneByL2G(geneId: $geneId) {
+    pval
+    yProbaModel
     study {
       studyId
       traitReported
@@ -20,16 +18,23 @@ query GenePageQuery($geneId: String!) {
       pmid
       nInitial
       nReplication
-      nCases
+      hasSumsStats
     }
-    pval
-    oddsRatio
-    oddsRatioCILower
-    oddsRatioCIUpper
-    beta
-    betaCILower
-    betaCIUpper
-    direction
+    variant {
+      rsId
+      id
+    }
+    odds{
+      oddsCI
+      oddsCILower
+      oddsCIUpper
+    }
+    beta{
+      betaCI
+      betaCILower
+      betaCIUpper
+      direction
+    }
   }
   colocalisationsForGene(geneId: $geneId) {
     leftVariant {

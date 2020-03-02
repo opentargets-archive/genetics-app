@@ -18,6 +18,11 @@ query StudyPageQuery($studyId: String!) {
         rsId
         chromosome
         position
+        nearestCodingGene{
+          id
+          symbol
+        }
+        nearestCodingGeneDistance
       }
       pval
       credibleSetSize
@@ -37,6 +42,13 @@ query StudyPageQuery($studyId: String!) {
         }
       }
       bestColocGenes {
+        score
+        gene {
+          id
+          symbol
+        }
+      }
+      bestLocus2Genes{
         score
         gene {
           id

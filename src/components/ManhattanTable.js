@@ -9,12 +9,10 @@ import {
 } from 'ot-ui';
 import { getCytoband } from 'ot-charts';
 
-import LocusLink from './LocusLink';
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-import cytobandComparator from '../logic/cytobandComparator';
 
 export const tableColumns = (studyId, hasSumsStats) => [
   {
@@ -26,15 +24,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
       </Link>
     ),
     comparator: variantIdComparator,
-  },
-  {
-    id: 'indexVariantRsId',
-    label: 'rsID',
-  },
-  {
-    id: 'cytoband',
-    label: 'Cytoband',
-    comparator: cytobandComparator,
   },
   {
     id: 'pval',
@@ -101,30 +90,42 @@ export const tableColumns = (studyId, hasSumsStats) => [
       rowData.ldSetSize ? commaSeparate(rowData.ldSetSize) : null,
   },
   {
-    id: 'bestGenes',
-    label: 'Top V2G Genes',
-    tooltip:
-      'The top ranked genes from our variant-to-gene pipeline for this lead variant',
+    id: 'bestLocus2Genes',
+    label: 'L2G',
+    tooltip: 'Genes prioritised by our locus-to-gene model with score ≥ 0.5',
     renderCell: rowData => (
       <React.Fragment>
-        {rowData.bestGenes.map((d, i) => (
+        {rowData.bestLocus2Genes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            {i > 0 ? ', ' : ''}
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
           </React.Fragment>
         ))}
       </React.Fragment>
     ),
   },
   {
+    id: 'nearestCodingGene',
+    label: 'Closest Gene',
+    tooltip: 'The gene with the closest transcription start site',
+    renderCell: rowData =>
+      rowData.nearestCodingGene ? (
+        <Link to={`/gene/${rowData.nearestCodingGene.id}`}>
+          {rowData.nearestCodingGene.symbol}
+        </Link>
+      ) : null,
+  },
+  {
     id: 'bestColocGenes',
-    label: 'Top Colocalising Genes',
+    label: 'Colocalisation',
     tooltip:
       'The list of genes which colocalise at this locus with PP(H4) ≥ 0.95 and log2(H4/H3) ≥ log2(5)',
     renderCell: rowData => (
       <React.Fragment>
         {rowData.bestColocGenes.map((d, i) => (
           <React.Fragment key={i}>
-            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>{' '}
+            {i > 0 ? ', ' : ''}
+            <Link to={`/gene/${d.gene.id}`}>{d.gene.symbol}</Link>
           </React.Fragment>
         ))}
       </React.Fragment>
@@ -135,12 +136,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
     label: 'View',
     renderCell: rowData => (
       <React.Fragment>
-        <LocusLink
-          chromosome={rowData.chromosome}
-          position={rowData.position}
-          selectedIndexVariants={[rowData.indexVariantId]}
-          selectedStudies={[studyId]}
-        />
         <StudyLocusLink
           hasSumsStats={hasSumsStats}
           indexVariantId={rowData.indexVariantId}
@@ -175,7 +170,11 @@ const getDownloadData = dataWithCytoband => {
           : null,
       credibleSetSize: row.credibleSetSize,
       ldSetSize: row.ldSetSize,
-      bestGenes: row.bestGenes.map(d => d.gene.symbol).join(', '),
+      bestLocus2Genes: row.bestLocus2Genes.map(d => d.gene.symbol).join(', '),
+      nearestCodingGene: row.nearestCodingGene
+        ? row.nearestCodingGene.symbol
+        : '',
+      bestColocGenes: row.bestColocGenes.map(d => d.gene.symbol).join(', '),
     };
   });
 };
@@ -227,6 +226,19 @@ function ManhattanTable({
             label: `study:manhattan:${sortBy}(${order})`,
           });
         }}
+        headerGroups={[
+          { colspan: 7, label: 'Association Information' },
+          {
+            colspan: 5,
+            label: (
+              <Fragment>
+                Prioritised Genes
+                <br />
+                <small>results from our gene prioritisation pipelines</small>
+              </Fragment>
+            ),
+          },
+        ]}
       />
     </Fragment>
   );
