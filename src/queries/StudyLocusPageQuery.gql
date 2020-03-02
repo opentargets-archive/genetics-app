@@ -117,6 +117,7 @@ query StudyLocusPageQuery(
   #     h4
   #     log2h4h3
   #   }
+  
   pageCredibleSet: gwasCredibleSet(studyId: $studyId, variantId: $variantId) {
     tagVariant {
       id
@@ -132,6 +133,25 @@ query StudyLocusPageQuery(
     is95
     is99
   }
+
+  pageSummary: studyAndLeadVariantInfo(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      rsId
+    }
+    study {
+      traitReported
+    }
+    pvalMantissa
+    pvalExponent
+    oddsRatio
+    oddsRatioCILower
+    oddsRatioCIUpper
+    beta
+    direction
+    betaCILower
+    betaCIUpper
+  }
+
   genes(chromosome: $chromosome, start: $start, end: $end) {
     id
     symbol
