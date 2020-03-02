@@ -41,14 +41,15 @@ const tableColumns = [
     comparator: (a, b) => d3.ascending(a.yProbaDistance, b.yProbaDistance),
     renderCell: d => significantFigures(d.yProbaDistance),
   },
-  // {
-  //   id: 'yProbaInterlocus',
-  //   label: 'QTL Coloc',
-  //   tooltip:
-  //     'Evidence linking gene to this study including molecular trait colocalisation features only. Score range [0, 1].',
-  //   comparator: (a, b) => d3.ascending(a.yProbaInterlocus, b.yProbaInterlocus),
-  //   renderCell: d => significantFigures(d.yProbaInterlocus),
-  // },
+  {
+    id: 'yProbaMolecularQTL',
+    label: 'QTL Coloc',
+    tooltip:
+      'Evidence linking gene to this study including molecular trait colocalisation features only. Score range [0, 1].',
+    comparator: (a, b) =>
+      d3.ascending(a.yProbaMolecularQTL, b.yProbaMolecularQTL),
+    renderCell: d => significantFigures(d.yProbaMolecularQTL),
+  },
   {
     id: 'yProbaInteraction',
     label: 'Chromatin Interaction',
@@ -87,7 +88,7 @@ const getDownloadColumns = () => {
 
     { id: 'yProbaPathogenicity', label: 'Variant Pathogenicity' },
     { id: 'yProbaDistance', label: 'Distance' },
-    // { id: 'yProbaInterlocus', label: 'QTL Coloc' },
+    { id: 'yProbaMolecularQTL', label: 'QTL Coloc' },
     { id: 'yProbaInteraction', label: 'Chromatin Interaction' },
 
     { id: 'distanceToLocus', label: 'Distance to Locus ' },
@@ -102,7 +103,7 @@ const getDownloadRows = data => {
     yProbaModel: d.yProbaModel,
     yProbaPathogenicity: d.yProbaPathogenicity,
     yProbaDistance: d.yProbaDistance,
-    // yProbaInterlocus: d.yProbaInterlocus,
+    yProbaMolecularQTL: d.yProbaMolecularQTL,
     yProbaInteraction: d.yProbaInteraction,
     distanceToLocus: d.distanceToLocus,
     hasColoc: d.hasColoc,
