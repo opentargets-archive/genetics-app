@@ -164,7 +164,7 @@ class HomePage extends Component {
                 }}
                 align="center"
               >
-                Note: All genomic coordinates are now based on GRCh38
+                Note: genomic coordinates are based on GRCh38
               </Typography>
               <Typography
                 className={classes.linkHeader}
