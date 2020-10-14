@@ -5,12 +5,14 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
+import Link from '@material-ui/core/Link';
 
-import { Splash, HomeBox, Footer, Button, NavBar, Link } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import ScrollDownButton from '../components/ScrollDownButton';
+import NavBar from '../components/NavBar/NavBar';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 import { contactUrl, externalLinks } from '../constants';
@@ -90,6 +92,14 @@ const styles = theme => {
       fontFamily: 'Inter',
       fontSize: '18px',
     },
+    linkHeader: {
+      marginTop: '5px',
+    },
+    link: {
+      '&:hover': {
+        color: theme.palette.primary.dark,
+      },
+    },
   };
 };
 
@@ -151,14 +161,44 @@ class HomePage extends Component {
               <Typography
                 style={{
                   marginTop: '25px',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
                 }}
+                align="center"
               >
                 Note: All genomic coordinates are now based on GRCh38
               </Typography>
-              <Typography style={{ marginTop: '25px', textAlign: 'center' }}>
-                <Link external to="http://eepurl.com/dHnchn">
+              <Typography
+                className={classes.linkHeader}
+                variant="subtitle2"
+                align="center"
+              >
+                Latest pubication:
+              </Typography>
+              <Typography style={{ textAlign: 'center' }}>
+                <Link
+                  underline="none"
+                  href="https://doi.org/10.1093/nar/gkaa840"
+                  className={classes.link}
+                >
+                  Open Targets Genetics: systematic identification of
+                  trait-associated genes using large-scale genetics and
+                  functional genomics
+                </Link>
+              </Typography>
+              <Typography align="center">Ghoussaini, M. et al, 2020</Typography>
+
+              <Typography
+                className={classes.linkHeader}
+                variant="subtitle2"
+                align="center"
+              >
+                News:
+              </Typography>
+              <Typography style={{ textAlign: 'center' }}>
+                <Link
+                  underline="none"
+                  href="http://eepurl.com/dHnchn"
+                  className={classes.link}
+                >
                   Subscribe to our newsletter
                 </Link>
               </Typography>

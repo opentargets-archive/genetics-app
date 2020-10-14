@@ -1,9 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { Page, NavBar, Footer } from 'ot-ui';
+import { Page, Footer } from 'ot-ui';
 
 import Search from '../components/Search';
+import NavBar from '../components/NavBar/NavBar';
 import { contactUrl, externalLinks } from '../constants';
 
 const BasePage = ({ children }) => (
