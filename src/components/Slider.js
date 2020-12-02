@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import MuiSlider from '@material-ui/lab/Slider';
+import MuiSlider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 
 const styles = {
