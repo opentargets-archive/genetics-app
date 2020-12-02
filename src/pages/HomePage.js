@@ -5,9 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
-import Link from '@material-ui/core/Link';
 
-import { Splash, HomeBox, Footer, Button } from 'ot-ui';
+import { Splash, HomeBox, Footer, Button, Link } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
@@ -175,8 +174,8 @@ class HomePage extends Component {
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
-                  underline="none"
-                  href="https://doi.org/10.1093/nar/gkaa840"
+                  to="https://doi.org/10.1093/nar/gkaa840"
+                  external
                   className={classes.link}
                 >
                   Open Targets Genetics: systematic identification of
@@ -195,8 +194,8 @@ class HomePage extends Component {
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
-                  underline="none"
-                  href="http://eepurl.com/dHnchn"
+                  external
+                  to="http://eepurl.com/dHnchn"
                   className={classes.link}
                 >
                   Subscribe to our newsletter
