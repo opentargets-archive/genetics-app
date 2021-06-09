@@ -11,11 +11,11 @@ import { HttpLink } from 'apollo-link-http';
 
 import App from './App';
 import { unregister } from './registerServiceWorker';
-import { graphqlApiUrl } from './configuration';
+import config from './config';
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: `${graphqlApiUrl}/graphql`,
+    uri: config.apiUrl,
   }),
   cache: new InMemoryCache(),
 });
