@@ -1,7 +1,7 @@
 const config = {
   apiUrl: window.configApiUrl
     ? window.configApiUrl
-    : 'https://genetics-api.opentargets.io/graphql',
+    : 'https://open-targets-genetics-dev.ew.r.appspot.com/graphql',
 };
 
 export default config;
