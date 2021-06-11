@@ -38,15 +38,12 @@ export const externalLinks = {
     { label: 'Blog', url: 'https://blog.opentargets.org' },
   ],
   partners: [
-    { label: 'Biogen', url: 'https://www.biogen.com' },
-    { label: 'Celgene', url: 'http://www.celgene.com' },
+    { label: 'Bristol Myers Squibb', url: 'https://www.bms.com' },
     { label: 'EMBL-EBI', url: 'http://www.ebi.ac.uk' },
     { label: 'GSK', url: 'http://www.gsk.com' },
+    { label: 'Sanofi', url: 'https://www.sanofi.com' },
     { label: 'Takeda', url: 'https://www.takeda.com' },
-    {
-      label: 'Wellcome Sanger Institute',
-      url: 'http://www.sanger.ac.uk',
-    },
+    { label: 'Wellcome Sanger Institute', url: 'http://www.sanger.ac.uk' },
   ],
   help: [
     {

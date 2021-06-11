@@ -1,0 +1,2 @@
+// DevOps context
+var configApiUrl = DEVOPS_CONTEXT_PLATFORM_APP_CONFIG_API_URL
