@@ -153,7 +153,7 @@ const tableColumns = ({
     label: 'View',
     renderCell: d => (
       <StudyLocusLink
-        hasSumsStats={d.study.hasSumsStats}
+        hasSumsStats={d.study.hasSumstats}
         indexVariantId={d.leftVariant.id}
         studyId={d.study.studyId}
       />
