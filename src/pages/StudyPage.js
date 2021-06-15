@@ -41,7 +41,7 @@ class StudyPage extends React.Component {
               pubAuthor,
               pubDate,
               pubJournal,
-              hasSumsStats,
+              hasSumstats,
             } = isStudyWithInfo ? data.studyInfo : {};
             return (
               <React.Fragment>
@@ -80,7 +80,7 @@ class StudyPage extends React.Component {
                 />
                 {isStudyWithInfo ? <StudySummary {...data.studyInfo} /> : null}
                 <ManhattanContainer
-                  {...{ studyId, hasSumsStats, loading, error, data }}
+                  {...{ studyId, hasSumstats, loading, error, data }}
                 />
               </React.Fragment>
             );

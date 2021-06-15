@@ -184,7 +184,7 @@ function ManhattanTable({
   error,
   data,
   studyId,
-  hasSumsStats,
+  hasSumstats,
   filenameStem,
 }) {
   const dataWithCytoband = data.map(d => {
@@ -194,7 +194,7 @@ function ManhattanTable({
       cytoband: getCytoband(chromosome, position),
     };
   });
-  const columns = tableColumns(studyId, hasSumsStats);
+  const columns = tableColumns(studyId, hasSumstats);
   const downloadColumns = getDownloadColumns(columns);
   const downloadData = getDownloadData(dataWithCytoband);
 
