@@ -152,7 +152,7 @@ query VariantPageQuery($variantId: String!) {
         pmid
         pubDate
         pubAuthor
-        hasSumsStats
+        hasSumstats
       }
       pval
       nTotal
