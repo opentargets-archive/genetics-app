@@ -438,7 +438,11 @@ query CredibleSetsQuery {
                 />
 
                 <SectionHeading
-                  heading="Gene prioritisation using colocalisation analysis"
+                  heading={
+                    <div id="coloc">
+                      Gene prioritisation using colocalisation analysis
+                    </div>
+                  }
                   subheading={
                     <React.Fragment>
                       Which molecular traits colocalise with{' '}
@@ -479,7 +483,7 @@ query CredibleSetsQuery {
                 ) : null}
 
                 <SectionHeading
-                  heading={<div id="coloc">GWAS Study Colocalisation</div>}
+                  heading="GWAS Study Colocalisation"
                   subheading={
                     <React.Fragment>
                       Which GWAS studies colocalise with{' '}
