@@ -66,20 +66,20 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
           fontWeight="bold"
           fontSize="10px"
         >
-          Variant-to-Gene{' '}
+          Locus-to-Gene{' '}
         </tspan>
         <tspan
-          x="5.3"
+          x="2"
           y="12"
           fill="#5b5f5f"
           fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
-          (V2G) analysis
+          (L2G) analysis
         </tspan>
         <tspan
-          x="21.9"
+          x="18"
           y="24"
           fill="#5b5f5f"
           fontFamily="Inter"
@@ -123,34 +123,34 @@ const PortalFeaturesIcon = ({ className, classes, ...rest }) => {
       </text>
       <text transform="translate(182.56 205.88)">
         <tspan
-          x="0"
+          x="3"
           y="0"
           fill="#5b5f5f"
           fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
-          UK Biobank +
+          UK Biobank
         </tspan>
         <tspan
-          x="-2.7"
+          x="12"
           y="12"
           fill="#5b5f5f"
           fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
-          GWAS Catalog
+          FinnGen
         </tspan>
         <tspan
-          x="5.8"
+          x="-4"
           y="24"
           fill="#5b5f5f"
           fontFamily="Inter"
           fontWeight="bold"
           fontSize="10px"
         >
-          integration
+          GWAS Catalog
         </tspan>
       </text>
       <path
