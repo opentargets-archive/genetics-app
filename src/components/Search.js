@@ -86,13 +86,15 @@ class Search extends React.Component {
   };
   render() {
     return (
-      <OtSearch
-        onInputChange={this.handleInputChange}
-        onFocus={this.handleFocus}
-        optionComponent={SearchOption}
-        onSelectOption={this.handleSelectOption}
-        placeholder="Search for a gene, variant or trait..."
-      />
+      <div style={{ backgroundColor: '#fff' }}>
+        <OtSearch
+          onInputChange={this.handleInputChange}
+          onFocus={this.handleFocus}
+          optionComponent={SearchOption}
+          onSelectOption={this.handleSelectOption}
+          placeholder="Search for a gene, variant or trait..."
+        />
+      </div>
     );
   }
 }
