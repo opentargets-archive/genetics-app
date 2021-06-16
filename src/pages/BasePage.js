@@ -13,9 +13,10 @@ const BasePage = ({ children }) => (
       <NavBar
         name="Genetics"
         search={<Search searchLocation="navbar" />}
-        docs="https://opentargets.gitbook.io/open-targets-genetics-documentation"
-        api="https://genetics-docs.opentargets.org/technical-pipeline/graphql-api"
-        downloads="https://genetics-docs.opentargets.org/technical-pipeline/data-download"
+        docs="https://genetics-docs.opentargets.org/"
+        api="https://genetics-docs.opentargets.org/data-access/graphql-api"
+        downloads="https://genetics-docs.opentargets.org/data-access/data-download"
+        community="https://community.opentargets.org/"
         contact={contactUrl}
       />
     }
