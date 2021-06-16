@@ -347,7 +347,7 @@ class GenePage extends React.Component {
                         <Grid item>
                           <a
                             className={classes.link}
-                            href={`https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
+                            href={`https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
