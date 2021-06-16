@@ -60,20 +60,6 @@ const GnomADTable = ({ classes, data, variantId }) => (
           {data.rsId}
         </Link>
       </Typography>
-      <Typography variant="subtitle2">
-        <strong>gnomAD:</strong>{' '}
-        {data.idB37 ? (
-          <Link
-            external
-            to={`http://gnomad.broadinstitute.org/variant/${data.idB37.replace(
-              /_/g,
-              '-'
-            )}`}
-          >
-            {data.idB37.replace(/_/g, '-')}
-          </Link>
-        ) : null}
-      </Typography>
       <br />
 
       <Typography variant="subtitle1">Neighbourhood</Typography>

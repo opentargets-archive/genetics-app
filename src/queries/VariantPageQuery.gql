@@ -3,7 +3,6 @@ query VariantPageQuery($variantId: String!) {
     rsId
     chromosome
     position
-    idB37
     chromosomeB37
     positionB37
     refAllele
