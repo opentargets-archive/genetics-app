@@ -224,7 +224,6 @@ const tableColumns = ({
     renderCell: rowData => {
       return (
         <StudyLocusLink
-          hasSumsStats={rowData.study.hasSumstats}
           indexVariantId={rowData.variant.id}
           studyId={rowData.study.studyId}
           label="Gene prioritisation"

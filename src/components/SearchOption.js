@@ -28,7 +28,7 @@ const Option = ({ data }) => {
               {commaSeparate(data.nInitial)}
               {data.numAssocLoci ? (
                 <span style={{ float: 'right' }}>
-                  {data.hasSumsStats ? (
+                  {data.hasSumstats ? (
                     <Chip
                       style={{
                         height: '16px',

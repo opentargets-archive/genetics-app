@@ -14,7 +14,7 @@ import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
-export const tableColumns = (studyId, hasSumsStats) => [
+export const tableColumns = studyId => [
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
@@ -137,7 +137,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
     renderCell: rowData => (
       <React.Fragment>
         <StudyLocusLink
-          hasSumsStats={hasSumsStats}
           indexVariantId={rowData.indexVariantId}
           studyId={studyId}
         />
