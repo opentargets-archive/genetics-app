@@ -116,13 +116,14 @@ const tableColumns = variantId => [
   {
     id: 'studyLocus',
     label: 'View',
-    renderCell: rowData => (
-      <StudyLocusLink
-        indexVariantId={rowData.indexVariantId}
-        studyId={rowData.studyId}
-        hasSumsStats={rowData.hasSumsStats}
-      />
-    ),
+    renderCell: rowData => {
+      return (
+        <StudyLocusLink
+          indexVariantId={rowData.indexVariantId}
+          studyId={rowData.studyId}
+        />
+      );
+    },
   },
 ];
 

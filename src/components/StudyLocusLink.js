@@ -38,14 +38,7 @@ const styles = {
   },
 };
 
-const StudyLocusLink = ({
-  big,
-  studyId,
-  indexVariantId,
-  classes,
-  hasSumsStats,
-  label,
-}) => {
+const StudyLocusLink = ({ big, studyId, indexVariantId, classes, label }) => {
   return (
     <Tooltip
       title="View gene prioritisation results for this locus"
