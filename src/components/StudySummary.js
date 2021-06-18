@@ -9,9 +9,14 @@ const StudySummary = ({ pmid, nInitial, nReplication, nCases, studyId }) => (
       <Typography variant="subtitle1">External references</Typography>
       {studyId && studyId.startsWith('NEALE2') ? (
         <Typography variant="subtitle2">
-          <strong>Neale UK Biobank:</strong>{' '}
-          <Link external to="http://www.nealelab.is/uk-biobank">
-            Homepage
+          <strong>UK Biobank:</strong>{' '}
+          <Link
+            external
+            to={`http://biobank.ndph.ox.ac.uk/showcase/field.cgi?id=${
+              studyId.split('_')[1]
+            }`}
+          >
+            {studyId.split('_')[1]}
           </Link>
         </Typography>
       ) : null}
