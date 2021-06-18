@@ -1,8 +1,8 @@
-import { lighten, darken, desaturate, tint, shade } from 'polished';
+import { lighten, darken } from 'polished';
 
 const PRIMARY = '#0091eb';
 const SECONDARY = '#ff6350';
-const TERTIARY = '#00a252';
+// const TERTIARY = '#00a252';
 const GREY = {
   50: '#fafafa',
   100: '#f5f5f5',
