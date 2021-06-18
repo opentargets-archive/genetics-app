@@ -65,6 +65,7 @@ const NavBar = ({
   api,
   downloads,
   docs,
+  community,
   contact,
   homepage,
   items,
@@ -86,12 +87,6 @@ const NavBar = ({
       )}
       <div className={classes.flex} />
       {search ? search : null}
-      <MenuExternalLink
-        classes={classes}
-        href="https://genetics-docs.opentargets.org/#overview"
-      >
-        About
-      </MenuExternalLink>
       {docs ? (
         <MenuExternalLink classes={classes} href={docs}>
           Documentation
@@ -107,6 +102,12 @@ const NavBar = ({
       {downloads ? (
         <MenuExternalLink classes={classes} href={downloads}>
           Downloads
+        </MenuExternalLink>
+      ) : null}
+
+      {community ? (
+        <MenuExternalLink classes={classes} href={community}>
+          Community
         </MenuExternalLink>
       ) : null}
 

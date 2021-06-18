@@ -1,9 +1,4 @@
-import {
-  contactUrl as contactUrlConfig,
-  gitRevision,
-  packageVersion,
-  platformUrl,
-} from './configuration';
+import { contactUrl as contactUrlConfig } from './configuration';
 
 export const pvalThreshold = 4.94e-322;
 
@@ -12,12 +7,12 @@ export const contactUrl = contactUrlConfig;
 export const externalLinks = {
   about: [
     {
-      label: `Version ${packageVersion} (${gitRevision})`,
-      url: `https://github.com/opentargets/genetics-app/commit/${gitRevision}`,
+      label: `Data version 21.06`,
+      url: `https://genetics-docs.opentargets.org/release-notes`,
     },
     {
-      label: 'Github codebase',
-      url: 'https://github.com/opentargets/genetics-app',
+      label: 'Community forum',
+      url: 'https://community.opentargets.org/',
     },
     {
       label: 'Privacy notice',
@@ -25,16 +20,14 @@ export const externalLinks = {
     },
     {
       label: 'Terms of use',
-      url: `${platformUrl}/terms-of-use`,
+      url: `https://genetics-docs.opentargets.org/terms-of-use`,
     },
   ],
   network: [
-    {
-      label: 'Overview',
-      url: 'https://www.opentargets.org',
-    },
     { label: 'Science', url: 'https://www.opentargets.org/science' },
-    { label: 'Resources', url: 'https://www.opentargets.org/resources' },
+    { label: 'Publications', url: 'https://www.opentargets.org/publications' },
+    { label: 'Platform', url: 'https://platform.opentargets.org/' },
+    { label: 'Jobs', url: 'https://www.opentargets.org/jobs' },
     { label: 'Blog', url: 'https://blog.opentargets.org' },
   ],
   partners: [
@@ -42,7 +35,6 @@ export const externalLinks = {
     { label: 'EMBL-EBI', url: 'http://www.ebi.ac.uk' },
     { label: 'GSK', url: 'http://www.gsk.com' },
     { label: 'Sanofi', url: 'https://www.sanofi.com' },
-    { label: 'Takeda', url: 'https://www.takeda.com' },
     { label: 'Wellcome Sanger Institute', url: 'http://www.sanger.ac.uk' },
   ],
   help: [
@@ -59,23 +51,21 @@ export const externalLinks = {
   ],
   social: [
     {
-      iconClasses: 'fab fa-facebook',
-      url: 'https://www.facebook.com/OpenTargets',
+      iconClasses: 'fab fa-discourse',
+      url: 'https://community.opentargets.org/',
     },
     {
       iconClasses: 'fab fa-twitter-square',
-      url: 'http://twitter.com/targetvalidate',
+      url: 'http://twitter.com/opentargets',
     },
     {
       iconClasses: 'fab fa-linkedin',
-      url:
-        'https://www.linkedin.com/company/centre-for-therapeutic-target-validation',
+      url: 'https://www.linkedin.com/company/open-targets/',
     },
     {
       iconClasses: 'fab fa-youtube-square',
-      url: 'https://www.youtube.com/channel/UCLMrondxbT0DIGx5nGOSYOQ',
+      url: 'https://www.youtube.com/opentargets',
     },
-    { iconClasses: 'fab fa-medium', url: 'https://medium.com/opentargets' },
     {
       iconClasses: 'fab fa-github-square',
       url: 'https://github.com/opentargets',
