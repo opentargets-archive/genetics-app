@@ -4,7 +4,8 @@ import _ from 'lodash';
 import { loader } from 'graphql.macro';
 
 import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
-import { PheWAS, withTooltip } from 'ot-charts';
+import { withTooltip } from 'ot-charts';
+import PheWAS from './PheWAS';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
 import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
