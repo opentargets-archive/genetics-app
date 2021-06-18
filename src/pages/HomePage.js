@@ -172,7 +172,7 @@ class HomePage extends Component {
                 variant="subtitle2"
                 align="center"
               >
-                Latest pubication:
+                Latest publication:
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
@@ -185,14 +185,13 @@ class HomePage extends Component {
                   functional genomics
                 </Link>
               </Typography>
-              <Typography align="center">Ghoussaini, M. et al, 2021</Typography>
 
               <Typography
                 className={classes.linkHeader}
                 variant="subtitle2"
                 align="center"
               >
-                Current data release:
+                Last updated:
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
@@ -200,7 +199,7 @@ class HomePage extends Component {
                   href="https://genetics-docs.opentargets.org/release-notes"
                   className={classes.link}
                 >
-                  21.06 (June 2021)
+                  June 2021 (21.06)
                 </Link>
               </Typography>
             </HomeBox>
