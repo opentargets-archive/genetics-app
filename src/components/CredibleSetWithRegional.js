@@ -8,7 +8,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import { CredibleSet, Regional } from 'ot-charts';
+import CredibleSet from './CredibleSet';
+import Regional from './Regional';
 
 const styles = () => ({
   container: {
