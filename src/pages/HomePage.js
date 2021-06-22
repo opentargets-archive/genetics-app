@@ -13,7 +13,6 @@ import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import ScrollDownButton from '../components/ScrollDownButton';
 import NavBar from '../components/NavBar/NavBar';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 import { contactUrl, externalLinks } from '../constants';
 
@@ -36,14 +35,6 @@ const EXAMPLES = [
     type: 'study',
   },
 ];
-
-const clickExample = type => () => {
-  reportAnalyticsEvent({
-    category: 'home-example',
-    action: 'click',
-    label: type,
-  });
-};
 
 const styles = theme => {
   return {
@@ -148,12 +139,7 @@ class HomePage extends Component {
               <Search />
               <Grid container justify="center" className={classes.examples}>
                 {EXAMPLES.map((d, i) => (
-                  <a
-                    className={classes.exampleLink}
-                    key={i}
-                    href={d.url}
-                    onClick={clickExample(d.type)}
-                  >
+                  <a className={classes.exampleLink} key={i} href={d.url}>
                     <Button variant="outlined">{d.label}</Button>
                   </a>
                 ))}

@@ -7,7 +7,6 @@ import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
 import { PheWAS, withTooltip } from 'ot-charts';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const PHEWAS_QUERY = loader('../queries/PheWASQuery.gql');
 
@@ -141,13 +140,6 @@ class PheWASSection extends React.Component {
                   error={error}
                   svgContainer={pheWASPlot}
                   filenameStem={`${variantId}-traits`}
-                  reportDownloadEvent={() => {
-                    reportAnalyticsEvent({
-                      category: 'visualisation',
-                      action: 'download',
-                      label: `variant:phewas:svg`,
-                    });
-                  }}
                 >
                   <PheWASWithTooltip
                     significancePVal={0.05 / data.pheWAS.totalGWASStudies}

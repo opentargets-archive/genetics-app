@@ -6,7 +6,6 @@ import { loader } from 'graphql.macro';
 import { Search as OtSearch } from 'ot-ui';
 
 import SearchOption from './SearchOption';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const SEARCH_QUERY = loader('../queries/SearchQuery.gql');
 
@@ -29,15 +28,8 @@ const asGroupedOptions = data => {
 
 class Search extends React.Component {
   handleSelectOption = (value, { action }) => {
-    const { history, searchLocation } = this.props;
+    const { history } = this.props;
     if (action === 'select-option') {
-      reportAnalyticsEvent({
-        category: 'search',
-        action: 'select-option',
-        label: searchLocation
-          ? `${searchLocation}:${value.groupType}`
-          : `home:${value.groupType}`,
-      });
       switch (value.groupType) {
         case 'gene':
           history.push(`/gene/${value.id}`);
@@ -76,19 +68,10 @@ class Search extends React.Component {
         }
       });
   };
-  handleFocus = () => {
-    const { searchLocation } = this.props;
-    reportAnalyticsEvent({
-      category: 'search',
-      action: 'click',
-      label: searchLocation ? searchLocation : 'home',
-    });
-  };
   render() {
     return (
       <OtSearch
         onInputChange={this.handleInputChange}
-        onFocus={this.handleFocus}
         optionComponent={SearchOption}
         onSelectOption={this.handleSelectOption}
         placeholder="Search for a gene, variant or trait..."

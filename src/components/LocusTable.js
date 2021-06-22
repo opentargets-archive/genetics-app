@@ -9,7 +9,6 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import StudyDetailCell from './StudyDetailCell';
 import StudyLocusLink from './StudyLocusLink';
 
@@ -255,20 +254,6 @@ function LocusTable({
       sortBy="pval"
       order="asc"
       downloadFileStem={filenameStem}
-      reportTableDownloadEvent={format => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'download',
-          label: `locus:${format}`,
-        });
-      }}
-      reportTableSortEvent={(sortBy, order) => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'sort-column',
-          label: `locus:${sortBy}(${order})`,
-        });
-      }}
     />
   );
 }

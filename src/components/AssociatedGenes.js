@@ -14,7 +14,6 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import generateComparator from '../utils/generateComparator';
 import LabelHML from './LabelHML';
 
@@ -473,11 +472,6 @@ class AssociatedGenes extends Component {
   };
 
   handleChange = (_, value) => {
-    reportAnalyticsEvent({
-      category: 'tabs',
-      action: 'change-tab',
-      label: `variant:associated-genes:${value}`,
-    });
     this.setState({ value });
   };
 
@@ -523,20 +517,6 @@ class AssociatedGenes extends Component {
           order="desc"
           columns={columnsAll}
           data={dataAll}
-          reportTableDownloadEvent={format => {
-            reportAnalyticsEvent({
-              category: 'table',
-              action: 'download',
-              label: `variant:associated-genes:overview:${format}`,
-            });
-          }}
-          reportTableSortEvent={(sortBy, order) => {
-            reportAnalyticsEvent({
-              category: 'table',
-              action: 'sort-column',
-              label: `variant:associated-genes:overview:${sortBy}(${order})`,
-            });
-          }}
         />
       </Fragment>
     );
@@ -571,24 +551,6 @@ class AssociatedGenes extends Component {
               verticalHeaders
               columns={tableColumns}
               data={tableData}
-              reportTableDownloadEvent={format => {
-                reportAnalyticsEvent({
-                  category: 'table',
-                  action: 'download',
-                  label: `variant:associated-genes:${
-                    schema.sourceId
-                  }:${format}`,
-                });
-              }}
-              reportTableSortEvent={(sortBy, order) => {
-                reportAnalyticsEvent({
-                  category: 'table',
-                  action: 'sort-column',
-                  label: `variant:associated-genes:${
-                    schema.sourceId
-                  }:${sortBy}(${order})`,
-                });
-              }}
             />
           </Fragment>
         )
