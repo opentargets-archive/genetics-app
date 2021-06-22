@@ -118,7 +118,7 @@ class PheWASSection extends React.Component {
             <React.Fragment>
               <SectionHeading
                 heading="PheWAS"
-                subheading="Which traits are associated with this variant in the UK Biobank and GWAS Catalog summary statistics repository? Only traits with P-value < 0.05 are returned."
+                subheading="Which traits are associated with this variant in the UK Biobank, FinnGen, and/or GWAS Catalog summary statistics repository? Only traits with P-value < 0.05 are returned."
                 entities={[
                   {
                     type: 'study',
