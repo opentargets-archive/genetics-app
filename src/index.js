@@ -8,6 +8,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
+import TagManager from 'react-gtm-module';
 
 import App from './App';
 import { unregister } from './registerServiceWorker';
@@ -19,6 +20,10 @@ const client = new ApolloClient({
   }),
   cache: new InMemoryCache(),
 });
+
+if (config.googleTagManagerID) {
+  TagManager.initialize({ gtmId: config.googleTagManagerID });
+}
 
 ReactDOM.render(
   <ApolloProvider client={client}>
