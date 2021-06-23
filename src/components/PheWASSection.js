@@ -55,7 +55,7 @@ function isFromSource(study, studySource) {
     case 'gwas':
       return study.source === 'GCST';
     case 'ukbiobank':
-      return study.source === 'SAIGE' || study.source === 'NEALE2';
+      return study.source === 'SAIGE' || study.source === 'NEALE';
     default:
       return true;
   }
