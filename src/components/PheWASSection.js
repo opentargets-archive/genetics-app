@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Query } from 'react-apollo';
 import _ from 'lodash';
 import { loader } from 'graphql.macro';
-import { NativeSelect } from '@material-ui/core';
+import { Typography, NativeSelect } from '@material-ui/core';
 
 import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
 import { withTooltip } from 'ot-charts';
@@ -159,6 +159,9 @@ function PheWASSection({
             />
             {isPheWASVariant ? (
               <>
+                <Typography style={{ display: 'inline' }}>
+                  Show studies:
+                </Typography>{' '}
                 <NativeSelect onChange={handleSourceChange} value={studySource}>
                   <option value="all">
                     FinnGen, UK Biobank, and GWAS Catalog
