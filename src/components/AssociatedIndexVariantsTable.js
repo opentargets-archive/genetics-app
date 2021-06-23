@@ -2,7 +2,6 @@ import React from 'react';
 import { OtTable, commaSeparate, significantFigures, Link } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import StudyLocusLink from './StudyLocusLink';
 
@@ -142,20 +141,6 @@ const AssociatedIndexVariantsTable = ({
     sortBy="pval"
     order="asc"
     downloadFileStem={filenameStem}
-    reportTableDownloadEvent={format => {
-      reportAnalyticsEvent({
-        category: 'table',
-        action: 'download',
-        label: `variant:associated-index-variants:${format}`,
-      });
-    }}
-    reportTableSortEvent={(sortBy, order) => {
-      reportAnalyticsEvent({
-        category: 'table',
-        action: 'sort-column',
-        label: `variant:associated-index-variants:${sortBy}(${order})`,
-      });
-    }}
   />
 );
 

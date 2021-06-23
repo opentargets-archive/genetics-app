@@ -10,7 +10,6 @@ import {
 
 import { pvalThreshold } from '../constants';
 import StudyLocusLink from './StudyLocusLink';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 import generateComparator from '../utils/generateComparator';
 
 const getDownloadColumns = () => {
@@ -274,20 +273,6 @@ const AssociatedStudiesTable = ({
       data={data}
       sortBy="yProbaModel"
       order="desc"
-      reportTableDownloadEvent={format => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'download',
-          label: `gene:associated-studies:${format}`,
-        });
-      }}
-      reportTableSortEvent={(sortBy, order) => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'sort-column',
-          label: `gene:associated-studies:${sortBy}(${order})`,
-        });
-      }}
       headerGroups={[
         { colspan: 4, label: 'Study Information' },
         {

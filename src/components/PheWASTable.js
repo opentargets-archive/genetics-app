@@ -10,7 +10,6 @@ import {
 import LocusLink from './LocusLink';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 export const tableColumns = ({
   variantId,
@@ -167,20 +166,6 @@ function PheWASTable({
       filters
       downloadFileStem={`${variantId}-associated-studies`}
       excludeDownloadColumns={['locusView']}
-      reportTableDownloadEvent={format => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'download',
-          label: `variant:phewas:${format}`,
-        });
-      }}
-      reportTableSortEvent={(sortBy, order) => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'sort-column',
-          label: `variant:phewas:${sortBy}(${order})`,
-        });
-      }}
     />
   );
 }

@@ -12,7 +12,6 @@ import { getCytoband } from 'ot-charts';
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 export const tableColumns = studyId => [
   {
@@ -211,20 +210,6 @@ function ManhattanTable({
         data={dataWithCytoband}
         sortBy="pval"
         order="asc"
-        reportTableDownloadEvent={format => {
-          reportAnalyticsEvent({
-            category: 'table',
-            action: 'download',
-            label: `study:manhattan:${format}`,
-          });
-        }}
-        reportTableSortEvent={(sortBy, order) => {
-          reportAnalyticsEvent({
-            category: 'table',
-            action: 'sort-column',
-            label: `study:manhattan:${sortBy}(${order})`,
-          });
-        }}
         headerGroups={[
           { colspan: 7, label: 'Association Information' },
           {

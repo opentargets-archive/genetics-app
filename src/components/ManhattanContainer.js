@@ -4,7 +4,6 @@ import { Manhattan, chromosomesWithCumulativeLengths } from 'ot-charts';
 import { SectionHeading, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
 
 const maxPos =
   chromosomesWithCumulativeLengths[chromosomesWithCumulativeLengths.length - 1]
@@ -121,13 +120,6 @@ class ManhattanContainer extends React.Component {
           loading={loading}
           error={error}
           filenameStem={`${studyId}-independently-associated-loci`}
-          reportDownloadEvent={() =>
-            reportAnalyticsEvent({
-              category: 'visualisation',
-              action: 'download',
-              label: `study:manhattan:svg`,
-            })
-          }
         >
           <Manhattan
             ref={this.manhattanPlot}

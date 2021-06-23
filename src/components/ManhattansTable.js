@@ -5,8 +5,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Link, OtTable, commaSeparate } from 'ot-ui';
 import { ManhattanFlat } from 'ot-charts';
 
-import reportAnalyticsEvent from '../analytics/reportAnalyticsEvent';
-
 const CloseButton = props => (
   <IconButton {...props}>
     <CloseIcon />
@@ -124,20 +122,6 @@ function ManhattansTable({
           </small>
         </React.Fragment>
       }
-      reportTableDownloadEvent={format => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'download',
-          label: `study-comparison:selected-studies:${format}`,
-        });
-      }}
-      reportTableSortEvent={(sortBy, order) => {
-        reportAnalyticsEvent({
-          category: 'table',
-          action: 'sort-column',
-          label: `study-comparison:selected-studies:${sortBy}(${order})`,
-        });
-      }}
     />
   );
 }
