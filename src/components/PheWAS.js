@@ -167,7 +167,8 @@ class PheWAS extends Component {
       rect = g
         .append('rect')
         .attr('height', theme.legend.height)
-        .attr('fill', theme.legend.backgroundColor);
+        .attr('fill', '#fff');
+      // .attr('fill', theme.legend.backgroundColor);
 
       g.append('path')
         .attr('d', trianglePath)
