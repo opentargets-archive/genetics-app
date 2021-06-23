@@ -49,7 +49,16 @@ function transformPheWAS(data) {
 }
 
 function isFromSource(study, studySource) {
-  return true;
+  switch (studySource) {
+    case 'finngen':
+      return study.source === 'FINNGEN';
+    case 'gwas':
+      return study.source === 'GCST';
+    case 'ukbiobank':
+      return study.source === 'SAIGE' || study.source === 'NEALE2';
+    default:
+      return true;
+  }
 }
 
 function PheWASSection({
