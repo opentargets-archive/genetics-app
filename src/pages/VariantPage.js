@@ -58,7 +58,6 @@ function transformAssociatedIndexVariants(data) {
         indexVariantRsId: indexVariant.rsId,
         studyId: study.studyId,
         traitReported: study.traitReported,
-        hasSumsStats: study.hasSumsStats,
         pmid: study.pmid,
         pubDate: study.pubDate,
         pubAuthor: study.pubAuthor,

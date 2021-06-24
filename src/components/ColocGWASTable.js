@@ -69,10 +69,9 @@ const tableColumns = [
     id: 'locus',
     label: 'View',
     comparator: (a, b) =>
-      d3.ascending(a.study.hasSumsStats, b.study.hasSumsStats),
+      d3.ascending(a.study.hasSumstats, b.study.hasSumstats),
     renderCell: d => (
       <StudyLocusLink
-        hasSumsStats={d.study.hasSumsStats}
         indexVariantId={d.indexVariant.id}
         studyId={d.study.studyId}
       />

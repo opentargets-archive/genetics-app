@@ -13,7 +13,7 @@ import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
 
-export const tableColumns = (studyId, hasSumsStats) => [
+export const tableColumns = studyId => [
   {
     id: 'indexVariantId',
     label: 'Lead Variant',
@@ -136,7 +136,6 @@ export const tableColumns = (studyId, hasSumsStats) => [
     renderCell: rowData => (
       <React.Fragment>
         <StudyLocusLink
-          hasSumsStats={hasSumsStats}
           indexVariantId={rowData.indexVariantId}
           studyId={studyId}
         />
@@ -183,7 +182,7 @@ function ManhattanTable({
   error,
   data,
   studyId,
-  hasSumsStats,
+  hasSumstats,
   filenameStem,
 }) {
   const dataWithCytoband = data.map(d => {
@@ -193,7 +192,7 @@ function ManhattanTable({
       cytoband: getCytoband(chromosome, position),
     };
   });
-  const columns = tableColumns(studyId, hasSumsStats);
+  const columns = tableColumns(studyId, hasSumstats);
   const downloadColumns = getDownloadColumns(columns);
   const downloadData = getDownloadData(dataWithCytoband);
 

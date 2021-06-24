@@ -1,5 +1,7 @@
 const config = {
-  apiUrl: window.configApiUrl ?? 'https://genetics-api.opentargets.io/graphql',
+  apiUrl:
+    window.configApiUrl ??
+    'https://open-targets-genetics-dev.ew.r.appspot.com/graphql',
   googleTagManagerID: window.configGoogleTagManagerID ?? null,
 };
 

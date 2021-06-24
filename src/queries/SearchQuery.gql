@@ -27,7 +27,7 @@ query SearchQuery($queryString: String!) {
       pubJournal
       nInitial
       numAssocLoci
-      hasSumsStats
+      hasSumstats
     }
   }
 }

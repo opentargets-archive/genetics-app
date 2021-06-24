@@ -9,6 +9,7 @@ query PheWASQuery($variantId: String!) {
         pmid
         pubDate
         pubAuthor
+        source
       }
       pval
       beta

@@ -126,15 +126,16 @@ class HomePage extends Component {
               search={null}
               homepage
               docs="https://genetics-docs.opentargets.org"
-              api="https://genetics-docs.opentargets.org/technical-pipeline/graphql-api"
-              downloads="https://genetics-docs.opentargets.org/technical-pipeline/data-download"
+              api="https://genetics-docs.opentargets.org/data-access/graphql-api"
+              downloads="https://genetics-docs.opentargets.org/data-access/data-download"
+              community="https://community.opentargets.org/"
               contact={contactUrl}
             />
             <HomeBox name="Genetics">
               <div className={classes.slogan}>
                 Explore{' '}
                 <span className={classes.highlight}>variant-gene-trait</span>{' '}
-                associations from UK Biobank and GWAS Catalog
+                associations from UK Biobank, FinnGen, and GWAS Catalog
               </div>
               <Search />
               <Grid container justify="center" className={classes.examples}>
@@ -157,7 +158,7 @@ class HomePage extends Component {
                 variant="subtitle2"
                 align="center"
               >
-                Latest pubication:
+                Latest publication:
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
@@ -170,22 +171,21 @@ class HomePage extends Component {
                   functional genomics
                 </Link>
               </Typography>
-              <Typography align="center">Ghoussaini, M. et al, 2020</Typography>
 
               <Typography
                 className={classes.linkHeader}
                 variant="subtitle2"
                 align="center"
               >
-                News:
+                Last updated:
               </Typography>
               <Typography style={{ textAlign: 'center' }}>
                 <Link
                   underline="none"
-                  href="http://eepurl.com/dHnchn"
+                  href="https://genetics-docs.opentargets.org/release-notes"
                   className={classes.link}
                 >
-                  Subscribe to our newsletter
+                  June 2021 (21.06)
                 </Link>
               </Typography>
             </HomeBox>
@@ -198,7 +198,7 @@ class HomePage extends Component {
           </Grid>
         </RootRef>
         <Grid container justify="center">
-          <Grid item md={8}>
+          <Grid className={classes.list} item md={4}>
             <p className={classes.introTitle}>
               Welcome to Open Targets Genetics
             </p>
@@ -212,28 +212,17 @@ class HomePage extends Component {
               The Portal offers three unique features to help you discover
               associations between genes, variants, and traits:
             </p>
-          </Grid>
-        </Grid>
-        <Grid container justify="center">
-          <Grid className={classes.list} item md={4}>
-            <p className={classes.listText}>
-              + Browse and rank gene and variant associations identified by our{' '}
-              <span className={classes.highlight}>
-                Variant-to-Gene (V2G) scoring
-              </span>{' '}
-              pipeline
+            <p className={classes.introText}>
+              + Browse and rank gene and variant associations identified by our
+              Locus-to-Gene (L2G) scoring pipeline
             </p>
-            <p className={classes.listText}>
+            <p className={classes.introText}>
               + Uncover credible sets for variant and trait associations based
-              on our{' '}
-              <span className={classes.highlight}>fine mapping analyses</span>{' '}
-              pipeline
+              on our fine mapping analyses pipeline
             </p>
-            <p className={classes.listText}>
-              + Explore and compare studies from both UK Biobank and GWAS
-              Catalog using our{' '}
-              <span className={classes.highlight}>multi-trait comparison</span>{' '}
-              tool
+            <p className={classes.introText}>
+              + Explore and compare studies from UK Biobank, FinnGen, and GWAS
+              Catalog using our multi-trait comparison tool
             </p>
           </Grid>
           <Grid container item md={4} justify="center">

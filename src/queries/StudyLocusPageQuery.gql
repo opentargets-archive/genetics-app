@@ -21,9 +21,9 @@ query StudyLocusPageQuery(
     pubJournal
     pmid
   }
-  studyLocus2GeneTable(studyId:$studyId variantId:$variantId){
-    rows{
-      gene{
+  studyLocus2GeneTable(studyId: $studyId, variantId: $variantId) {
+    rows {
+      gene {
         symbol
         id
       }
@@ -53,7 +53,7 @@ query StudyLocusPageQuery(
       pubDate
       pubJournal
       pmid
-      hasSumsStats
+      hasSumstats
     }
     beta
     h3
@@ -117,7 +117,7 @@ query StudyLocusPageQuery(
   #     h4
   #     log2h4h3
   #   }
-  
+
   pageCredibleSet: gwasCredibleSet(studyId: $studyId, variantId: $variantId) {
     tagVariant {
       id
@@ -134,7 +134,10 @@ query StudyLocusPageQuery(
     is99
   }
 
-  pageSummary: studyAndLeadVariantInfo(studyId: $studyId, variantId: $variantId) {
+  pageSummary: studyAndLeadVariantInfo(
+    studyId: $studyId
+    variantId: $variantId
+  ) {
     indexVariant {
       rsId
     }

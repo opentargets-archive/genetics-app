@@ -3,25 +3,20 @@ import Grid from '@material-ui/core/Grid';
 
 import { Link, Typography, commaSeparate } from 'ot-ui';
 
-const StudySummary = ({
-  classes,
-  pubAuthor,
-  pubDate,
-  pubJournal,
-  pmid,
-  nInitial,
-  nReplication,
-  nCases,
-  studyId,
-}) => (
+const StudySummary = ({ pmid, nInitial, nReplication, nCases, studyId }) => (
   <Grid container justify="space-between">
     <Grid item xs={12} sm={6} md={8}>
       <Typography variant="subtitle1">External references</Typography>
       {studyId && studyId.startsWith('NEALE2') ? (
         <Typography variant="subtitle2">
-          <strong>Neale UK Biobank:</strong>{' '}
-          <Link external to="http://www.nealelab.is/uk-biobank">
-            Homepage
+          <strong>UK Biobank:</strong>{' '}
+          <Link
+            external
+            to={`http://biobank.ndph.ox.ac.uk/showcase/field.cgi?id=${
+              studyId.split('_')[1]
+            }`}
+          >
+            {studyId.split('_')[1]}
           </Link>
         </Typography>
       ) : null}
@@ -44,6 +39,17 @@ const StudySummary = ({
             )}`}
           >
             {studyId.replace(/_\d+/, '')}
+          </Link>
+        </Typography>
+      ) : null}
+      {studyId && studyId.startsWith('FINNGEN') ? (
+        <Typography variant="subtitle2">
+          <strong>FinnGen</strong>{' '}
+          <Link
+            external
+            to={`https://r5.finngen.fi/pheno/${studyId.slice(11)}`}
+          >
+            {studyId.slice(11)}
           </Link>
         </Typography>
       ) : null}

@@ -3,7 +3,6 @@ query VariantPageQuery($variantId: String!) {
     rsId
     chromosome
     position
-    idB37
     chromosomeB37
     positionB37
     refAllele
@@ -152,7 +151,7 @@ query VariantPageQuery($variantId: String!) {
         pmid
         pubDate
         pubAuthor
-        hasSumsStats
+        hasSumstats
       }
       pval
       nTotal

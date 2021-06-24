@@ -25,7 +25,7 @@ query LocusPageQuery($chromosome: String!, $start: Long!, $end: Long!) {
       pubDate
       pubJournal
       pmid
-      hasSumsStats
+      hasSumstats
     }
     geneTagVariants {
       geneId

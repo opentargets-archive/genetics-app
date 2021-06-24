@@ -2,9 +2,9 @@ import pkg from '../package.json';
 
 const defaults = {
   REACT_APP_GRAPHQL_API_URL: 'https://genetics-api.opentargets.io',
-  REACT_APP_PLATFORM_URL: 'https://www.targetvalidation.org',
+  REACT_APP_PLATFORM_URL: 'https://platform.opentargets.org/',
   REACT_APP_GIT_REVISION: '2222ccc',
-  REACT_APP_CONTACT_URL: 'mailto:geneticsportal@opentargets.org',
+  REACT_APP_CONTACT_URL: 'mailto:helpdesk@opentargets.org',
 };
 
 const envVarOrDefault = envVarName =>
