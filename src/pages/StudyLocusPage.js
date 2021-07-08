@@ -21,8 +21,8 @@ import {
   significantFigures,
   DataDownloader,
 } from 'ot-ui';
-import { GeneTrack } from 'ot-charts';
 
+import GeneTrack from '../components/GeneTrack';
 import CredibleSet from '../components/CredibleSet';
 
 import BasePage from './BasePage';
