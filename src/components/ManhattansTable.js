@@ -3,7 +3,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { Link, OtTable, commaSeparate } from 'ot-ui';
-import { ManhattanFlat } from 'ot-charts';
+
+import ManhattanFlat from '../components/ManhattanFlat';
 
 const CloseButton = props => (
   <IconButton {...props}>
