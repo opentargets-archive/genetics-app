@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { Manhattan, chromosomesWithCumulativeLengths } from 'ot-charts';
+// import { Manhattan } from 'ot-charts';
 import { SectionHeading, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
+import { chromosomesWithCumulativeLengths } from '../utils';
+import Manhattan from '../components/Manhattan';
 import ManhattanTable, { tableColumns } from '../components/ManhattanTable';
 
 const maxPos =

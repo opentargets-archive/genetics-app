@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import { withStyles } from '@material-ui/core';
 
 import { Link, Button, LocusIcon } from 'ot-ui';
-import { chromosomesWithCumulativeLengths } from 'ot-charts';
+import { chromosomesWithCumulativeLengths } from '../utils';
 
 const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {
   acc[d.name] = d;
