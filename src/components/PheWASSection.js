@@ -5,7 +5,7 @@ import { loader } from 'graphql.macro';
 import { Typography, NativeSelect } from '@material-ui/core';
 
 import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
-import { withTooltip } from 'ot-charts';
+import withTooltip from './withTooltip';
 import PheWAS from './PheWAS';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';

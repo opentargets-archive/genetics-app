@@ -7,11 +7,11 @@ import {
   commaSeparate,
   significantFigures,
 } from 'ot-ui';
-import { getCytoband } from 'ot-charts';
 
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
+import { getCytoband } from '../utils';
 
 export const tableColumns = studyId => [
   {
