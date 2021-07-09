@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Link, OtTable } from 'ot-ui';
-import { getCytoband } from 'ot-charts';
 
 import LocusLink from './LocusLink';
 import variantIdComparator from '../logic/variantIdComparator';
 import cytobandComparator from '../logic/cytobandComparator';
+import { getCytoband } from '../utils';
 
 const tableColumns = studyIds => [
   {

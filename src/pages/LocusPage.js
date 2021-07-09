@@ -7,7 +7,6 @@ import { findDOMNode } from 'react-dom';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { Gecko } from 'ot-charts';
 import {
   SectionHeading,
   PlotContainer,
@@ -26,6 +25,7 @@ import locusScheme, {
   LOCUS_FINEMAPPING,
 } from '../logic/locusScheme';
 import ScrollToTop from '../components/ScrollToTop';
+import Gecko from '../components/Gecko';
 
 const LOCUS_PAGE_QUERY = loader('../queries/LocusPageQuery.gql');
 

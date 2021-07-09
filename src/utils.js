@@ -10,6 +10,21 @@ export const generateComparator = accessor => (a, b) => {
   return aValue > bValue ? 1 : aValue === bValue ? 0 : -1;
 };
 
+// get the cytoband of a position on a chromosome
+export const getCytoband = (chromosome, position) => {
+  const chrom = GRCh38.top_level_region.find(d => d.name === chromosome);
+  if (chrom) {
+    const band = chrom.bands.find(d => d.start <= position && d.end > position);
+    if (band) {
+      const [major] = band.id.split('.');
+      return `${chrom.name}${major}`;
+    } else {
+      return null;
+    }
+  }
+  return null;
+};
+
 // ignore Y, MT and patches
 const chromosomesNumeric = [];
 for (let i = 0; i < 22; i++) {
