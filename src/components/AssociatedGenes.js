@@ -14,7 +14,7 @@ import {
 } from 'ot-ui';
 
 import { pvalThreshold } from '../constants';
-import generateComparator from '../utils/generateComparator';
+import { generateComparator } from '../utils';
 import LabelHML from './LabelHML';
 
 const OVERVIEW = 'overview';

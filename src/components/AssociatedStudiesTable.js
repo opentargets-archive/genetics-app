@@ -10,7 +10,7 @@ import {
 
 import { pvalThreshold } from '../constants';
 import StudyLocusLink from './StudyLocusLink';
-import generateComparator from '../utils/generateComparator';
+import { generateComparator } from '../utils';
 
 const getDownloadColumns = () => {
   return [
