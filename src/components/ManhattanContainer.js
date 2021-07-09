@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import { Manhattan } from 'ot-charts';
 import { SectionHeading, DownloadSVGPlot, ListTooltip } from 'ot-ui';
 
 import { chromosomesWithCumulativeLengths } from '../utils';
