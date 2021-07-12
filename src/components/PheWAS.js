@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import sortBy from 'lodash.sortby';
+import _ from 'lodash';
 import { withContentRect } from 'react-measure';
 
 import theme from './theme';
@@ -104,7 +104,7 @@ class PheWAS extends Component {
     const width = outerWidth - theme.margin.right - theme.margin.left;
     const height = outerHeight - theme.margin.top - theme.margin.phewasBottom;
 
-    const assocs = sortBy(associations, ['traitCategory']);
+    const assocs = _.sortBy(associations, ['traitCategory']);
 
     const svg = d3.select(this.svgRef);
     const chart = svg.select('g');
