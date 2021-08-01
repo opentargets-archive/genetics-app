@@ -1,5 +1,5 @@
 import React from 'react';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import { Helmet } from 'react-helmet';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
