@@ -1,13 +1,11 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
 import config from './config';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  link: new HttpLink({
-    uri: config.apiUrl,
-  }),
+  uri: config.apiUrl,
   cache: new InMemoryCache(),
 });
 
 export default client;
+
+// const all = { client, clientsss };

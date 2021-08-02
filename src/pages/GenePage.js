@@ -1,6 +1,5 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Query } from 'react-apollo';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import _ from 'lodash';
@@ -8,6 +7,7 @@ import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import LinkIcon from '@material-ui/icons/Link';
 import Paper from '@material-ui/core/Paper';
+import { Query } from '@apollo/client/react/components';
 
 import {
   SectionHeading,
@@ -157,7 +157,9 @@ class GenePage extends React.Component {
             const isValidGene = hasGeneData(data, geneId);
             const gene = isValidGene ? geneData(data) : {};
 
-            const { colocalisationsForGene } = data;
+            const colocalisationsForGene = data
+              ? data.colocalisationsForGene
+              : null;
 
             const colocalisationsForGeneFiltered = (
               colocalisationsForGene || []

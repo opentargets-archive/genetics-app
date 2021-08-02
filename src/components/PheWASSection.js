@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import _ from 'lodash';
 import { loader } from 'graphql.macro';
 import { Typography, NativeSelect } from '@material-ui/core';

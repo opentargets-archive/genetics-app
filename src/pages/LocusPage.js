@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/client/react/components';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 import { findDOMNode } from 'react-dom';
