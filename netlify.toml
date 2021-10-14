@@ -22,18 +22,18 @@
   status = 301
   force = true
 
-# redirect to ensure longer urls still fetch index.html
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # redirect domain aliases to primary domain
 [[redirects]]
   from = "https://genetics.opentargets.io/*"
   to = "https://genetics.opentargets.org/:splat"
   status = 301
   force = true
+  
+# redirect to ensure longer urls still fetch index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # qa and dev branches to use different apis
 # (as per https://github.com/opentargets/genetics/issues/312)
