@@ -7,12 +7,15 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 import Link from '@material-ui/core/Link';
 
-import { Splash, HomeBox, Footer, Button } from 'ot-ui';
+import { Splash, HomeBox, Button } from 'ot-ui';
 
 import Search from '../components/Search';
 import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
 import ScrollDownButton from '../components/ScrollDownButton';
 import NavBar from '../components/NavBar/NavBar';
+
+import Version from '../components/Version';
+import Footer from '../components/Footer';
 
 import { contactUrl, externalLinks } from '../constants';
 
@@ -179,15 +182,7 @@ class HomePage extends Component {
               >
                 Last updated:
               </Typography>
-              <Typography style={{ textAlign: 'center' }}>
-                <Link
-                  underline="none"
-                  href="https://genetics-docs.opentargets.org/release-notes"
-                  className={classes.link}
-                >
-                  June 2021 (21.06)
-                </Link>
-              </Typography>
+              <Version />
             </HomeBox>
             <Grid container item justify="center">
               <ScrollDownButton
