@@ -36,12 +36,16 @@ const ColocTable = ({ loading, error, fileStem, data }) => {
       return acc;
     }, {})
   );
+  const tissueThresholdValue = 7;
   const [minVal, maxVal] = d3.extent(data, d => d.log2h4h3);
-  const absMax = Math.max(Math.abs(minVal), maxVal);
+  const absMax = Math.min(
+    tissueThresholdValue,
+    Math.max(Math.abs(minVal), maxVal)
+  );
   const radiusScale = d3
     .scaleSqrt()
     .domain([0, absMax])
-    .range([1, 7]);
+    .range([0, 6]);
   const tissueColumns = uniqueTissues
     .sort((a, b) => d3.ascending(a.name, b.name))
     .map(t => ({
@@ -56,7 +60,9 @@ const ColocTable = ({ loading, error, fileStem, data }) => {
         }
 
         const { h3, h4, log2h4h3, beta } = row[t.id];
-        const qtlRadius = radiusScale(Math.abs(log2h4h3));
+        const qtlRadius = radiusScale(
+          Math.min(tissueThresholdValue, Math.abs(log2h4h3))
+        );
         const qtlColor = log2h4h3 > 0 ? 'blue' : 'red';
         return (
           <Tooltip
