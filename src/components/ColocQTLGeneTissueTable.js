@@ -41,7 +41,7 @@ const ColocTable = ({ loading, error, fileStem, data }) => {
   const radiusScale = d3
     .scaleSqrt()
     .domain([0, absMax])
-    .range([0, 6]);
+    .range([1, 7]);
   const tissueColumns = uniqueTissues
     .sort((a, b) => d3.ascending(a.name, b.name))
     .map(t => ({
