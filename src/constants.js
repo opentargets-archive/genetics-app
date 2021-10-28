@@ -7,10 +7,6 @@ export const contactUrl = contactUrlConfig;
 export const externalLinks = {
   about: [
     {
-      label: `Data version 21.06`,
-      url: `https://genetics-docs.opentargets.org/release-notes`,
-    },
-    {
       label: 'Community forum',
       url: 'https://community.opentargets.org/',
     },
