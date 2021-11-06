@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from '@apollo/client/react/components';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { findDOMNode } from 'react-dom';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -17,7 +18,7 @@ import {
 } from 'ot-ui';
 
 import BasePage from './BasePage';
-import BrowserControls from '../components/BrowserControls';
+// import BrowserControls from '../components/BrowserControls';
 import LocusSelection from '../components/LocusSelection';
 import LocusTable from '../components/LocusTable';
 import locusScheme, {
@@ -27,10 +28,10 @@ import locusScheme, {
 import ScrollToTop from '../components/ScrollToTop';
 import Gecko from '../components/Gecko';
 
-const LOCUS_PAGE_QUERY = loader('../queries/LocusPageQuery.gql');
+const LOCUS_PAGE_QUERY = loader('../queries/_LocusPageQuery.gql');
 
 function hasData(data) {
-  return data && data.gecko;
+  return data && data.regionPlot;
 }
 
 const FullWidthText = ({ children }) => (
@@ -269,6 +270,16 @@ class LocusPage extends React.Component {
     };
     this._stringifyQueryProps(newQueryParams);
   };
+
+  getQueryVariables = ({ entity, id }) => {
+    if (!entity || !id) return null;
+    const parsedEntity = entity[0].toUpperCase() + entity.substring(1);
+    const option = `optional${parsedEntity}Id`;
+    const variables = {};
+    variables[option] = id;
+    return variables;
+  };
+
   render() {
     const {
       start,
@@ -281,6 +292,9 @@ class LocusPage extends React.Component {
       selectedIndexVariants,
       selectedStudies,
     } = this._parseQueryProps();
+    const { entity, id } = this.props.match.params;
+    const queryVariables = this.getQueryVariables({ entity, id });
+    console.log(queryVariables);
     const locationString = this._locationString();
     const displayTypeValue = displayType ? displayType : LOCUS_SCHEME.ALL_GENES;
     const displayFinemappingValue = displayFinemapping
@@ -321,7 +335,7 @@ class LocusPage extends React.Component {
         />
         <Query
           query={LOCUS_PAGE_QUERY}
-          variables={{ chromosome, start, end }}
+          variables={{ optionalVariantId: '20_53852427_T_C' }}
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
@@ -337,7 +351,7 @@ class LocusPage extends React.Component {
               scheme: displayTypeValue,
               finemappingOnly:
                 displayFinemappingValue === LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-              data: isValidLocus ? data.gecko : null,
+              data: isValidLocus ? data.regionPlot : null,
               selectedGenes,
               selectedTagVariants,
               selectedIndexVariants,
@@ -348,45 +362,45 @@ class LocusPage extends React.Component {
                 <PlotContainer
                   loading={loading}
                   error={error}
-                  left={
-                    <BrowserControls
-                      handleZoomIn={this.handleZoomIn}
-                      handleZoomOut={this.handleZoomOut}
-                      handlePanLeft={this.handlePanLeft}
-                      handlePanRight={this.handlePanRight}
-                      handleDisplayTypeChange={this.handleDisplayTypeChange}
-                      handleDisplayFinemappingChange={
-                        this.handleDisplayFinemappingChange
-                      }
-                      displayTypeValue={displayTypeValue}
-                      displayTypeOptions={[
-                        {
-                          value: LOCUS_SCHEME.ALL_GENES,
-                          label: 'Show selection and all genes',
-                        },
-                        {
-                          value: LOCUS_SCHEME.CHAINED,
-                          label: 'Show selection',
-                        },
-                        {
-                          value: LOCUS_SCHEME.ALL,
-                          label: 'Show all data in locus',
-                        },
-                      ]}
-                      displayFinemappingValue={displayFinemappingValue}
-                      displayFinemappingOptions={[
-                        {
-                          value: LOCUS_FINEMAPPING.ALL,
-                          label: 'Show expansion by LD and fine-mapping',
-                        },
-                        {
-                          value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-                          label: 'Show expansion by fine-mapping only',
-                        },
-                      ]}
-                      disabledZoomOut={end - start >= ZOOM_LIMIT}
-                    />
-                  }
+                  // left={
+                  //   <BrowserControls
+                  //     handleZoomIn={this.handleZoomIn}
+                  //     handleZoomOut={this.handleZoomOut}
+                  //     handlePanLeft={this.handlePanLeft}
+                  //     handlePanRight={this.handlePanRight}
+                  //     handleDisplayTypeChange={this.handleDisplayTypeChange}
+                  //     handleDisplayFinemappingChange={
+                  //       this.handleDisplayFinemappingChange
+                  //     }
+                  //     displayTypeValue={displayTypeValue}
+                  //     displayTypeOptions={[
+                  //       {
+                  //         value: LOCUS_SCHEME.ALL_GENES,
+                  //         label: 'Show selection and all genes',
+                  //       },
+                  //       {
+                  //         value: LOCUS_SCHEME.CHAINED,
+                  //         label: 'Show selection',
+                  //       },
+                  //       {
+                  //         value: LOCUS_SCHEME.ALL,
+                  //         label: 'Show all data in locus',
+                  //       },
+                  //     ]}
+                  //     displayFinemappingValue={displayFinemappingValue}
+                  //     displayFinemappingOptions={[
+                  //       {
+                  //         value: LOCUS_FINEMAPPING.ALL,
+                  //         label: 'Show expansion by LD and fine-mapping',
+                  //       },
+                  //       {
+                  //         value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
+                  //         label: 'Show expansion by fine-mapping only',
+                  //       },
+                  //     ]}
+                  //     disabledZoomOut={end - start >= ZOOM_LIMIT}
+                  //   />
+                  // }
                   right={
                     <Button
                       variant="outlined"
