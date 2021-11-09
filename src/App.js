@@ -23,8 +23,7 @@ const App = () => (
           <Route path="/study-comparison/:studyId" component={StudiesPage} />
           <Route path="/gene/:geneId" component={GenePage} />
           <Route path="/variant/:variantId" component={VariantPage} />
-          {/* <Route path="/locus" component={LocusPage} /> */}
-          <Route path="/locus/:entity?/:id?" component={LocusPage} />
+          <Route path="/locus" component={LocusPage} />
           <Route
             path="/study-locus/:studyId/:indexVariantId"
             component={StudyLocusPage}

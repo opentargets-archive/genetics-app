@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Query } from '@apollo/client/react/components';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { findDOMNode } from 'react-dom';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,7 +17,6 @@ import {
 } from 'ot-ui';
 
 import BasePage from './BasePage';
-// import BrowserControls from '../components/BrowserControls';
 import LocusSelection from '../components/LocusSelection';
 import LocusTable from '../components/LocusTable';
 import locusScheme, {
@@ -26,9 +24,9 @@ import locusScheme, {
   LOCUS_FINEMAPPING,
 } from '../logic/locusScheme';
 import ScrollToTop from '../components/ScrollToTop';
-import Gecko from '../components/Gecko';
+import GeckoCanvas from '../components/GeckoCanvas';
 
-const LOCUS_PAGE_QUERY = loader('../queries/_LocusPageQuery.gql');
+const LOCUS_PAGE_QUERY = loader('../queries/LocusPageQuery.gql');
 
 function hasData(data) {
   return data && data.regionPlot;
@@ -119,41 +117,41 @@ class LocusPage extends React.Component {
     } = this._parseQueryProps();
     switch (type) {
       case 'gene':
-        if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
-          selectedGenes = [d.id, ...(selectedGenes || [])];
-        }
+        // if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
+        //   selectedGenes = [d.id, ...(selectedGenes || [])];
+        // }
         break;
       case 'tagVariant':
-        if (
-          !selectedTagVariants ||
-          !selectedTagVariants.find(d2 => d2 === d.id)
-        ) {
-          selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
-        }
+        // if (
+        //   !selectedTagVariants ||
+        //   !selectedTagVariants.find(d2 => d2 === d.id)
+        // ) {
+        //   selectedTagVariants = [d.id, ...(selectedTagVariants || [])];
+        // }
         break;
       case 'indexVariant':
-        if (
-          !selectedIndexVariants ||
-          !selectedIndexVariants.find(d2 => d2 === d.id)
-        ) {
-          selectedIndexVariants = [d.id, ...(selectedIndexVariants || [])];
-        }
+        // if (
+        //   !selectedIndexVariants ||
+        //   !selectedIndexVariants.find(d2 => d2 === d.id)
+        // ) {
+        //   selectedIndexVariants = [d.id, ...(selectedIndexVariants || [])];
+        // }
         break;
       case 'study':
-        if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
-          selectedStudies = [d.studyId, ...(selectedStudies || [])];
-        }
+        // if (!selectedStudies || !selectedStudies.find(d2 => d2 === d.studyId)) {
+        //   selectedStudies = [d.studyId, ...(selectedStudies || [])];
+        // }
         break;
       default:
     }
-    const newQueryParams = {
-      selectedGenes,
-      selectedTagVariants,
-      selectedIndexVariants,
-      selectedStudies,
-      ...rest,
-    };
-    this._stringifyQueryProps(newQueryParams);
+    // const newQueryParams = {
+    //   selectedGenes,
+    //   selectedTagVariants,
+    //   selectedIndexVariants,
+    //   selectedStudies,
+    //   ...rest,
+    // };
+    // this._stringifyQueryProps(newQueryParams);
   };
   handleMousemove = (d, type, point) => {};
   handleAddGene = newSelectedGenes => {
@@ -271,14 +269,33 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
 
-  getQueryVariables = ({ entity, id }) => {
-    if (!entity || !id) return null;
-    const parsedEntity = entity[0].toUpperCase() + entity.substring(1);
-    const option = `optional${parsedEntity}Id`;
-    const variables = {};
-    variables[option] = id;
-    return variables;
+  getQueryVariables = () => {
+    const urlProps = this._parseQueryProps();
+    const locusQueryVariables = {};
+    if (urlProps.selectedIndexVariants) {
+      locusQueryVariables[
+        'optionalVariantId'
+      ] = urlProps.selectedIndexVariants.join();
+    }
+    if (urlProps.selectedStudies) {
+      locusQueryVariables['optionalStudyId'] = urlProps.selectedStudies.join();
+    }
+    if (urlProps.selectedGenes) {
+      locusQueryVariables['optionalGeneId'] = urlProps.selectedGenes.join();
+    }
+    const isEmptyOptions = Object.keys(locusQueryVariables).length < 1;
+    const { chromosome, start, end } = urlProps;
+    const queryVariables = { chromosome, start, end, ...locusQueryVariables };
+
+    return isEmptyOptions ? null : queryVariables;
   };
+
+  mergeData(data) {
+    if (!data) return null;
+    const genes = [...data.regionPlot.genes, ...data.genes];
+    const unique = [...new Map(genes.map(item => [item['id'], item])).values()];
+    return { ...data.regionPlot, genes: unique };
+  }
 
   render() {
     const {
@@ -292,9 +309,7 @@ class LocusPage extends React.Component {
       selectedIndexVariants,
       selectedStudies,
     } = this._parseQueryProps();
-    const { entity, id } = this.props.match.params;
-    const queryVariables = this.getQueryVariables({ entity, id });
-    console.log(queryVariables);
+    const queryVariables = this.getQueryVariables();
     const locationString = this._locationString();
     const displayTypeValue = displayType ? displayType : LOCUS_SCHEME.ALL_GENES;
     const displayFinemappingValue = displayFinemapping
@@ -335,10 +350,11 @@ class LocusPage extends React.Component {
         />
         <Query
           query={LOCUS_PAGE_QUERY}
-          variables={{ optionalVariantId: '20_53852427_T_C' }}
+          variables={queryVariables}
           fetchPolicy="network-only"
         >
           {({ loading, error, data }) => {
+            const datum = this.mergeData(data);
             const isValidLocus = hasData(data);
             const {
               lookups,
@@ -351,7 +367,7 @@ class LocusPage extends React.Component {
               scheme: displayTypeValue,
               finemappingOnly:
                 displayFinemappingValue === LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-              data: isValidLocus ? data.regionPlot : null,
+              data: isValidLocus ? datum : null,
               selectedGenes,
               selectedTagVariants,
               selectedIndexVariants,
@@ -362,45 +378,6 @@ class LocusPage extends React.Component {
                 <PlotContainer
                   loading={loading}
                   error={error}
-                  // left={
-                  //   <BrowserControls
-                  //     handleZoomIn={this.handleZoomIn}
-                  //     handleZoomOut={this.handleZoomOut}
-                  //     handlePanLeft={this.handlePanLeft}
-                  //     handlePanRight={this.handlePanRight}
-                  //     handleDisplayTypeChange={this.handleDisplayTypeChange}
-                  //     handleDisplayFinemappingChange={
-                  //       this.handleDisplayFinemappingChange
-                  //     }
-                  //     displayTypeValue={displayTypeValue}
-                  //     displayTypeOptions={[
-                  //       {
-                  //         value: LOCUS_SCHEME.ALL_GENES,
-                  //         label: 'Show selection and all genes',
-                  //       },
-                  //       {
-                  //         value: LOCUS_SCHEME.CHAINED,
-                  //         label: 'Show selection',
-                  //       },
-                  //       {
-                  //         value: LOCUS_SCHEME.ALL,
-                  //         label: 'Show all data in locus',
-                  //       },
-                  //     ]}
-                  //     displayFinemappingValue={displayFinemappingValue}
-                  //     displayFinemappingOptions={[
-                  //       {
-                  //         value: LOCUS_FINEMAPPING.ALL,
-                  //         label: 'Show expansion by LD and fine-mapping',
-                  //       },
-                  //       {
-                  //         value: LOCUS_FINEMAPPING.FINEMAPPING_ONLY,
-                  //         label: 'Show expansion by fine-mapping only',
-                  //       },
-                  //     ]}
-                  //     disabledZoomOut={end - start >= ZOOM_LIMIT}
-                  //   />
-                  // }
                   right={
                     <Button
                       variant="outlined"
@@ -449,7 +426,7 @@ class LocusPage extends React.Component {
                     />
                   </PlotContainerSection>
 
-                  <Gecko
+                  <GeckoCanvas
                     ref={geckoPlot}
                     data={plot}
                     start={start}
