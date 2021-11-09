@@ -108,13 +108,13 @@ class LocusPage extends React.Component {
     this._stringifyQueryProps(newQueryParams);
   };
   handleClick = (d, type, point) => {
-    let {
-      selectedGenes,
-      selectedTagVariants,
-      selectedIndexVariants,
-      selectedStudies,
-      ...rest
-    } = this._parseQueryProps();
+    // let {
+    //   selectedGenes,
+    //   selectedTagVariants,
+    //   selectedIndexVariants,
+    //   selectedStudies,
+    //   ...rest
+    // } = this._parseQueryProps();
     switch (type) {
       case 'gene':
         // if (!selectedGenes || !selectedGenes.find(d2 => d2 === d.id)) {
