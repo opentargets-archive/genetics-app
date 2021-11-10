@@ -194,7 +194,7 @@ class Gecko extends React.Component {
       const item = colorMap[color];
       if (item) {
         const type = HIDDEN_TYPE_MAP_INVERSE[r >> 4];
-        d3.select(hiddenCanvas).style('cursor', 'pointer');
+        // d3.select(hiddenCanvas).style('cursor', 'pointer');
         handleMousemove(item, type, point);
       } else {
         d3.select(hiddenCanvas).style('cursor', 'auto');
