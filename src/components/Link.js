@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link as RouterLink } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import Icon from '@material-ui/core/Icon';
 
 const styles = theme => ({
   base: {
@@ -72,15 +71,6 @@ class Link extends React.Component {
         onClick={onClick}
       >
         {children}
-        {footer ? null : (
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalIcon
-            )}
-          />
-        )}
       </a>
     ) : (
       <RouterLink

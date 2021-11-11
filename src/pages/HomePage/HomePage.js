@@ -7,17 +7,19 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 import Link from '@material-ui/core/Link';
 
-import { Splash, HomeBox, Button } from 'ot-ui';
+import { Splash } from 'ot-ui';
 
-import Search from '../components/Search';
-import PortalFeaturesIcon from '../components/PortalFeaturesIcon';
-import ScrollDownButton from '../components/ScrollDownButton';
-import NavBar from '../components/NavBar/NavBar';
+import HomeBox from './HomeBox';
 
-import Version from '../components/Version';
-import Footer from '../components/Footer';
+import Search from '../../components/Search';
+import PortalFeaturesIcon from '../../components/PortalFeaturesIcon';
+import ScrollDownButton from '../../components/ScrollDownButton';
+import NavBar from '../../components/NavBar/NavBar';
 
-import { contactUrl, externalLinks } from '../constants';
+import Version from '../../components/Version';
+import Footer from '../../components/Footer';
+
+import { externalLinks, mainMenuItems } from '../../constants';
 
 const EXAMPLES = [
   { label: 'PCSK9', url: '/gene/ENSG00000169174', type: 'gene' },
@@ -30,11 +32,6 @@ const EXAMPLES = [
   {
     label: 'LDL cholesterol (Willer CJ et al. 2013)',
     url: '/study/GCST002222',
-    type: 'study',
-  },
-  {
-    label: "Crohn's disease (Liu JZ et al. 2015)",
-    url: '/study/GCST003044',
     type: 'study',
   },
 ];
@@ -58,11 +55,10 @@ const styles = theme => {
       textAlign: 'center',
     },
     examples: {
-      marginTop: '25px',
+      marginTop: '12px',
     },
     exampleLink: {
-      textDecoration: 'none',
-      marginRight: '15px',
+      marginTop: '12px',
     },
     scrollDown: {
       position: 'absolute',
@@ -88,6 +84,10 @@ const styles = theme => {
     },
     linkHeader: {
       marginTop: '22px',
+    },
+    scrollDownContainer: {
+      position: 'absolute',
+      bottom: 0,
     },
     link: {
       '&:hover': {
@@ -125,27 +125,28 @@ class HomePage extends Component {
           >
             <Splash />
             <NavBar
-              name={null}
+              name="Genetics"
+              items={mainMenuItems}
               search={null}
               homepage
-              docs="https://genetics-docs.opentargets.org"
-              api="https://genetics-docs.opentargets.org/data-access/graphql-api"
-              downloads="https://genetics-docs.opentargets.org/data-access/data-download"
-              community="https://community.opentargets.org/"
-              contact={contactUrl}
             />
             <HomeBox name="Genetics">
-              <div className={classes.slogan}>
-                Explore{' '}
-                <span className={classes.highlight}>variant-gene-trait</span>{' '}
-                associations from UK Biobank, FinnGen, and GWAS Catalog
-              </div>
               <Search />
-              <Grid container justify="center" className={classes.examples}>
+              <Grid
+                container
+                className={classes.examples}
+                justify="space-around"
+              >
                 {EXAMPLES.map((d, i) => (
-                  <a className={classes.exampleLink} key={i} href={d.url}>
-                    <Button variant="outlined">{d.label}</Button>
-                  </a>
+                  <Typography
+                    key={i}
+                    style={{ textAlign: 'center' }}
+                    className={classes.exampleLink}
+                  >
+                    <Link href={d.url} underline="none">
+                      {d.label}
+                    </Link>
+                  </Typography>
                 ))}
               </Grid>
               <Typography
@@ -155,24 +156,6 @@ class HomePage extends Component {
                 align="center"
               >
                 Note: genomic coordinates are based on GRCh38
-              </Typography>
-              <Typography
-                className={classes.linkHeader}
-                variant="subtitle2"
-                align="center"
-              >
-                Latest publication:
-              </Typography>
-              <Typography style={{ textAlign: 'center' }}>
-                <Link
-                  underline="none"
-                  href="https://doi.org/10.1093/nar/gkaa840"
-                  className={classes.link}
-                >
-                  Open Targets Genetics: systematic identification of
-                  trait-associated genes using large-scale genetics and
-                  functional genomics
-                </Link>
               </Typography>
 
               <Typography
@@ -184,7 +167,12 @@ class HomePage extends Component {
               </Typography>
               <Version />
             </HomeBox>
-            <Grid container item justify="center">
+            <Grid
+              container
+              item
+              justify="center"
+              className={classes.scrollDownContainer}
+            >
               <ScrollDownButton
                 className={classes.scrollDown}
                 onClick={this.handleScrollDown}
