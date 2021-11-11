@@ -337,7 +337,6 @@ class LocusTraitPage extends React.Component {
               .filter(d => d.h4 >= this.state.h4SliderValue)
               .sort(log2h4h3Comparator)
               .reverse();
-
             const associationSummary = pageSummary;
 
             const pageCredibleSetAdjusted = pageCredibleSet
@@ -666,28 +665,29 @@ class LocusTraitPage extends React.Component {
                           tissue,
                           indexVariant,
                           ...rest
-                        }) => ({
-                          key: `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
+                        }) => {
+                          const key = `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
                             tissue.id
-                          }__${indexVariant.id}`,
-                          qtlStudyName,
-                          phenotypeId,
-                          tissue,
-                          indexVariant,
-                          credibleSet: data2[
-                            `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
-                              tissue.id
-                            }__${indexVariant.id}`
-                          ]
-                            .map(flattenPosition)
-                            .filter(
-                              d =>
-                                credSet95Value === '95'
-                                  ? d.is95CredibleSet
-                                  : true
-                            ),
-                          ...rest,
-                        })
+                          }__${indexVariant.id}`;
+                          return {
+                            key,
+                            qtlStudyName,
+                            phenotypeId,
+                            tissue,
+                            indexVariant,
+                            credibleSet: data2[key]
+                              ? data2[key]
+                                  .map(flattenPosition)
+                                  .filter(
+                                    d =>
+                                      credSet95Value === '95'
+                                        ? d.is95CredibleSet
+                                        : true
+                                  )
+                              : [],
+                            ...rest,
+                          };
+                        }
                       );
 
                       // get the intersecting variants
