@@ -1,5 +1,24 @@
-query LocusPageQuery($chromosome: String!, $start: Long!, $end: Long!) {
-  gecko(chromosome: $chromosome, start: $start, end: $end) {
+query LocusPageQuery(
+  $optionalVariantId: String
+  $optionalGeneId: String
+  $optionalStudyId: String
+  $chromosome: String!
+  $start: Long!
+  $end: Long!
+) {
+  genes(chromosome: $chromosome, start: $start, end: $end) {
+    id
+    symbol
+    tss
+    start
+    end
+    exons
+  }
+  regionPlot(
+    optionalVariantId: $optionalVariantId
+    optionalGeneId: $optionalGeneId
+    optionalStudyId: $optionalStudyId
+  ) {
     genes {
       id
       symbol

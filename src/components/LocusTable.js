@@ -248,7 +248,6 @@ function LocusTable({
         studyFilterOptions,
         studyFilterHandler,
       })}
-      filters
       data={data}
       sortBy="pval"
       order="asc"
