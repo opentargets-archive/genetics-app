@@ -15,7 +15,7 @@ export const mainMenuItems = [
   // API
   {
     name: 'API',
-    url: config.apiUrl.split('/api/v4/graphql')[0],
+    url: config.apiUrl.split('/graphql')[0],
     external: true,
   },
   // Community
