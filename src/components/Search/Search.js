@@ -36,7 +36,7 @@ const Search = ({
   const selectStyles = {
     input: base => ({
       ...base,
-      color: white ? '#ffffff' : theme.palette.text.primary,
+      color: theme.palette.text.primary,
     }),
   };
 
@@ -48,7 +48,7 @@ const Search = ({
 
   const components = {
     Option,
-    Control,
+    Control: props => <Control white={white} {...props} />,
     NoOptionsMessage,
     Placeholder,
     SingleValue,

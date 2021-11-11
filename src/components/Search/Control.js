@@ -15,13 +15,21 @@ const InputComponent = ({ inputRef, ...rest }) => (
 
 class Control extends React.Component {
   render() {
-    const { classes, innerRef, innerProps, children, selectProps } = this.props;
+    const {
+      classes,
+      innerRef,
+      innerProps,
+      children,
+      selectProps,
+      white,
+    } = this.props;
     return (
       <TextField
         fullWidth
         InputProps={{
           inputComponent: InputComponent,
           inputProps: {
+            style: { backgroundColor: white ? '#ffffff' : null },
             className: classes.input,
             inputRef: innerRef,
             children,
