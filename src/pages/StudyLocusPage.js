@@ -76,8 +76,8 @@ const qtlCredibleSetQueryAliasedFragment = ({
   tissue,
   indexVariant,
 }) => {
-  const tissueId = tissue.id.replace('-', '_');
-  const parseQTLStudyName = qtlStudyName.replace('-', '_');
+  const tissueId = tissue.id.replaceAll('-', '_');
+  const parseQTLStudyName = qtlStudyName.replaceAll('-', '_');
   const request = `
   qtlCredibleSet__${parseQTLStudyName}__${phenotypeId}__${tissueId}__${
     indexVariant.id
