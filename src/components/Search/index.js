@@ -3,11 +3,11 @@ import { withRouter } from 'react-router';
 import { useApolloClient } from '@apollo/client';
 import { loader } from 'graphql.macro';
 
-import { Search as OtSearch } from 'ot-ui';
+import OtSearch from './Search';
 
 import SearchOption from './SearchOption';
 
-const SEARCH_QUERY = loader('../queries/SearchQuery.gql');
+const SEARCH_QUERY = loader('../../queries/SearchQuery.gql');
 
 const asGroupedOptions = data => {
   return [
@@ -26,10 +26,9 @@ const asGroupedOptions = data => {
   ];
 };
 
-const Search = props => {
+const Search = ({ history, white = false }) => {
   const client = useApolloClient();
   const handleSelectOption = (value, { action }) => {
-    const { history } = props;
     if (action === 'select-option') {
       switch (value.groupType) {
         case 'gene':
@@ -73,7 +72,8 @@ const Search = props => {
       onInputChange={handleInputChange}
       optionComponent={SearchOption}
       onSelectOption={handleSelectOption}
-      placeholder="Search for a gene, variant or trait..."
+      placeholder="Search for a gene, variant, study, or trait..."
+      white={white}
     />
   );
 };

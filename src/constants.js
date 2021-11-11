@@ -1,8 +1,36 @@
 import { contactUrl as contactUrlConfig } from './configuration';
+import config from './config';
 
 export const pvalThreshold = 4.94e-322;
 
 export const contactUrl = contactUrlConfig;
+
+export const mainMenuItems = [
+  // Documentation
+  {
+    name: 'Documentation',
+    url: 'https://genetics-docs.opentargets.org',
+    external: true,
+  },
+  // API
+  {
+    name: 'API',
+    url: config.apiUrl.split('/api/v4/graphql')[0],
+    external: true,
+  },
+  // Community
+  {
+    name: 'Community',
+    url: 'https://community.opentargets.org/',
+    external: true,
+  },
+  // Contact
+  {
+    name: 'Contact us',
+    url: `mailto:helpdesk@opentargets.org`,
+    external: true,
+  },
+];
 
 export const externalLinks = {
   about: [

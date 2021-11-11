@@ -1,15 +1,16 @@
-// TODO: remove this and update the NavBar component in ot-ui
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { MenuItem, MenuList } from '@material-ui/core';
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-
+import Link from '../Link';
 import OpenTargetsTitle from './OpenTargetsTitle';
-import { HeaderMenu } from 'ot-ui';
+import HeaderMenu from './HeaderMenu';
 
 const styles = theme => ({
   navbar: {
@@ -21,8 +22,6 @@ const styles = theme => ({
     left: 0,
     top: 0,
     position: 'absolute',
-    background: 'none',
-    boxShadow: 'none',
   },
   flex: {
     flexGrow: 1,
@@ -41,6 +40,20 @@ const styles = theme => ({
     textDecoration: 'none',
     '&:hover': {
       color: theme.palette.secondary.main,
+    },
+  },
+  menuList: {
+    display: 'flex',
+  },
+  menuItem: {
+    paddingTop: '6px',
+    paddingBottom: '6px',
+  },
+  menuLink: {
+    fontSize: '0.875rem',
+    color: '#fff',
+    '&:hover': {
+      color: '#fff',
     },
   },
 });
@@ -65,61 +78,77 @@ const NavBar = ({
   api,
   downloads,
   docs,
-  community,
   contact,
   homepage,
   items,
   placement,
-}) => (
-  <AppBar
-    className={classNames(classes.navbar, {
-      [classes.navbarHomepage]: homepage,
-    })}
-    position="static"
-    color="primary"
-    elevation={0}
-  >
-    <Toolbar variant="dense">
-      {homepage ? null : (
-        <Button component={Link} to="/" color="inherit">
-          <OpenTargetsTitle name={name} />
-        </Button>
-      )}
-      <div className={classes.flex} />
-      {search ? search : null}
-      {docs ? (
-        <MenuExternalLink classes={classes} href={docs}>
-          Documentation
-        </MenuExternalLink>
-      ) : null}
+}) => {
+  const smMQ = useMediaQuery('(max-width:800px)');
+  const isHomePageRegular = homepage && !smMQ;
+  return (
+    <AppBar
+      className={classNames(classes.navbar, {
+        [classes.navbarHomepage]: homepage,
+      })}
+      position="static"
+      color="primary"
+      elevation={0}
+    >
+      <Toolbar variant="dense">
+        {homepage ? null : (
+          <Button component={ReactRouterLink} to="/" color="inherit">
+            <OpenTargetsTitle name={name} />
+          </Button>
+        )}
+        <div className={classes.flex} />
+        {search ? search : null}
 
-      {api ? (
-        <MenuExternalLink classes={classes} href={api}>
-          API
-        </MenuExternalLink>
-      ) : null}
+        {docs ? (
+          <MenuExternalLink classes={classes} href={docs}>
+            Docs
+          </MenuExternalLink>
+        ) : null}
 
-      {downloads ? (
-        <MenuExternalLink classes={classes} href={downloads}>
-          Downloads
-        </MenuExternalLink>
-      ) : null}
+        {api ? (
+          <MenuExternalLink classes={classes} href={api}>
+            API
+          </MenuExternalLink>
+        ) : null}
 
-      {community ? (
-        <MenuExternalLink classes={classes} href={community}>
-          Community
-        </MenuExternalLink>
-      ) : null}
+        {downloads ? (
+          <MenuExternalLink classes={classes} href={downloads}>
+            Downloads
+          </MenuExternalLink>
+        ) : null}
 
-      {contact ? (
-        <MenuExternalLink classes={classes} href={contact}>
-          Contact
-        </MenuExternalLink>
-      ) : null}
+        {contact ? (
+          <MenuExternalLink classes={classes} href={contact}>
+            Contact
+          </MenuExternalLink>
+        ) : null}
 
-      {items ? <HeaderMenu items={items} placement={placement} /> : null}
-    </Toolbar>
-  </AppBar>
-);
+        {items && !isHomePageRegular ? (
+          <HeaderMenu items={items} placement={placement} />
+        ) : null}
+
+        {isHomePageRegular && (
+          <MenuList className={classes.menuList}>
+            {items.map((item, i) => (
+              <MenuItem key={i} dense={true} className={classes.menuItem}>
+                <Link
+                  external={item.external}
+                  to={item.url}
+                  className={classes.menuLink}
+                >
+                  {item.name}
+                </Link>
+              </MenuItem>
+            ))}
+          </MenuList>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default withStyles(styles)(NavBar);

@@ -72,15 +72,6 @@ class Link extends React.Component {
         onClick={onClick}
       >
         {children}
-        {footer ? null : (
-          <Icon
-            className={classNames(
-              'fa',
-              'fa-external-link-alt',
-              classes.externalIcon
-            )}
-          />
-        )}
       </a>
     ) : (
       <RouterLink

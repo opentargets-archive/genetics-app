@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { OtUiThemeProvider } from 'ot-ui';
 
 import client from './client';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePage/index';
 import StudyPage from './pages/StudyPage';
 import StudiesPage from './pages/StudiesPage';
 import GenePage from './pages/GenePage';

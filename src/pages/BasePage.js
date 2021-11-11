@@ -5,7 +5,7 @@ import { Page } from 'ot-ui';
 
 import Search from '../components/Search';
 import NavBar from '../components/NavBar/NavBar';
-import { contactUrl, externalLinks } from '../constants';
+import { externalLinks, mainMenuItems } from '../constants';
 import Footer from '../components/Footer';
 
 const BasePage = ({ children }) => (
@@ -13,12 +13,8 @@ const BasePage = ({ children }) => (
     header={
       <NavBar
         name="Genetics"
-        search={<Search searchLocation="navbar" />}
-        docs="https://genetics-docs.opentargets.org/"
-        api="https://genetics-docs.opentargets.org/data-access/graphql-api"
-        downloads="https://genetics-docs.opentargets.org/data-access/data-download"
-        community="https://community.opentargets.org/"
-        contact={contactUrl}
+        items={mainMenuItems}
+        search={<Search searchLocation="navbar" white />}
       />
     }
     footer={<Footer externalLinks={externalLinks} />}
