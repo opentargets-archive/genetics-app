@@ -55,7 +55,7 @@ const Chip = ({ classes, type, label, onDelete }) => (
     avatar={<Avatar className={classes.avatar}>{AVATAR_MAP[type]}</Avatar>}
     className={classNames(classes.chip, classes[type])}
     label={label}
-    onDelete={onDelete}
+    // onDelete={onDelete}
   />
 );
 
