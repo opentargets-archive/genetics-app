@@ -2,7 +2,6 @@ import React from 'react';
 import { Query } from '@apollo/client/react/components';
 import { loader } from 'graphql.macro';
 import gql from 'graphql-tag';
-import { Helmet } from 'react-helmet';
 import * as d3 from 'd3';
 
 import Typography from '@material-ui/core/Typography';
@@ -76,27 +75,32 @@ const qtlCredibleSetQueryAliasedFragment = ({
   phenotypeId,
   tissue,
   indexVariant,
-}) => `
-qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${tissue.id}__${
-  indexVariant.id
-}: qtlCredibleSet(studyId: "${qtlStudyName}", variantId: "${
-  indexVariant.id
-}", phenotypeId: "${phenotypeId}", bioFeature: "${tissue.id}") {
-  tagVariant {
-    id
-    rsId
-    position
+}) => {
+  const tissueId = tissue.id.replaceAll('-', '_');
+  const parseQTLStudyName = qtlStudyName.replaceAll('-', '_');
+  const request = `
+  qtlCredibleSet__${parseQTLStudyName}__${phenotypeId}__${tissueId}__${
+    indexVariant.id
+  }: qtlCredibleSet(studyId: "${parseQTLStudyName}", variantId: "${
+    indexVariant.id
+  }", phenotypeId: "${phenotypeId}", bioFeature: "${tissueId}") {
+    tagVariant {
+      id
+      rsId
+      position
+    }
+    pval
+    se
+    beta
+    postProb
+    MultisignalMethod
+    logABF
+    is95
+    is99
   }
-  pval
-  se
-  beta
-  postProb
-  MultisignalMethod
-  logABF
-  is95
-  is99
-}
-`;
+  `;
+  return request;
+};
 
 const flattenPosition = ({ tagVariant, postProb, is95, is99, ...rest }) => ({
   tagVariant,
@@ -274,6 +278,10 @@ class LocusTraitPage extends React.Component {
 
     return (
       <BasePage>
+        {/* TODO: rescue Page title
+        <Helmet>
+          <title>{this.state.pageHeader}</title>
+        </Helmet> */}
         <Query
           query={STUDY_LOCUS_PAGE_QUERY}
           variables={{
@@ -308,12 +316,14 @@ class LocusTraitPage extends React.Component {
             const shouldMakeColocalisationCredibleSetQuery =
               gwasColocalisation.length > 0 || qtlColocalisation.length > 0;
             const colocalisationCredibleSetQuery = shouldMakeColocalisationCredibleSetQuery
-              ? gql(`
-query CredibleSetsQuery {
-  ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
-  ${qtlColocalisation.map(qtlCredibleSetQueryAliasedFragment).join('')}
-}
-            `)
+              ? gql(`query CredibleSetsQuery {
+                ${gwasColocalisation
+                  .map(gwasCredibleSetQueryAliasedFragment)
+                  .join('')}
+                ${qtlColocalisation
+                  .map(qtlCredibleSetQueryAliasedFragment)
+                  .join('')}
+              }`)
               : null;
 
             const gwasColocalisationFiltered = gwasColocalisation
@@ -327,7 +337,6 @@ query CredibleSetsQuery {
               .filter(d => d.h4 >= this.state.h4SliderValue)
               .sort(log2h4h3Comparator)
               .reverse();
-
             const associationSummary = pageSummary;
 
             const pageCredibleSetAdjusted = pageCredibleSet
@@ -340,11 +349,6 @@ query CredibleSetsQuery {
 
             return (
               <React.Fragment>
-                <Helmet>
-                  <title>{`(${
-                    studyInfo.traitReported
-                  }, ${indexVariantId})`}</title>
-                </Helmet>
                 <Grid container justify="space-between">
                   <Grid item>
                     <Typography variant="h4" color="textSecondary">
@@ -661,28 +665,29 @@ query CredibleSetsQuery {
                           tissue,
                           indexVariant,
                           ...rest
-                        }) => ({
-                          key: `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
+                        }) => {
+                          const key = `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
                             tissue.id
-                          }__${indexVariant.id}`,
-                          qtlStudyName,
-                          phenotypeId,
-                          tissue,
-                          indexVariant,
-                          credibleSet: data2[
-                            `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
-                              tissue.id
-                            }__${indexVariant.id}`
-                          ]
-                            .map(flattenPosition)
-                            .filter(
-                              d =>
-                                credSet95Value === '95'
-                                  ? d.is95CredibleSet
-                                  : true
-                            ),
-                          ...rest,
-                        })
+                          }__${indexVariant.id}`;
+                          return {
+                            key,
+                            qtlStudyName,
+                            phenotypeId,
+                            tissue,
+                            indexVariant,
+                            credibleSet: data2[key]
+                              ? data2[key]
+                                  .map(flattenPosition)
+                                  .filter(
+                                    d =>
+                                      credSet95Value === '95'
+                                        ? d.is95CredibleSet
+                                        : true
+                                  )
+                              : [],
+                            ...rest,
+                          };
+                        }
                       );
 
                       // get the intersecting variants
