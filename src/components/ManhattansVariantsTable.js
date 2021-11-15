@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Link, OtTable } from 'ot-ui';
 
-import LocusLink from './LocusLink';
 import variantIdComparator from '../logic/variantIdComparator';
 import cytobandComparator from '../logic/cytobandComparator';
 import { getCytoband } from '../utils';
@@ -42,19 +41,6 @@ const tableColumns = studyIds => [
           </React.Fragment>
         ))}
       </React.Fragment>
-    ),
-  },
-  {
-    id: 'locus',
-    label: 'View',
-    renderCell: rowData => (
-      <LocusLink
-        chromosome={rowData.chromosome}
-        position={rowData.position}
-        selectedStudies={studyIds}
-      >
-        Locus
-      </LocusLink>
     ),
   },
 ];
