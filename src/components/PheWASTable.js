@@ -7,16 +7,10 @@ import {
   Autocomplete,
 } from 'ot-ui';
 
-import LocusLink from './LocusLink';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';
 
 export const tableColumns = ({
-  variantId,
-  chromosome,
-  position,
-  isIndexVariant,
-  isTagVariant,
   traitFilterValue,
   traitFilterOptions,
   traitFilterHandler,
@@ -101,29 +95,6 @@ export const tableColumns = ({
     id: 'nTotal',
     label: 'N Overall',
     renderCell: rowData => commaSeparate(rowData.nTotal),
-  },
-  {
-    id: 'locusView',
-    label: 'View',
-    renderCell: rowData => {
-      return isIndexVariant ? (
-        <LocusLink
-          chromosome={chromosome}
-          position={position}
-          selectedIndexVariants={[variantId]}
-        >
-          Locus
-        </LocusLink>
-      ) : isTagVariant ? (
-        <LocusLink
-          chromosome={chromosome}
-          position={position}
-          selectedTagVariants={[variantId]}
-        >
-          Locus
-        </LocusLink>
-      ) : null;
-    },
   },
 ];
 
