@@ -4,6 +4,7 @@ import { commaSeparate } from 'ot-ui';
 import SearchOption from './BaseSearchOption';
 
 const Option = ({ data }) => {
+  console.log(data);
   switch (data.groupType) {
     case 'gene':
       return (
@@ -27,7 +28,7 @@ const Option = ({ data }) => {
             <React.Fragment>
               {data.pubJournal ? <em>{data.pubJournal} </em> : null}N Study:{' '}
               {commaSeparate(data.nInitial)}
-              {data.numAssocLoci ? (
+              {data.hasSumstats ? (
                 <span style={{ float: 'right' }}>
                   {data.hasSumstats ? (
                     <Chip
