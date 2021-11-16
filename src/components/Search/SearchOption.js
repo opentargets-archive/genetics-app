@@ -4,7 +4,6 @@ import { commaSeparate } from 'ot-ui';
 import SearchOption from './BaseSearchOption';
 
 const Option = ({ data }) => {
-  console.log(data);
   switch (data.groupType) {
     case 'gene':
       return (
