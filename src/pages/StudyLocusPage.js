@@ -9,6 +9,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import { sanitize } from 'string-sanitizer';
 
 import {
   Link,
@@ -21,6 +22,7 @@ import {
   DataDownloader,
 } from 'ot-ui';
 
+import ErrorBoundary from '../components/ErrorBoundary';
 import GeneTrack from '../components/GeneTrack';
 import CredibleSet from '../components/CredibleSet';
 
@@ -78,12 +80,16 @@ const qtlCredibleSetQueryAliasedFragment = ({
 }) => {
   const tissueId = tissue.id.replaceAll('-', '_');
   const parseQTLStudyName = qtlStudyName.replaceAll('-', '_');
-  const request = `
-  qtlCredibleSet__${parseQTLStudyName}__${phenotypeId}__${tissueId}__${
+  const parsePhenotypeId = phenotypeId.replaceAll('-', '_');
+  const sanitizedTissueId = sanitize(tissueId);
+  const sanitizedPhenotypeId = sanitize(parsePhenotypeId);
+  const sanitizedParseQTLStudyName = sanitize(parseQTLStudyName);
+  return `
+  qtlCredibleSet__${sanitizedParseQTLStudyName}__${sanitizedPhenotypeId}__${sanitizedTissueId}__${
     indexVariant.id
   }: qtlCredibleSet(studyId: "${parseQTLStudyName}", variantId: "${
     indexVariant.id
-  }", phenotypeId: "${phenotypeId}", bioFeature: "${tissueId}") {
+  }", phenotypeId: "${parsePhenotypeId}", bioFeature: "${tissueId}") {
     tagVariant {
       id
       rsId
@@ -99,7 +105,13 @@ const qtlCredibleSetQueryAliasedFragment = ({
     is99
   }
   `;
-  return request;
+};
+
+const createCredibleSetsQuery = ({ gwasColocalisation, qtlColocalisation }) => {
+  return gql(`query CredibleSetsQuery {
+    ${gwasColocalisation.map(gwasCredibleSetQueryAliasedFragment).join('')}
+    ${qtlColocalisation.map(qtlCredibleSetQueryAliasedFragment).join('')}
+  }`);
 };
 
 const flattenPosition = ({ tagVariant, postProb, is95, is99, ...rest }) => ({
@@ -282,230 +294,236 @@ class LocusTraitPage extends React.Component {
         <Helmet>
           <title>{this.state.pageHeader}</title>
         </Helmet> */}
-        <Query
-          query={STUDY_LOCUS_PAGE_QUERY}
-          variables={{
-            studyId,
-            variantId: indexVariantId,
-            chromosome,
-            start,
-            end,
-          }}
-        >
-          {({ loading, error, data }) => {
-            if (loading || error) {
-              return null;
-            }
+        <ErrorBoundary>
+          <Query
+            query={STUDY_LOCUS_PAGE_QUERY}
+            variables={{
+              studyId,
+              variantId: indexVariantId,
+              chromosome,
+              start,
+              end,
+            }}
+          >
+            {({ loading, error, data }) => {
+              if (loading || error) {
+                return null;
+              }
 
-            const {
-              studyInfo,
-              variantInfo,
-              gwasColocalisation,
-              qtlColocalisation,
-              // gwasColocalisationForRegion,
-              pageCredibleSet,
-              pageSummary,
-              genes,
-              studyLocus2GeneTable,
-            } = data;
+              const {
+                studyInfo,
+                variantInfo,
+                gwasColocalisation,
+                qtlColocalisation,
+                // gwasColocalisationForRegion,
+                pageCredibleSet,
+                pageSummary,
+                genes,
+                studyLocus2GeneTable,
+              } = data;
 
-            const maxQTLLog2h4h3 = d3.max(qtlColocalisation, d => d.log2h4h3);
-            const maxGWASLog2h4h3 = d3.max(gwasColocalisation, d => d.log2h4h3);
-            const maxLog2h4h3 = d3.max([maxQTLLog2h4h3, maxGWASLog2h4h3]);
-
-            const shouldMakeColocalisationCredibleSetQuery =
-              gwasColocalisation.length > 0 || qtlColocalisation.length > 0;
-            const colocalisationCredibleSetQuery = shouldMakeColocalisationCredibleSetQuery
-              ? gql(`query CredibleSetsQuery {
-                ${gwasColocalisation
-                  .map(gwasCredibleSetQueryAliasedFragment)
-                  .join('')}
-                ${qtlColocalisation
-                  .map(qtlCredibleSetQueryAliasedFragment)
-                  .join('')}
-              }`)
-              : null;
-
-            const gwasColocalisationFiltered = gwasColocalisation
-              .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
-              .filter(d => d.h4 >= this.state.h4SliderValue)
-              .sort(log2h4h3Comparator)
-              .reverse();
-
-            const qtlColocalisationFiltered = qtlColocalisation
-              .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
-              .filter(d => d.h4 >= this.state.h4SliderValue)
-              .sort(log2h4h3Comparator)
-              .reverse();
-            const associationSummary = pageSummary;
-
-            const pageCredibleSetAdjusted = pageCredibleSet
-              .map(flattenPosition)
-              .filter(
-                d => (credSet95Value === '95' ? d.is95CredibleSet : true)
+              const maxQTLLog2h4h3 = d3.max(qtlColocalisation, d => d.log2h4h3);
+              const maxGWASLog2h4h3 = d3.max(
+                gwasColocalisation,
+                d => d.log2h4h3
               );
-            const pageCredibleSetKey = `gwasCredibleSet__${studyId}__${indexVariantId}`;
-            const qtlColocDownloadData = getDownloadData(qtlColocalisation);
+              const maxLog2h4h3 = d3.max([maxQTLLog2h4h3, maxGWASLog2h4h3]);
 
-            return (
-              <React.Fragment>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography variant="h4" color="textSecondary">
-                      {`${studyInfo.traitReported}`}
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      {studyInfo.pubAuthor}{' '}
-                      {studyInfo.pubDate
-                        ? `(${new Date(studyInfo.pubDate).getFullYear()})`
-                        : null}{' '}
-                      {studyInfo.pubJournal ? (
-                        <em>{studyInfo.pubJournal}</em>
-                      ) : null}
-                      {studyId ? (
-                        <React.Fragment>
-                          {' '}
-                          <Link to={`/study/${studyId}`}>{studyId}</Link>
-                        </React.Fragment>
-                      ) : null}
-                    </Typography>
-                    <Typography variant="h6" color="textSecondary">
-                      Locus around{' '}
-                      <Link to={`/variant/${indexVariantId}`}>
-                        {indexVariantId}
-                      </Link>
-                      {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
-                    </Typography>
+              const shouldMakeColocalisationCredibleSetQuery =
+                gwasColocalisation.length > 0 || qtlColocalisation.length > 0;
+              const colocalisationCredibleSetQuery = shouldMakeColocalisationCredibleSetQuery
+                ? createCredibleSetsQuery({
+                    gwasColocalisation,
+                    qtlColocalisation,
+                  })
+                : null;
+
+              const gwasColocalisationFiltered = gwasColocalisation
+                .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
+                .filter(d => d.h4 >= this.state.h4SliderValue)
+                .sort(log2h4h3Comparator)
+                .reverse();
+
+              const qtlColocalisationFiltered = qtlColocalisation
+                .filter(d => d.log2h4h3 >= this.state.log2h4h3SliderValue)
+                .filter(d => d.h4 >= this.state.h4SliderValue)
+                .sort(log2h4h3Comparator)
+                .reverse();
+              const associationSummary = pageSummary;
+
+              const pageCredibleSetAdjusted = pageCredibleSet
+                .map(flattenPosition)
+                .filter(
+                  d => (credSet95Value === '95' ? d.is95CredibleSet : true)
+                );
+              const pageCredibleSetKey = `gwasCredibleSet__${studyId}__${indexVariantId}`;
+              const qtlColocDownloadData = getDownloadData(qtlColocalisation);
+
+              return (
+                <React.Fragment>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant="h4" color="textSecondary">
+                        {`${studyInfo.traitReported}`}
+                      </Typography>
+                      <Typography variant="subtitle1">
+                        {studyInfo.pubAuthor}{' '}
+                        {studyInfo.pubDate
+                          ? `(${new Date(studyInfo.pubDate).getFullYear()})`
+                          : null}{' '}
+                        {studyInfo.pubJournal ? (
+                          <em>{studyInfo.pubJournal}</em>
+                        ) : null}
+                        {studyId ? (
+                          <React.Fragment>
+                            {' '}
+                            <Link to={`/study/${studyId}`}>{studyId}</Link>
+                          </React.Fragment>
+                        ) : null}
+                      </Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        Locus around{' '}
+                        <Link to={`/variant/${indexVariantId}`}>
+                          {indexVariantId}
+                        </Link>
+                        {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <LocusLink
+                        big
+                        chromosome={chromosome}
+                        position={position}
+                        selectedStudies={[studyId]}
+                        selectedIndexVariants={[indexVariantId]}
+                      >
+                        View locus
+                      </LocusLink>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <LocusLink
-                      big
-                      chromosome={chromosome}
-                      position={position}
-                      selectedStudies={[studyId]}
-                      selectedIndexVariants={[indexVariantId]}
-                    >
-                      View locus
-                    </LocusLink>
-                  </Grid>
-                </Grid>
 
-                <SectionHeading heading="Association summary" />
+                  <SectionHeading heading="Association summary" />
 
-                <Typography variant="subtitle2">
-                  <strong>P-value:</strong>{' '}
-                  {significantFigures(associationSummary.pvalMantissa) +
-                    'e' +
-                    associationSummary.pvalExponent}
-                </Typography>
-
-                {associationSummary.beta ? (
-                  <>
-                    <Typography variant="subtitle2">
-                      <strong>Beta:</strong>{' '}
-                      {significantFigures(associationSummary.beta)}
-                    </Typography>
-
-                    <Typography variant="subtitle2">
-                      <strong>Beta 95% Confidence Interval:</strong> (
-                      {significantFigures(associationSummary.betaCILower)},{' '}
-                      {significantFigures(associationSummary.betaCIUpper)})
-                    </Typography>
-                  </>
-                ) : associationSummary.oddsRatio ? (
-                  <>
-                    <Typography variant="subtitle2">
-                      <strong>Odds ratio:</strong>{' '}
-                      {significantFigures(associationSummary.oddsRatio)}
-                    </Typography>
-
-                    <Typography variant="subtitle2">
-                      <strong>Odds ratio Confidence Interval:</strong> (
-                      {significantFigures(associationSummary.oddsRatioCILower)},{' '}
-                      {significantFigures(associationSummary.oddsRatioCIUpper)})
-                    </Typography>
-                  </>
-                ) : (
                   <Typography variant="subtitle2">
-                    <strong>Beta:</strong> N/A
+                    <strong>P-value:</strong>{' '}
+                    {significantFigures(associationSummary.pvalMantissa) +
+                      'e' +
+                      associationSummary.pvalExponent}
                   </Typography>
-                )}
 
-                <SectionHeading
-                  heading="Gene prioritisation using locus-to-gene pipeline"
-                  subheading="Which genes were prioritised by L2G pipeline at this locus?"
-                />
-                <ColocL2GTable
-                  loading={false}
-                  error={false}
-                  data={studyLocus2GeneTable.rows}
-                  handleToggleRegional={this.handleToggleRegional}
-                  fileStem={`l2g-assignment-${studyId}-${indexVariantId}`}
-                />
+                  {associationSummary.beta ? (
+                    <>
+                      <Typography variant="subtitle2">
+                        <strong>Beta:</strong>{' '}
+                        {significantFigures(associationSummary.beta)}
+                      </Typography>
 
-                <SectionHeading
-                  heading={
-                    <div id="coloc">
-                      Gene prioritisation using colocalisation analysis
-                    </div>
-                  }
-                  subheading={
-                    <React.Fragment>
-                      Which molecular traits colocalise with{' '}
-                      <strong>{traitAuthorYear(studyInfo)}</strong> at this
-                      locus?
-                    </React.Fragment>
-                  }
-                />
-                <DataDownloader
-                  tableHeaders={tableColumns}
-                  rows={qtlColocDownloadData}
-                  fileStem={`qtl-coloc-${studyId}-${indexVariantId}`}
-                />
+                      <Typography variant="subtitle2">
+                        <strong>Beta 95% Confidence Interval:</strong> (
+                        {significantFigures(associationSummary.betaCILower)},{' '}
+                        {significantFigures(associationSummary.betaCIUpper)})
+                      </Typography>
+                    </>
+                  ) : associationSummary.oddsRatio ? (
+                    <>
+                      <Typography variant="subtitle2">
+                        <strong>Odds ratio:</strong>{' '}
+                        {significantFigures(associationSummary.oddsRatio)}
+                      </Typography>
 
-                <Tabs
-                  variant="scrollable"
-                  value={this.state.qtlTabsValue}
-                  onChange={this.handleQtlTabsChange}
-                >
-                  <Tab label="Heatmap" value="heatmap" />
-                  <Tab label="Table" value="table" />
-                </Tabs>
-                {this.state.qtlTabsValue === 'heatmap' ? (
-                  <ColocQTLGeneTissueTable
+                      <Typography variant="subtitle2">
+                        <strong>Odds ratio Confidence Interval:</strong> (
+                        {significantFigures(
+                          associationSummary.oddsRatioCILower
+                        )}
+                        ,{' '}
+                        {significantFigures(
+                          associationSummary.oddsRatioCIUpper
+                        )}
+                        )
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography variant="subtitle2">
+                      <strong>Beta:</strong> N/A
+                    </Typography>
+                  )}
+
+                  <SectionHeading
+                    heading="Gene prioritisation using locus-to-gene pipeline"
+                    subheading="Which genes were prioritised by L2G pipeline at this locus?"
+                  />
+                  <ColocL2GTable
                     loading={false}
                     error={false}
-                    data={qtlColocalisation}
-                    fileStem="qtl-coloc-heatmap"
+                    data={studyLocus2GeneTable.rows}
+                    handleToggleRegional={this.handleToggleRegional}
+                    fileStem={`l2g-assignment-${studyId}-${indexVariantId}`}
                   />
-                ) : null}
-                {this.state.qtlTabsValue === 'table' ? (
-                  <ColocQTLTable
+
+                  <SectionHeading
+                    heading={
+                      <div id="coloc">
+                        Gene prioritisation using colocalisation analysis
+                      </div>
+                    }
+                    subheading={
+                      <React.Fragment>
+                        Which molecular traits colocalise with{' '}
+                        <strong>{traitAuthorYear(studyInfo)}</strong> at this
+                        locus?
+                      </React.Fragment>
+                    }
+                  />
+                  <DataDownloader
+                    tableHeaders={tableColumns}
+                    rows={qtlColocDownloadData}
+                    fileStem={`qtl-coloc-${studyId}-${indexVariantId}`}
+                  />
+
+                  <Tabs
+                    variant="scrollable"
+                    value={this.state.qtlTabsValue}
+                    onChange={this.handleQtlTabsChange}
+                  >
+                    <Tab label="Heatmap" value="heatmap" />
+                    <Tab label="Table" value="table" />
+                  </Tabs>
+                  {this.state.qtlTabsValue === 'heatmap' ? (
+                    <ColocQTLGeneTissueTable
+                      loading={false}
+                      error={false}
+                      data={qtlColocalisation}
+                      fileStem="qtl-coloc-heatmap"
+                    />
+                  ) : null}
+                  {this.state.qtlTabsValue === 'table' ? (
+                    <ColocQTLTable
+                      loading={false}
+                      error={false}
+                      data={qtlColocalisation}
+                      tableColumns={tableColumns}
+                    />
+                  ) : null}
+
+                  <SectionHeading
+                    heading="GWAS Study Colocalisation"
+                    subheading={
+                      <React.Fragment>
+                        Which GWAS studies colocalise with{' '}
+                        <strong>{traitAuthorYear(studyInfo)}</strong> at this
+                        locus?
+                      </React.Fragment>
+                    }
+                  />
+                  <ColocGWASTable
                     loading={false}
                     error={false}
-                    data={qtlColocalisation}
-                    tableColumns={tableColumns}
+                    data={gwasColocalisation}
+                    handleToggleRegional={this.handleToggleRegional}
+                    fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
                   />
-                ) : null}
-
-                <SectionHeading
-                  heading="GWAS Study Colocalisation"
-                  subheading={
-                    <React.Fragment>
-                      Which GWAS studies colocalise with{' '}
-                      <strong>{traitAuthorYear(studyInfo)}</strong> at this
-                      locus?
-                    </React.Fragment>
-                  }
-                />
-                <ColocGWASTable
-                  loading={false}
-                  error={false}
-                  data={gwasColocalisation}
-                  handleToggleRegional={this.handleToggleRegional}
-                  fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
-                />
-                {/* <Tabs
+                  {/* <Tabs
                   variant="scrollable"
                   value={this.state.gwasTabsValue}
                   onChange={this.handleGWASTabsChange}
@@ -529,375 +547,381 @@ class LocusTraitPage extends React.Component {
                   />
                 ) : null} */}
 
-                <SectionHeading
-                  heading={`Credible Set Overlap`}
-                  subheading={`Which variants at this locus are most likely causal?`}
-                />
-                <PlotContainer
-                  center={
-                    <Typography>
-                      Showing credible sets for{' '}
-                      <strong>{traitAuthorYear(studyInfo)}</strong> and GWAS
-                      studies/QTLs in colocalisation. Expand the section to see
-                      the underlying regional plot.
-                    </Typography>
-                  }
-                >
-                  <PlotContainerSection>
-                    <Grid container alignItems="center">
-                      <Grid item>
-                        <div style={{ padding: '0 20px' }}>
-                          <Typography>Credible set variants</Typography>
-                          <RadioGroup
-                            style={{ padding: '0 16px' }}
-                            row
-                            aria-label="95% credible set"
-                            name="credset95"
-                            value={this.state.credSet95Value}
-                            onChange={this.handleCredSet95Change}
-                          >
-                            <FormControlLabel
-                              value="95"
-                              control={<Radio />}
-                              label="95%"
-                            />
-                            <FormControlLabel
-                              value="all"
-                              control={<Radio />}
-                              label="PP > 0.1%"
-                            />
-                          </RadioGroup>
-                        </div>
+                  <SectionHeading
+                    heading={`Credible Set Overlap`}
+                    subheading={`Which variants at this locus are most likely causal?`}
+                  />
+                  <PlotContainer
+                    center={
+                      <Typography>
+                        Showing credible sets for{' '}
+                        <strong>{traitAuthorYear(studyInfo)}</strong> and GWAS
+                        studies/QTLs in colocalisation. Expand the section to
+                        see the underlying regional plot.
+                      </Typography>
+                    }
+                  >
+                    <PlotContainerSection>
+                      <Grid container alignItems="center">
+                        <Grid item>
+                          <div style={{ padding: '0 20px' }}>
+                            <Typography>Credible set variants</Typography>
+                            <RadioGroup
+                              style={{ padding: '0 16px' }}
+                              row
+                              aria-label="95% credible set"
+                              name="credset95"
+                              value={this.state.credSet95Value}
+                              onChange={this.handleCredSet95Change}
+                            >
+                              <FormControlLabel
+                                value="95"
+                                control={<Radio />}
+                                label="95%"
+                              />
+                              <FormControlLabel
+                                value="all"
+                                control={<Radio />}
+                                label="PP > 0.1%"
+                              />
+                            </RadioGroup>
+                          </div>
+                        </Grid>
+                        <Grid item>
+                          <Slider
+                            label={`log2(H4/H3): ${significantFigures(
+                              this.state.log2h4h3SliderValue
+                            )}`}
+                            min={0}
+                            max={Math.ceil(maxLog2h4h3)}
+                            step={Math.ceil(maxLog2h4h3) / 50}
+                            value={this.state.log2h4h3SliderValue}
+                            onChange={this.handleLog2h4h3SliderChange}
+                          />
+                        </Grid>
+                        <Grid item>
+                          <Slider
+                            label={`H4: ${significantFigures(
+                              this.state.h4SliderValue
+                            )}`}
+                            min={0}
+                            max={1}
+                            step={0.02}
+                            value={this.state.h4SliderValue}
+                            onChange={this.handleH4SliderChange}
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <Slider
-                          label={`log2(H4/H3): ${significantFigures(
-                            this.state.log2h4h3SliderValue
-                          )}`}
-                          min={0}
-                          max={Math.ceil(maxLog2h4h3)}
-                          step={Math.ceil(maxLog2h4h3) / 50}
-                          value={this.state.log2h4h3SliderValue}
-                          onChange={this.handleLog2h4h3SliderChange}
-                        />
-                      </Grid>
-                      <Grid item>
-                        <Slider
-                          label={`H4: ${significantFigures(
-                            this.state.h4SliderValue
-                          )}`}
-                          min={0}
-                          max={1}
-                          step={0.02}
-                          value={this.state.h4SliderValue}
-                          onChange={this.handleH4SliderChange}
-                        />
-                      </Grid>
-                    </Grid>
-                  </PlotContainerSection>
-                </PlotContainer>
+                    </PlotContainerSection>
+                  </PlotContainer>
 
-                <CredibleSetWithRegional
-                  checkboxProps={{
-                    checked:
-                      this.state.credibleSetIntersectionKeys.indexOf(
+                  <CredibleSetWithRegional
+                    checkboxProps={{
+                      checked:
+                        this.state.credibleSetIntersectionKeys.indexOf(
+                          pageCredibleSetKey
+                        ) >= 0,
+                      onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
                         pageCredibleSetKey
-                      ) >= 0,
-                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
-                      pageCredibleSetKey
-                    ),
-                    value: pageCredibleSetKey,
-                  }}
-                  credibleSetProps={{
-                    label: traitAuthorYear(studyInfo),
-                    start,
-                    end,
-                    data: pageCredibleSetAdjusted,
-                  }}
-                  regionalProps={{
-                    title: null,
-                    query: GWAS_REGIONAL_QUERY,
-                    variables: {
-                      studyId: studyInfo.studyId,
-                      chromosome,
+                      ),
+                      value: pageCredibleSetKey,
+                    }}
+                    credibleSetProps={{
+                      label: traitAuthorYear(studyInfo),
                       start,
                       end,
-                    },
-                    start,
-                    end,
-                  }}
-                />
+                      data: pageCredibleSetAdjusted,
+                    }}
+                    regionalProps={{
+                      title: null,
+                      query: GWAS_REGIONAL_QUERY,
+                      variables: {
+                        studyId: studyInfo.studyId,
+                        chromosome,
+                        start,
+                        end,
+                      },
+                      start,
+                      end,
+                    }}
+                  />
 
-                {shouldMakeColocalisationCredibleSetQuery ? (
-                  <Query query={colocalisationCredibleSetQuery} variables={{}}>
-                    {({ loading: loading2, error: error2, data: data2 }) => {
-                      if (loading2 || error2) {
-                        return null;
-                      }
+                  {shouldMakeColocalisationCredibleSetQuery ? (
+                    <Query
+                      query={colocalisationCredibleSetQuery}
+                      variables={{}}
+                    >
+                      {({ loading: loading2, error: error2, data: data2 }) => {
+                        if (loading2 || error2) {
+                          return null;
+                        }
 
-                      // de-alias
-                      const gwasColocalisationCredibleSetsFiltered = gwasColocalisationFiltered.map(
-                        ({ study, indexVariant, ...rest }) => ({
-                          key: `gwasCredibleSet__${study.studyId}__${
-                            indexVariant.id
-                          }`,
-                          study,
-                          indexVariant,
-                          credibleSet: data2[
-                            `gwasCredibleSet__${study.studyId}__${
+                        // de-alias
+                        const gwasColocalisationCredibleSetsFiltered = gwasColocalisationFiltered.map(
+                          ({ study, indexVariant, ...rest }) => ({
+                            key: `gwasCredibleSet__${study.studyId}__${
                               indexVariant.id
-                            }`
-                          ]
-                            .map(flattenPosition)
-                            .filter(
-                              d =>
-                                credSet95Value === '95'
-                                  ? d.is95CredibleSet
-                                  : true
-                            ),
-                          ...rest,
-                        })
-                      );
-                      const qtlColocalisationCredibleSetsFiltered = qtlColocalisationFiltered.map(
-                        ({
-                          qtlStudyName,
-                          phenotypeId,
-                          tissue,
-                          indexVariant,
-                          ...rest
-                        }) => {
-                          const key = `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
-                            tissue.id
-                          }__${indexVariant.id}`;
-                          return {
-                            key,
+                            }`,
+                            study,
+                            indexVariant,
+                            credibleSet: data2[
+                              `gwasCredibleSet__${study.studyId}__${
+                                indexVariant.id
+                              }`
+                            ]
+                              .map(flattenPosition)
+                              .filter(
+                                d =>
+                                  credSet95Value === '95'
+                                    ? d.is95CredibleSet
+                                    : true
+                              ),
+                            ...rest,
+                          })
+                        );
+                        const qtlColocalisationCredibleSetsFiltered = qtlColocalisationFiltered.map(
+                          ({
                             qtlStudyName,
                             phenotypeId,
                             tissue,
                             indexVariant,
-                            credibleSet: data2[key]
-                              ? data2[key]
-                                  .map(flattenPosition)
-                                  .filter(
-                                    d =>
-                                      credSet95Value === '95'
-                                        ? d.is95CredibleSet
-                                        : true
-                                  )
-                              : [],
-                            ...rest,
-                          };
-                        }
-                      );
+                            ...rest
+                          }) => {
+                            const key = `qtlCredibleSet__${qtlStudyName}__${phenotypeId}__${
+                              tissue.id
+                            }__${indexVariant.id}`;
+                            return {
+                              key,
+                              qtlStudyName,
+                              phenotypeId,
+                              tissue,
+                              indexVariant,
+                              credibleSet: data2[key]
+                                ? data2[key]
+                                    .map(flattenPosition)
+                                    .filter(
+                                      d =>
+                                        credSet95Value === '95'
+                                          ? d.is95CredibleSet
+                                          : true
+                                    )
+                                : [],
+                              ...rest,
+                            };
+                          }
+                        );
 
-                      // get the intersecting variants
-                      const credibleSetsAll = [
-                        {
-                          key: pageCredibleSetKey,
-                          credibleSet: pageCredibleSetAdjusted,
-                        },
-                        ...gwasColocalisationCredibleSetsFiltered.map(
-                          ({ key, credibleSet }) => ({ key, credibleSet })
-                        ),
-                        ...qtlColocalisationCredibleSetsFiltered.map(
-                          ({ key, credibleSet }) => ({ key, credibleSet })
-                        ),
-                      ];
-                      const { credibleSetIntersectionKeys } = this.state;
-                      const credibleSetsChecked = credibleSetsAll.filter(
-                        d => credibleSetIntersectionKeys.indexOf(d.key) >= 0
-                      );
-                      const variantsByCredibleSets = credibleSetsChecked.map(
-                        d =>
-                          d.credibleSet.map(({ tagVariant, ...rest }) => ({
-                            statsFields: rest,
-                            ...tagVariant,
-                          }))
-                      );
-                      const variantIdsInCredibleSetsIntersection = variantsByCredibleSets.reduce(
-                        (acc, vs, i) => {
-                          vs.forEach(v => {
-                            const { statsFields, ...variantFields } = v;
-                            if (acc[v.id]) {
-                              acc[v.id].posteriorProbabilityProd *=
-                                statsFields.posteriorProbability;
-                              acc[v.id].posteriorProbabilityMax = Math.max(
-                                acc[v.id].posteriorProbabilityMax,
-                                statsFields.posteriorProbability
-                              );
-                              acc[v.id].appearsInCount += 1;
-                            } else {
-                              acc[v.id] = {
-                                ...variantFields,
-                                posteriorProbabilityMax:
-                                  statsFields.posteriorProbability,
-                                posteriorProbabilityProd:
-                                  statsFields.posteriorProbability,
-                                appearsInCount: 1,
-                              };
-                            }
-                          });
-                          return acc;
-                        },
-                        {}
-                      );
-                      const variantsByCredibleSetsIntersection = Object.values(
-                        variantIdsInCredibleSetsIntersection
-                      )
-                        .filter(
-                          v =>
-                            v.appearsInCount === variantsByCredibleSets.length
+                        // get the intersecting variants
+                        const credibleSetsAll = [
+                          {
+                            key: pageCredibleSetKey,
+                            credibleSet: pageCredibleSetAdjusted,
+                          },
+                          ...gwasColocalisationCredibleSetsFiltered.map(
+                            ({ key, credibleSet }) => ({ key, credibleSet })
+                          ),
+                          ...qtlColocalisationCredibleSetsFiltered.map(
+                            ({ key, credibleSet }) => ({ key, credibleSet })
+                          ),
+                        ];
+                        const { credibleSetIntersectionKeys } = this.state;
+                        const credibleSetsChecked = credibleSetsAll.filter(
+                          d => credibleSetIntersectionKeys.indexOf(d.key) >= 0
+                        );
+                        const variantsByCredibleSets = credibleSetsChecked.map(
+                          d =>
+                            d.credibleSet.map(({ tagVariant, ...rest }) => ({
+                              statsFields: rest,
+                              ...tagVariant,
+                            }))
+                        );
+                        const variantIdsInCredibleSetsIntersection = variantsByCredibleSets.reduce(
+                          (acc, vs, i) => {
+                            vs.forEach(v => {
+                              const { statsFields, ...variantFields } = v;
+                              if (acc[v.id]) {
+                                acc[v.id].posteriorProbabilityProd *=
+                                  statsFields.posteriorProbability;
+                                acc[v.id].posteriorProbabilityMax = Math.max(
+                                  acc[v.id].posteriorProbabilityMax,
+                                  statsFields.posteriorProbability
+                                );
+                                acc[v.id].appearsInCount += 1;
+                              } else {
+                                acc[v.id] = {
+                                  ...variantFields,
+                                  posteriorProbabilityMax:
+                                    statsFields.posteriorProbability,
+                                  posteriorProbabilityProd:
+                                    statsFields.posteriorProbability,
+                                  appearsInCount: 1,
+                                };
+                              }
+                            });
+                            return acc;
+                          },
+                          {}
+                        );
+                        const variantsByCredibleSetsIntersection = Object.values(
+                          variantIdsInCredibleSetsIntersection
                         )
-                        .map(v => ({
-                          ...v,
-                          posteriorProbability: v.posteriorProbabilityProd, // aliased for colouring on plot
-                        }));
+                          .filter(
+                            v =>
+                              v.appearsInCount === variantsByCredibleSets.length
+                          )
+                          .map(v => ({
+                            ...v,
+                            posteriorProbability: v.posteriorProbabilityProd, // aliased for colouring on plot
+                          }));
 
-                      return (
-                        <React.Fragment>
-                          <Typography style={{ paddingTop: '10px' }}>
-                            <strong>GWAS</strong>
-                          </Typography>
-                          {gwasColocalisationCredibleSetsFiltered.length > 0 ? (
-                            gwasColocalisationCredibleSetsFiltered.map(d => {
-                              return (
-                                <CredibleSetWithRegional
-                                  key={d.key}
-                                  checkboxProps={{
-                                    checked:
-                                      this.state.credibleSetIntersectionKeys.indexOf(
+                        return (
+                          <React.Fragment>
+                            <Typography style={{ paddingTop: '10px' }}>
+                              <strong>GWAS</strong>
+                            </Typography>
+                            {gwasColocalisationCredibleSetsFiltered.length >
+                            0 ? (
+                              gwasColocalisationCredibleSetsFiltered.map(d => {
+                                return (
+                                  <CredibleSetWithRegional
+                                    key={d.key}
+                                    checkboxProps={{
+                                      checked:
+                                        this.state.credibleSetIntersectionKeys.indexOf(
+                                          d.key
+                                        ) >= 0,
+                                      onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
                                         d.key
-                                      ) >= 0,
-                                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
-                                      d.key
-                                    ),
-                                    value: d.key,
-                                  }}
-                                  credibleSetProps={{
-                                    label: traitAuthorYear(d.study),
-                                    start,
-                                    end,
-                                    h4: d.h4,
-                                    logH4H3: d.log2h4h3,
-                                    data: d.credibleSet,
-                                  }}
-                                  regionalProps={{
-                                    title: null,
-                                    query: GWAS_REGIONAL_QUERY,
-                                    variables: {
-                                      studyId: d.study.studyId,
-                                      chromosome,
+                                      ),
+                                      value: d.key,
+                                    }}
+                                    credibleSetProps={{
+                                      label: traitAuthorYear(d.study),
                                       start,
                                       end,
-                                    },
-                                    start,
-                                    end,
-                                  }}
-                                />
-                              );
-                            })
-                          ) : (
-                            <Typography align="center">
-                              No GWAS studies satisfying the applied filters.
-                            </Typography>
-                          )}
-
-                          <Typography style={{ paddingTop: '10px' }}>
-                            <strong>QTL</strong>
-                          </Typography>
-                          {qtlColocalisationCredibleSetsFiltered.length > 0 ? (
-                            qtlColocalisationCredibleSetsFiltered.map(d => {
-                              return (
-                                <CredibleSetWithRegional
-                                  key={d.key}
-                                  checkboxProps={{
-                                    checked:
-                                      this.state.credibleSetIntersectionKeys.indexOf(
-                                        d.key
-                                      ) >= 0,
-                                    onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
-                                      d.key
-                                    ),
-                                    value: d.key,
-                                  }}
-                                  credibleSetProps={{
-                                    label: `${d.qtlStudyName}: ${
-                                      d.gene.symbol
-                                    } in ${d.tissue.name}`,
-                                    start,
-                                    end,
-                                    h4: d.h4,
-                                    logH4H3: d.log2h4h3,
-                                    data: d.credibleSet,
-                                  }}
-                                  regionalProps={{
-                                    title: null,
-                                    query: QTL_REGIONAL_QUERY,
-                                    variables: {
-                                      studyId: d.qtlStudyName,
-                                      phenotypeId: d.phenotypeId,
-                                      bioFeature: d.tissue.id,
-                                      chromosome,
+                                      h4: d.h4,
+                                      logH4H3: d.log2h4h3,
+                                      data: d.credibleSet,
+                                    }}
+                                    regionalProps={{
+                                      title: null,
+                                      query: GWAS_REGIONAL_QUERY,
+                                      variables: {
+                                        studyId: d.study.studyId,
+                                        chromosome,
+                                        start,
+                                        end,
+                                      },
                                       start,
                                       end,
-                                    },
-                                    start,
-                                    end,
-                                  }}
-                                />
-                              );
-                            })
-                          ) : (
-                            <Typography align="center">
-                              No QTL studies satisfying the applied filters.
+                                    }}
+                                  />
+                                );
+                              })
+                            ) : (
+                              <Typography align="center">
+                                No GWAS studies satisfying the applied filters.
+                              </Typography>
+                            )}
+
+                            <Typography style={{ paddingTop: '10px' }}>
+                              <strong>QTL</strong>
                             </Typography>
-                          )}
+                            {qtlColocalisationCredibleSetsFiltered.length >
+                            0 ? (
+                              qtlColocalisationCredibleSetsFiltered.map(d => {
+                                return (
+                                  <CredibleSetWithRegional
+                                    key={d.key}
+                                    checkboxProps={{
+                                      checked:
+                                        this.state.credibleSetIntersectionKeys.indexOf(
+                                          d.key
+                                        ) >= 0,
+                                      onChange: this.handleCredibleSetIntersectionKeysCheckboxClick(
+                                        d.key
+                                      ),
+                                      value: d.key,
+                                    }}
+                                    credibleSetProps={{
+                                      label: `${d.qtlStudyName}: ${
+                                        d.gene.symbol
+                                      } in ${d.tissue.name}`,
+                                      start,
+                                      end,
+                                      h4: d.h4,
+                                      logH4H3: d.log2h4h3,
+                                      data: d.credibleSet,
+                                    }}
+                                    regionalProps={{
+                                      title: null,
+                                      query: QTL_REGIONAL_QUERY,
+                                      variables: {
+                                        studyId: d.qtlStudyName,
+                                        phenotypeId: d.phenotypeId,
+                                        bioFeature: d.tissue.id,
+                                        chromosome,
+                                        start,
+                                        end,
+                                      },
+                                      start,
+                                      end,
+                                    }}
+                                  />
+                                );
+                              })
+                            ) : (
+                              <Typography align="center">
+                                No QTL studies satisfying the applied filters.
+                              </Typography>
+                            )}
 
-                          <Typography style={{ paddingTop: '10px' }}>
-                            <strong>
-                              Intersection of credible set variants
-                            </strong>
-                          </Typography>
-                          <PlotContainer>
-                            <PlotContainerSection>
-                              <div style={{ paddingRight: '32px' }}>
-                                <CredibleSet
-                                  label="Intersection Variants"
-                                  start={start}
-                                  end={end}
-                                  data={variantsByCredibleSetsIntersection}
-                                />
-                              </div>
-                            </PlotContainerSection>
-                          </PlotContainer>
-                          <CredibleSetsIntersectionTable
-                            data={variantsByCredibleSetsIntersection}
-                            filenameStem={`${studyId}-${indexVariantId}-credset-intersection`}
-                          />
-                        </React.Fragment>
-                      );
-                    }}
-                  </Query>
-                ) : null}
+                            <Typography style={{ paddingTop: '10px' }}>
+                              <strong>
+                                Intersection of credible set variants
+                              </strong>
+                            </Typography>
+                            <PlotContainer>
+                              <PlotContainerSection>
+                                <div style={{ paddingRight: '32px' }}>
+                                  <CredibleSet
+                                    label="Intersection Variants"
+                                    start={start}
+                                    end={end}
+                                    data={variantsByCredibleSetsIntersection}
+                                  />
+                                </div>
+                              </PlotContainerSection>
+                            </PlotContainer>
+                            <CredibleSetsIntersectionTable
+                              data={variantsByCredibleSetsIntersection}
+                              filenameStem={`${studyId}-${indexVariantId}-credset-intersection`}
+                            />
+                          </React.Fragment>
+                        );
+                      }}
+                    </Query>
+                  ) : null}
 
-                <Typography style={{ paddingTop: '10px' }}>
-                  <strong>Genes</strong>
-                </Typography>
-                <PlotContainer>
-                  <PlotContainerSection>
-                    <div style={{ paddingRight: '32px' }}>
-                      <GeneTrack
-                        data={{ genes: flatExonsToPairedExons(genes) }}
-                        start={start}
-                        end={end}
-                      />
-                    </div>
-                  </PlotContainerSection>
-                </PlotContainer>
-              </React.Fragment>
-            );
-          }}
-        </Query>
+                  <Typography style={{ paddingTop: '10px' }}>
+                    <strong>Genes</strong>
+                  </Typography>
+                  <PlotContainer>
+                    <PlotContainerSection>
+                      <div style={{ paddingRight: '32px' }}>
+                        <GeneTrack
+                          data={{ genes: flatExonsToPairedExons(genes) }}
+                          start={start}
+                          end={end}
+                        />
+                      </div>
+                    </PlotContainerSection>
+                  </PlotContainer>
+                </React.Fragment>
+              );
+            }}
+          </Query>
+        </ErrorBoundary>
       </BasePage>
     );
   }
