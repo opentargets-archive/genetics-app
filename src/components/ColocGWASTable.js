@@ -1,7 +1,12 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
+import {
+  Link,
+  OtTableRF,
+  DataDownloader,
+  significantFigures,
+} from '../ot-ui-components';
 
 import StudyLocusLink from './StudyLocusLink';
 

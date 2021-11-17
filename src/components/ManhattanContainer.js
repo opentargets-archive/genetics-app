@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { SectionHeading, DownloadSVGPlot, ListTooltip } from 'ot-ui';
+import {
+  SectionHeading,
+  DownloadSVGPlot,
+  ListTooltip,
+} from '../ot-ui-components';
 
 import { chromosomesWithCumulativeLengths } from '../utils';
 import Manhattan from '../components/Manhattan';

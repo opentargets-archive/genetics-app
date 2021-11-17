@@ -7,7 +7,7 @@ import {
   Autocomplete,
   significantFigures,
   DataDownloader,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import StudyLocusLink from './StudyLocusLink';
 

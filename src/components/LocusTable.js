@@ -6,7 +6,7 @@ import {
   DataCircle,
   significantFigures,
   Autocomplete,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
 import StudyDetailCell from './StudyDetailCell';

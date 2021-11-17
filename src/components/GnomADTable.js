@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import { Link, Typography, commaSeparate } from 'ot-ui';
+import { Link, Typography, commaSeparate } from '../ot-ui-components';
 
 const populations = [
   { code: 'AFR', description: 'African/African-American' },

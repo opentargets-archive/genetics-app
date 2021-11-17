@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { Link, OtTableRF, DataDownloader, significantFigures } from 'ot-ui';
+import {
+  Link,
+  OtTableRF,
+  DataDownloader,
+  significantFigures,
+} from '../ot-ui-components';
 
 const tableColumns = [
   {

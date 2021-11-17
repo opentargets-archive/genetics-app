@@ -6,7 +6,7 @@ import {
   significantFigures,
   Autocomplete,
   Link,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
 import StudyLocusLink from './StudyLocusLink';

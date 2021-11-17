@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Link, Button } from 'ot-ui';
+import { Link, Button } from '../ot-ui-components';
 
 import BasePage from './BasePage';
 

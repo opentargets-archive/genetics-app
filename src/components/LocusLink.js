@@ -2,7 +2,7 @@ import React from 'react';
 import queryString from 'query-string';
 import { withStyles } from '@material-ui/core';
 
-import { Link, Button, LocusIcon } from 'ot-ui';
+import { Link, Button, LocusIcon } from '../ot-ui-components';
 import { chromosomesWithCumulativeLengths } from '../utils';
 
 const chromosomeDict = chromosomesWithCumulativeLengths.reduce((acc, d) => {

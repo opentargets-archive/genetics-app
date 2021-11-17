@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from 'ot-ui';
+import { Typography } from '../ot-ui-components';
 
 import Chip from './LocusChip';
 

@@ -7,7 +7,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
 import Link from '@material-ui/core/Link';
 
-import { Splash } from 'ot-ui';
+import { Splash } from '../../ot-ui-components';
 
 import HomeBox from './HomeBox';
 

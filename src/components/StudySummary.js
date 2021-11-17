@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
-import { Link, Typography, commaSeparate } from 'ot-ui';
+import { Link, Typography, commaSeparate } from '../ot-ui-components';
 
 const StudySummary = ({ pmid, nInitial, nReplication, nCases, studyId }) => (
   <Grid container justify="space-between">

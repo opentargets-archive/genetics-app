@@ -5,7 +5,7 @@ import {
   commaSeparate,
   significantFigures,
   Autocomplete,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';

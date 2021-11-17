@@ -4,7 +4,11 @@ import _ from 'lodash';
 import { loader } from 'graphql.macro';
 import { Typography, NativeSelect } from '@material-ui/core';
 
-import { DownloadSVGPlot, ListTooltip, SectionHeading } from 'ot-ui';
+import {
+  DownloadSVGPlot,
+  ListTooltip,
+  SectionHeading,
+} from '../ot-ui-components';
 import withTooltip from './withTooltip';
 import PheWAS from './PheWAS';
 

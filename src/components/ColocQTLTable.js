@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OtTableRF } from 'ot-ui';
+import { OtTableRF } from '../ot-ui-components';
 
 const ColocQTLTable = ({ loading, error, data, tableColumns }) => {
   return (

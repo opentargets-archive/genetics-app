@@ -11,7 +11,7 @@ import {
   Tooltip,
   significantFigures,
   commaSeparate,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
 import { generateComparator } from '../utils';
