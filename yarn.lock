@@ -9788,11 +9788,6 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ot-ui@^0.0.98:
-  version "0.0.98"
-  resolved "https://registry.yarnpkg.com/ot-ui/-/ot-ui-0.0.98.tgz#49e318f26e9ff20a76faf0dacbf53b0284e43096"
-  integrity sha512-+y7KORbqPaWOSkVYDbfir2yxdCPG30BcYh2taDuJ0jPucvhq/WY7/COoulZTN4qsUxxpRNoOOISjneVWsTpmeA==
-
 p-each-series@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-each-series/-/p-each-series-2.2.0.tgz#105ab0357ce72b202a8a8b94933672657b5e2a9a"
