@@ -45,7 +45,6 @@ query VariantPageQuery($variantId: String!) {
       }
     }
     intervals {
-      id
       sourceId
       sourceLabel
       sourceDescriptionOverview
