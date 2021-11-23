@@ -53,9 +53,11 @@ function getStudiesTableData(data, studyId, studyIds) {
 
   // select
   const rootStudyTop = topStudies.find(d => d.study.studyId === studyId);
-  const topStudiesExcludingRoot = topStudies.filter(
-    d => d.study.id !== studyId
-  );
+
+  const topStudiesExcludingRoot = topStudies.filter(d => {
+    if (d.study !== null) return d.study.studyId !== studyId;
+    else return null;
+  });
   if (!rootStudyTop) {
     // handle case of manhattan data but no ld/fine-mapping (eg. GCST004132)
     if (
