@@ -13,6 +13,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import ManhattansTable from '../components/ManhattansTable';
 import ManhattansVariantsTable from '../components/ManhattansVariantsTable';
 import StudyComparisonOption from '../components/StudyComparisonOption';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const STUDIES_PAGE_QUERY = loader('../queries/StudiesPageQuery.gql');
 
@@ -269,104 +270,105 @@ class StudiesPage extends React.Component {
         <Helmet>
           <title>Compare studies</title>
         </Helmet>
+        <ErrorBoundary>
+          <Query
+            query={STUDIES_PAGE_QUERY}
+            variables={{ studyId, studyIds: [studyId, ...studyIds] }}
+            fetchPolicy="network-only"
+          >
+            {({ loading, error, data }) => {
+              const isStudyWithInfo = hasStudyInfo(data);
+              const studyInfo = isStudyWithInfo ? getStudyInfo(data) : {};
+              const { pubAuthor, pubDate, pubJournal } = studyInfo;
+              const {
+                studySelectOptions,
+                pileupPseudoStudy,
+                variantIntersectionSet,
+                rootStudy,
+                studies,
+              } = getStudiesTableData(data, studyId, studyIds);
+              const studySelectValue = studySelectOptions.filter(
+                d => studyIds.indexOf(d.study.studyId) >= 0
+              );
+              const overlappingVariants = getOverlappingVariants(
+                data,
+                variantIntersectionSet,
+                studies.length > 0
+              );
+              return (
+                <Fragment>
+                  <Typography variant="h4" color="textSecondary">
+                    {studyInfo.traitReported}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    {pubAuthor}{' '}
+                    {pubDate ? `(${new Date(pubDate).getFullYear()})` : null}{' '}
+                    {pubJournal ? <em>{pubJournal}</em> : null}
+                  </Typography>
 
-        <Query
-          query={STUDIES_PAGE_QUERY}
-          variables={{ studyId, studyIds: [studyId, ...studyIds] }}
-          fetchPolicy="network-only"
-        >
-          {({ loading, error, data }) => {
-            const isStudyWithInfo = hasStudyInfo(data);
-            const studyInfo = isStudyWithInfo ? getStudyInfo(data) : {};
-            const { pubAuthor, pubDate, pubJournal } = studyInfo;
-            const {
-              studySelectOptions,
-              pileupPseudoStudy,
-              variantIntersectionSet,
-              rootStudy,
-              studies,
-            } = getStudiesTableData(data, studyId, studyIds);
-            const studySelectValue = studySelectOptions.filter(
-              d => studyIds.indexOf(d.study.studyId) >= 0
-            );
-            const overlappingVariants = getOverlappingVariants(
-              data,
-              variantIntersectionSet,
-              studies.length > 0
-            );
-            return (
-              <Fragment>
-                <Typography variant="h4" color="textSecondary">
-                  {studyInfo.traitReported}
-                </Typography>
-                <Typography variant="subtitle1">
-                  {pubAuthor}{' '}
-                  {pubDate ? `(${new Date(pubDate).getFullYear()})` : null}{' '}
-                  {pubJournal ? <em>{pubJournal}</em> : null}
-                </Typography>
-
-                <SectionHeading
-                  heading={`Compare overlapping studies`}
-                  subheading={
-                    isStudyWithInfo ? (
-                      <Fragment>
-                        Which independently-associated loci are shared between{' '}
-                        <b>
-                          {studyInfo.pubAuthor} (
-                          {new Date(studyInfo.pubDate).getFullYear()})
-                        </b>{' '}
-                        and other studies?
-                      </Fragment>
-                    ) : null
-                  }
-                  entities={[
-                    {
-                      type: 'study',
-                      fixed: true,
-                    },
-                    {
-                      type: 'indexVariant',
-                      fixed: false,
-                    },
-                  ]}
-                />
-                <ManhattansTable
-                  loading={loading}
-                  error={error}
-                  select={
-                    <Autocomplete
-                      options={studySelectOptions}
-                      value={studySelectValue}
-                      getOptionLabel={d =>
-                        `${d.study.traitReported} (${
-                          d.study.pubAuthor
-                        } ${new Date(d.study.pubDate).getFullYear()})`
-                      }
-                      getOptionValue={d => d.study.studyId}
-                      handleSelectOption={this.handleChange}
-                      placeholder="Add a study to compare..."
-                      multiple
-                      wide
-                      OptionComponent={StudyComparisonOption}
-                    />
-                  }
-                  studies={studies}
-                  rootStudy={rootStudy}
-                  pileupPseudoStudy={pileupPseudoStudy}
-                  onDeleteStudy={this.handleDeleteStudy}
-                  onClickIntersectionLocus={this.handleClick}
-                />
-                <ManhattansVariantsTable
-                  loading={loading}
-                  error={error}
-                  data={overlappingVariants}
-                  studyIds={[studyId, ...studyIds]}
-                  filenameStem={`intersecting-independently-associated-loci`}
-                />
-              </Fragment>
-            );
-          }}
-        </Query>
+                  <SectionHeading
+                    heading={`Compare overlapping studies`}
+                    subheading={
+                      isStudyWithInfo ? (
+                        <Fragment>
+                          Which independently-associated loci are shared between{' '}
+                          <b>
+                            {studyInfo.pubAuthor} (
+                            {new Date(studyInfo.pubDate).getFullYear()})
+                          </b>{' '}
+                          and other studies?
+                        </Fragment>
+                      ) : null
+                    }
+                    entities={[
+                      {
+                        type: 'study',
+                        fixed: true,
+                      },
+                      {
+                        type: 'indexVariant',
+                        fixed: false,
+                      },
+                    ]}
+                  />
+                  <ManhattansTable
+                    loading={loading}
+                    error={error}
+                    select={
+                      <Autocomplete
+                        options={studySelectOptions}
+                        value={studySelectValue}
+                        getOptionLabel={d =>
+                          `${d.study.traitReported} (${
+                            d.study.pubAuthor
+                          } ${new Date(d.study.pubDate).getFullYear()})`
+                        }
+                        getOptionValue={d => d.study.studyId}
+                        handleSelectOption={this.handleChange}
+                        placeholder="Add a study to compare..."
+                        multiple
+                        wide
+                        OptionComponent={StudyComparisonOption}
+                      />
+                    }
+                    studies={studies}
+                    rootStudy={rootStudy}
+                    pileupPseudoStudy={pileupPseudoStudy}
+                    onDeleteStudy={this.handleDeleteStudy}
+                    onClickIntersectionLocus={this.handleClick}
+                  />
+                  <ManhattansVariantsTable
+                    loading={loading}
+                    error={error}
+                    data={overlappingVariants}
+                    studyIds={[studyId, ...studyIds]}
+                    filenameStem={`intersecting-independently-associated-loci`}
+                  />
+                </Fragment>
+              );
+            }}
+          </Query>
+        </ErrorBoundary>
       </BasePage>
     );
   }
