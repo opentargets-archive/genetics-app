@@ -27,19 +27,19 @@ const Option = ({ data }) => {
             <React.Fragment>
               {data.pubJournal ? <em>{data.pubJournal} </em> : null}N Study:{' '}
               {commaSeparate(data.nInitial)}
-              {data.hasSumstats ? (
-                <span style={{ float: 'right' }}>
-                  {data.hasSumstats ? (
-                    <Chip
-                      style={{
-                        height: '16px',
-                        fontSize: '0.7rem',
-                        marginRight: '16px',
-                      }}
-                      color="primary"
-                      label="summary statistics"
-                    />
-                  ) : null}
+              <span style={{ float: 'right' }}>
+                {data.hasSumstats ? (
+                  <Chip
+                    style={{
+                      height: '16px',
+                      fontSize: '0.7rem',
+                      marginRight: '16px',
+                    }}
+                    color="primary"
+                    label="summary statistics"
+                  />
+                ) : null}
+                {data.numAssocLoci ? (
                   <span
                     style={{
                       minWidth: '100px',
@@ -49,8 +49,8 @@ const Option = ({ data }) => {
                   >
                     <strong>{data.numAssocLoci} associated loci</strong>
                   </span>
-                </span>
-              ) : null}
+                ) : null}
+              </span>
             </React.Fragment>
           }
         />
