@@ -267,7 +267,7 @@ class OtTable extends Component {
         left={left}
         center={center}
         right={
-          <Grid container justify="flex-end" spacing={8}>
+          <Grid container justifyContent="flex-end" spacing={8}>
             <Grid item>
               <Typography variant="caption" className={classes.downloadHeader}>
                 Download table as
@@ -420,7 +420,7 @@ class OtTable extends Component {
           <TablePagination
             component="div"
             count={data.length}
-            onChangePage={this.handleChangePage}
+            onPageChange={this.handleChangePage}
             page={page}
             rowsPerPage={pageSize}
             rowsPerPageOptions={[]}
