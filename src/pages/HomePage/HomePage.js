@@ -120,7 +120,7 @@ class HomePage extends Component {
           <Grid
             className={classes.searchSection}
             container
-            justify="center"
+            justifyContent="center"
             alignItems="center"
           >
             <Splash />
@@ -135,7 +135,7 @@ class HomePage extends Component {
               <Grid
                 container
                 className={classes.examples}
-                justify="space-around"
+                justifyContent="space-around"
               >
                 {EXAMPLES.map((d, i) => (
                   <Typography
@@ -170,7 +170,7 @@ class HomePage extends Component {
             <Grid
               container
               item
-              justify="center"
+              justifyContent="center"
               className={classes.scrollDownContainer}
             >
               <ScrollDownButton
@@ -180,7 +180,7 @@ class HomePage extends Component {
             </Grid>
           </Grid>
         </RootRef>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid className={classes.list} item md={4}>
             <p className={classes.introTitle}>
               Welcome to Open Targets Genetics
@@ -208,7 +208,7 @@ class HomePage extends Component {
               Catalog using our multi-trait comparison tool
             </p>
           </Grid>
-          <Grid container item md={4} justify="center">
+          <Grid container item md={4} justifyContent="center">
             <PortalFeaturesIcon />
           </Grid>
         </Grid>

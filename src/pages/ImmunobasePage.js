@@ -19,7 +19,7 @@ const ImmunobasePage = ({ classes }) => (
     <Grid
       className={classes.information}
       container
-      justify="center"
+      justifyContent="center"
       alignItems="center"
     >
       <Grid item xs={12} sm={10} md={6}>
