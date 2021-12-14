@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { MenuItem, MenuList } from '@material-ui/core';
-import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Link from '../Link';
