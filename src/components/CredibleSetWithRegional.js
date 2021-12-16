@@ -1,9 +1,11 @@
 import React from 'react';
 import { Query } from '@apollo/client/react/components';
 import { withStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -31,8 +33,8 @@ class CredibleSetWithRegional extends React.Component {
     const { expanded } = this.state;
     const { query, variables, start, end, ...rest } = regionalProps;
     return (
-      <ExpansionPanel expanded={expanded}>
-        <ExpansionPanelSummary
+      <Accordion expanded={expanded}>
+        <AccordionSummary
           style={{ cursor: 'default' }}
           expandIcon={
             <ExpandMoreIcon
@@ -54,8 +56,8 @@ class CredibleSetWithRegional extends React.Component {
           ) : null}
 
           <CredibleSet {...credibleSetProps} />
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
           {expanded && (
             <Query query={query} variables={variables}>
               {({ loading, error, data }) => {
@@ -81,8 +83,8 @@ class CredibleSetWithRegional extends React.Component {
               }}
             </Query>
           )}
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 }
