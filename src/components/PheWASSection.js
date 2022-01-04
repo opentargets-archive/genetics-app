@@ -13,6 +13,7 @@ import withTooltip from './withTooltip';
 import PheWAS from './PheWAS';
 
 import PheWASTable, { tableColumns } from '../components/PheWASTable';
+import ForestPlot from './ForestPlot';
 
 const PHEWAS_QUERY = loader('../queries/PheWASQuery.gql');
 
@@ -74,13 +75,19 @@ function PheWASSection({
   isTagVariant,
 }) {
   const [studySource, setStudySource] = useState('all');
+  const [selectedCategories, setSelectedCategories] = useState([]);
   let pheWASPlot = React.createRef();
+  let forestPlot = React.createRef();
 
   const [chromosome, positionString] = variantId.split('_');
   const position = parseInt(positionString, 10);
 
   function handleSourceChange(e) {
     setStudySource(e.target.value);
+  }
+
+  function handleTraitSelection(newDropdownValue) {
+    setSelectedCategories(_ => newDropdownValue.map(d => d.value));
   }
 
   return (
@@ -185,6 +192,13 @@ function PheWASSection({
                     ref={pheWASPlot}
                   />
                 </DownloadSVGPlot>
+                <ForestPlot
+                  refs={forestPlot}
+                  data={pheWASAssociationsFiltered}
+                  variantId={variantId}
+                  selectionHandler={handleTraitSelection}
+                  selectedCategories={selectedCategories}
+                />
               </>
             ) : null}
             <PheWASTable
