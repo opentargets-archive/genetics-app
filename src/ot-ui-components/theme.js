@@ -99,6 +99,7 @@ const theme = {
     MuiTabs: {
       root: {
         borderBottom: '1px solid #616161',
+        color: '#000000',
       },
       indicator: {
         display: 'none',

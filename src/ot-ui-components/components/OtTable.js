@@ -270,7 +270,7 @@ class OtTable extends Component {
         left={left}
         center={center}
         right={
-          <Grid container justifyContent="flex-end" spacing={8}>
+          <Grid container justifyContent="flex-end" spacing={1}>
             <Grid item>
               <Typography variant="caption" className={classes.downloadHeader}>
                 Download table as
