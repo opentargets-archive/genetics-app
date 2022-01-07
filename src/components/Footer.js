@@ -119,9 +119,9 @@ const Footer = ({ classes, externalLinks }) => (
     className={classes.footer}
     container
     justifyContent="center"
-    spacing={24}
+    spacing={4}
   >
-    <Grid item container xs={12} md={10} spacing={16}>
+    <Grid item container xs={12} md={10} spacing={2}>
       <FooterSection heading="About" links={externalLinks.about} />
       <FooterSection
         heading="Help"

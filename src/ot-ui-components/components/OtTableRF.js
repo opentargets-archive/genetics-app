@@ -183,6 +183,9 @@ const tableStyles = theme => ({
   downloadHeader: {
     marginTop: '7px',
   },
+  badgeWithTooltip: {
+    flexShrink: 1,
+  },
 });
 
 class OtTableRF extends Component {
@@ -310,6 +313,7 @@ class OtTableRF extends Component {
                         >
                           {column.tooltip ? (
                             <Badge
+                              className={classes.badgeWithTooltip}
                               badgeContent={
                                 <Tooltip
                                   title={column.tooltip}

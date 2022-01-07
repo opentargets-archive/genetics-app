@@ -68,6 +68,7 @@ const styles = theme => {
     platformLink: {
       textAlign: 'center',
       textDecoration: 'none',
+      color: '#5A5F5F',
       '&:hover': {
         textDecoration: 'underline',
       },
@@ -345,7 +346,7 @@ class GenePage extends React.Component {
                           <Typography>Other links</Typography>
                         </Grid>
                       </Grid>
-                      <Grid container spacing={8}>
+                      <Grid container spacing={1}>
                         <Grid item>
                           <a
                             className={classes.link}

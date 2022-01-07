@@ -48,6 +48,21 @@ const theme = {
     },
   },
   overrides: {
+    MuiTableCell: {
+      root: {
+        padding: '4px 56px 4px 24px',
+      },
+      head: {
+        fontSize: '0.75rem',
+        lineHeight: '1.2',
+        color: 'rgba(0, 0, 0, 0.54)',
+      },
+    },
+    MuiTableRow: {
+      head: {
+        height: '56px',
+      },
+    },
     MuiButton: {
       root: {
         borderRadius: 0,
