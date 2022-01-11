@@ -14,7 +14,7 @@ const BasePage = ({ children }) => (
       <NavBar
         name="Genetics"
         items={mainMenuItems}
-        search={<Search searchLocation="navbar" white />}
+        search={<Search embedded />}
       />
     }
     footer={<Footer externalLinks={externalLinks} />}
