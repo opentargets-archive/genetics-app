@@ -11,7 +11,7 @@ import { Splash } from '../../ot-ui-components';
 
 import HomeBox from './HomeBox';
 
-import Search from '../../components/Search';
+import Search from '../../components/_Search';
 import PortalFeaturesIcon from '../../components/PortalFeaturesIcon';
 import ScrollDownButton from '../../components/ScrollDownButton';
 import NavBar from '../../components/NavBar/NavBar';
