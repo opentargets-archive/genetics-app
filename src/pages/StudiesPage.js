@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { SectionHeading, Autocomplete } from 'ot-ui';
+import { SectionHeading, Autocomplete } from '../ot-ui-components';
 
 import BasePage from './BasePage';
 import ScrollToTop from '../components/ScrollToTop';

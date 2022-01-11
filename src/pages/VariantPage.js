@@ -4,12 +4,12 @@ import { Query } from '@apollo/client/react/components';
 import { loader } from 'graphql.macro';
 import queryString from 'query-string';
 
-import { SectionHeading, Typography } from 'ot-ui';
+import { SectionHeading, Typography } from '../ot-ui-components';
 
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
-import { PlotContainer } from 'ot-ui';
+import { PlotContainer } from '../ot-ui-components';
 
 import BasePage from './BasePage';
 import AssociatedTagVariantsTable from '../components/AssociatedTagVariantsTable';

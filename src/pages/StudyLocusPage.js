@@ -20,7 +20,7 @@ import {
   PlotContainerSection,
   significantFigures,
   DataDownloader,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import ErrorBoundary from '../components/ErrorBoundary';
 import GeneTrack from '../components/GeneTrack';

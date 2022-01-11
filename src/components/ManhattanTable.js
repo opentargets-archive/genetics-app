@@ -6,7 +6,7 @@ import {
   DataDownloader,
   commaSeparate,
   significantFigures,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';

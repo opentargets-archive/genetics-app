@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
-import { OtUiThemeProvider } from 'ot-ui';
+import { OtUiThemeProvider } from './ot-ui-components';
 
 import client from './client';
 import HomePage from './pages/HomePage/index';

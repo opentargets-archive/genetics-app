@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, OtTable } from 'ot-ui';
+import { Link, OtTable } from '../ot-ui-components';
 
 import variantIdComparator from '../logic/variantIdComparator';
 import cytobandComparator from '../logic/cytobandComparator';

@@ -1,6 +1,6 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
-import { commaSeparate } from 'ot-ui';
+import { commaSeparate } from '../../ot-ui-components';
 import SearchOption from './BaseSearchOption';
 
 const Option = ({ data }) => {

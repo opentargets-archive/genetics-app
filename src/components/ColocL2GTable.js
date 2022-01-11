@@ -7,7 +7,7 @@ import {
   DataDownloader,
   significantFigures,
   commaSeparate,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 const tableColumns = [
   {

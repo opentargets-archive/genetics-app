@@ -14,7 +14,7 @@ import {
   Button,
   commaSeparate,
   downloadPNG,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import BasePage from './BasePage';
 import LocusSelection from '../components/LocusSelection';

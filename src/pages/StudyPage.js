@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { loader } from 'graphql.macro';
 
-import { SectionHeading } from 'ot-ui';
+import { SectionHeading } from '../ot-ui-components';
 
 import BasePage from './BasePage';
 

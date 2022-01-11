@@ -19,7 +19,7 @@ import {
   PathwaysIcon,
   ExpressionIcon,
   commaSeparate,
-} from 'ot-ui';
+} from '../ot-ui-components';
 
 import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
