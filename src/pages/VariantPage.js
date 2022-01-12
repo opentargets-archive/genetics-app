@@ -191,7 +191,7 @@ class VariantPage extends React.Component {
 
             return (
               <Fragment>
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                   <Grid item>
                     <Typography
                       className={classes.header}

@@ -27,8 +27,8 @@ function DataDownloader({ tableHeaders, rows, classes, fileStem }) {
   return (
     <Grid
       container
-      justify="flex-end"
-      spacing={8}
+      justifyContent="flex-end"
+      spacing={1}
       className={classes.container}
     >
       <Grid item>

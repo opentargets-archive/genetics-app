@@ -27,7 +27,7 @@ const DownloadSVGPlot = ({
     left={left}
     center={center}
     right={
-      <Grid container justify="flex-end" spacing={8}>
+      <Grid container justifyContent="flex-end" spacing={8}>
         <Grid item>
           <Button
             variant="outlined"

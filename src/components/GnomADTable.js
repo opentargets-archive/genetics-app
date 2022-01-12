@@ -30,7 +30,7 @@ const styles = () => ({
 const GnomADTable = ({ classes, data, variantId }) => {
   const gnomadId = variantId.replaceAll('_', '-');
   return (
-    <Grid container justify="space-between">
+    <Grid container justifyContent="space-between">
       <Grid item xs={12} sm={6} md={8}>
         <Typography variant="subtitle1">Location</Typography>
         <Typography variant="subtitle2">

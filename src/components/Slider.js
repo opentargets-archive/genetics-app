@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import MuiSlider from '@material-ui/lab/Slider';
+import MuiSlider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 
 const styles = {
@@ -31,7 +31,7 @@ const Slider = ({ classes, label, value, min, max, step, onChange }) => {
         />
       </div>
 
-      <Grid container justify="space-between">
+      <Grid container justifyContent="space-between">
         <Grid item>
           <Typography className={classes.min}>{min}</Typography>
         </Grid>

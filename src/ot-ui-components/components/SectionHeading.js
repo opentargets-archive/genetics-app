@@ -28,7 +28,7 @@ const SectionHeading = ({ classes, heading, subheading, entities }) => {
       <div className={classes.container}>
         <div>
           <Typography variant="h5">{heading}</Typography>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item>
               <Typography variant="subtitle1">{subheading}</Typography>
             </Grid>

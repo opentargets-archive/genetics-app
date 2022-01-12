@@ -49,7 +49,7 @@ class StudyPage extends React.Component {
                 <Helmet>
                   <title>{studyId}</title>
                 </Helmet>
-                <Grid container justify="space-between">
+                <Grid container justifyContent="space-between">
                   <Grid item>
                     <Typography
                       className={classes.header}

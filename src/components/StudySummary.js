@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { Link, Typography, commaSeparate } from '../ot-ui-components';
 
 const StudySummary = ({ pmid, nInitial, nReplication, nCases, studyId }) => (
-  <Grid container justify="space-between">
+  <Grid container justifyContent="space-between">
     <Grid item xs={12} sm={6} md={8}>
       <Typography variant="subtitle1">External references</Typography>
       {studyId && studyId.startsWith('NEALE2') ? (

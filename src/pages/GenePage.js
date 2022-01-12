@@ -68,6 +68,7 @@ const styles = theme => {
     platformLink: {
       textAlign: 'center',
       textDecoration: 'none',
+      color: '#5A5F5F',
       '&:hover': {
         textDecoration: 'underline',
       },
@@ -242,7 +243,7 @@ class GenePage extends React.Component {
                 <Grid container style={{ marginBottom: '10px' }}>
                   <Grid item xs={12} sm={12} md={12}>
                     <Paper className={classes.section}>
-                      <Grid container justify="space-between">
+                      <Grid container justifyContent="space-between">
                         <Grid item>
                           <Typography
                             className={classes.geneSymbol}
@@ -270,14 +271,14 @@ class GenePage extends React.Component {
                     </Paper>
                   </Grid>
                 </Grid>
-                <Grid container justify="space-between" spacing={8}>
+                <Grid container justifyContent="space-between" spacing={8}>
                   <Grid item sm={12} md={8}>
                     <Paper className={classes.section}>
                       <Typography variant="subtitle1">
                         Information about {symbol} from the Open Targets
                         Platform
                       </Typography>
-                      <Grid container justify="space-around">
+                      <Grid container justifyContent="space-around">
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
@@ -345,7 +346,7 @@ class GenePage extends React.Component {
                           <Typography>Other links</Typography>
                         </Grid>
                       </Grid>
-                      <Grid container spacing={8}>
+                      <Grid container spacing={1}>
                         <Grid item>
                           <a
                             className={classes.link}

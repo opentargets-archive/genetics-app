@@ -28,8 +28,8 @@ class Page extends React.Component {
         {header}
         <Grid
           container
-          justify={'center'}
-          spacing={24}
+          justifyContent={'center'}
+          spacing={4}
           className={classes.gridContainer}
         >
           <Grid item xs={12} md={11}>

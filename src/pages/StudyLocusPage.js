@@ -361,7 +361,7 @@ class LocusTraitPage extends React.Component {
 
               return (
                 <React.Fragment>
-                  <Grid container justify="space-between">
+                  <Grid container justifyContent="space-between">
                     <Grid item>
                       <Typography variant="h4" color="textSecondary">
                         {`${studyInfo.traitReported}`}

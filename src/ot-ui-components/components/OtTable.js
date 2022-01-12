@@ -34,23 +34,23 @@ const actionsStyles = theme => ({
 
 class TablePaginationActions extends Component {
   handleFirstPageButtonClick = event => {
-    this.props.onChangePage(event, 0);
+    this.props.onPageChange(event, 0);
   };
 
   handleBackButtonClick = event => {
-    const { onChangePage, page } = this.props;
-    onChangePage(event, page - 1);
+    const { onPageChange, page } = this.props;
+    onPageChange(event, page - 1);
   };
 
   handleNextButtonClick = event => {
-    const { onChangePage, page } = this.props;
-    onChangePage(event, page + 1);
+    const { onPageChange, page } = this.props;
+    onPageChange(event, page + 1);
   };
 
   handleLastPageButtonClick = event => {
-    const { onChangePage, count, rowsPerPage } = this.props;
+    const { onPageChange, count, rowsPerPage } = this.props;
     const lastPage = Math.ceil(count / rowsPerPage) - 1;
-    onChangePage(event, lastPage);
+    onPageChange(event, lastPage);
   };
 
   render() {
@@ -179,6 +179,9 @@ const tableStyles = theme => ({
   downloadHeader: {
     marginTop: '7px',
   },
+  badgeWithTooltip: {
+    flexShrink: 1,
+  },
 });
 
 class OtTable extends Component {
@@ -267,7 +270,7 @@ class OtTable extends Component {
         left={left}
         center={center}
         right={
-          <Grid container justify="flex-end" spacing={8}>
+          <Grid container justifyContent="flex-end" spacing={1}>
             <Grid item>
               <Typography variant="caption" className={classes.downloadHeader}>
                 Download table as
@@ -331,6 +334,7 @@ class OtTable extends Component {
                       >
                         {column.tooltip ? (
                           <Badge
+                            className={classes.badgeWithTooltip}
                             badgeContent={
                               <Tooltip
                                 title={column.tooltip}
@@ -420,7 +424,7 @@ class OtTable extends Component {
           <TablePagination
             component="div"
             count={data.length}
-            onChangePage={this.handleChangePage}
+            onPageChange={this.handleChangePage}
             page={page}
             rowsPerPage={pageSize}
             rowsPerPageOptions={[]}
