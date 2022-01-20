@@ -1,9 +1,6 @@
-import { contactUrl as contactUrlConfig } from './configuration';
 import config from './config';
 
 export const pvalThreshold = 4.94e-322;
-
-export const contactUrl = contactUrlConfig;
 
 export const mainMenuItems = [
   // Documentation
@@ -27,7 +24,7 @@ export const mainMenuItems = [
   // Contact
   {
     name: 'Contact us',
-    url: `mailto:helpdesk@opentargets.org`,
+    url: `mailto:${config.helpdeskEmail}`,
     external: true,
   },
 ];
@@ -70,7 +67,7 @@ export const externalLinks = {
     {
       label: 'Contact',
       iconClasses: 'fa fa-envelope',
-      url: `${contactUrl}`,
+      url: `mailto:${config.helpdeskEmail}`,
     },
   ],
   social: [
