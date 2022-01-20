@@ -25,7 +25,7 @@ import BasePage from './BasePage';
 import LocusLink from '../components/LocusLink';
 import AssociatedStudiesTable from '../components/AssociatedStudiesTable';
 import ColocForGeneTable from '../components/ColocForGeneTable';
-import { platformUrl } from '../configuration';
+import config from '../config';
 
 const GENE_PAGE_QUERY = loader('../queries/GenePageQuery.gql');
 
@@ -282,7 +282,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`${platformUrl}target/${geneId}`}
+                            href={`${config.platformUrl}target/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -293,7 +293,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`${platformUrl}target/${geneId}`}
+                            href={`${config.platformUrl}target/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -304,7 +304,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`${platformUrl}target/${geneId}`}
+                            href={`${config.platformUrl}target/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -317,7 +317,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`${platformUrl}target/${geneId}`}
+                            href={`${config.platformUrl}target/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -328,7 +328,7 @@ class GenePage extends React.Component {
                         <Grid item className={classes.geneInfoItem}>
                           <a
                             className={classes.platformLink}
-                            href={`${platformUrl}target/${geneId}`}
+                            href={`${config.platformUrl}target/${geneId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
