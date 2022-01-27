@@ -1,5 +1,3 @@
-import 'typeface-inter';
-
 export { default as Link } from './components/Link';
 export { default as Page } from './components/Page';
 export { default as Tabs } from '@material-ui/core/Tabs';
