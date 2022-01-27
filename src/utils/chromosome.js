@@ -1,15 +1,5 @@
 import GRCh38 from './GRCh38';
 
-/* 
-Example usage:
-const comparatorDiseaseName = generateComparator(d => d.disease.name);
- */
-export const generateComparator = accessor => (a, b) => {
-  const aValue = accessor(a);
-  const bValue = accessor(b);
-  return aValue > bValue ? 1 : aValue === bValue ? 0 : -1;
-};
-
 // get the cytoband of a position on a chromosome
 export const getCytoband = (chromosome, position) => {
   const chrom = GRCh38.top_level_region.find(d => d.name === chromosome);
@@ -57,5 +47,3 @@ export const chromosomesWithCumulativeLengths = chromosomesWithLengths.reduce(
   },
   []
 );
-
-export const SIGNIFICANCE = -Math.log10(5e-8);

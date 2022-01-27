@@ -19,6 +19,9 @@ const styles = theme => ({
   flex: {
     flexGrow: 1,
   },
+  heading: {
+    fontWeight: 400,
+  },
 });
 
 const SectionHeading = ({ classes, heading, subheading, entities }) => {
@@ -27,7 +30,9 @@ const SectionHeading = ({ classes, heading, subheading, entities }) => {
       <hr className={classes.hr} />
       <div className={classes.container}>
         <div>
-          <Typography variant="h5">{heading}</Typography>
+          <Typography className={classes.heading} variant="h6">
+            {heading}
+          </Typography>
           <Grid container justifyContent="space-between">
             <Grid item>
               <Typography variant="subtitle1">{subheading}</Typography>

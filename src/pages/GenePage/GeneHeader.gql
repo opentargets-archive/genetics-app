@@ -1,0 +1,11 @@
+query GeneHeaderQuery($geneId: String!) {
+  geneInfo(geneId: $geneId) {
+    id
+    symbol
+    chromosome
+    start
+    end
+    bioType
+    description
+  }
+}
