@@ -1,0 +1,16 @@
+query VariantHeader($variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    rsId
+    id
+  }
+  tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
+    associations {
+      direction
+    }
+  }
+  indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
+    associations {
+      direction
+    }
+  }
+}
