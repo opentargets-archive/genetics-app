@@ -1,0 +1,34 @@
+query VariantPageQuery($variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    rsId
+    chromosome
+    position
+    chromosomeB37
+    positionB37
+    refAllele
+    altAllele
+    nearestGene {
+      id
+      symbol
+    }
+    nearestGeneDistance
+    nearestCodingGene {
+      id
+      symbol
+    }
+    nearestCodingGeneDistance
+    mostSevereConsequence
+    caddRaw
+    caddPhred
+    gnomadAFR
+    gnomadAMR
+    gnomadASJ
+    gnomadEAS
+    gnomadFIN
+    gnomadNFE
+    gnomadNFEEST
+    gnomadNFENWE
+    gnomadNFESEU
+    gnomadOTH
+  }
+}
