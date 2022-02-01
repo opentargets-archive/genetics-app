@@ -3,14 +3,4 @@ query VariantHeader($variantId: String!) {
     rsId
     id
   }
-  tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
-    associations {
-      direction
-    }
-  }
-  indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
-    associations {
-      direction
-    }
-  }
 }

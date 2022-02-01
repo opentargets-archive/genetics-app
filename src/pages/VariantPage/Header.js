@@ -3,10 +3,6 @@ import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 import BaseHeader from '../../components/Header';
 import { ExternalLink } from '../../components/ExternalLink';
 import LocusLink from '../../components/LocusLink';
-import {
-  variantHasAssociatedTagVariants,
-  variantHasAssociatedIndexVariants,
-} from '../../utils';
 
 const VariantHeader = ({ loading, data }) => {
   const id = data?.variantInfo.id;
@@ -14,9 +10,6 @@ const VariantHeader = ({ loading, data }) => {
   const chromosome = !loading ? id.split('_')[0] : null;
   const positionString = !loading ? id.split('_')[1] : '';
   const position = parseInt(positionString, 10);
-
-  const isTagVariant = variantHasAssociatedIndexVariants(data);
-  const isIndexVariant = variantHasAssociatedTagVariants(data);
 
   return (
     <BaseHeader
@@ -38,17 +31,16 @@ const VariantHeader = ({ loading, data }) => {
         </>
       }
     >
-      {!loading &&
-        (isIndexVariant || isTagVariant) && (
-          <LocusLink
-            chromosome={chromosome}
-            position={position}
-            selectedIndexVariants={isIndexVariant ? [id] : null}
-            selectedTagVariants={isTagVariant && !isIndexVariant ? [id] : null}
-          >
-            View locus
-          </LocusLink>
-        )}
+      {!loading && (
+        <LocusLink
+          chromosome={chromosome}
+          position={position}
+          selectedIndexVariants={[id]}
+          selectedTagVariants={[id]}
+        >
+          View locus
+        </LocusLink>
+      )}
     </BaseHeader>
   );
 };
