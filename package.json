@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "REACT_APP_GIT_REVISION=\"$(git rev-parse --short HEAD)\" react-scripts build",
+    "build": "react-scripts build",
     "build:serve": "serve -s build -l 5000",
     "test": "react-scripts test --env=jsdom",
     "test:coverage": "yarn test --coverage",
