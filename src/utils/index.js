@@ -1,3 +1,7 @@
+import { format } from 'd3-format';
+
+export const commaSeparate = format(',');
+
 /* 
 Example usage:
 const comparatorDiseaseName = generateComparator(d => d.disease.name);
@@ -16,3 +20,4 @@ export * from './chromosome';
 
 // Pages helpers
 export * from './gene';
+export * from './variant';
