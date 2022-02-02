@@ -1,0 +1,6 @@
+query VariantHeader($variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    rsId
+    id
+  }
+}
