@@ -54,15 +54,20 @@ const StudySummary = ({ studyId }) => {
               <Skeleton width="50vw" />
             ) : (
               <>
-                <strong>PubMed:</strong>{' '}
-                <Link
-                  to={`https://europepmc.org/abstract/med/${data.pmid.replace(
-                    'PMID:',
-                    ''
-                  )}`}
-                >
-                  {data.pmid.replace('PMID:', '')}
-                </Link>
+                <strong>PubMed:</strong>
+                {data.pmid ? (
+                  <Link
+                    external
+                    to={`https://europepmc.org/abstract/med/${data.pmid.replace(
+                      'PMID:',
+                      ''
+                    )}`}
+                  >
+                    {data.pmid.replace('PMID:', '')}
+                  </Link>
+                ) : (
+                  ' NA'
+                )}
               </>
             )}
           </Typography>
