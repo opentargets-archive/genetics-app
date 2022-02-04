@@ -28,7 +28,7 @@ const StudyHeader = ({ loading, data }) => {
             <ExternalLink
               title="SAIGE"
               url="https://www.leelabsg.org/resources"
-              id="Homepage"
+              id={studyId.replace('SAIGE_', '')}
             />
           ) : null}
           {studyId && studyId.startsWith('GCST') ? (
