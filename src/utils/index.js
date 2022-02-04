@@ -21,3 +21,4 @@ export * from './chromosome';
 // Pages helpers
 export * from './gene';
 export * from './variant';
+export * from './study';

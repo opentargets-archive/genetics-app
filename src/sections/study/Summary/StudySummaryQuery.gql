@@ -1,0 +1,14 @@
+query StudySummaryQuery($studyId: String!) {
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+    nInitial
+    nReplication
+    nCases
+    hasSumstats
+  }
+}
