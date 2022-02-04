@@ -1,0 +1,18 @@
+query StudyLocusHeaderQuery($studyId: String!, $variantId: String!) {
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+    nInitial
+    nReplication
+    nCases
+    hasSumstats
+  }
+  variantInfo(variantId: $variantId) {
+    rsId
+    id
+  }
+}

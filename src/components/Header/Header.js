@@ -13,10 +13,10 @@ const useStyles = makeStyles(theme => ({
   mainIconContainer: {
     width: '56px',
     textAlign: 'center',
-    marginRight: '4px',
+    marginRight: '15px',
   },
   mainIcon: {
-    height: '65px',
+    width: '100% !important',
     color: theme.palette.primary.main,
   },
   subtitle: {
@@ -50,6 +50,8 @@ function Header({
       className={classes.titleContainer}
       container
       id="profile-page-header-block"
+      justifyContent="space-between"
+      wrap="nowrap"
     >
       <Grid item zeroMinWidth>
         <Grid container wrap="nowrap" alignItems="center">
@@ -66,7 +68,6 @@ function Header({
                 className={classes.title}
                 color="textSecondary"
                 variant="h5"
-                noWrap
                 title={title}
               >
                 {loading ? <Skeleton width="10vw" /> : title}

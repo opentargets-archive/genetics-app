@@ -12,6 +12,8 @@ query StudyLocusPageQuery(
     position
     refAllele
     altAllele
+    chromosomeB37
+    positionB37
   }
   studyInfo(studyId: $studyId) {
     studyId

@@ -10,9 +10,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import { sanitize } from 'string-sanitizer';
+import Link from '../../components/Link';
 
 import {
-  Link,
   Tab,
   Tabs,
   SectionHeading,
@@ -20,26 +20,28 @@ import {
   PlotContainerSection,
   significantFigures,
   DataDownloader,
-} from '../ot-ui-components';
+} from '../../ot-ui-components';
 
-import ErrorBoundary from '../components/ErrorBoundary';
-import GeneTrack from '../components/GeneTrack';
-import CredibleSet from '../components/CredibleSet';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import GeneTrack from '../../components/GeneTrack';
+import CredibleSet from '../../components/CredibleSet';
 
-import BasePage from './BasePage';
-import ColocQTLTable from '../components/ColocQTLTable';
-import ColocQTLGeneTissueTable from '../components/ColocQTLGeneTissueTable';
-import ColocGWASTable from '../components/ColocGWASTable';
-import ColocL2GTable from '../components/ColocL2GTable';
-// import ColocGWASHeatmapTable from '../components/ColocGWASHeatmapTable';
-import CredibleSetWithRegional from '../components/CredibleSetWithRegional';
-import CredibleSetsIntersectionTable from '../components/CredibleSetsIntersectionTable';
-import Slider from '../components/Slider';
-import LocusLink from '../components/LocusLink';
+import BasePage from '../BasePage';
+import ColocQTLTable from '../../components/ColocQTLTable';
+import ColocQTLGeneTissueTable from '../../components/ColocQTLGeneTissueTable';
+import ColocGWASTable from '../../components/ColocGWASTable';
+import ColocL2GTable from '../../components/ColocL2GTable';
+import CredibleSetWithRegional from '../../components/CredibleSetWithRegional';
+import CredibleSetsIntersectionTable from '../../components/CredibleSetsIntersectionTable';
+import Slider from '../../components/Slider';
+import { commaSeparate } from '../../utils';
 
-const STUDY_LOCUS_PAGE_QUERY = loader('../queries/StudyLocusPageQuery.gql');
-const GWAS_REGIONAL_QUERY = loader('../queries/GWASRegionalQuery.gql');
-const QTL_REGIONAL_QUERY = loader('../queries/QTLRegionalQuery.gql');
+import Header from './Header';
+
+const STUDY_LOCUS_HEADER_QUERY = loader('./StudyLocusHeaderQuery.gql');
+const STUDY_LOCUS_PAGE_QUERY = loader('../../queries/StudyLocusPageQuery.gql');
+const GWAS_REGIONAL_QUERY = loader('../../queries/GWASRegionalQuery.gql');
+const QTL_REGIONAL_QUERY = loader('../../queries/QTLRegionalQuery.gql');
 
 const HALF_WINDOW = 250000;
 
@@ -216,7 +218,7 @@ const getDownloadData = data => {
   }));
 };
 
-class LocusTraitPage extends React.Component {
+class StudyLocusPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
     gwasTabsValue: 'heatmap',
@@ -296,6 +298,17 @@ class LocusTraitPage extends React.Component {
         </Helmet> */}
         <ErrorBoundary>
           <Query
+            query={STUDY_LOCUS_HEADER_QUERY}
+            variables={{
+              studyId,
+              variantId: indexVariantId,
+            }}
+          >
+            {({ loading: headerLoading, data: dataHeader }) => (
+              <Header loading={headerLoading} data={dataHeader} />
+            )}
+          </Query>
+          <Query
             query={STUDY_LOCUS_PAGE_QUERY}
             variables={{
               studyId,
@@ -312,7 +325,6 @@ class LocusTraitPage extends React.Component {
 
               const {
                 studyInfo,
-                variantInfo,
                 gwasColocalisation,
                 qtlColocalisation,
                 // gwasColocalisationForRegion,
@@ -320,6 +332,7 @@ class LocusTraitPage extends React.Component {
                 pageSummary,
                 genes,
                 studyLocus2GeneTable,
+                variantInfo,
               } = data;
 
               const maxQTLLog2h4h3 = d3.max(qtlColocalisation, d => d.log2h4h3);
@@ -361,93 +374,103 @@ class LocusTraitPage extends React.Component {
 
               return (
                 <React.Fragment>
-                  <Grid container justifyContent="space-between">
-                    <Grid item>
-                      <Typography variant="h4" color="textSecondary">
-                        {`${studyInfo.traitReported}`}
-                      </Typography>
+                  <SectionHeading heading="Association summary" />
+                  <Grid container>
+                    <Grid xs={4}>
                       <Typography variant="subtitle1">
-                        {studyInfo.pubAuthor}{' '}
-                        {studyInfo.pubDate
-                          ? `(${new Date(studyInfo.pubDate).getFullYear()})`
-                          : null}{' '}
-                        {studyInfo.pubJournal ? (
-                          <em>{studyInfo.pubJournal}</em>
-                        ) : null}
-                        {studyId ? (
-                          <React.Fragment>
-                            {' '}
-                            <Link to={`/study/${studyId}`}>{studyId}</Link>
-                          </React.Fragment>
-                        ) : null}
+                        Study-variant associantion
                       </Typography>
-                      <Typography variant="h6" color="textSecondary">
-                        Locus around{' '}
-                        <Link to={`/variant/${indexVariantId}`}>
-                          {indexVariantId}
-                        </Link>
-                        {variantInfo.rsId ? ` (${variantInfo.rsId})` : null}
+                      <Typography variant="subtitle2">
+                        <strong>P-value:</strong>{' '}
+                        {significantFigures(associationSummary.pvalMantissa) +
+                          'e' +
+                          associationSummary.pvalExponent}
+                      </Typography>
+
+                      {associationSummary.beta ? (
+                        <>
+                          <Typography variant="subtitle2">
+                            <strong>Beta:</strong>{' '}
+                            {significantFigures(associationSummary.beta)}
+                          </Typography>
+
+                          <Typography variant="subtitle2">
+                            <strong>Beta 95% Confidence Interval:</strong> (
+                            {significantFigures(associationSummary.betaCILower)}
+                            ,{' '}
+                            {significantFigures(associationSummary.betaCIUpper)}
+                            )
+                          </Typography>
+                        </>
+                      ) : associationSummary.oddsRatio ? (
+                        <>
+                          <Typography variant="subtitle2">
+                            <strong>Odds ratio:</strong>{' '}
+                            {significantFigures(associationSummary.oddsRatio)}
+                          </Typography>
+
+                          <Typography variant="subtitle2">
+                            <strong>Odds ratio Confidence Interval:</strong> (
+                            {significantFigures(
+                              associationSummary.oddsRatioCILower
+                            )}
+                            ,{' '}
+                            {significantFigures(
+                              associationSummary.oddsRatioCIUpper
+                            )}
+                            )
+                          </Typography>
+                        </>
+                      ) : (
+                        <Typography variant="subtitle2">
+                          <strong>Beta:</strong> N/A
+                        </Typography>
+                      )}
+                    </Grid>
+                    <Grid xs={4}>
+                      <Typography variant="subtitle1">Study details</Typography>
+                      <Typography variant="subtitle2">
+                        <strong>Author:</strong> {studyInfo.pubAuthor}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>Year:</strong>{' '}
+                        {new Date(studyInfo.pubDate).getFullYear()}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>PubMed:</strong>{' '}
+                        {studyInfo.pmid ? (
+                          <Link
+                            external
+                            to={`https://europepmc.org/abstract/med/${studyInfo.pmid.replace(
+                              'PMID:',
+                              ''
+                            )}`}
+                          >
+                            {studyInfo.pmid.replace('PMID:', '')}
+                          </Link>
+                        ) : (
+                          'NA'
+                        )}
                       </Typography>
                     </Grid>
-                    <Grid item>
-                      <LocusLink
-                        big
-                        chromosome={chromosome}
-                        position={position}
-                        selectedStudies={[studyId]}
-                        selectedIndexVariants={[indexVariantId]}
-                      >
-                        View locus
-                      </LocusLink>
+                    <Grid xs={4}>
+                      <Typography variant="subtitle1">
+                        Variant details
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>GRCh38:</strong> {variantInfo.chromosome}:
+                        {commaSeparate(variantInfo.position)}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>GRCh37:</strong> {variantInfo.chromosomeB37}:
+                        {commaSeparate(variantInfo.positionB37)}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>RSID:</strong>{' '}
+                        {variantInfo.rsId ? variantInfo.rsId : ' NA'}
+                      </Typography>
                     </Grid>
                   </Grid>
-
-                  <SectionHeading heading="Association summary" />
-
-                  <Typography variant="subtitle2">
-                    <strong>P-value:</strong>{' '}
-                    {significantFigures(associationSummary.pvalMantissa) +
-                      'e' +
-                      associationSummary.pvalExponent}
-                  </Typography>
-
-                  {associationSummary.beta ? (
-                    <>
-                      <Typography variant="subtitle2">
-                        <strong>Beta:</strong>{' '}
-                        {significantFigures(associationSummary.beta)}
-                      </Typography>
-
-                      <Typography variant="subtitle2">
-                        <strong>Beta 95% Confidence Interval:</strong> (
-                        {significantFigures(associationSummary.betaCILower)},{' '}
-                        {significantFigures(associationSummary.betaCIUpper)})
-                      </Typography>
-                    </>
-                  ) : associationSummary.oddsRatio ? (
-                    <>
-                      <Typography variant="subtitle2">
-                        <strong>Odds ratio:</strong>{' '}
-                        {significantFigures(associationSummary.oddsRatio)}
-                      </Typography>
-
-                      <Typography variant="subtitle2">
-                        <strong>Odds ratio Confidence Interval:</strong> (
-                        {significantFigures(
-                          associationSummary.oddsRatioCILower
-                        )}
-                        ,{' '}
-                        {significantFigures(
-                          associationSummary.oddsRatioCIUpper
-                        )}
-                        )
-                      </Typography>
-                    </>
-                  ) : (
-                    <Typography variant="subtitle2">
-                      <strong>Beta:</strong> N/A
-                    </Typography>
-                  )}
 
                   <SectionHeading
                     heading="Gene prioritisation using locus-to-gene pipeline"
@@ -523,29 +546,6 @@ class LocusTraitPage extends React.Component {
                     handleToggleRegional={this.handleToggleRegional}
                     fileStem={`gwas-coloc-${studyId}-${indexVariantId}`}
                   />
-                  {/* <Tabs
-                  variant="scrollable"
-                  value={this.state.gwasTabsValue}
-                  onChange={this.handleGWASTabsChange}
-                >
-                  <Tab label="Heatmap" value={'heatmap'} />
-                  <Tab label="Table" value={'table'} />
-                </Tabs>
-                {this.state.gwasTabsValue === 'heatmap' ? (
-                  <ColocGWASHeatmapTable
-                    loading={false}
-                    error={false}
-                    data={gwasColocalisationForRegion}
-                  />
-                ) : null}
-                {this.state.gwasTabsValue === 'table' ? (
-                  <ColocGWASTable
-                    loading={false}
-                    error={false}
-                    data={gwasColocalisation}
-                    handleToggleRegional={this.handleToggleRegional}
-                  />
-                ) : null} */}
 
                   <SectionHeading
                     heading={`Credible Set Overlap`}
@@ -927,4 +927,4 @@ class LocusTraitPage extends React.Component {
   }
 }
 
-export default LocusTraitPage;
+export default StudyLocusPage;

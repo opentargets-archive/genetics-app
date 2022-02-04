@@ -52,6 +52,7 @@ const LocusLink = ({
   selectedStudies,
   classes,
 }) => {
+  if (chromosome === null) return null;
   const chromosomeObj = chromosomeDict[chromosome];
   const start = position > mb ? position - mb : 0;
   const end =
