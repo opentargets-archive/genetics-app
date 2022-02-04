@@ -437,7 +437,7 @@ class StudyLocusPage extends React.Component {
                         {new Date(studyInfo.pubDate).getFullYear()}
                       </Typography>
                       <Typography variant="subtitle2">
-                        <strong>PubMed:</strong>
+                        <strong>PubMed:</strong>{' '}
                         {studyInfo.pmid ? (
                           <Link
                             external
@@ -449,7 +449,7 @@ class StudyLocusPage extends React.Component {
                             {studyInfo.pmid.replace('PMID:', '')}
                           </Link>
                         ) : (
-                          ' NA'
+                          'NA'
                         )}
                       </Typography>
                     </Grid>
@@ -464,6 +464,10 @@ class StudyLocusPage extends React.Component {
                       <Typography variant="subtitle2">
                         <strong>GRCh37:</strong> {variantInfo.chromosomeB37}:
                         {commaSeparate(variantInfo.positionB37)}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <strong>RSID:</strong>{' '}
+                        {variantInfo.rsId ? variantInfo.rsId : ' NA'}
                       </Typography>
                     </Grid>
                   </Grid>
