@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   mainIconContainer: {
     width: '56px',
     textAlign: 'center',
-    marginRight: '4px',
+    marginRight: '15px',
   },
   mainIcon: {
     height: '65px',
