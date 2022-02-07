@@ -378,7 +378,7 @@ class StudyLocusPage extends React.Component {
                   <Grid container>
                     <Grid xs={4}>
                       <Typography variant="subtitle1">
-                        Study-variant associantion
+                        Study-variant association
                       </Typography>
                       <Typography variant="subtitle2">
                         <strong>P-value:</strong>{' '}
