@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import RootRef from '@material-ui/core/RootRef';
-import Link from '@material-ui/core/Link';
+import Link from '../../components/Link';
 
 import { Splash } from '../../ot-ui-components';
 
@@ -143,7 +143,7 @@ class HomePage extends Component {
                     style={{ textAlign: 'center' }}
                     className={classes.exampleLink}
                   >
-                    <Link href={d.url} underline="none">
+                    <Link to={d.url} underline="none">
                       {d.label}
                     </Link>
                   </Typography>
