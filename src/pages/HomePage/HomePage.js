@@ -1,23 +1,26 @@
 import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import { Grid, Box, Typography, useMediaQuery } from '@material-ui/core';
+import { useTheme, withStyles, makeStyles } from '@material-ui/core/styles';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import RootRef from '@material-ui/core/RootRef';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCircle,
+  faDownload,
+  faLaptopCode,
+  faQuestionCircle,
+  faFileAlt,
+  faCommentDots,
+} from '@fortawesome/free-solid-svg-icons';
 import Link from '../../components/Link';
-
+import Search from '../../components/Search';
+import ScrollDownButton from '../../components/ScrollDownButton';
+import NavBar from '../../components/NavBar/NavBar';
+import Version from '../../components/Version';
+import Footer from '../../components/Footer';
 import { Splash } from '../../ot-ui-components';
 
 import HomeBox from './HomeBox';
-
-import Search from '../../components/Search';
-import PortalFeaturesIcon from '../../components/PortalFeaturesIcon';
-import ScrollDownButton from '../../components/ScrollDownButton';
-import NavBar from '../../components/NavBar/NavBar';
-
-import Version from '../../components/Version';
-import Footer from '../../components/Footer';
 
 import { externalLinks, mainMenuItems } from '../../constants';
 
@@ -36,7 +39,7 @@ const EXAMPLES = [
   },
 ];
 
-const styles = theme => {
+const containerStyles = theme => {
   return {
     highlight: {
       color: theme.palette.primary.main,
@@ -94,7 +97,65 @@ const styles = theme => {
         color: theme.palette.primary.dark,
       },
     },
+    hpSection: {
+      marginBottom: '40px',
+      marginTop: '60px',
+    },
+    linksContainer: {
+      marginTop: '15px',
+      marginBottom: '15px',
+    },
   };
+};
+
+const useHelpBoxStyle = makeStyles(theme => ({
+  baseLink: {
+    whiteSpace: 'pre-wrap',
+  },
+  helpBoxes: {
+    maxWidth: '120px',
+    textAlign: 'center',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'left',
+    },
+  },
+}));
+
+const HelpBoxPanel = ({ fai, url, label, external }) => {
+  const theme = useTheme();
+  const xsMQ = useMediaQuery(theme.breakpoints.down('xs'));
+  const classes = useHelpBoxStyle();
+  if (xsMQ) {
+    // on xsmall screens
+    return (
+      <Link to={url} external={external} className={classes.baseLink}>
+        <Grid container wrap="nowrap" alignItems="center" spacing={1}>
+          <Grid item>
+            <div className="fa-layers fa-fw fa-3x">
+              <FontAwesomeIcon icon={faCircle} />
+              <FontAwesomeIcon icon={fai} transform="shrink-8" inverse />
+            </div>
+          </Grid>
+          <Grid item>
+            <Typography display="inline" wrap>
+              {label}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Link>
+    );
+  }
+  return (
+    <Box className={classes.helpBoxes}>
+      <Link to={url} external={external} className={classes.baseLink}>
+        <div className="fa-layers fa-fw fa-6x">
+          <FontAwesomeIcon icon={faCircle} />
+          <FontAwesomeIcon icon={fai} transform="shrink-8" inverse />
+        </div>
+        <Typography wrap>{label}</Typography>
+      </Link>
+    </Box>
+  );
 };
 
 class HomePage extends Component {
@@ -116,7 +177,7 @@ class HomePage extends Component {
         <Helmet>
           <title>Open Targets Genetics</title>
         </Helmet>
-        <RootRef rootRef={this.searchSectionRef}>
+        <main ref={this.searchSectionRef}>
           <Grid
             className={classes.searchSection}
             container
@@ -179,37 +240,70 @@ class HomePage extends Component {
               />
             </Grid>
           </Grid>
-        </RootRef>
-        <Grid container justifyContent="center">
-          <Grid className={classes.list} item md={4}>
-            <p className={classes.introTitle}>
-              Welcome to Open Targets Genetics
-            </p>
-            <p className={classes.introText}>
-              Open Targets Genetics is the latest release from Open Targets, an
-              innovative, large-scale, multi-year, public-private partnership
-              that uses human genetics and genomics data for systematic drug
-              target identification and prioritisation.
-            </p>
-            <p className={classes.introText}>
-              The Portal offers three unique features to help you discover
-              associations between genes, variants, and traits:
-            </p>
-            <p className={classes.introText}>
-              + Browse and rank gene and variant associations identified by our
-              Locus-to-Gene (L2G) scoring pipeline
-            </p>
-            <p className={classes.introText}>
-              + Uncover credible sets for variant and trait associations based
-              on our fine mapping analyses pipeline
-            </p>
-            <p className={classes.introText}>
-              + Explore and compare studies from UK Biobank, FinnGen, and GWAS
-              Catalog using our multi-trait comparison tool
-            </p>
-          </Grid>
-          <Grid container item md={4} justifyContent="center">
-            <PortalFeaturesIcon />
+        </main>
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+          className={classes.hpSection}
+        >
+          <Grid item xs={10} md={10}>
+            <Typography variant="h4" component="h1" align="center" paragraph>
+              Get started with the Genetics Portal
+            </Typography>
+
+            <Grid
+              container
+              justifyContent="space-evenly"
+              alignItems="flex-start"
+              spacing={5}
+              className={classes.linksContainer}
+            >
+              <Grid item xs={12} sm={'auto'}>
+                <HelpBoxPanel
+                  fai={faDownload}
+                  url="https://genetics-docs.opentargets.org/data-access/data-download"
+                  label="Download all of our open datasets"
+                  external
+                />
+              </Grid>
+              <Grid item xs={12} sm={'auto'}>
+                <HelpBoxPanel
+                  fai={faLaptopCode}
+                  url="https://genetics-docs.opentargets.org/data-access/graphql-api"
+                  label="Access data with our GraphQL API"
+                  external
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={'auto'}>
+                <HelpBoxPanel
+                  fai={faQuestionCircle}
+                  url="https://genetics-docs.opentargets.org/"
+                  label="Check out our Platform documentation"
+                  external
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={'auto'}>
+                <HelpBoxPanel
+                  fai={faFileAlt}
+                  url="https://genetics-docs.opentargets.org/citation"
+                  label="Read our latest Platform publications"
+                  external
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={'auto'}>
+                <HelpBoxPanel
+                  fai={faCommentDots}
+                  url="https://community.opentargets.org/"
+                  label="Join the Open Targets Community"
+                  external
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Footer externalLinks={externalLinks} />
@@ -218,4 +312,4 @@ class HomePage extends Component {
   }
 }
 
-export default withStyles(styles)(HomePage);
+export default withStyles(containerStyles)(HomePage);
