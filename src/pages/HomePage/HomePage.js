@@ -41,21 +41,10 @@ const EXAMPLES = [
 
 const containerStyles = theme => {
   return {
-    highlight: {
-      color: theme.palette.primary.main,
-      fontWeight: 'bold',
-    },
     searchSection: {
       position: 'relative',
       height: '100vh',
       overflow: 'visible',
-    },
-    slogan: {
-      color: theme.palette.grey[700],
-      fontFamily: 'Inter',
-      fontSize: '18px',
-      marginBottom: '15px',
-      textAlign: 'center',
     },
     examples: {
       marginTop: '12px',
@@ -67,24 +56,6 @@ const containerStyles = theme => {
       position: 'absolute',
       bottom: '10px',
     },
-    introTitle: {
-      color: theme.palette.grey[700],
-      fontFamily: 'Inter',
-      fontSize: '22px',
-      fontWeight: 'bold',
-    },
-    introText: {
-      color: theme.palette.grey[800],
-      fontFamily: 'Inter',
-    },
-    list: {
-      paddingTop: '44px',
-    },
-    listText: {
-      color: theme.palette.grey[800],
-      fontFamily: 'Inter',
-      fontSize: '18px',
-    },
     linkHeader: {
       marginTop: '22px',
     },
@@ -92,18 +63,16 @@ const containerStyles = theme => {
       position: 'absolute',
       bottom: 0,
     },
-    link: {
-      '&:hover': {
-        color: theme.palette.primary.dark,
-      },
-    },
     hpSection: {
       marginBottom: '40px',
-      marginTop: '60px',
+      marginTop: '80px',
     },
     linksContainer: {
       marginTop: '15px',
       marginBottom: '15px',
+    },
+    homeSection: {
+      marginBottom: '40px',
     },
   };
 };
@@ -137,9 +106,7 @@ const HelpBoxPanel = ({ fai, url, label, external }) => {
             </div>
           </Grid>
           <Grid item>
-            <Typography display="inline" wrap>
-              {label}
-            </Typography>
+            <Typography display="inline">{label}</Typography>
           </Grid>
         </Grid>
       </Link>
@@ -152,7 +119,7 @@ const HelpBoxPanel = ({ fai, url, label, external }) => {
           <FontAwesomeIcon icon={faCircle} />
           <FontAwesomeIcon icon={fai} transform="shrink-8" inverse />
         </div>
-        <Typography wrap>{label}</Typography>
+        <Typography>{label}</Typography>
       </Link>
     </Box>
   );
@@ -248,9 +215,34 @@ class HomePage extends Component {
           direction="column"
           className={classes.hpSection}
         >
-          <Grid item xs={10} md={10}>
+          <Grid item xs={10} md={8} className={classes.homeSection}>
             <Typography variant="h4" component="h1" align="center" paragraph>
-              Get started with the Genetics Portal
+              About Open Targets Genetics
+            </Typography>
+            <Typography paragraph>
+              Open Targets Genetics is a comprehensive tool highlighting
+              variant-centric statistical evidence to allow both prioritisation
+              of candidate causal variants at trait-associated loci and
+              identification of potential drug targets.
+            </Typography>
+            <Typography paragraph>
+              It aggregates and integrates genetic associations curated from
+              both literature and newly-derived loci from UK Biobank and FinnGen
+              and also contains functional genomics data (e.g. chromatin
+              conformation, chromatin interactions) and quantitative trait loci
+              (eQTLs and pQTLs). Large-scale pipelines apply statistical
+              fine-mapping across thousands of trait-associated loci to resolve
+              association signals and link each variant to its proximal and
+              distal target gene(s) using a Locus2Gene assessment. Integrated
+              cross-trait colocalisation analyses and linking to detailed
+              pharmaceutical compounds extend the capacity of Open Targets
+              Genetics to explore drug repositioning opportunities and shared
+              genetic architecture.
+            </Typography>
+          </Grid>
+          <Grid item xs={10} md={8} className={classes.homeSection}>
+            <Typography variant="h4" component="h1" align="center" paragraph>
+              Get started with Open Targets Genetics
             </Typography>
 
             <Grid
