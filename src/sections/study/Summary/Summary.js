@@ -54,7 +54,7 @@ const StudySummary = ({ studyId }) => {
               <Skeleton width="50vw" />
             ) : (
               <>
-                <strong>PubMed:</strong>
+                <strong>PubMed: </strong>
                 {data.pmid ? (
                   <Link
                     external
