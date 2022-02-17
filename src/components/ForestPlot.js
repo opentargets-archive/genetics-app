@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
-import { Autocomplete, DownloadSVGPlot, significantFigures } from 'ot-ui';
+import {
+  Autocomplete,
+  DownloadSVGPlot,
+  significantFigures,
+  ListTooltip,
+} from 'ot-ui';
 import { Tooltip } from '@material-ui/core';
 import Help from '@material-ui/icons/Help';
 import { pvalThreshold } from '../constants';
@@ -44,9 +49,17 @@ const ForestPlot = ({
   variantId,
   selectionHandler,
   selectedCategories,
+  tooltipRows,
 }) => {
   const [traits, setTraits] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [anchor, setAnchor] = useState(null);
+  const [anchorData, setAnchorData] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  function handleMouseLeave() {
+    setOpen(false);
+  }
 
   // update the plot if a new trait category is selected
   React.useEffect(
@@ -304,14 +317,11 @@ const ForestPlot = ({
         .attr('fill', cfg.treeColor)
         .attr('width', d => boxSizeScale(d.nTotal))
         .attr('height', d => boxSizeScale(d.nTotal))
-        .append('title')
-        .text(
-          d =>
-            d3.format('.3f')(d.beta) +
-            ' (± ' +
-            d3.format('.3f')(d.se * 1.959964) +
-            ')'
-        );
+        .on('mouseover', (d, i, n) => {
+          setAnchor(n[i]);
+          setOpen(true);
+          setAnchorData(d);
+        });
 
       // legend circles
       svg
@@ -367,6 +377,13 @@ const ForestPlot = ({
     />
   );
 
+  const dataList = anchorData
+    ? tooltipRows.map(({ label, id, renderCell }) => ({
+        label,
+        value: renderCell ? renderCell(anchorData) : anchorData[id],
+      }))
+    : [];
+
   // combine all elements to create the forest plot container
   return (
     <DownloadSVGPlot
@@ -375,6 +392,7 @@ const ForestPlot = ({
       filenameStem={`${variantId}-traits`}
     >
       <div
+        onMouseLeave={handleMouseLeave}
         style={{
           width: cfg.component_width,
           height: plot_height,
@@ -397,6 +415,7 @@ const ForestPlot = ({
           />
         </Tooltip>
         <svg ref={refs} />
+        <ListTooltip open={open} anchorEl={anchor} dataList={dataList} />
       </div>
     </DownloadSVGPlot>
   );

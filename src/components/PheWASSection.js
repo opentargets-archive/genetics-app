@@ -94,16 +94,17 @@ function PheWASSection({
     <Query query={PHEWAS_QUERY} variables={{ variantId }}>
       {({ loading, error, data }) => {
         const isPheWASVariant = hasAssociations(data);
+        const tooltipRows = tableColumns({
+          variantId,
+          chromosome,
+          position,
+          isIndexVariant,
+          isTagVariant,
+        });
         const PheWASWithTooltip = withTooltip(
           PheWAS,
           ListTooltip,
-          tableColumns({
-            variantId,
-            chromosome,
-            position,
-            isIndexVariant,
-            isTagVariant,
-          }),
+          tooltipRows,
           'phewas'
         );
         const pheWASAssociations = isPheWASVariant ? transformPheWAS(data) : [];
@@ -198,6 +199,7 @@ function PheWASSection({
                   variantId={variantId}
                   selectionHandler={handleTraitSelection}
                   selectedCategories={selectedCategories}
+                  tooltipRows={tooltipRows}
                 />
               </>
             ) : null}
