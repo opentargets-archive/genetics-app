@@ -307,14 +307,14 @@ const ForestPlot = ({
         .attr('y1', cfg.rowHeight / 2)
         .attr('y2', cfg.rowHeight / 2)
         .attr('stroke-width', 1)
-        .attr('stroke', cfg.treeColor);
+        .attr('stroke', d => colorScale(d.traitCategory));
 
       // create boxes
       trees
         .append('rect')
         .attr('x', d => x(d.beta) - boxSizeScale(d.nTotal) / 2)
         .attr('y', d => cfg.rowHeight / 2 - boxSizeScale(d.nTotal) / 2)
-        .attr('fill', cfg.treeColor)
+        .attr('fill', d => colorScale(d.traitCategory))
         .attr('width', d => boxSizeScale(d.nTotal))
         .attr('height', d => boxSizeScale(d.nTotal))
         .on('mouseover', (d, i, n) => {
