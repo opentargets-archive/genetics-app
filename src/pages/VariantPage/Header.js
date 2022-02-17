@@ -25,7 +25,7 @@ const VariantHeader = ({ loading, data }) => {
           />
           <ExternalLink
             title="gnomAD"
-            url={`http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=${rsId}`}
+            url={`https://www.ensembl.org/Homo_sapiens/Variation/Explore?v=${rsId}`}
             id={rsId}
           />
         </>
