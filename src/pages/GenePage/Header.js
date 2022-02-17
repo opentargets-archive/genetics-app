@@ -109,7 +109,7 @@ function Header({ geneId }) {
               <Skeleton width="50vw" />
             ) : (
               <>
-                <b>CRCh38:</b> {location} (
+                <b>GRCh38:</b> {location} (
                 <RouterLink className={classes.link} to={locusURL}>
                   view locus
                 </RouterLink>
