@@ -17,12 +17,11 @@ function traitFilterOptions(data, selectedCategories) {
       return {
         label: d,
         value: d,
-        selected: selectedCategories
-          ? selectedCategories.indexOf(d) >= 0
-          : false,
+        selected: selectedCategories.indexOf(d) >= 0,
+        index: selectedCategories.indexOf(d),
       };
     }),
-    [d => !d.selected, 'value']
+    [d => !d.selected, 'index']
   );
 }
 
