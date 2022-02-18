@@ -58,26 +58,23 @@ export const externalLinks = {
     { label: 'Bristol Myers Squibb', url: 'https://www.bms.com' },
     { label: 'EMBL-EBI', url: 'http://www.ebi.ac.uk' },
     { label: 'GSK', url: 'http://www.gsk.com' },
+    { label: 'Pfizer', url: 'https://pfizer.com/' },
     { label: 'Sanofi', url: 'https://www.sanofi.com' },
     { label: 'Wellcome Sanger Institute', url: 'http://www.sanger.ac.uk' },
   ],
   help: [
     {
       label: 'Documentation',
-      iconClasses: 'fa fa-question-circle',
+      iconClasses: 'fa fa-book',
       url: 'https://genetics-docs.opentargets.org',
     },
     {
-      label: 'Contact',
-      iconClasses: 'fa fa-envelope',
-      url: `${contactUrl}`,
+      label: 'Ask a question',
+      iconClasses: 'fa fa-question-circle',
+      url: 'https://community.opentargets.org/',
     },
   ],
   social: [
-    {
-      iconClasses: 'fab fa-discourse',
-      url: 'https://community.opentargets.org/',
-    },
     {
       iconClasses: 'fab fa-twitter-square',
       url: 'http://twitter.com/opentargets',
