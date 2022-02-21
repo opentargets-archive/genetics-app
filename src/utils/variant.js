@@ -80,3 +80,31 @@ export const variantPopulations = [
   { code: 'NFESEU', description: 'Non-Finnish European Southern European' },
   { code: 'OTH', description: 'Other (population not assigned)' },
 ];
+
+export function variantParseGenesForVariantSchema(data) {
+  const genesForVariantSchema = data.genesForVariantSchema;
+  const currentQtls = genesForVariantSchema.qtls;
+  if (currentQtls.length === 0) return genesForVariantSchema;
+  if (currentQtls[0].id === 'pqtl') {
+    const pqtl = currentQtls[0];
+    const restQtls = currentQtls.slice(1, pqtl.length);
+    const sourceDescriptionBreakdown = parseSourceDescriptionBreakdown(
+      pqtl.sourceDescriptionBreakdown
+    );
+    const sourceLabel = parseSourceLabel(pqtl.sourceLabel);
+    const newPqtl = { ...pqtl, sourceDescriptionBreakdown, sourceLabel };
+    const newQtls = [newPqtl, ...restQtls];
+    return { ...genesForVariantSchema, qtls: newQtls };
+  }
+  return genesForVariantSchema;
+}
+
+function parseSourceDescriptionBreakdown(description = '') {
+  if (!description) return;
+  return description.replace(' Sun *et al.* (2018)', '');
+}
+
+function parseSourceLabel(label = '') {
+  if (!label) return;
+  return label.replace(' (Sun, 2018)', '');
+}
