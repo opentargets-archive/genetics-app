@@ -25,6 +25,7 @@ import {
   variantHasAssociatedGenes,
   variantTransformAssociatedIndexVariants,
   variantTransformAssociatedTagVariants,
+  variantParseGenesForVariantSchema,
 } from '../../utils';
 
 const VARIANT_PAGE_QUERY = loader('../../queries/VariantPageQuery.gql');
@@ -118,6 +119,10 @@ function VariantPage(props) {
             ? variantTransformAssociatedTagVariants(data)
             : [];
 
+          const genesForVariantSchema = isGeneVariant
+            ? variantParseGenesForVariantSchema(data)
+            : [];
+
           return (
             <Fragment>
               <SectionHeading
@@ -137,7 +142,7 @@ function VariantPage(props) {
               {isGeneVariant ? (
                 <AssociatedGenes
                   variantId={variantId}
-                  genesForVariantSchema={data.genesForVariantSchema}
+                  genesForVariantSchema={genesForVariantSchema}
                   genesForVariant={data.genesForVariant}
                 />
               ) : (
