@@ -12,6 +12,12 @@ export const mainMenuItems = [
     url: 'https://genetics-docs.opentargets.org',
     external: true,
   },
+  // Data downloads
+  {
+    name: 'Data downloads',
+    url: 'https://genetics-docs.opentargets.org/data-access/data-download',
+    external: true,
+  },
   // API
   {
     name: 'API',
