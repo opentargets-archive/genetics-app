@@ -12,6 +12,12 @@ export const mainMenuItems = [
     url: 'https://genetics-docs.opentargets.org',
     external: true,
   },
+  // Data downloads
+  {
+    name: 'Data downloads',
+    url: 'https://genetics-docs.opentargets.org/data-access/data-download',
+    external: true,
+  },
   // API
   {
     name: 'API',
@@ -69,9 +75,14 @@ export const externalLinks = {
       url: 'https://genetics-docs.opentargets.org',
     },
     {
-      label: 'Ask a question',
-      iconClasses: 'fa fa-question-circle',
+      label: 'Community',
+      iconClasses: 'fab fa-discourse',
       url: 'https://community.opentargets.org/',
+    },
+    {
+      label: 'helpdesk@opentargets.org',
+      iconClasses: 'fa fa-envelope',
+      url: 'mailto:helpdesk@opentargets.org',
     },
   ],
   social: [

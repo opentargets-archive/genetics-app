@@ -8,7 +8,6 @@ const styles = theme => ({
   emailLink: {
     display: 'flex',
     alignItems: 'center',
-    fontSize: '0.8rem',
     textDecoration: 'none',
     outline: 'none',
     color: 'inherit',
@@ -33,7 +32,7 @@ const EmailLink = ({
     {iconClasses && (
       <Icon className={classNames(iconClasses, classes.iconPadding)} />
     )}
-    {contentRect.bounds.width < 225 ? 'Email support' : label}
+    {contentRect.bounds.width < 225 ? 'helpdesk@opentargets.org' : label}
   </a>
 );
 
