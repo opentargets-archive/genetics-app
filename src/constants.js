@@ -69,9 +69,14 @@ export const externalLinks = {
       url: 'https://genetics-docs.opentargets.org',
     },
     {
-      label: 'Ask a question',
-      iconClasses: 'fa fa-question-circle',
+      label: 'Community',
+      iconClasses: 'fab fa-discourse',
       url: 'https://community.opentargets.org/',
+    },
+    {
+      label: 'helpdesk@opentargets.org',
+      iconClasses: 'fa fa-envelope',
+      url: 'mailto:helpdesk@opentargets.org',
     },
   ],
   social: [
