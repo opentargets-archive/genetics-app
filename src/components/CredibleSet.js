@@ -31,10 +31,6 @@ class CredibleSet extends Component {
       .domain([0, 1])
       .range(['cyan', 'darkblue']);
 
-    if (data.length === 0) {
-      console.log(`Empty credible set for ${label}`);
-    }
-
     const bars = data.map(d => {
       return {
         x: xScale(d.position),
