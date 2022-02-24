@@ -14,7 +14,7 @@ class CredibleSet extends Component {
   state = {};
 
   static getDerivedStateFromProps(props) {
-    const { label, data, start, end, size } = props;
+    const { data, start, end, size } = props;
     const { width: outerWidth = 0 } = size;
     const width =
       outerWidth === 0
@@ -30,10 +30,6 @@ class CredibleSet extends Component {
       .scaleLinear()
       .domain([0, 1])
       .range(['cyan', 'darkblue']);
-
-    if (data.length === 0) {
-      console.log(`Empty credible set for ${label}`);
-    }
 
     const bars = data.map(d => {
       return {

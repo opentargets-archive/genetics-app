@@ -11,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import { sanitize } from 'string-sanitizer';
 import Link from '../../components/Link';
+import ScrollToTop from '../../components/ScrollToTop';
 
 import {
   Tab,
@@ -218,6 +219,15 @@ const getDownloadData = data => {
   }));
 };
 
+const buildCredibleSet = (data, study, indexVariant, credSet95Value) => {
+  const selection =
+    data[`gwasCredibleSet__${study.studyId}__${indexVariant.id}`];
+  if (selection === undefined) return [];
+  return selection
+    .map(flattenPosition)
+    .filter(d => (credSet95Value === '95' ? d.is95CredibleSet : true));
+};
+
 class StudyLocusPage extends React.Component {
   state = {
     qtlTabsValue: 'heatmap',
@@ -296,6 +306,7 @@ class StudyLocusPage extends React.Component {
         <Helmet>
           <title>{this.state.pageHeader}</title>
         </Helmet> */}
+        <ScrollToTop />
         <ErrorBoundary>
           <Query
             query={STUDY_LOCUS_HEADER_QUERY}
@@ -652,7 +663,7 @@ class StudyLocusPage extends React.Component {
                       variables={{}}
                     >
                       {({ loading: loading2, error: error2, data: data2 }) => {
-                        if (loading2 || error2) {
+                        if (loading2 || error2 || data2 === undefined) {
                           return null;
                         }
 
@@ -664,18 +675,12 @@ class StudyLocusPage extends React.Component {
                             }`,
                             study,
                             indexVariant,
-                            credibleSet: data2[
-                              `gwasCredibleSet__${study.studyId}__${
-                                indexVariant.id
-                              }`
-                            ]
-                              .map(flattenPosition)
-                              .filter(
-                                d =>
-                                  credSet95Value === '95'
-                                    ? d.is95CredibleSet
-                                    : true
-                              ),
+                            credibleSet: buildCredibleSet(
+                              data2,
+                              study,
+                              indexVariant,
+                              credSet95Value
+                            ),
                             ...rest,
                           })
                         );
