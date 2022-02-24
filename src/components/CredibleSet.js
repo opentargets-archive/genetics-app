@@ -14,7 +14,7 @@ class CredibleSet extends Component {
   state = {};
 
   static getDerivedStateFromProps(props) {
-    const { label, data, start, end, size } = props;
+    const { data, start, end, size } = props;
     const { width: outerWidth = 0 } = size;
     const width =
       outerWidth === 0
