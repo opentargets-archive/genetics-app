@@ -4,7 +4,7 @@ export const commaSeparate = format(',');
 
 export const significantFigures = format('.2g');
 
-export const longFigures = format('.4g');
+export const longFigures = format('.4f');
 
 /* 
 Example usage:
