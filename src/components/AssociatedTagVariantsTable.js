@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-  Link,
-  OtTable,
-  commaSeparate,
-  significantFigures,
-} from '../ot-ui-components';
+import { Link, OtTable, commaSeparate } from '../ot-ui-components';
+
+import { significantFigures } from '../utils';
 
 import { pvalThreshold } from '../constants';
 import PmidOrBiobankLink from './PmidOrBiobankLink';

@@ -9,12 +9,11 @@ import {
   Tab,
   DataCircle,
   Tooltip,
-  significantFigures,
   commaSeparate,
 } from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
-import { generateComparator } from '../utils';
+import { generateComparator, significantFigures } from '../utils';
 import LabelHML from './LabelHML';
 
 const OVERVIEW = 'overview';

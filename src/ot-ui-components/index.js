@@ -13,7 +13,6 @@ export { default as OtTable } from './components/OtTable';
 export { default as OtTableRF } from './components/OtTableRF';
 export { default as DataDownloader } from './components/DataDownloader';
 export { default as commaSeparate } from './helpers/commaSeparate';
-export { default as significantFigures } from './helpers/significantFigures';
 export { default as ListTooltip } from './components/ListTooltip';
 export { default as DownloadSVGPlot } from './components/DownloadSVGPlot';
 export { default as ModelSchematic } from './components/ModelSchematic';

@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  OtTable,
-  commaSeparate,
-  significantFigures,
-  Link,
-} from '../ot-ui-components';
+import { OtTable, commaSeparate, Link } from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import StudyLocusLink from './StudyLocusLink';
+
+import { significantFigures } from '../utils';
 
 const tableColumns = variantId => [
   {

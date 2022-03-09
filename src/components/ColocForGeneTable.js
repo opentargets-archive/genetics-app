@@ -5,9 +5,10 @@ import {
   Link,
   OtTableRF,
   Autocomplete,
-  significantFigures,
   DataDownloader,
 } from '../ot-ui-components';
+
+import { significantFigures } from '../utils';
 
 import StudyLocusLink from './StudyLocusLink';
 

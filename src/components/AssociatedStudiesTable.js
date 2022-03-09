@@ -3,14 +3,13 @@ import {
   DataDownloader,
   OtTableRF,
   commaSeparate,
-  significantFigures,
   Autocomplete,
   Link,
 } from '../ot-ui-components';
 
 import { pvalThreshold } from '../constants';
 import StudyLocusLink from './StudyLocusLink';
-import { generateComparator, longFigures } from '../utils';
+import { generateComparator, longFigures, significantFigures } from '../utils';
 
 const getDownloadColumns = () => {
   return [

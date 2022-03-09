@@ -3,8 +3,7 @@ import * as d3 from 'd3';
 import sizeMe from 'react-sizeme';
 
 import theme from './theme';
-
-const significantFigures = d3.format('.2g');
+import { significantFigures } from '../utils';
 
 const OUTER_HEIGHT = 40;
 const HEIGHT =

@@ -19,7 +19,6 @@ import {
   SectionHeading,
   PlotContainer,
   PlotContainerSection,
-  significantFigures,
   DataDownloader,
 } from '../../ot-ui-components';
 
@@ -35,7 +34,7 @@ import ColocL2GTable from '../../components/ColocL2GTable';
 import CredibleSetWithRegional from '../../components/CredibleSetWithRegional';
 import CredibleSetsIntersectionTable from '../../components/CredibleSetsIntersectionTable';
 import Slider from '../../components/Slider';
-import { commaSeparate, longFigures } from '../../utils';
+import { commaSeparate, longFigures, significantFigures } from '../../utils';
 
 import Header from './Header';
 

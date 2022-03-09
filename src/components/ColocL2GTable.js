@@ -5,9 +5,10 @@ import {
   Link,
   OtTableRF,
   DataDownloader,
-  significantFigures,
   commaSeparate,
 } from '../ot-ui-components';
+
+import { significantFigures } from '../utils';
 
 const tableColumns = [
   {

@@ -1,12 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
-import {
-  Link,
-  OtTable,
-  DataCircle,
-  significantFigures,
-  Autocomplete,
-} from '../ot-ui-components';
+import { Link, OtTable, DataCircle, Autocomplete } from '../ot-ui-components';
+import { significantFigures } from '../utils';
 
 import { pvalThreshold } from '../constants';
 import StudyDetailCell from './StudyDetailCell';

@@ -3,9 +3,9 @@ import {
   Link,
   OtTable,
   commaSeparate,
-  significantFigures,
   Autocomplete,
 } from '../ot-ui-components';
+import { significantFigures } from '../utils';
 
 import PmidOrBiobankLink from './PmidOrBiobankLink';
 import { pvalThreshold } from '../constants';

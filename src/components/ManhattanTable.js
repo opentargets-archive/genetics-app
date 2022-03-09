@@ -5,13 +5,12 @@ import {
   OtTableRF,
   DataDownloader,
   commaSeparate,
-  significantFigures,
 } from '../ot-ui-components';
 
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
-import { getCytoband, longFigures } from '../utils';
+import { getCytoband, longFigures, significantFigures } from '../utils';
 
 export const tableColumns = studyId => [
   {
