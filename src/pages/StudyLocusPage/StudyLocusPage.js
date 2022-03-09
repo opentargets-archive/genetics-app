@@ -35,7 +35,7 @@ import ColocL2GTable from '../../components/ColocL2GTable';
 import CredibleSetWithRegional from '../../components/CredibleSetWithRegional';
 import CredibleSetsIntersectionTable from '../../components/CredibleSetsIntersectionTable';
 import Slider from '../../components/Slider';
-import { commaSeparate } from '../../utils';
+import { commaSeparate, longFigures } from '../../utils';
 
 import Header from './Header';
 
@@ -417,19 +417,13 @@ class StudyLocusPage extends React.Component {
                         <>
                           <Typography variant="subtitle2">
                             <strong>Odds ratio:</strong>{' '}
-                            {significantFigures(associationSummary.oddsRatio)}
+                            {longFigures(associationSummary.oddsRatio)}
                           </Typography>
 
                           <Typography variant="subtitle2">
                             <strong>Odds ratio Confidence Interval:</strong> (
-                            {significantFigures(
-                              associationSummary.oddsRatioCILower
-                            )}
-                            ,{' '}
-                            {significantFigures(
-                              associationSummary.oddsRatioCIUpper
-                            )}
-                            )
+                            {longFigures(associationSummary.oddsRatioCILower)},{' '}
+                            {longFigures(associationSummary.oddsRatioCIUpper)})
                           </Typography>
                         </>
                       ) : (
