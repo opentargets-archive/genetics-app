@@ -11,7 +11,7 @@ import {
 import StudyLocusLink from './StudyLocusLink';
 import { pvalThreshold } from '../constants';
 import variantIdComparator from '../logic/variantIdComparator';
-import { getCytoband } from '../utils';
+import { getCytoband, longFigures } from '../utils';
 
 export const tableColumns = studyId => [
   {
@@ -55,7 +55,7 @@ export const tableColumns = studyId => [
     label: 'Odds Ratio',
     tooltip: 'Odds ratio with respect to the ALT allele',
     renderCell: rowData =>
-      rowData.oddsRatio ? significantFigures(rowData.oddsRatio) : null,
+      rowData.oddsRatio ? longFigures(rowData.oddsRatio) : null,
   },
   {
     id: 'ci',
