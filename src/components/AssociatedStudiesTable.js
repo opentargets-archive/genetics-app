@@ -10,7 +10,7 @@ import {
 
 import { pvalThreshold } from '../constants';
 import StudyLocusLink from './StudyLocusLink';
-import { generateComparator } from '../utils';
+import { generateComparator, longFigures } from '../utils';
 
 const getDownloadColumns = () => {
   return [
@@ -189,7 +189,7 @@ const tableColumns = ({
     label: 'Odds Ratio',
     tooltip: 'Odds ratio with respect to the ALT allele',
     renderCell: rowData =>
-      rowData.odds.oddsCI ? significantFigures(rowData.odds.oddsCI) : null,
+      rowData.odds.oddsCI ? longFigures(rowData.odds.oddsCI) : null,
   },
 
   {
