@@ -2,6 +2,10 @@ import { format } from 'd3-format';
 
 export const commaSeparate = format(',');
 
+export const significantFigures = format('.2g');
+
+export const longFigures = format('.4g');
+
 /* 
 Example usage:
 const comparatorDiseaseName = generateComparator(d => d.disease.name);
