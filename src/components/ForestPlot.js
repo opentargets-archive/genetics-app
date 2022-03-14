@@ -12,6 +12,11 @@ import Help from '@material-ui/icons/Help';
 import { pvalThreshold } from '../constants';
 
 function traitFilterOptions(data, selectedCategories) {
+  // color scale
+  let colorScale = d3
+    .scaleOrdinal()
+    .domain(selectedCategories)
+    .range(d3.schemeCategory10);
   return _.sortBy(
     _.uniq(data.map(d => d.traitCategory)).map(d => {
       return {
@@ -19,6 +24,7 @@ function traitFilterOptions(data, selectedCategories) {
         value: d,
         selected: selectedCategories.indexOf(d) >= 0,
         index: selectedCategories.indexOf(d),
+        chipcolor: colorScale(d),
       };
     }),
     [d => !d.selected, 'index']
@@ -28,7 +34,7 @@ function traitFilterOptions(data, selectedCategories) {
 const cfg = {
   component_width: 0,
   svgW: 1650,
-  plotW: 800,
+  plotW: 1100,
   tableW: 500,
   traitnameW: 400,
   nTicks: 5,
@@ -132,7 +138,7 @@ const ForestPlot = ({
       // set top row svg size and sticky
       const topRowSvg = d3
         .select('#topRow')
-        .attr('width', cfg.svgW)
+        .attr('width', cfg.svgW - 45)
         .attr('height', cfg.rowHeight + 5)
         .style('position', 'sticky')
         .style('top', '0');
@@ -143,7 +149,12 @@ const ForestPlot = ({
         .attr('width', cfg.svgW)
         .attr('height', 2 * cfg.rowHeight)
         .style('position', 'sticky')
-        .style('top', plot_height - 67)
+        .style(
+          'top',
+          plot_height <= 800
+            ? plot_height - 3 * cfg.rowHeight
+            : plot_height - 2 * cfg.rowHeight
+        )
         .style('background-color', 'white');
 
       // clip trait name text (row width)
@@ -418,40 +429,6 @@ const ForestPlot = ({
           setAnchorData(d);
         });
 
-      // legend circles
-      svg
-        .selectAll('.legend_circle')
-        .data(selectedCategories)
-        .enter()
-        .append('circle')
-        .attr('cx', 20 + cfg.plotW + cfg.tableW)
-        .attr('cy', function(d, i) {
-          return 10 + i * 25;
-        })
-        .attr('r', 7)
-        .style('fill', function(d) {
-          return colorScale(d);
-        });
-
-      // legend text labels
-      svg
-        .selectAll('.legend_label')
-        .data(selectedCategories)
-        .enter()
-        .append('text')
-        .attr('x', 35 + cfg.plotW + cfg.tableW)
-        .attr('y', function(d, i) {
-          return 10 + i * 25;
-        })
-        .style('fill', function(d) {
-          return colorScale(d);
-        })
-        .text(function(d) {
-          return d;
-        })
-        .attr('text-anchor', 'left')
-        .style('alignment-baseline', 'middle');
-
       // place lines on top of table for correct rendering
       table.selectAll('line').raise();
     },
@@ -494,6 +471,7 @@ const ForestPlot = ({
           margin: 'none',
         }}
       >
+        <svg ref={refs} />
         <Tooltip
           title={`The plot shows : beta for selected trait categories.`}
           placement={'top'}
@@ -506,10 +484,9 @@ const ForestPlot = ({
               color: 'rgba(0,0,0,0.54)',
               position: 'absolute',
             }}
-            transform={`translate(${cfg.component_width - 40},0)`}
+            transform={`translate(${cfg.svgW - 40},0)`}
           />
         </Tooltip>
-        <svg ref={refs} />
         <svg id="topRow" />
         <svg id="bottomRow" />
         <ListTooltip open={open} anchorEl={anchor} dataList={dataList} />
