@@ -42,7 +42,7 @@ const cfg = {
   minBoxSize: 5,
   maxBoxSize: 20,
   maxPlotHeight: 800,
-  plotMargin: 100,
+  plotMargin: 78,
   treeColor: '#5A5F5F',
   evenRowColor: '#fff',
   unevenRowColor: '#f2f1f1',
@@ -149,12 +149,7 @@ const ForestPlot = ({
         .attr('width', cfg.svgW)
         .attr('height', 2 * cfg.rowHeight)
         .style('position', 'sticky')
-        .style(
-          'top',
-          plot_height <= 800
-            ? plot_height - 3 * cfg.rowHeight
-            : plot_height - 2 * cfg.rowHeight
-        )
+        .style('top', plot_height - 2 * cfg.rowHeight)
         .style('background-color', 'white');
 
       // clip trait name text (row width)
