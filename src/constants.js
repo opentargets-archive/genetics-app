@@ -5,6 +5,8 @@ export const pvalThreshold = 4.94e-322;
 
 export const contactUrl = contactUrlConfig;
 
+export const naLabel = 'N/A';
+
 export const mainMenuItems = [
   // Documentation
   {

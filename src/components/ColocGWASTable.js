@@ -9,6 +9,7 @@ import {
 } from '../ot-ui-components';
 
 import StudyLocusLink from './StudyLocusLink';
+import { naLabel } from '../constants';
 
 const tableColumns = [
   {
@@ -45,7 +46,7 @@ const tableColumns = [
     label: 'Study beta',
     tooltip:
       'Effect with respect to the alternative allele of the page variant',
-    renderCell: d => significantFigures(d.beta),
+    renderCell: d => (d.beta ? significantFigures(d.beta) : naLabel),
   },
   {
     id: 'h3',
