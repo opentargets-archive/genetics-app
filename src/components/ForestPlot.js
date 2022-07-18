@@ -12,10 +12,11 @@ import Help from '@material-ui/icons/Help';
 import { pvalThreshold } from '../constants';
 
 function traitFilterOptions(data, selectedCategories) {
+  let all_categories = _.sortBy(_.uniq(data.map(d => d.traitCategory)), d => d);
   // color scale
   let colorScale = d3
     .scaleOrdinal()
-    .domain(selectedCategories)
+    .domain(all_categories)
     .range(d3.schemeCategory10);
   return _.sortBy(
     _.uniq(data.map(d => d.traitCategory)).map(d => {
