@@ -193,6 +193,7 @@ function PheWASSection({
                     ref={pheWASPlot}
                   />
                 </DownloadSVGPlot>
+                <SectionHeading subheading="Forest Plot" />
                 <ForestPlot
                   refs={forestPlot}
                   data={pheWASAssociationsFiltered}
