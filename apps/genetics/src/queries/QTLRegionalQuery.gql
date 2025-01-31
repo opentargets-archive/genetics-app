@@ -1,0 +1,24 @@
+query QTLRegionalQuery(
+  $studyId: String!
+  $bioFeature: String!
+  $geneId: String!
+  $chromosome: String!
+  $start: Long!
+  $end: Long!
+) {
+  regional: qtlRegional(
+    studyId: $studyId
+    geneId: $geneId
+    bioFeature: $bioFeature
+    chromosome: $chromosome
+    start: $start
+    end: $end
+  ) {
+    variant {
+      id
+      rsId
+      position
+    }
+    pval
+  }
+}

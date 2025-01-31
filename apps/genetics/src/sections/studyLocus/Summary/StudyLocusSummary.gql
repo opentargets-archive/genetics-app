@@ -1,0 +1,48 @@
+query StudyLocusSummaryQuery(
+  $studyId: String!
+  $variantId: String!
+  ) {
+   variantInfo(variantId: $variantId) {
+    # id # TODO: investigate; bizarrely, if id is requested, rsId is null in the cache (but valid in the response)
+    rsId
+    chromosome
+    position
+    refAllele
+    altAllele
+    chromosomeB37
+    positionB37
+  }
+
+   studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+    hasSumstats
+  }
+
+  pageSummary: studyAndLeadVariantInfo(
+    studyId: $studyId
+    variantId: $variantId
+  ) {
+    indexVariant {
+      rsId
+    }
+    study {
+      traitReported
+    }
+    pvalMantissa
+    pvalExponent
+    oddsRatio
+    oddsRatioCILower
+    oddsRatioCIUpper
+    beta
+    direction
+    betaCILower
+    betaCIUpper
+  }
+
+
+}

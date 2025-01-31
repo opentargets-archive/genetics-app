@@ -1,0 +1,29 @@
+query StudyLocus2Gene {
+  studyLocus2GeneTable(studyId: "GCST009240_9", variantId: "1_55052794_A_G") {
+    rows {
+      gene {
+        symbol
+        id
+        __typename
+      }
+      yProbaModel
+      yProbaDistance
+      yProbaInteraction
+      yProbaMolecularQTL
+      yProbaPathogenicity
+      hasColoc
+      distanceToLocus
+      __typename
+    }
+    __typename
+  }
+  genes(chromosome: "1", start: 54802794, end: 55302794) {
+    id
+    symbol
+    tss
+    start
+    end
+    exons
+    __typename
+  }
+}

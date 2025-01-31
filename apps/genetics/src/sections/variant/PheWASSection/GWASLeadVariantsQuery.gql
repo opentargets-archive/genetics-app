@@ -1,0 +1,10 @@
+query GWASLeadVariantsPageQuery($variantId: String!) {
+  indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
+    associations {
+      indexVariant {
+        id
+        rsId
+      }
+    }
+  }
+}

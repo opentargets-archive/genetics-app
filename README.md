@@ -1,61 +1,25 @@
 # Open Targets Genetics App
 
-This repo contains the web application code for [Open Targets Genetics](https://genetics.opentargets.org).
+This repository holds the new [Open Targets Platform](https://www.targetvalidation.org) web app.
 
-It is one component of several and the overarching project is described [here](https://github.com/opentargets/genetics), which is also where issues can be raised.
+It is a Single Page Application built on [React](https://reactjs.org/) using [Apollo GraphQL](https://www.apollographql.com/docs/react/v3.0-beta) for the data fetching and management and the [Material-UI](https://material-ui.com/) component collection.
 
-## Installation
+If you are interested in the backend, you can take a look at the [GraphQL Endpoint Browser](https://api-beta-dot-open-targets-eu-dev.appspot.com/api/v4/graphql/browser) and the [GraphQL Endpoint Schema](https://api-beta-dot-open-targets-eu-dev.appspot.com/api/v4/graphql/browser).
 
-Before developing or building for production, you will need to follow these steps:
+## Required stack
 
-Clone the repo.
+- [NodeJS >= v14](https://nodejs.org/en/)
+- [Yarn package manager](https://yarnpkg.com/)
 
-```
-git clone https://github.com/opentargets/genetics-app.git
-```
+## Running development
 
-Enter the directory.
+This project contains [Genetics](https://genetics.opentargets.org/) web application. To run development mode, you can run: `yarn dev:genetics` in the root directory.
 
-```
-cd genetics-app
-```
+## Building production-ready bundle
 
-Install the dependencies.
+From the root directory run: `yarn build:genetics`. This will generate on each application a production-ready bundle.
 
-```
-yarn install
-```
-
-### Development
-
-Start the dev server.
-
-```
-yarn start
-```
-
-### Build
-
-Build for production (generates a static `build` directory).
-
-```
-yarn build
-```
-
-### Deployment
-
-We deploy the public version of this site on [Netlify](https://www.netlify.com/). See the [netlify.toml](netlify.toml) for more detail.
-
-## Contribute
-
-Read our [contributing guidelines](CONTRIBUTING.md).
-
-# Special Thanks
-
-BrowserStack has allowed us to do cross-browser testing of the genetics app at no cost.
-<img src="./tools-icons/Browserstack-logo.svg" alt="BrowserStack" width="400">
-
-# Copyright
+## Copyright
 
 Copyright 2014-2018 Biogen, Celgene Corporation, EMBL - European Bioinformatics Institute, GlaxoSmithKline, Takeda Pharmaceutical Company and Wellcome Sanger Institute
 

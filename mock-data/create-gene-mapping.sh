@@ -1,2 +1,0 @@
-# build mapping for ILMN_1343291 type phenotypes
-cat raw/HumanHT-12_V4_gene_metadata.txt | jq -R -c 'split("\t") | { phenotype: .[0], ensgId: .[3], symbol: .[8] }' | jq -s '. | .[1:]' > raw/ilmn-to-ensembl.json

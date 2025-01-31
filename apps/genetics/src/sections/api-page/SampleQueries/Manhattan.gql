@@ -1,0 +1,38 @@
+query StudyVariants {
+  manhattan(studyId: "GCST90002369") {
+    associations {
+      variant {
+        id
+        rsId
+        chromosome
+        position
+        nearestCodingGene {
+          id
+          symbol
+          __typename
+        }
+        nearestCodingGeneDistance
+        __typename
+      }
+      pval
+      credibleSetSize
+      ldSetSize
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
+      bestGenes {
+        score
+        gene {
+          id
+          symbol
+          __typename
+        }
+        __typename
+      }
+    }
+  }
+}

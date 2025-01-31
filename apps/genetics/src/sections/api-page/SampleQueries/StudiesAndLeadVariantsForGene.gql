@@ -1,0 +1,17 @@
+query Jak2variants {
+  studiesAndLeadVariantsForGene(geneId: "ENSG00000096968") {
+    indexVariant {
+      id
+    }
+    study {
+      source
+      pmid
+      traitReported
+      pubDate
+      pubTitle
+      pubAuthor
+      hasSumstats
+      numAssocLoci
+    }
+  }
+}

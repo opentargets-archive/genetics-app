@@ -1,0 +1,34 @@
+query StudyLocusColocGWASTableQuery($variantId: String!, $studyId: String!) {
+  gwasColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+      hasSumstats
+    }
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+  }
+}

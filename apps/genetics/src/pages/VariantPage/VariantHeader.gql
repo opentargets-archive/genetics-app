@@ -1,0 +1,10 @@
+query VariantHeader($variantId: String!) {
+  variantInfo(variantId: $variantId) {
+    rsId
+    id
+    chromosomeB37
+    positionB37
+    refAllele
+    altAllele
+  }
+}

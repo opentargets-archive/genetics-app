@@ -1,0 +1,10 @@
+query TagVariantPageQuery($variantId: String!) {
+  tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
+    associations {
+      tagVariant {
+        id
+        rsId
+      }
+    }
+  }
+}

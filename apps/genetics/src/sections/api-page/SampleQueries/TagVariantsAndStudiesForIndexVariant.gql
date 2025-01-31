@@ -1,0 +1,25 @@
+query Variant {
+  tagVariantsAndStudiesForIndexVariant(variantId: "1_55058182_G_A") {
+    associations {
+      tagVariant {
+        id
+        rsId
+        __typename
+      }
+      study {
+        studyId
+        traitReported
+        pmid
+        pubDate
+        pubAuthor
+        __typename
+      }
+      pval
+      nTotal
+      overallR2
+      posteriorProbability
+      __typename
+    }
+    __typename
+  }
+}

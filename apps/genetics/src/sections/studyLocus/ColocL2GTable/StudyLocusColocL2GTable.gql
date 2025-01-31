@@ -1,0 +1,22 @@
+query StudyLocusColocL2GTableQuery(
+  $variantId: String!
+  $studyId: String!
+  ) {
+   
+   studyLocus2GeneTable(studyId: $studyId, variantId: $variantId) {
+    rows {
+      gene {
+        symbol
+        id
+      }
+      yProbaModel
+      yProbaDistance
+      yProbaInteraction
+      yProbaMolecularQTL
+      yProbaPathogenicity
+      hasColoc
+      distanceToLocus
+    }
+  }
+
+}

@@ -1,0 +1,8 @@
+{
+  "exclude": ["dist", "build", "node_modules"],
+  "extends": "tsconfig/vite.json",
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}

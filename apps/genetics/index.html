@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Open Targets Genetics explores associations between traits, variants, and genes with a focus on multi-trait analysis and gene to variant scoring."
+    />
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Open Targets Genetics" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://genetics.opentargets.org/" />
+    <meta
+      property="og:description"
+      content="Open Targets Genetics explores associations between traits, variants, and genes with a focus on multi-trait analysis and gene to variant scoring."
+    />
+    <meta property="og:image" content="/splash.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>Open Targets Genetics</title>
+  </head>
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+    <script>
+      var global = global || window;
+      var Buffer = Buffer || [];
+      var process = process || {
+        env: { DEBUG: undefined },
+        version: [],
+      };
+    </script>
+
+    <!-- - Deployment Context -->
+    <script type="text/javascript" src="/profiles/default.js"></script>
+    <script type="text/javascript" src="/config.js"></script>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>
