@@ -1,0 +1,109 @@
+query GenesForVariantQuery($variantId: String!) {
+  genesForVariantSchema {
+    qtls {
+      id
+      sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
+      tissues {
+        id
+        name
+      }
+    }
+    intervals {
+      sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
+      tissues {
+        id
+        name
+      }
+    }
+    functionalPredictions {
+      id
+      sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
+      tissues {
+        id
+        name
+      }
+    }
+    distances {
+      id
+      sourceId
+      sourceLabel
+      sourceDescriptionOverview
+      sourceDescriptionBreakdown
+      pmid
+      tissues {
+        id
+        name
+      }
+    }
+  }
+  genesForVariant(variantId: $variantId) {
+    gene {
+      id
+      symbol
+    }
+    overallScore
+    qtls {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        quantile
+        beta
+        pval
+      }
+    }
+    intervals {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        quantile
+        score
+      }
+    }
+    functionalPredictions {
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        maxEffectLabel
+        maxEffectScore
+      }
+    }
+    distances {
+      typeId
+      sourceId
+      aggregatedScore
+      tissues {
+        tissue {
+          id
+          name
+        }
+        distance
+        score
+        quantile
+      }
+    }
+  }
+}

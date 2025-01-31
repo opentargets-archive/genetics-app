@@ -1,0 +1,29 @@
+query GWASLeadVariantsPageQuery($variantId: String!) {
+  indexVariantsAndStudiesForTagVariant(variantId: $variantId) {
+    associations {
+      indexVariant {
+        id
+        rsId
+      }
+      study {
+        studyId
+        traitReported
+        pmid
+        pubDate
+        pubAuthor
+        hasSumstats
+      }
+      pval
+      nTotal
+      overallR2
+      posteriorProbability
+      oddsRatio
+      oddsRatioCILower
+      oddsRatioCIUpper
+      beta
+      betaCILower
+      betaCIUpper
+      direction
+    }
+  }
+}

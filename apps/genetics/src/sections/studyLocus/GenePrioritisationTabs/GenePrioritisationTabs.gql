@@ -1,0 +1,39 @@
+query StudyLocusGenesPrioritisationQuery($studyId: String!, $variantId: String!) {
+  qtlColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    gene {
+      id
+      symbol
+      chromosome
+      start
+      end
+      bioType
+    }
+    phenotypeId
+    tissue {
+      id
+      name
+    }
+    qtlStudyName
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+  }
+}

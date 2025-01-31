@@ -1,0 +1,29 @@
+query Jak2coloc {
+  colocalisationsForGene(geneId: "ENSG00000169174") {
+    leftVariant {
+      id
+      rsId
+      __typename
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pmid
+      hasSumstats
+      __typename
+    }
+    qtlStudyId
+    phenotypeId
+    tissue {
+      id
+      name
+      __typename
+    }
+    h3
+    h4
+    log2h4h3
+    __typename
+  }
+}

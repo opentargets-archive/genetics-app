@@ -1,0 +1,30 @@
+query GenePageColocAnalysisQuery($geneId: String!) {
+  geneInfo(geneId: $geneId) {
+    id
+    symbol
+    bioType
+  }
+  colocalisationsForGene(geneId: $geneId) {
+    leftVariant {
+      id
+      rsId
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pmid
+      hasSumstats
+    }
+    qtlStudyId
+    phenotypeId
+    tissue {
+      id
+      name
+    }
+    h3
+    h4
+    log2h4h3
+  }
+}

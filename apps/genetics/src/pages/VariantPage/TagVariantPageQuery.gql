@@ -1,0 +1,21 @@
+query TagVariantPageQuery($variantId: String!) {
+  tagVariantsAndStudiesForIndexVariant(variantId: $variantId) {
+    associations {
+      tagVariant {
+        id
+        rsId
+      }
+      study {
+        studyId
+        traitReported
+        pmid
+        pubDate
+        pubAuthor
+      }
+      pval
+      nTotal
+      overallR2
+      posteriorProbability
+    }
+  }
+}

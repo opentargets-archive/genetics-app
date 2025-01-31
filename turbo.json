@@ -1,0 +1,25 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "baseBranch": "origin/main",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["bundle-genetics/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev-ppp": {
+      "cache": false,
+      "persistent": true
+    },
+    "build-ppp": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}

@@ -1,0 +1,15 @@
+query study {
+  studyInfo(studyId:"SAIGE_740_1"){
+    studyId
+    traitReported
+    source
+    traitEfos
+    pmid
+    pubDate
+    pubJournal
+    pubTitle
+    pubAuthor
+    hasSumstats
+    numAssocLoci
+  }
+}

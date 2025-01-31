@@ -1,0 +1,79 @@
+query StudyLocusCredibleSetsGroupQuery($studyId: String!, $variantId: String!) {
+  studyInfo(studyId: $studyId) {
+    studyId
+    traitReported
+    pubAuthor
+    pubDate
+    pubJournal
+    pmid
+  }
+
+  gwasColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pubJournal
+      pmid
+      hasSumstats
+    }
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+
+  qtlColocalisation(studyId: $studyId, variantId: $variantId) {
+    indexVariant {
+      id
+      rsId
+      chromosome
+      position
+      refAllele
+      altAllele
+    }
+    gene {
+      id
+      symbol
+      chromosome
+      start
+      end
+      bioType
+    }
+    phenotypeId
+    tissue {
+      id
+      name
+    }
+    qtlStudyName
+    beta
+    h3
+    h4
+    log2h4h3
+  }
+
+  pageCredibleSet: gwasCredibleSet(studyId: $studyId, variantId: $variantId) {
+    tagVariant {
+      id
+      rsId
+      position
+    }
+    pval
+    se
+    beta
+    postProb
+    MultisignalMethod
+    logABF
+    is95
+    is99
+  }
+}

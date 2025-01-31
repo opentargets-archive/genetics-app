@@ -1,0 +1,41 @@
+
+query GenePageL2GPipelineQuery($geneId: String!) {
+  geneInfo(geneId: $geneId) {
+    id
+    symbol
+    chromosome
+    start
+    end
+    bioType
+  }
+  studiesAndLeadVariantsForGeneByL2G(geneId: $geneId) {
+    pval
+    yProbaModel
+    study {
+      studyId
+      traitReported
+      pubAuthor
+      pubDate
+      pmid
+      nInitial
+      nReplication
+      hasSumstats
+      nCases
+    }
+    variant {
+      rsId
+      id
+    }
+    odds{
+      oddsCI
+      oddsCILower
+      oddsCIUpper
+    }
+    beta{
+      betaCI
+      betaCILower
+      betaCIUpper
+      direction
+    }
+  }
+}

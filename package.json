@@ -1,115 +1,28 @@
 {
   "name": "genetics-app",
-  "version": "0.4.0",
+  "version": "0.5.0",
+  "private": true,
   "license": "Apache-2.0",
-  "contributors": [
-    "Gareth Peat <garethpeat@gmail.com>",
-    "Alfredo Miranda <alfredo@miranda.io>"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
-  "bugs": {
-    "url": "https://github.com/opentargets/genetics/issues",
-    "email": "support@targetvalidation.org"
-  },
-  "dependencies": {
-    "@apollo/client": "^3.4.1",
-    "@fontsource/inter": "^4.5.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-brands-svg-icons": "^5.15.4",
-    "@fortawesome/free-regular-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.16",
-    "@material-ui/core": "^4.9.11",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.50",
-    "classnames": "^2.2.6",
-    "d3": "^5.5.0",
-    "d3-scale-chromatic": "^1.3.3",
-    "fg-loadcss": "^2.0.1",
-    "file-saver": "^1.3.8",
-    "graphql": "^15.5.1",
-    "graphql-tag": "^2.10.1",
-    "lodash": "^4.17.21",
-    "polished": "^2.1.1",
-    "query-string": "5",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-ga": "^2.5.3",
-    "react-gtm-module": "^2.0.11",
-    "react-helmet": "^5.2.0",
-    "react-measure": "^2.1.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "4.0.3",
-    "react-select": "^2.0.0",
-    "react-sizeme": "^2.6.7",
-    "source-map-explorer": "^1.5.0",
-    "string-sanitizer": "^2.0.2"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:serve": "serve -s build -l 5000",
-    "test": "react-scripts test --env=jsdom",
-    "test:coverage": "yarn test --coverage",
-    "eject": "react-scripts eject",
-    "analyse": "source-map-explorer build/static/js/main.*",
-    "prettier": "prettier --write",
-    "prettier:all": "prettier --write 'src/**/*.js' config-overrides.js",
-    "eslint": "eslint . --fix --ext .js",
-    "version": "yarn build",
-    "report:coverage": "codecov",
-    "test:nightwatch": "node end-to-end-test-runner.js",
-    "test:nightwatch:serve": "serve -s build -l 8080 &"
+    "build": "turbo run build",
+    "build:no-cache": "turbo run build --parallel --no-cache",
+    "dev": "turbo run dev --parallel",
+    "dev:genetics": "turbo run dev --no-cache --continue --filter=genetics",
+    "build:genetics": "turbo run build --filter=genetics",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "babel-plugin-import": "^1.8.0",
-    "browserstack-local": "^1.4.0",
-    "codecov": "^3.7.1",
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.12.1",
-    "eslint-plugin-prettier": "^2.6.2",
-    "graphql.macro": "^1.4.2",
-    "husky": "^1.0.0-rc.13",
-    "lint-staged": "^7.2.0",
-    "nightwatch": "^1.1.13",
-    "prettier": "1.14.0",
-    "react-test-renderer": "^16.4.2",
-    "serve": "^11.1.0"
+    "prettier": "^2.5.1",
+    "turbo": "^1.8.8"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
   },
-  "lint-staged": {
-    "src/**/*.js": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "**/*.{json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!**/node_modules/**",
-      "!src/index.js",
-      "!src/registerServiceWorker.js",
-      "!src/setupTests.js"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "packageManager": "yarn@1.22.18"
 }

@@ -1,19 +1,31 @@
 language: node_js
 node_js:
-  - 12
+  - 16
 cache: yarn
 install:
   - yarn
+before_script:
+  - export NODE_OPTIONS=--max_old_space_size=4096
 script:
-  - yarn build
+  - yarn build:genetics
+  - yarn build:platform
 after_success:
-  - cd build
-  - tar czvf ../bundle.tgz *
+  - cd apps/platform/bundle-platform
+  - tar czvf ../bundle-platform.tgz *
   - cd ..
+  - mv bundle-platform.tgz ../../bundle-platform.tgz
+  - cd ../..
+  - cd apps/genetics/bundle-genetics
+  - tar czvf ../bundle-genetics.tgz *
+  - cd ..
+  - mv bundle-genetics.tgz ../../bundle-genetics.tgz
+  - cd ../..
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
-  file: 'bundle.tgz'
+  file:
+    - "bundle-platform.tgz"
+    - "bundle-genetics.tgz"
   skip_cleanup: true
   on:
     tags: true

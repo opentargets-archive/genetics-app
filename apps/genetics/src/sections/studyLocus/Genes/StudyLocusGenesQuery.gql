@@ -1,0 +1,10 @@
+query StudyLocusGenesQuery($chromosome: String!, $start: Long!, $end: Long!) {
+  genes(chromosome: $chromosome, start: $start, end: $end) {
+    id
+    symbol
+    tss
+    start
+    end
+    exons
+  }
+}
